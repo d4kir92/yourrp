@@ -5,7 +5,7 @@
 local DATABASE_NAME = "yrp_chat_channels"
 local yrp_chat_channels = {}
 hook.Add(
-	"YRP_SQLDBREADY_COMMUNICATION",
+	"YRP_SQLDBREADY_COMMUNICATION_DB",
 	"yrp_chat_channels",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'Unnamed'")
@@ -86,7 +86,13 @@ hook.Add(
 		if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "ID" .. "'") == nil then
 			YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, int_mode, bool_removeable", "'ID', 'Color( 0, 255, 0 )%RPNAME% Color( 255, 255, 255, 255 )shows his ID, it says: Color( 0, 255, 0 )%IDCARDID%', 1, 0")
 		end
+	end
+)
 
+hook.Add(
+	"YRP_SQLDBREADY_COMMUNICATION_UPDATE",
+	"yrp_chat_channels",
+	function()
 		if YRP_SQL_SELECT(DATABASE_NAME, "*", "string_name = '" .. "W" .. "'") == nil then
 			YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, string_structure, string_structure2, int_mode, bool_removeable", "'W', 'Color( 255, 100, 255 )von %RPNAME%: %TEXT%', 'Color( 255, 100, 255 )zu %TARGET%: %TEXT%', 6, 0")
 		else
@@ -121,7 +127,13 @@ hook.Add(
 				)
 			end
 		end
+	end
+)
 
+hook.Add(
+	"YRP_SQLDBREADY_COMMUNICATION",
+	"yrp_chat_channels",
+	function()
 		GenerateChatTable()
 	end
 )

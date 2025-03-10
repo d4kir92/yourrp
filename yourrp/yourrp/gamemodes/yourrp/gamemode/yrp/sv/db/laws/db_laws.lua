@@ -3,7 +3,7 @@
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_laws"
 hook.Add(
-	"YRP_SQLDBREADY_GAMEPLAY",
+	"YRP_SQLDBREADY_GAMEPLAY_DB",
 	"yrp_laws",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_lawsymbol", "TEXT DEFAULT '§'")
@@ -11,7 +11,13 @@ hook.Add(
 		if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'") == nil then
 			YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_lawsymbol, string_laws", "'§', ''")
 		end
+	end
+)
 
+hook.Add(
+	"YRP_SQLDBREADY_GAMEPLAY",
+	"yrp_laws",
+	function()
 		local dblaws = YRP_SQL_SELECT(DATABASE_NAME, "*")
 		if IsNotNilAndNotFalse(dblaws) then
 			dblaws = dblaws[1]

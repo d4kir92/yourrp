@@ -8,7 +8,7 @@ function YRP:XpPerMinute()
 end
 
 hook.Add(
-	"YRP_SQLDBREADY_GAMEPLAY",
+	"YRP_SQLDBREADY_GAMEPLAY_DB",
 	"yrp_levelsystem",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_level_min", "INT DEFAULT 0")
@@ -22,7 +22,13 @@ hook.Add(
 		if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
 			YRP_SQL_INSERT_INTO(DATABASE_NAME, "uniqueID", "'1'")
 		end
+	end
+)
 
+hook.Add(
+	"YRP_SQLDBREADY_GAMEPLAY",
+	"yrp_levelsystem",
+	function()
 		local system = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
 		if IsNotNilAndNotFalse(system) then
 			xpPerMinute = tonumber(system[1].int_xp_per_minute)

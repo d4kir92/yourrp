@@ -13,7 +13,7 @@ local HANDLER_GROUPSANDROLES = {}
 HANDLER_GROUPSANDROLES["roleslist"] = {}
 HANDLER_GROUPSANDROLES["roles"] = {}
 hook.Add(
-	"YRP_SQLDBREADY_GENERAL",
+	"YRP_SQLDBREADY_GENERAL_DB",
 	"yrp_ply_roles",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'NewRole'")
@@ -87,7 +87,13 @@ hook.Add(
 			YRP:msg("note", DATABASE_NAME .. " has not the default role")
 			YRP_SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_groupID, bool_removeable", "'1', 'Civilian', '0,0,255', '1', '0'")
 		end
+	end
+)
 
+hook.Add(
+	"YRP_SQLDBREADY_GENERAL_UPDATE",
+	"yrp_ply_roles",
+	function()
 		YRP_SQL_UPDATE(
 			DATABASE_NAME,
 			{
@@ -185,158 +191,14 @@ hook.Add(
 					["bool_whitelist"] = 0
 				}, "uniqueID = '1'"
 			)
-
-			YRPBuildDarkrpTeams()
-			local yrp_roles = {}
-			local _init_ply_roles = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
-			if IsNotNilAndNotFalse(_init_ply_roles) then
-				yrp_roles = _init_ply_roles[1]
-			end
-
-			for str, val in pairs(yrp_roles) do
-				if string.find(str, "string_", 1, true) then
-					local tab = {}
-					tab.netstr = "nws_yrp_update_role_" .. str
-					YRP:AddNetworkString(tab.netstr)
-					net.Receive(
-						tab.netstr,
-						function(len, ply)
-							local uid = tonumber(net.ReadString())
-							local s = net.ReadString()
-							tab.ply = ply
-							tab.id = str
-							tab.value = s
-							tab.db = DATABASE_NAME
-							tab.uniqueID = uid
-							UpdateString(tab)
-							tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
-							BroadcastString(tab)
-							if tab.netstr == "nws_yrp_update_role_string_name" then
-								YRP:AddNetworkString("nws_yrp_settings_role_update_name")
-								local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
-								if IsNotNilAndNotFalse(puid) then
-									puid = puid[1]
-									tab.handler = HANDLER_GROUPSANDROLES["roleslist"][tonumber(puid.int_parentrole)]
-									tab.netstr = "nws_yrp_settings_role_update_name"
-									tab.uniqueID = tonumber(puid.uniqueID)
-									tab.force = true
-									BroadcastString(tab)
-								end
-							elseif tab.netstr == "nws_yrp_update_role_string_color" then
-								YRP:AddNetworkString("nws_yrp_settings_role_update_color")
-								local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
-								if IsNotNilAndNotFalse(puid) then
-									puid = puid[1]
-									tab.handler = HANDLER_GROUPSANDROLES["roleslist"][tonumber(puid.int_parentrole)]
-									tab.netstr = "nws_yrp_settings_role_update_color"
-									tab.uniqueID = tonumber(puid.uniqueID)
-									tab.force = true
-									BroadcastString(tab)
-								end
-							elseif tab.netstr == "nws_yrp_update_role_string_icon" then
-								YRP:AddNetworkString("nws_yrp_settings_role_update_icon")
-								local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
-								if IsNotNilAndNotFalse(puid) then
-									puid = puid[1]
-									tab.handler = HANDLER_GROUPSANDROLES["roleslist"][tonumber(puid.int_parentrole)]
-									tab.netstr = "nws_yrp_settings_role_update_icon"
-									tab.uniqueID = tonumber(puid.uniqueID)
-									tab.force = true
-									BroadcastString(tab)
-								end
-							end
-						end
-					)
-				elseif string.find(str, "int_", 1, true) then
-					local tab = {}
-					tab.netstr = "nws_yrp_update_role_" .. str
-					YRP:AddNetworkString(tab.netstr)
-					net.Receive(
-						tab.netstr,
-						function(len, ply)
-							local uid = tonumber(net.ReadString())
-							local int = tonumber(net.ReadString())
-							local cur = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
-							tab.ply = ply
-							tab.id = str
-							tab.value = int
-							tab.db = DATABASE_NAME
-							tab.uniqueID = uid
-							UpdateInt(tab)
-							tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
-							BroadcastInt(tab)
-							if tab.netstr == "nws_yrp_update_role_int_prerole" then
-								if IsNotNilAndNotFalse(cur) then
-									cur = cur[1]
-									SendRoleList(nil, tonumber(cur.int_groupID), tonumber(cur.int_prerole))
-								end
-
-								SendRoleList(nil, tonumber(cur.int_groupID), 0)
-							elseif tab.netstr == "nws_yrp_update_role_int_groupID" then
-								UpdatePrerolesGroupIDs(tab.uniqueID, tab.value)
-							end
-						end
-					)
-				elseif string.find(str, "float_", 1, true) then
-					local tab = {}
-					tab.netstr = "nws_yrp_update_role_" .. str
-					YRP:AddNetworkString(tab.netstr)
-					net.Receive(
-						tab.netstr,
-						function(len, ply)
-							local uid = tonumber(net.ReadString())
-							local float = tonumber(net.ReadString())
-							local cur = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
-							tab.ply = ply
-							tab.id = str
-							tab.value = float
-							tab.db = DATABASE_NAME
-							tab.uniqueID = uid
-							UpdateFloat(tab)
-							tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
-							BroadcastFloat(tab)
-							if tab.netstr == "nws_yrp_update_role_int_prerole" then
-								if IsNotNilAndNotFalse(cur) then
-									cur = cur[1]
-									SendGroupList(tonumber(cur.float_parentrole))
-								end
-
-								SendGroupList(float)
-							end
-						end
-					)
-				elseif string.find(str, "bool_", 1, true) then
-					local tab = {}
-					tab.netstr = "nws_yrp_update_role_" .. str
-					YRP:AddNetworkString(tab.netstr)
-					net.Receive(
-						tab.netstr,
-						function(len, ply)
-							local uid = tonumber(net.ReadString())
-							local int = tonumber(net.ReadString())
-							local cur = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
-							tab.ply = ply
-							tab.id = str
-							tab.value = int
-							tab.db = DATABASE_NAME
-							tab.uniqueID = uid
-							UpdateInt(tab)
-							tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
-							BroadcastInt(tab)
-							if tab.netstr == "nws_yrp_update_role_int_prerole" then
-								if IsNotNilAndNotFalse(cur) then
-									cur = cur[1]
-									SendGroupList(tonumber(cur.int_parentrole))
-								end
-
-								SendGroupList(int)
-							end
-						end
-					)
-				end
-			end
 		end
+	end
+)
 
+hook.Add(
+	"YRP_SQLDBREADY_GENERAL",
+	"yrp_ply_roles",
+	function()
 		local drp_allgroups = YRP_SQL_SELECT("yrp_ply_groups", "*", nil)
 		if IsNotNilAndNotFalse(drp_allgroups) then
 			for i, group in pairs(drp_allgroups) do
@@ -355,10 +217,160 @@ hook.Add(
 				end
 			end
 		end
+
+		YRPBuildDarkrpTeams()
+		local yrp_roles = {}
+		local _init_ply_roles = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")
+		if IsNotNilAndNotFalse(_init_ply_roles) then
+			yrp_roles = _init_ply_roles[1]
+		end
+
+		for str, val in pairs(yrp_roles) do
+			if string.find(str, "string_", 1, true) then
+				local tab = {}
+				tab.netstr = "nws_yrp_update_role_" .. str
+				YRP:AddNetworkString(tab.netstr)
+				net.Receive(
+					tab.netstr,
+					function(len, ply)
+						local uid = tonumber(net.ReadString())
+						local s = net.ReadString()
+						tab.ply = ply
+						tab.id = str
+						tab.value = s
+						tab.db = DATABASE_NAME
+						tab.uniqueID = uid
+						UpdateString(tab)
+						tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
+						BroadcastString(tab)
+						if tab.netstr == "nws_yrp_update_role_string_name" then
+							YRP:AddNetworkString("nws_yrp_settings_role_update_name")
+							local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+							if IsNotNilAndNotFalse(puid) then
+								puid = puid[1]
+								tab.handler = HANDLER_GROUPSANDROLES["roleslist"][tonumber(puid.int_parentrole)]
+								tab.netstr = "nws_yrp_settings_role_update_name"
+								tab.uniqueID = tonumber(puid.uniqueID)
+								tab.force = true
+								BroadcastString(tab)
+							end
+						elseif tab.netstr == "nws_yrp_update_role_string_color" then
+							YRP:AddNetworkString("nws_yrp_settings_role_update_color")
+							local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+							if IsNotNilAndNotFalse(puid) then
+								puid = puid[1]
+								tab.handler = HANDLER_GROUPSANDROLES["roleslist"][tonumber(puid.int_parentrole)]
+								tab.netstr = "nws_yrp_settings_role_update_color"
+								tab.uniqueID = tonumber(puid.uniqueID)
+								tab.force = true
+								BroadcastString(tab)
+							end
+						elseif tab.netstr == "nws_yrp_update_role_string_icon" then
+							YRP:AddNetworkString("nws_yrp_settings_role_update_icon")
+							local puid = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+							if IsNotNilAndNotFalse(puid) then
+								puid = puid[1]
+								tab.handler = HANDLER_GROUPSANDROLES["roleslist"][tonumber(puid.int_parentrole)]
+								tab.netstr = "nws_yrp_settings_role_update_icon"
+								tab.uniqueID = tonumber(puid.uniqueID)
+								tab.force = true
+								BroadcastString(tab)
+							end
+						end
+					end
+				)
+			elseif string.find(str, "int_", 1, true) then
+				local tab = {}
+				tab.netstr = "nws_yrp_update_role_" .. str
+				YRP:AddNetworkString(tab.netstr)
+				net.Receive(
+					tab.netstr,
+					function(len, ply)
+						local uid = tonumber(net.ReadString())
+						local int = tonumber(net.ReadString())
+						local cur = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+						tab.ply = ply
+						tab.id = str
+						tab.value = int
+						tab.db = DATABASE_NAME
+						tab.uniqueID = uid
+						UpdateInt(tab)
+						tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
+						BroadcastInt(tab)
+						if tab.netstr == "nws_yrp_update_role_int_prerole" then
+							if IsNotNilAndNotFalse(cur) then
+								cur = cur[1]
+								SendRoleList(nil, tonumber(cur.int_groupID), tonumber(cur.int_prerole))
+							end
+
+							SendRoleList(nil, tonumber(cur.int_groupID), 0)
+						elseif tab.netstr == "nws_yrp_update_role_int_groupID" then
+							UpdatePrerolesGroupIDs(tab.uniqueID, tab.value)
+						end
+					end
+				)
+			elseif string.find(str, "float_", 1, true) then
+				local tab = {}
+				tab.netstr = "nws_yrp_update_role_" .. str
+				YRP:AddNetworkString(tab.netstr)
+				net.Receive(
+					tab.netstr,
+					function(len, ply)
+						local uid = tonumber(net.ReadString())
+						local float = tonumber(net.ReadString())
+						local cur = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+						tab.ply = ply
+						tab.id = str
+						tab.value = float
+						tab.db = DATABASE_NAME
+						tab.uniqueID = uid
+						UpdateFloat(tab)
+						tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
+						BroadcastFloat(tab)
+						if tab.netstr == "nws_yrp_update_role_int_prerole" then
+							if IsNotNilAndNotFalse(cur) then
+								cur = cur[1]
+								SendGroupList(tonumber(cur.float_parentrole))
+							end
+
+							SendGroupList(float)
+						end
+					end
+				)
+			elseif string.find(str, "bool_", 1, true) then
+				local tab = {}
+				tab.netstr = "nws_yrp_update_role_" .. str
+				YRP:AddNetworkString(tab.netstr)
+				net.Receive(
+					tab.netstr,
+					function(len, ply)
+						local uid = tonumber(net.ReadString())
+						local int = tonumber(net.ReadString())
+						local cur = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+						tab.ply = ply
+						tab.id = str
+						tab.value = int
+						tab.db = DATABASE_NAME
+						tab.uniqueID = uid
+						UpdateInt(tab)
+						tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
+						BroadcastInt(tab)
+						if tab.netstr == "nws_yrp_update_role_int_prerole" then
+							if IsNotNilAndNotFalse(cur) then
+								cur = cur[1]
+								SendGroupList(tonumber(cur.int_parentrole))
+							end
+
+							SendGroupList(int)
+						end
+					end
+				)
+			end
+		end
 	end
 )
 
-function MoveUnusedGroups()
+local function MoveUnusedGroups()
 	local count = 0
 	local all_groups = YRP_SQL_SELECT("yrp_ply_groups", "*", nil)
 	for i, group in pairs(all_groups) do

@@ -4,7 +4,7 @@
 local DATABASE_NAME = "yrp_general"
 local yrp_general = {}
 hook.Add(
-	"YRP_SQLDBREADY_GENERAL",
+	"YRP_SQLDBREADY_GENERAL_DB",
 	"yrp_general",
 	function()
 		--[[ Server Settings ]]
@@ -218,7 +218,13 @@ hook.Add(
 		if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'") == nil then
 			YRP_SQL_INSERT_INTO_DEFAULTVALUES(DATABASE_NAME)
 		end
+	end
+)
 
+hook.Add(
+	"YRP_SQLDBREADY_GENERAL",
+	"yrp_general",
+	function()
 		timer.Simple(0, YRPLoadGlobals)
 		GeneralDB()
 		timer.Simple(1, YRPRepairSQLDB)
@@ -2900,7 +2906,7 @@ function YRPRepairSQLDB(force)
 		version = tonumber(version[1].int_version)
 		if (version <= 1 or force) and fixonce then
 			fixonce = false
-			local alltables = YRP_SQL_QUERY("SELECT * FROM sqlite_master WHERE type='table';")
+			local alltables = YRP_SQL_QUERY("SELECT * FROM sqlite_master WHERE type='table';", true)
 			MsgC(Color(0, 255, 0), ">>> REPAIR YourRP DB, START <<<" .. "\n")
 			if alltables then
 				for i, v in pairs(alltables) do

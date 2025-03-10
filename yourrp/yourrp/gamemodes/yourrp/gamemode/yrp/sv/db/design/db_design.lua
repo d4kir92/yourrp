@@ -3,7 +3,7 @@
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_design"
 hook.Add(
-	"YRP_SQLDBREADY_VISUAL",
+	"YRP_SQLDBREADY_VISUAL_DB",
 	"yrp_design",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_hud_design", "TEXT DEFAULT ''")
@@ -14,7 +14,16 @@ hook.Add(
 		local fir = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1")
 		if fir == nil then
 			YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_hud_design, string_interface_design, string_fontname", "'Simple', 'Material', 'Roboto'")
-		elseif IsNotNilAndNotFalse(fir) then
+		end
+	end
+)
+
+hook.Add(
+	"YRP_SQLDBREADY_VISUAL_UPDATE",
+	"yrp_design",
+	function()
+		local fir = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1")
+		if IsNotNilAndNotFalse(fir) then
 			fir = fir[1]
 			if fir.string_interface_design == "Simple" or fir.string_hud_design == "Material" then
 				YRP_SQL_UPDATE(
@@ -32,7 +41,13 @@ hook.Add(
 				)
 			end
 		end
+	end
+)
 
+hook.Add(
+	"YRP_SQLDBREADY_VISUAL",
+	"yrp_design",
+	function()
 		YRPDesignLoadout("Init")
 		local IF_Material = {}
 		IF_Material.name = "Material"

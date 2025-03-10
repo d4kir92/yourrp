@@ -3,7 +3,7 @@
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME_DOORS = "yrp_" .. GetMapNameDB() .. "_doors"
 hook.Add(
-	"YRP_SQLDBREADY_GAMEPLAY",
+	"YRP_SQLDBREADY_GAMEPLAY_DB",
 	"yrp_MAPNAME_doors",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME_DOORS, "buildingID", "TEXT DEFAULT '-1'")
@@ -14,7 +14,7 @@ hook.Add(
 
 local DATABASE_NAME_BUILDINGS = "yrp_" .. GetMapNameDB() .. "_buildings"
 hook.Add(
-	"YRP_SQLDBREADY_GAMEPLAY",
+	"YRP_SQLDBREADY_GAMEPLAY_DB",
 	"yrp_MAPNAME_buildings",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "groupID", "INTEGER DEFAULT 0")
@@ -27,6 +27,13 @@ hook.Add(
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "bool_canbeowned", "INT DEFAULT 1")
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "int_securitylevel", "TEXT DEFAULT 0")
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "bool_lockdown", "INT DEFAULT 1")
+	end
+)
+
+hook.Add(
+	"YRP_SQLDBREADY_GAMEPLAY",
+	"yrp_MAPNAME_buildings",
+	function()
 		YRPLookForEmptyBuildings()
 	end
 )

@@ -3,7 +3,7 @@
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_characters"
 hook.Add(
-	"YRP_SQLDBREADY_GENERAL",
+	"YRP_SQLDBREADY_GENERAL_DB",
 	"yrp_characters",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "SteamID", "TEXT DEFAULT 'UNKNOWN'")

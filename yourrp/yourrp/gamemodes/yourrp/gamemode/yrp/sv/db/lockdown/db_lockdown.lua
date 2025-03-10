@@ -3,7 +3,7 @@
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_lockdown"
 hook.Add(
-	"YRP_SQLDBREADY_GAMEPLAY",
+	"YRP_SQLDBREADY_GAMEPLAY_DB",
 	"yrp_lockdown",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_lockdowntext", "TEXT DEFAULT 'LockdownText'")
@@ -11,7 +11,13 @@ hook.Add(
 		if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'") == nil then
 			YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_lockdowntext", "'LockdownText'")
 		end
+	end
+)
 
+hook.Add(
+	"YRP_SQLDBREADY_GAMEPLAY",
+	"yrp_lockdown",
+	function()
 		AddLockDownAlarm([[ambient\alarms\alarm_citizen_loop1.wav]], "alarm_citizen_loop1")
 		AddLockDownAlarm([[ambient\alarms\alarm1.wav]], "alarm1")
 		AddLockDownAlarm([[ambient\alarms\apc_alarm_loop1.wav]], "apc_alarm_loop1")

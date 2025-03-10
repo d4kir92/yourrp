@@ -5,7 +5,7 @@ local DATABASE_NAME = "yrp_logs"
 local showafter = 60 * 60 * 2
 local deleteafter = 60 * 60 * 12
 hook.Add(
-	"YRP_SQLDBREADY_GENERAL",
+	"YRP_SQLDBREADY_GENERAL_DB",
 	"yrp_logs",
 	function()
 		--YRP_SQL_DROP_TABLE(DATABASE_NAME)
@@ -15,6 +15,13 @@ hook.Add(
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_value", "TEXT DEFAULT ''")
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_timestamp", "TEXT DEFAULT ''")
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_alttarget", "TEXT DEFAULT ''")
+	end
+)
+
+hook.Add(
+	"YRP_SQLDBREADY_GENERAL_UPDATE",
+	"yrp_logs",
+	function()
 		local logTab = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 		if IsNotNilAndNotFalse(logTab) then
 			for i, t in pairs(logTab) do

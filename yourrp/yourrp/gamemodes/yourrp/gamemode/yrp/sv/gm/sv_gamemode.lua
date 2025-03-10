@@ -1213,7 +1213,7 @@ function GenerateVoiceTable()
 end
 
 hook.Add(
-	"YRP_SQLDBREADY_COMMUNICATION",
+	"YRP_SQLDBREADY_COMMUNICATION_DB",
 	"yrp_voice_channels",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'Unnamed'")
@@ -1230,7 +1230,13 @@ hook.Add(
 		if YRP_SQL_SELECT(DATABASE_NAME, "*") == nil then
 			YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, int_hear, string_mode, string_active_usergroups, string_passive_usergroups", "'DEFAULT', '1', '0', 'superadmin, admin, user', 'superadmin, admin, user'")
 		end
+	end
+)
 
+hook.Add(
+	"YRP_SQLDBREADY_COMMUNICATION",
+	"yrp_voice_channels",
+	function()
 		GenerateVoiceTable()
 	end
 )

@@ -4,7 +4,7 @@
 -- #BLACKLIST
 local DATABASE_NAME = "yrp_blacklist"
 hook.Add(
-	"YRP_SQLDBREADY_GENERAL",
+	"YRP_SQLDBREADY_GENERAL_DB",
 	"yrp_blacklist",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
@@ -12,7 +12,13 @@ hook.Add(
 		if YRP_SQL_SELECT(DATABASE_NAME, "*", "value = 'yrp_teleporter'") == nil then
 			YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'inventory', 'yrp_teleporter'")
 		end
+	end
+)
 
+hook.Add(
+	"YRP_SQLDBREADY_GENERAL_DB",
+	"yrp_blacklist",
+	function()
 		LoadBlacklist()
 	end
 )

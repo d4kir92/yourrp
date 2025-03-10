@@ -3,7 +3,7 @@
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_keybinds"
 hook.Add(
-	"YRP_SQLDBREADY_GAMEPLAY",
+	"YRP_SQLDBREADY_GAMEPLAY_DB",
 	"yrp_keybinds",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")

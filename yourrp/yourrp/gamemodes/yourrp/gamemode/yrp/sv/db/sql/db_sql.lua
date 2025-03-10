@@ -2,6 +2,32 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_sql"
+local function SQLITE_TABLE_EXISTS(db_table, from)
+	local _q = "SELECT "
+	_q = _q .. "*"
+	_q = _q .. " FROM " .. tostring(db_table)
+	_q = _q .. ";"
+	local _r = YRP_SQL_QUERY(_q)
+	if _r == nil or istable(_r) then
+		return true
+	else
+		return false
+	end
+end
+
+local function SQLITE_INIT_DATABASE(db_table)
+	if not SQLITE_TABLE_EXISTS(db_table, "YRP_SQL_INIT_DATABASE") then
+		local _q = "CREATE TABLE "
+		_q = _q .. db_table .. " ( "
+		_q = _q .. "uniqueID		INTEGER				 PRIMARY KEY autoincrement"
+		_q = _q .. " )"
+		_q = _q .. ";"
+		local _result = YRP_SQL_QUERY(_q)
+
+		return _result
+	end
+end
+
 local function SQLITE_CHECK_IF_COLUMN_EXISTS(db_name, column_name)
 	--YRP:msg( "db", "YRP_SQL_CHECK_IF_COLUMN_EXISTS( " .. tostring( db_name) .. ", " .. tostring( column_name) .. " )" )
 	local _result = sql.Query("SELECT " .. column_name .. " FROM " .. db_name)
@@ -86,62 +112,58 @@ function DBUpdateString(db_name, ply, netstr, str, l_db, value, sqlite)
 end
 
 local yrp_sql = {}
-timer.Simple(
-	0,
-	function()
-		YRP_SQL_INIT_DATABASE(DATABASE_NAME, true)
-		SQLITE_ADD_COLUMN(DATABASE_NAME, "string_mode", "TEXT DEFAULT '0'", true)
-		SQLITE_ADD_COLUMN(DATABASE_NAME, "int_mode", "INT DEFAULT '0'", true)
-		SQLITE_ADD_COLUMN(DATABASE_NAME, "string_host", "TEXT DEFAULT 'UNKNOWN HOST'", true)
-		SQLITE_ADD_COLUMN(DATABASE_NAME, "string_database", "TEXT DEFAULT 'UNKNOWN DATABASE'", true)
-		SQLITE_ADD_COLUMN(DATABASE_NAME, "string_username", "TEXT DEFAULT 'UNKNOWN USERNAME'", true)
-		SQLITE_ADD_COLUMN(DATABASE_NAME, "string_password", "TEXT DEFAULT 'ADMIN'", true)
-		SQLITE_ADD_COLUMN(DATABASE_NAME, "int_port", "INT DEFAULT '12345'", true)
-		SQLITE_ADD_COLUMN(DATABASE_NAME, "int_backup_create", "INT DEFAULT '1'", true)
-		SQLITE_ADD_COLUMN(DATABASE_NAME, "int_backup_delete", "INT DEFAULT '30'", true)
-		YRP:AddNetworkString("nws_yrp_get_sql_info")
-		if sql.Query("SELECT * FROM yrp_sql") == nil then
-			--YRP:msg( "db", "Missing first entry, insert it now!" )
-			sql.Query("INSERT INTO yrp_sql DEFAULT VALUES")
-		end
+SQLITE_INIT_DATABASE(DATABASE_NAME)
+SQLITE_ADD_COLUMN(DATABASE_NAME, "string_mode", "TEXT DEFAULT '0'", true)
+SQLITE_ADD_COLUMN(DATABASE_NAME, "int_mode", "INT DEFAULT '0'", true)
+SQLITE_ADD_COLUMN(DATABASE_NAME, "string_host", "TEXT DEFAULT 'UNKNOWN HOST'", true)
+SQLITE_ADD_COLUMN(DATABASE_NAME, "string_database", "TEXT DEFAULT 'UNKNOWN DATABASE'", true)
+SQLITE_ADD_COLUMN(DATABASE_NAME, "string_username", "TEXT DEFAULT 'UNKNOWN USERNAME'", true)
+SQLITE_ADD_COLUMN(DATABASE_NAME, "string_password", "TEXT DEFAULT 'ADMIN'", true)
+SQLITE_ADD_COLUMN(DATABASE_NAME, "int_port", "INT DEFAULT '12345'", true)
+SQLITE_ADD_COLUMN(DATABASE_NAME, "int_backup_create", "INT DEFAULT '1'", true)
+SQLITE_ADD_COLUMN(DATABASE_NAME, "int_backup_delete", "INT DEFAULT '30'", true)
+SQLITE_ADD_COLUMN(DATABASE_NAME, "db_version", "INT DEFAULT '0'", true)
+YRP:AddNetworkString("nws_yrp_get_sql_info")
+if sql.Query("SELECT * FROM yrp_sql") == nil then
+	--YRP:msg( "db", "Missing first entry, insert it now!" )
+	sql.Query("INSERT INTO yrp_sql DEFAULT VALUES")
+end
 
-		local _init_yrp_sql = sql.Query("SELECT * FROM " .. DATABASE_NAME)
-		if IsNotNilAndNotFalse(_init_yrp_sql) then
-			yrp_sql = _init_yrp_sql[1]
-		end
+local _init_yrp_sql = sql.Query("SELECT * FROM " .. DATABASE_NAME)
+if IsNotNilAndNotFalse(_init_yrp_sql) then
+	yrp_sql = _init_yrp_sql[1]
+end
 
-		for str, val in pairs(yrp_sql) do
-			if string.find(str, "int_", 1, true) then
-				YRP:AddNetworkString("nws_yrp_update_" .. str)
-				net.Receive(
-					"nws_yrp_update_" .. str,
-					function(len, ply)
-						local i = net.ReadInt(32)
-						DBUpdateInt(DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_sql, i, true)
-					end
-				)
-			elseif string.find(str, "float_", 1, true) then
-				YRP:AddNetworkString("nws_yrp_update_" .. str)
-				net.Receive(
-					"nws_yrp_update_" .. str,
-					function(len, ply)
-						local f = net.ReadFloat()
-						DBUpdateFloat(DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_sql, f, true)
-					end
-				)
-			elseif string.find(str, "string_", 1, true) then
-				YRP:AddNetworkString("nws_yrp_update_" .. str)
-				net.Receive(
-					"nws_yrp_update_" .. str,
-					function(len, ply)
-						local s = net.ReadString()
-						DBUpdateString(DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_sql, s, true)
-					end
-				)
+for str, val in pairs(yrp_sql) do
+	if string.find(str, "int_", 1, true) then
+		YRP:AddNetworkString("nws_yrp_update_" .. str)
+		net.Receive(
+			"nws_yrp_update_" .. str,
+			function(len, ply)
+				local i = net.ReadInt(32)
+				DBUpdateInt(DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_sql, i, true)
 			end
-		end
+		)
+	elseif string.find(str, "float_", 1, true) then
+		YRP:AddNetworkString("nws_yrp_update_" .. str)
+		net.Receive(
+			"nws_yrp_update_" .. str,
+			function(len, ply)
+				local f = net.ReadFloat()
+				DBUpdateFloat(DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_sql, f, true)
+			end
+		)
+	elseif string.find(str, "string_", 1, true) then
+		YRP:AddNetworkString("nws_yrp_update_" .. str)
+		net.Receive(
+			"nws_yrp_update_" .. str,
+			function(len, ply)
+				local s = net.ReadString()
+				DBUpdateString(DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_sql, s, true)
+			end
+		)
 	end
-)
+end
 
 -- NEW
 function BroadcastString(tab)

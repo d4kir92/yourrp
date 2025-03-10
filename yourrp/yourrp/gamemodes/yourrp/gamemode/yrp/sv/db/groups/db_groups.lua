@@ -7,7 +7,7 @@ HANDLER_GROUPSANDROLES["groupslist"] = {}
 HANDLER_GROUPSANDROLES["groups"] = {}
 HANDLER_GROUPSANDROLES["roles"] = {}
 hook.Add(
-	"YRP_SQLDBREADY_GENERAL",
+	"YRP_SQLDBREADY_GENERAL_DB",
 	"yrp_ply_groups",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT 'GroupName'")
@@ -31,7 +31,13 @@ hook.Add(
 		if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = -1") == nil then
 			YRP_SQL_INSERT_INTO(DATABASE_NAME, "uniqueID, string_name, string_color, int_parentgroup, bool_removeable, bool_locked, bool_visible_rm, bool_visible_cc", "-1, 'PUBLIC', '255,255,255', -1, 0, 0, 0, 0")
 		end
+	end
+)
 
+hook.Add(
+	"YRP_SQLDBREADY_GENERAL_UPDATE",
+	"yrp_ply_groups",
+	function()
 		YRP_SQL_UPDATE(
 			DATABASE_NAME,
 			{
@@ -68,7 +74,13 @@ hook.Add(
 				end
 			end
 		end
+	end
+)
 
+hook.Add(
+	"YRP_SQLDBREADY_GENERAL",
+	"yrp_ply_groups",
+	function()
 		-- Local Table
 		local yrp_groups = {}
 		local _init_ply_groups = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'")

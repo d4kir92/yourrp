@@ -14,7 +14,7 @@ function YRPSetWeaponSettings()
 end
 
 hook.Add(
-	"YRP_SQLDBREADY_GAMEPLAY",
+	"YRP_SQLDBREADY_GAMEPLAY_DB",
 	"yrp_weapon_options",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slots_primary", "INT DEFAULT 1")
@@ -28,7 +28,18 @@ hook.Add(
 					YRP:msg("db", "Set Default Weapon Settings")
 					YRP_SQL_INSERT_INTO_DEFAULTVALUES(DATABASE_NAME)
 				end
+			end
+		)
+	end
+)
 
+hook.Add(
+	"YRP_SQLDBREADY_GAMEPLAY",
+	"yrp_weapon_options",
+	function()
+		timer.Simple(
+			0,
+			function()
 				YRPSetWeaponSettings()
 			end
 		)
@@ -56,7 +67,7 @@ net.Receive(
 
 local DATABASE_NAME2 = "yrp_weapon_slots"
 hook.Add(
-	"YRP_SQLDBREADY_GAMEPLAY",
+	"YRP_SQLDBREADY_GAMEPLAY_DB",
 	"yrp_weapon_slots",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME2, "classname", "TEXT DEFAULT ''")

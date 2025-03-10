@@ -5,6 +5,7 @@ local _show_db_if_not_empty = false
 YRPSQL = YRPSQL or {}
 YRPSQL.mysql_worked = YRPSQL.mysql_worked or false
 YRPSQL.int_mode = YRPSQL.int_mode or 0
+local db_version = 1
 local function YRP_MYSQL_CHECK_OUTDATED()
 	if system.IsLinux() and (not file.Exists("bin/gmsv_mysqloo_linux.dll", "LUA") or not file.Exists("bin/gmsv_mysqloo_linux64.dll", "LUA")) then
 		if not file.Exists("bin/gmsv_mysqloo_linux.dll", "LUA") then
@@ -56,15 +57,49 @@ local function _YRPTryRepairDatabase()
 end
 
 local function _IsReady()
-	MsgC(Color(0, 255, 0), "[YourRP] DATABASE: LOAD TABLES GENERAL (Can Take Some Time..)\n")
+	local version = nil
+	local tab = sql.Query("SELECT * FROM yrp_sql")
+	if tab then
+		tab = tab[1]
+		if tab.db_version then
+			version = tonumber(tab.db_version)
+		end
+	end
+
+	if version ~= db_version then
+		MsgC(Color(0, 255, 0), "[YourRP] DATABASE: INIT TABLES (1/5) GENERAL (Can Take Some Time..)\n")
+		hook.Run("YRP_SQLDBREADY_GENERAL_DB")
+		MsgC(Color(0, 255, 0), "[YourRP] DATABASE: INIT TABLES (2/5) GAMEPLAY (Can Take Some Time..)\n")
+		hook.Run("YRP_SQLDBREADY_GAMEPLAY_DB")
+		MsgC(Color(0, 255, 0), "[YourRP] DATABASE: INIT TABLES (3/5) VISUAL (Can Take Some Time..)\n")
+		hook.Run("YRP_SQLDBREADY_VISUAL_DB")
+		MsgC(Color(0, 255, 0), "[YourRP] DATABASE: INIT TABLES (4/5) COMMUNICATION (Can Take Some Time..)\n")
+		hook.Run("YRP_SQLDBREADY_COMMUNICATION_DB")
+		MsgC(Color(0, 255, 0), "[YourRP] DATABASE: INIT TABLES (5/5) INTEGRATION (Can Take Some Time..)\n")
+		hook.Run("YRP_SQLDBREADY_INTEGRATION_DB")
+		YRP_SQL_UPDATE(
+			"yrp_sql",
+			{
+				["db_version"] = db_version
+			}, "uniqueID = '1'", true
+		)
+	end
+
+	MsgC(Color(0, 255, 0), "[YourRP] DATABASE: UPDATE TABLES.\n")
+	hook.Run("YRP_SQLDBREADY_GENERAL_UPDATE")
+	hook.Run("YRP_SQLDBREADY_GAMEPLAY_UPDATE")
+	hook.Run("YRP_SQLDBREADY_VISUAL_UPDATE")
+	hook.Run("YRP_SQLDBREADY_COMMUNICATION_UPDATE")
+	hook.Run("YRP_SQLDBREADY_INTEGRATION_UPDATE")
+	MsgC(Color(0, 255, 0), "[YourRP] DATABASE: START TABLES (1/5) GENERAL (Can Take Some Time..)\n")
 	hook.Run("YRP_SQLDBREADY_GENERAL")
-	MsgC(Color(0, 255, 0), "[YourRP] DATABASE: LOAD TABLES GAMEPLAY (Can Take Some Time..)\n")
+	MsgC(Color(0, 255, 0), "[YourRP] DATABASE: START TABLES (2/5) GAMEPLAY (Can Take Some Time..)\n")
 	hook.Run("YRP_SQLDBREADY_GAMEPLAY")
-	MsgC(Color(0, 255, 0), "[YourRP] DATABASE: LOAD TABLES VISUAL (Can Take Some Time..)\n")
+	MsgC(Color(0, 255, 0), "[YourRP] DATABASE: START TABLES (3/5) VISUAL (Can Take Some Time..)\n")
 	hook.Run("YRP_SQLDBREADY_VISUAL")
-	MsgC(Color(0, 255, 0), "[YourRP] DATABASE: LOAD TABLES COMMUNICATION (Can Take Some Time..)\n")
+	MsgC(Color(0, 255, 0), "[YourRP] DATABASE: START TABLES (4/5) COMMUNICATION (Can Take Some Time..)\n")
 	hook.Run("YRP_SQLDBREADY_COMMUNICATION")
-	MsgC(Color(0, 255, 0), "[YourRP] DATABASE: LOAD TABLES INTEGRATION (Can Take Some Time..)\n")
+	MsgC(Color(0, 255, 0), "[YourRP] DATABASE: START TABLES (5/5) INTEGRATION (Can Take Some Time..)\n")
 	hook.Run("YRP_SQLDBREADY_INTEGRATION")
 	MsgC(Color(0, 255, 0), "[YourRP] DATABASE: LOADED TABLES.\n")
 end
@@ -236,17 +271,16 @@ function YRP_SQL_TABLE_EXISTS(db_table, from)
 	--YRP:msg( "note", "Table [" .. tostring( db_table) .. "] not exists." )
 end
 
-function YRP_SQL_QUERY(query)
+function YRP_SQL_QUERY(query, sqlite)
 	--_NotReadyMessage("YRP_SQL_QUERY")
 	query = tostring(query)
-	--YRP:msg( "db", "YRP_SQL_QUERY( " .. tostring(query) .. " )" )
 	if not string.find(query, ";", 1, true) then
 		YRP:msg("error", GetSQLModeName() .. ": " .. "Query has no ; [" .. query .. "]")
 
 		return false
 	end
 
-	if GetSQLMode() == 0 then
+	if GetSQLMode() == 0 or sqlite then
 		local _result = sql.Query(query)
 		if _result == nil then
 			return _result
@@ -416,7 +450,7 @@ function YRP_SQL_UPDATE(db_table, db_sets, db_where, sqlite)
 		end
 
 		_q = _q .. ";"
-		local ret = YRP_SQL_QUERY(_q)
+		local ret = YRP_SQL_QUERY(_q, sqlite)
 		if ret ~= nil then
 			YRP:msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_UPDATE: has failed! query: " .. tostring(_q) .. " result: " .. tostring(ret) .. YRP_SQL_Show_Last_Error())
 		end

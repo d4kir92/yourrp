@@ -922,7 +922,7 @@ function DStringListBox(tab)
 	end
 
 	function pnl.add:DoClick()
-		tab.doclick()
+		tab.DoClick()
 	end
 
 	pnl.dpl = YRPCreateD("DPanelList", pnl.bg, tab.w, tab.h - YRP:ctr(50), 0, YRP:ctr(50))
@@ -946,7 +946,7 @@ function DStringListBox(tab)
 				end
 
 				line.pmid = 1
-				if table.Count(line.models) > 1 or not strEmpty(line.models[1]) then
+				if line.models and (table.Count(line.models) > 1 or not strEmpty(line.models[1])) then
 					line.mod = YRPCreateD("DModelPanel", line, v.h - 2 * v.br, v.h - 2 * v.br, YRP:ctr(40) + v.br, v.br)
 				end
 
@@ -983,18 +983,20 @@ function DStringListBox(tab)
 					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
 					if self.mod ~= nil and self.oldpmid ~= self.pmid then
 						self.oldpmid = self.pmid
-						line.mod:SetModel(line.models[line.pmid])
+						if line.models then
+							line.mod:SetModel(line.models[line.pmid])
+						end
 					end
 
 					local name = v.string_name
-					if table.Count(self.models) > 1 then
+					if line.models and table.Count(self.models) > 1 then
 						name = name .. " ( " .. self.pmid .. "/" .. table.Count(self.models) .. " )"
 					end
 
 					draw.SimpleText(name, "DermaDefault", YRP:ctr(40) + v.h + YRP:ctr(40) + YRP:ctr(20), ph / 2 - YRP:ctr(25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 					if v.slots then
 						draw.SimpleText(text, "DermaDefault", YRP:ctr(40) + v.h + YRP:ctr(40) + YRP:ctr(20), ph / 2 + YRP:ctr(25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-					else
+					elseif line.models then
 						draw.SimpleText(line.models[line.pmid], "DermaDefault", YRP:ctr(40) + v.h + YRP:ctr(40) + YRP:ctr(20), ph / 2 + YRP:ctr(25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 					end
 				end
@@ -1007,20 +1009,20 @@ function DStringListBox(tab)
 				end
 
 				function line.rem:DoClick()
-					v.doclick()
+					v.DoClick()
 				end
 
 				line.next = YRPCreateD("DButton", line, YRP:ctr(40), v.h - 2 * v.br, YRP:ctr(40) + v.h, v.br)
 				line.next:SetText("")
 				function line.next:Paint(pw, ph)
-					if line.pmid < table.Count(line.models) then
+					if line.models and line.pmid < table.Count(line.models) then
 						draw.RoundedBox(0, 0, 0, pw, ph, Color(0, 255, 0, 200))
 						draw.SimpleText(">", "DermaDefault", pw / 2, ph / 2, Color(0, 0, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					end
 				end
 
 				function line.next:DoClick()
-					if line.pmid < table.Count(line.models) then
+					if line.models and line.pmid < table.Count(line.models) then
 						line.pmid = line.pmid + 1
 					end
 				end

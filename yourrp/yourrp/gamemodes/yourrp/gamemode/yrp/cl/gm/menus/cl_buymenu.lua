@@ -114,7 +114,7 @@ function createShopItem(item, duid, id)
 	end
 
 	if item.description ~= nil then
-		_i.description = YRPCreateD("RichText", _i, YRP:ctr(W - H - 20), YRP:ctr(350), YRP:ctr(H), YRP:ctr(20 + HE + 20))
+		_i.description = YRPCreateD("RichText", _i, YRP:ctr(W - H - 20), YRP:ctr(120), YRP:ctr(H), YRP:ctr(20 + HE + 20))
 		_i.description.description = item.description
 		_i.description:SetText(_i.description.description)
 		function _i.description:PerformLayout()
@@ -368,6 +368,7 @@ net.Receive(
 							for j, cat in pairs(_cats) do
 								local BR = 20
 								local _cat = YRPCreateD("DYRPCollapsibleCategory", BUYMENU.shop, BUYMENU.shop:GetWide(), YRP:ctr(100), 0, 0)
+								cat.uniqueID = tonumber(cat.uniqueID)
 								_cat.uid = cat.uniqueID
 								_cat:SetHeaderHeight(YRP:ctr(100))
 								_cat:SetHeader(cat.name)
@@ -380,6 +381,7 @@ net.Receive(
 											"nws_yrp_shop_get_items",
 											function(l)
 												local uid = net.ReadString()
+												uid = tonumber(uid)
 												local _items = net.ReadTable()
 												local cat2 = BUYMENU.cats[uid]
 												if IsValid(cat2) then
@@ -388,16 +390,6 @@ net.Receive(
 													local w = YRP:ctr(600 + BR)
 													local idmax = math.Round(_cat:GetWide() / w - 0.6, 0)
 													for k, item in pairs(_items) do
-														--[[if id == 0 then
-												hid = hid + 1
-												cat.hs[hid] = YRPCreateD( "DPanel", nil, w * idmax, YRP:ctr(650 + 2 * 20), 0, 0)
-												local line = cat.hs[hid]
-												function line:Paint(pw, ph)
-													--
-												end
-
-												cat:Add(line)
-											end]]
 														local _item = createShopItem(item, _dealer_uid, nil, id)
 														cat2:Add(_item)
 														id = id + 1

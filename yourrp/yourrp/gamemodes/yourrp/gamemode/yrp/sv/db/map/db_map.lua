@@ -3,7 +3,7 @@
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_" .. GetMapNameDB()
 hook.Add(
-	"YRP_SQLDBREADY_GENERAL",
+	"YRP_SQLDBREADY_GENERAL_DB",
 	"yrp_MAPNAME",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "position", "TEXT DEFAULT ''")
@@ -16,6 +16,13 @@ hook.Add(
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_swep", "TEXT DEFAULT ''")
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_amount", "TEXT DEFAULT '1'")
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_classname", "TEXT DEFAULT 'npc_zombie'")
+	end
+)
+
+hook.Add(
+	"YRP_SQLDBREADY_GENERAL",
+	"yrp_MAPNAME",
+	function()
 		timer.Simple(4, YRPCheckIfStoragesExists)
 		UpdateSpawnerNPCTable()
 		UpdateSpawnerENTTable()

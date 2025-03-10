@@ -4,7 +4,7 @@
 -- #FEEDBACKDATABASE
 local DATABASE_NAME = "yrp_feedback"
 hook.Add(
-	"YRP_SQLDBREADY_GENERAL",
+	"YRP_SQLDBREADY_GENERAL_DB",
 	"yrp_feedback",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "title", "TEXT DEFAULT 'UNNAMED'")

@@ -1498,7 +1498,7 @@ net.Receive(
 							local tab_cf = net.ReadTable()
 							if tab_cf then
 								for i, v in pairs(tab_cf) do
-									v.doclick = function()
+									v.DoClick = function()
 										net.Start("nws_yrp_rem_role_flag")
 										net.WriteInt(role.uniqueID, 32)
 										net.WriteInt(v.uniqueID, 32)

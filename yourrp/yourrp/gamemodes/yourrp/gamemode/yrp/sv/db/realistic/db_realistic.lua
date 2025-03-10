@@ -5,7 +5,7 @@ local DATABASE_NAME = "yrp_realistic"
 local yrp_realistic = {}
 local HANDLER_REALISTIC = {}
 hook.Add(
-	"YRP_SQLDBREADY_GAMEPLAY",
+	"YRP_SQLDBREADY_GAMEPLAY_DB",
 	"yrp_realistic",
 	function()
 		--YRP_SQL_DROP_TABLE(DATABASE_NAME)
@@ -39,7 +39,13 @@ hook.Add(
 			local _result = YRP_SQL_INSERT_INTO_DEFAULTVALUES(DATABASE_NAME)
 			YRP:msg("note", tostring(_result))
 		end
+	end
+)
 
+hook.Add(
+	"YRP_SQLDBREADY_GAMEPLAY",
+	"yrp_realistic",
+	function()
 		local _init_realistic = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
 		if _init_realistic ~= false and _init_realistic ~= nil then
 			yrp_realistic = _init_realistic[1]

@@ -3,12 +3,19 @@
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_profiles_hud"
 hook.Add(
-	"YRP_SQLDBREADY_VISUAL",
+	"YRP_SQLDBREADY_VISUAL_DB",
 	"yrp_profiles_hud",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "profile_name", "TEXT DEFAULT ''")
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
+	end
+)
+
+hook.Add(
+	"YRP_SQLDBREADY_VISUAL_UPDATE",
+	"yrp_profiles_hud",
+	function()
 		ProfilesYourRPDefault()
 		ProfilesTopBar()
 		ProfilesIdentifycard()

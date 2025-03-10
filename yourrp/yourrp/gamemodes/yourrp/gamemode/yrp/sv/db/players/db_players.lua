@@ -6,7 +6,7 @@ function YRPSaveClients(str)
 end
 
 hook.Add(
-	"YRP_SQLDBREADY_GENERAL",
+	"YRP_SQLDBREADY_GENERAL_DB",
 	"yrp_players",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "SteamID", "TEXT DEFAULT ''")
@@ -18,6 +18,13 @@ hook.Add(
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "uptime_current", "INT DEFAULT 0")
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "TS_LastOnline", "INT DEFAULT 1")
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_chatdelay", "INT DEFAULT 4")
+	end
+)
+
+hook.Add(
+	"YRP_SQLDBREADY_GENERAL",
+	"yrp_players",
+	function()
 		function YRPSaveClients(str)
 			--YRP:msg( "db", string.upper( "[Saving all clients] [" .. str .. "]" ) )
 			if YRP_SQL_TABLE_EXISTS(DATABASE_NAME, "YRPSaveClients #1") then

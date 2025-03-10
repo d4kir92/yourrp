@@ -3,7 +3,7 @@
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_events"
 hook.Add(
-	"YRP_SQLDBREADY_GAMEPLAY",
+	"YRP_SQLDBREADY_GAMEPLAY_DB",
 	"yrp_events",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_eventname", "TEXT DEFAULT ''")

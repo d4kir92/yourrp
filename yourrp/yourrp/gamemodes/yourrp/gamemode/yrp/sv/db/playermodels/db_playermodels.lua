@@ -31,13 +31,20 @@ function YRP_CheckAndRemoveUnusedPlayermodels()
 end
 
 hook.Add(
-	"YRP_SQLDBREADY_VISUAL",
+	"YRP_SQLDBREADY_VISUAL_DB",
 	"yrp_playermodels",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_name", "TEXT DEFAULT ''")
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "string_models", "TEXT DEFAULT ''")
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_size_min", "TEXT DEFAULT '1'")
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "float_size_max", "TEXT DEFAULT '1'")
+	end
+)
+
+hook.Add(
+	"YRP_SQLDBREADY_VISUAL_UPDATE",
+	"yrp_playermodels",
+	function()
 		timer.Simple(
 			1,
 			function()

@@ -3,7 +3,7 @@
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_hud"
 hook.Add(
-	"YRP_SQLDBREADY_VISUAL",
+	"YRP_SQLDBREADY_VISUAL_DB",
 	"yrp_hud",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
@@ -13,6 +13,13 @@ hook.Add(
 		end
 
 		DefaultHUDSettings()
+	end
+)
+
+hook.Add(
+	"YRP_SQLDBREADY_VISUAL",
+	"yrp_hud",
+	function()
 		HudLoadoutAll()
 	end
 )
