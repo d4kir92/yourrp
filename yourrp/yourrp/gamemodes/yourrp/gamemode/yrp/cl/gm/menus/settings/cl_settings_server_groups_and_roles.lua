@@ -865,7 +865,7 @@ net.Receive(
 							sweps.uniqueID = group.uniqueID
 							sweps.w = ea.equipment:GetContent():GetWide()
 							sweps.h = YRP:ctr(325)
-							sweps.doclick = function()
+							sweps.DoClick = function()
 								local winswep = YRPCreateD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 								winswep:SetTitle("")
 								winswep:Center()
@@ -944,7 +944,7 @@ net.Receive(
 										swep.string_models = GetSwepWorldModel(v)
 										swep.string_classname = v
 										swep.string_name = v
-										swep.doclick = function()
+										swep.DoClick = function()
 											net.Start("nws_yrp_settings_rem_sweps")
 											net.WriteInt(group.uniqueID, 32)
 											net.WriteString(swep.string_classname)
@@ -1459,7 +1459,7 @@ net.Receive(
 					custom_flags.uniqueID = role.uniqueID
 					custom_flags.w = ea.flags:GetContent():GetWide()
 					custom_flags.h = YRP:ctr(225)
-					custom_flags.doclick = function()
+					custom_flags.DoClick = function()
 						net.Receive(
 							"nws_yrp_get_all_role_customflags",
 							function()
@@ -1555,7 +1555,7 @@ net.Receive(
 					playermodels.uniqueID = role.uniqueID
 					playermodels.w = ea.appearance:GetContent():GetWide()
 					playermodels.h = YRP:ctr(425)
-					playermodels.doclick = function()
+					playermodels.DoClick = function()
 						local pms = {}
 						local win = YRPCreateD("YFrame", nil, YRP:ctr(1400), YRP:ctr(1400), 0, 0)
 						win:SetHeaderHeight(YRP:ctr(100))
@@ -1830,7 +1830,7 @@ net.Receive(
 						function()
 							local tab_pm = net.ReadTable()
 							for i, v in pairs(tab_pm) do
-								v.doclick = function()
+								v.DoClick = function()
 									net.Start("nws_yrp_rem_role_playermodel")
 									net.WriteInt(role.uniqueID, 32)
 									net.WriteInt(v.uniqueID, 32)
@@ -1892,7 +1892,7 @@ net.Receive(
 					sweps.uniqueID = role.uniqueID
 					sweps.w = ea.equipment:GetContent():GetWide()
 					sweps.h = YRP:ctr(325)
-					sweps.doclick = function()
+					sweps.DoClick = function()
 						local lply = LocalPlayer()
 						lply.yrpseltab = {}
 						for i, v in pairs(string.Explode(",", role.string_sweps)) do
@@ -1942,7 +1942,7 @@ net.Receive(
 								swep.string_models = GetSWEPWorldModel(v)
 								swep.string_classname = v
 								swep.string_name = v
-								swep.doclick = function()
+								swep.DoClick = function()
 									net.Start("nws_yrp_rem_role_swep")
 									net.WriteInt(role.uniqueID, 32)
 									net.WriteString(swep.string_classname)
@@ -1982,7 +1982,7 @@ net.Receive(
 						swepsonspawn.uniqueID = role.uniqueID
 						swepsonspawn.w = ea.equipment:GetContent():GetWide()
 						swepsonspawn.h = YRP:ctr(325)
-						swepsonspawn.doclick = function()
+						swepsonspawn.DoClick = function()
 							local lply = LocalPlayer()
 							lply.yrpseltab = {}
 							for i, v in pairs(string.Explode(",", role.string_sweps_onspawn)) do
@@ -2033,7 +2033,7 @@ net.Receive(
 									swep.string_classname = v.classname
 									swep.string_name = v.classname
 									swep.slots = v
-									swep.doclick = function()
+									swep.DoClick = function()
 										net.Start("nws_yrp_rem_role_swep_onspawn")
 										net.WriteInt(role.uniqueID, 32)
 										net.WriteString(swep.string_classname)
@@ -2151,7 +2151,7 @@ net.Receive(
 					licenses.uniqueID = role.uniqueID
 					licenses.w = ea.equipment:GetContent():GetWide()
 					licenses.h = YRP:ctr(325)
-					licenses.doclick = function()
+					licenses.DoClick = function()
 						local winlicenses = YRPCreateD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 						winlicenses:SetTitle("")
 						winlicenses:Center()
@@ -2249,7 +2249,7 @@ net.Receive(
 									license.string_models = ""
 									license.string_classname = v.uniqueID
 									license.string_name = v.string_name
-									license.doclick = function()
+									license.DoClick = function()
 										net.Start("nws_yrp_rem_role_license")
 										net.WriteInt(role.uniqueID, 32)
 										net.WriteString(license.string_classname)
@@ -2505,7 +2505,7 @@ net.Receive(
 					ndsweps.uniqueID = role.uniqueID
 					ndsweps.w = ea.restriction:GetContent():GetWide()
 					ndsweps.h = YRP:ctr(325)
-					ndsweps.doclick = function()
+					ndsweps.DoClick = function()
 						local winndswep = YRPCreateD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 						winndswep:SetTitle("")
 						winndswep:Center()
@@ -2585,7 +2585,7 @@ net.Receive(
 								ndswep.string_models = GetSwepWorldModel(v) or "notfound"
 								ndswep.string_classname = v
 								ndswep.string_name = v
-								ndswep.doclick = function()
+								ndswep.DoClick = function()
 									net.Start("nws_yrp_rem_role_ndswep")
 									net.WriteInt(role.uniqueID, 32)
 									net.WriteString(ndswep.string_classname)
@@ -2616,7 +2616,7 @@ net.Receive(
 					specializations.uniqueID = role.uniqueID
 					specializations.w = ea.restriction:GetContent():GetWide()
 					specializations.h = YRP:ctr(325)
-					specializations.doclick = function()
+					specializations.DoClick = function()
 						local winspecializations = YRPCreateD("DFrame", nil, ScrW(), ScrH(), 0, 0)
 						winspecializations:SetTitle("")
 						winspecializations:Center()
@@ -2712,7 +2712,7 @@ net.Receive(
 									specialization.string_models = ""
 									specialization.string_classname = v.uniqueID
 									specialization.string_name = v.string_name
-									specialization.doclick = function()
+									specialization.DoClick = function()
 										net.Start("nws_yrp_rem_role_specialization")
 										net.WriteInt(role.uniqueID, 32)
 										net.WriteString(specialization.string_classname)

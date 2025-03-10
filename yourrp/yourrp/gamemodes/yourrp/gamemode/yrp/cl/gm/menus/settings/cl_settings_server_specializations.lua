@@ -75,7 +75,7 @@ net.Receive(
 				sweps.h = YRP:ctr(325)
 				sweps.x = YRP:ctr(0)
 				sweps.y = YRP:ctr(330)
-				sweps.doclick = function()
+				sweps.DoClick = function()
 					local lply = LocalPlayer()
 					lply.yrpseltab = {}
 					for i, v in pairs(string.Explode(",", tbl.sweps or "")) do
@@ -119,7 +119,7 @@ net.Receive(
 							swep.string_models = GetSwepWorldModel(v)
 							swep.string_classname = v
 							swep.string_name = v
-							swep.doclick = function()
+							swep.DoClick = function()
 								net.Start("nws_yrp_spec_rem_swep")
 								net.WriteInt(tbl.uniqueID, 32)
 								net.WriteString(swep.string_classname)
@@ -159,7 +159,7 @@ net.Receive(
 				pms.h = YRP:ctr(600)
 				pms.x = YRP:ctr(0)
 				pms.y = YRP:ctr(665)
-				pms.doclick = function()
+				pms.DoClick = function()
 					local lply = LocalPlayer()
 					lply.yrpseltab = {}
 					for i, v in pairs(string.Explode(",", tbl.pms or "")) do
@@ -214,7 +214,7 @@ net.Receive(
 							pms2.string_models = v
 							pms2.string_classname = v
 							pms2.string_name = v
-							pms2.doclick = function()
+							pms2.DoClick = function()
 								net.Start("nws_yrp_spec_rem_pm")
 								net.WriteInt(tbl.uniqueID, 32)
 								net.WriteString(pms2.string_classname)
