@@ -141,7 +141,6 @@ end
 YRP:AddNetworkString("nws_yrp_loaded_doors")
 function YRPLoadDoors()
 	if GetGlobalYRPBool("bool_building_system", false) then
-		YRP:msg("db", "[Buildings] Setting up Doors!")
 		local problems = 0
 		local _tmpDoors = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_doors", "*", nil)
 		if IsNotNilAndNotFalse(_tmpDoors) then
@@ -164,9 +163,7 @@ function YRPLoadDoors()
 			YRP:msg("db", "[Buildings] no doors in database!")
 		end
 
-		if problems == 0 then
-			YRP:msg("db", "[Buildings] No Problems found!")
-		else
+		if problems > 0 then
 			YRP:msg("db", string.format("[Buildings] Found %s Problems!", problems))
 		end
 

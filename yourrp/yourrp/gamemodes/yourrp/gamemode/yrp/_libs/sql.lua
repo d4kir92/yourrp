@@ -67,15 +67,15 @@ local function _IsReady()
 	end
 
 	if version ~= db_version then
-		MsgC(Color(0, 255, 0), "[YourRP] DATABASE: INIT TABLES (1/5) GENERAL (Can Take Some Time..)\n")
+		YRP:msg("db", "DATABASE: INIT TABLES (1/5) GENERAL (Can Take Some Time..)")
 		hook.Run("YRP_SQLDBREADY_GENERAL_DB")
-		MsgC(Color(0, 255, 0), "[YourRP] DATABASE: INIT TABLES (2/5) GAMEPLAY (Can Take Some Time..)\n")
+		YRP:msg("db", "DATABASE: INIT TABLES (2/5) GAMEPLAY (Can Take Some Time..)")
 		hook.Run("YRP_SQLDBREADY_GAMEPLAY_DB")
-		MsgC(Color(0, 255, 0), "[YourRP] DATABASE: INIT TABLES (3/5) VISUAL (Can Take Some Time..)\n")
+		YRP:msg("db", "DATABASE: INIT TABLES (3/5) VISUAL (Can Take Some Time..)")
 		hook.Run("YRP_SQLDBREADY_VISUAL_DB")
-		MsgC(Color(0, 255, 0), "[YourRP] DATABASE: INIT TABLES (4/5) COMMUNICATION (Can Take Some Time..)\n")
+		YRP:msg("db", "DATABASE: INIT TABLES (4/5) COMMUNICATION (Can Take Some Time..)")
 		hook.Run("YRP_SQLDBREADY_COMMUNICATION_DB")
-		MsgC(Color(0, 255, 0), "[YourRP] DATABASE: INIT TABLES (5/5) INTEGRATION (Can Take Some Time..)\n")
+		YRP:msg("db", "DATABASE: INIT TABLES (5/5) INTEGRATION (Can Take Some Time..)")
 		hook.Run("YRP_SQLDBREADY_INTEGRATION_DB")
 		YRP_SQL_UPDATE(
 			"yrp_sql",
@@ -85,23 +85,23 @@ local function _IsReady()
 		)
 	end
 
-	MsgC(Color(0, 255, 0), "[YourRP] DATABASE: UPDATE TABLES.\n")
+	YRP:msg("db", "DATABASE: UPDATE TABLES.")
 	hook.Run("YRP_SQLDBREADY_GENERAL_UPDATE")
 	hook.Run("YRP_SQLDBREADY_GAMEPLAY_UPDATE")
 	hook.Run("YRP_SQLDBREADY_VISUAL_UPDATE")
 	hook.Run("YRP_SQLDBREADY_COMMUNICATION_UPDATE")
 	hook.Run("YRP_SQLDBREADY_INTEGRATION_UPDATE")
-	MsgC(Color(0, 255, 0), "[YourRP] DATABASE: START TABLES (1/5) GENERAL (Can Take Some Time..)\n")
+	YRP:msg("db", "DATABASE: START TABLES (1/5) GENERAL (Can Take Some Time..)")
 	hook.Run("YRP_SQLDBREADY_GENERAL")
-	MsgC(Color(0, 255, 0), "[YourRP] DATABASE: START TABLES (2/5) GAMEPLAY (Can Take Some Time..)\n")
+	YRP:msg("db", "DATABASE: START TABLES (2/5) GAMEPLAY (Can Take Some Time..)")
 	hook.Run("YRP_SQLDBREADY_GAMEPLAY")
-	MsgC(Color(0, 255, 0), "[YourRP] DATABASE: START TABLES (3/5) VISUAL (Can Take Some Time..)\n")
+	YRP:msg("db", "DATABASE: START TABLES (3/5) VISUAL (Can Take Some Time..)")
 	hook.Run("YRP_SQLDBREADY_VISUAL")
-	MsgC(Color(0, 255, 0), "[YourRP] DATABASE: START TABLES (4/5) COMMUNICATION (Can Take Some Time..)\n")
+	YRP:msg("db", "DATABASE: START TABLES (4/5) COMMUNICATION (Can Take Some Time..)")
 	hook.Run("YRP_SQLDBREADY_COMMUNICATION")
-	MsgC(Color(0, 255, 0), "[YourRP] DATABASE: START TABLES (5/5) INTEGRATION (Can Take Some Time..)\n")
+	YRP:msg("db", "DATABASE: START TABLES (5/5) INTEGRATION (Can Take Some Time..)")
 	hook.Run("YRP_SQLDBREADY_INTEGRATION")
-	MsgC(Color(0, 255, 0), "[YourRP] DATABASE: LOADED TABLES.\n")
+	YRP:msg("db", "DATABASE: LOADED TABLES.")
 end
 
 local function _NotReadyMessage(msg, ...)
@@ -716,7 +716,7 @@ timer.Simple(
 					end
 
 					if not YRP_MYSQL_CHECK_OUTDATED() then
-						MsgC(Color(0, 255, 0), "LOAD MODULE MYSQLOO!\n")
+						YRP:msg("db", ">>> LOAD MODULE MYSQLOO! <<<")
 						require("mysqloo")
 						if mysqloo.VERSION ~= "9" or not mysqloo.MINOR_VERSION or tonumber(mysqloo.MINOR_VERSION) < 1 then
 							MsgC(Color(0, 255, 0), "You are using an outdated mysqloo version (9.7.6)\n")
@@ -743,13 +743,13 @@ timer.Simple(
 						YRP:msg("db", "Connection info:")
 						YRP:msg("db", "Hostname: " .. _sql_settings.string_host)
 						YRP:msg("db", "Username: " .. _sql_settings.string_username)
-						YRP:msg("note", "Password: " .. _sql_settings.string_password .. " (DON'T SHOW THIS TO OTHERS)")
+						YRP:msg("db", "Password: " .. _sql_settings.string_password .. " (DON'T SHOW THIS TO OTHERS)")
 						YRP:msg("db", "Database/Schema: " .. _sql_settings.string_database)
 						YRP:msg("db", "Port: " .. _sql_settings.int_port)
 						YRP:msg("db", "Setup MYSQL Connection-Table")
 						YRPSQL.db = mysqloo.connect(_sql_settings.string_host, _sql_settings.string_username, _sql_settings.string_password, _sql_settings.string_database, tonumber(_sql_settings.int_port))
 						YRPSQL.db.onConnected = function()
-							YRP:msg("note", ">>> CONNECTED! <<<")
+							YRP:msg("db", ">>> >>> >>> CONNECTED! <<< <<< <<<")
 							YRPSQL.mysql_worked = true
 							SetSQLMode(1)
 							ready = true
@@ -768,7 +768,7 @@ timer.Simple(
 							_IsReady()
 						end
 
-						YRP:msg("db", ">>> Connect to MYSQL Server, if stuck => connection info is wrong or server offline! ( default mysql port: 3306)")
+						YRP:msg("db", ">>> Connecting to MYSQL Server, if stuck:\n=> Connection-info is wrong or server offline!\n(Default MYSQL port: 3306)")
 						YRPSQL.db:connect()
 						YRPSQL.db:wait()
 					end
