@@ -3,8 +3,8 @@
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME_DOORS = "yrp_" .. GetMapNameDB() .. "_doors"
 hook.Add(
-	"YRP_SQLDBREADY_GAMEPLAY_DB",
-	"yrp_MAPNAME_doors",
+	"YRP_SQLDBREADY_GAMEPLAY",
+	"yrp_MAPNAME_doors_DB",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME_DOORS, "buildingID", "TEXT DEFAULT '-1'")
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME_DOORS, "level", "INTEGER DEFAULT 1")
@@ -14,8 +14,8 @@ hook.Add(
 
 local DATABASE_NAME_BUILDINGS = "yrp_" .. GetMapNameDB() .. "_buildings"
 hook.Add(
-	"YRP_SQLDBREADY_GAMEPLAY_DB",
-	"yrp_MAPNAME_buildings",
+	"YRP_SQLDBREADY_GAMEPLAY",
+	"yrp_MAPNAME_buildings_DB",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "groupID", "INTEGER DEFAULT 0")
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "buildingprice", "TEXT DEFAULT 100")

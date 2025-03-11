@@ -3,8 +3,8 @@
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_" .. GetMapNameDB()
 hook.Add(
-	"YRP_SQLDBREADY_GENERAL_DB",
-	"yrp_MAPNAME",
+	"YRP_SQLDBREADY_GENERAL",
+	"yrp_MAPNAME_DB",
 	function()
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "position", "TEXT DEFAULT ''")
 		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "angle", "TEXT DEFAULT ''")
