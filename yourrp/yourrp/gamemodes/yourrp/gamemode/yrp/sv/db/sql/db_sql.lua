@@ -52,34 +52,33 @@ local function SQLITE_ADD_COLUMN(table_name, column_name, datatype)
 	end
 end
 
-function UpdateValue(tab)
+function UpdateValue(tab, sqlite)
 	tab.uniqueID = tab.uniqueID or 1
 	YRP_SQL_UPDATE(
 		tab.db,
 		{
 			[tab.id] = tab.value
-		}, "uniqueID = '" .. tab.uniqueID .. "'", true
+		}, "uniqueID = '" .. tab.uniqueID .. "'", sqlite
 	)
-	--sql.Query( "UPDATE " .. tab.db .. " SET " .. tab.id .. " = '" .. tab.value .. "' WHERE uniqueID = '" .. tab.uniqueID .. "'" )
 end
 
 function UpdateString(tab)
-	YRP:msg("db", tab.ply:YRPName() .. " updated string " .. tab.id .. " to: " .. tab.value)
+	YRP:msg("db", tab.ply:YRPName() .. " updated string " .. tab.id .. " to: " .. tab.value .. " (" .. tostring(tab.db) .. ")")
 	UpdateValue(tab)
 end
 
 function UpdateInt(tab)
-	YRP:msg("db", tab.ply:YRPName() .. " updated int " .. tab.id .. " to: " .. tab.value)
+	YRP:msg("db", tab.ply:YRPName() .. " updated int " .. tab.id .. " to: " .. tab.value .. " (" .. tostring(tab.db) .. ")")
 	UpdateValue(tab)
 end
 
 function UpdateFloat(tab)
-	YRP:msg("db", tab.ply:YRPName() .. " updated float " .. tab.id .. " to: " .. tab.value)
+	YRP:msg("db", tab.ply:YRPName() .. " updated float " .. tab.id .. " to: " .. tab.value .. " (" .. tostring(tab.db) .. ")")
 	UpdateValue(tab)
 end
 
 function UpdateBool(tab)
-	YRP:msg("db", tab.ply:YRPName() .. " updated bool " .. tab.id .. " to: " .. tab.value)
+	YRP:msg("db", tab.ply:YRPName() .. " updated bool " .. tab.id .. " to: " .. tab.value .. " (" .. tostring(tab.db) .. ")")
 	UpdateValue(tab)
 end
 
@@ -97,17 +96,17 @@ function DBUpdateValue(db_name, str, l_db, value, sqlite)
 end
 
 function DBUpdateFloat(db_name, ply, netstr, str, l_db, value, sqlite)
-	YRP:msg("db", ply:YRPName() .. " updated float " .. str .. " to: " .. tostring(value))
+	YRP:msg("db", ply:YRPName() .. " updated float " .. str .. " to: " .. tostring(value) .. " (" .. tostring(db_name) .. ")")
 	DBUpdateValue(db_name, str, l_db, value, sqlite)
 end
 
 function DBUpdateInt(db_name, ply, netstr, str, l_db, value, sqlite)
-	YRP:msg("db", ply:YRPName() .. " updated int " .. str .. " to: " .. tostring(value))
+	YRP:msg("db", ply:YRPName() .. " updated int " .. str .. " to: " .. tostring(value) .. " (" .. tostring(db_name) .. ")")
 	DBUpdateValue(db_name, str, l_db, value, sqlite)
 end
 
 function DBUpdateString(db_name, ply, netstr, str, l_db, value, sqlite)
-	YRP:msg("db", ply:YRPName() .. " updated string " .. str .. " to: " .. tostring(value))
+	YRP:msg("db", ply:YRPName() .. " updated string " .. str .. " to: " .. tostring(value) .. " (" .. tostring(db_name) .. ")")
 	DBUpdateValue(db_name, str, l_db, value, sqlite)
 end
 

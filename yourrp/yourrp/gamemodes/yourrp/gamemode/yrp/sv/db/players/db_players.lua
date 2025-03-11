@@ -959,7 +959,7 @@ function YRPIsWhitelisted(ply, id)
 		if tonumber(_role.bool_whitelist) == 1 or tonumber(_role.int_prerole) > 0 then
 			local _plyAllowedRole = YRP_SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. steamid .. "' AND roleID = " .. id)
 			if ply:HasAccess("YRPIsWhitelisted", true) then
-				YRP:msg("gm", "[YRPIsWhitelisted]" .. ply:RPName() .. " has access.")
+				YRP:msg("gm", "[YRPIsWhitelisted]" .. ply:RPName() .. " has access (ADMIN).")
 
 				return true
 			else

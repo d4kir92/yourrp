@@ -228,7 +228,7 @@ function YRPDCheckBox(tab)
 	end
 
 	pnl.DCheckBox = YRPCreateD("DCheckBox", pnl.line, tab.h, tab.h, 0, 0)
-	pnl.DCheckBox:SetValue(tab.value)
+	pnl.DCheckBox:SetValue(tonumber(tab.value))
 	pnl.DCheckBox.serverside = false
 	function pnl.DCheckBox:Paint(pw, ph)
 		surfaceCheckBox(self, pw, ph, "done")
