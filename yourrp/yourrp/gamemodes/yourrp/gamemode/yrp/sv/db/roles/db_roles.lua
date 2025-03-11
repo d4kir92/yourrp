@@ -12,6 +12,87 @@ CATEGORIES.vehicles = {}
 local HANDLER_GROUPSANDROLES = {}
 HANDLER_GROUPSANDROLES["roleslist"] = {}
 HANDLER_GROUPSANDROLES["roles"] = {}
+function MoveUnusedGroups()
+	local count = 0
+	local all_groups = YRP_SQL_SELECT("yrp_ply_groups", "*", nil)
+	for i, group in pairs(all_groups) do
+		group.int_parentgroup = tonumber(group.int_parentgroup)
+		if group.int_parentgroup > 0 then
+			local parentgroup = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. group.int_parentgroup .. "'")
+			if parentgroup == nil then
+				count = count + 1
+				YRP:msg("note", "Group is out of space: " .. group.string_name)
+				YRP_SQL_UPDATE(
+					"yrp_ply_groups",
+					{
+						["int_parentgroup"] = 1
+					}, "uniqueID = '" .. group.uniqueID .. "'"
+				)
+			elseif group.uniqueID == parentgroup[1].int_parentgroup then
+				YRP:msg("note", "YOU MADE A LOOP IN PARENTGROUP!!!")
+				YRP_SQL_UPDATE(
+					"yrp_ply_groups",
+					{
+						["int_parentgroup"] = 1
+					}, "uniqueID = '" .. parentgroup[1].uniqueID .. "'"
+				)
+			end
+		end
+	end
+
+	if count > 0 then
+		MoveUnusedGroups()
+	end
+end
+
+function MoveUnusedRolesToDefault()
+	local changed = false
+	local allroles = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID, string_name, int_prerole, int_groupID", nil)
+	if IsNotNilAndNotFalse(allroles) then
+		for i, role in pairs(allroles) do
+			-- If prerole not exists remove the prerole
+			if tonumber(role.int_prerole) ~= 0 then
+				local prerole = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. role.int_prerole .. "'")
+				if not IsNotNilAndNotFalse(prerole) then
+					changed = true
+					YRP_SQL_UPDATE(
+						DATABASE_NAME,
+						{
+							["int_prerole"] = 0
+						}, "uniqueID = '" .. role.uniqueID .. "'"
+					)
+				elseif role.uniqueID == prerole[1].int_prerole then
+					YRP:msg("note", "YOU MADE A LOOP in PREROLES!!!")
+					YRP_SQL_UPDATE(
+						DATABASE_NAME,
+						{
+							["int_prerole"] = 0
+						}, "uniqueID = '" .. prerole[1].uniqueID .. "'"
+					)
+				end
+			end
+
+			MoveUnusedGroups()
+			-- if group not exists move it to default group
+			local group = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. role.int_groupID .. "'")
+			if not IsNotNilAndNotFalse(group) then
+				changed = true
+				YRP_SQL_UPDATE(
+					DATABASE_NAME,
+					{
+						["int_groupID"] = 1,
+						["int_prerole"] = 0
+					}, "uniqueID = '" .. role.uniqueID .. "'"
+				)
+			end
+		end
+	end
+
+	if changed then
+		YRP:msg("note", "Moved unused roles to the default group")
+	end
+end
+
 hook.Add(
 	"YRP_SQLDBREADY_GENERAL_DB",
 	"yrp_ply_roles",
@@ -369,87 +450,6 @@ hook.Add(
 		end
 	end
 )
-
-local function MoveUnusedGroups()
-	local count = 0
-	local all_groups = YRP_SQL_SELECT("yrp_ply_groups", "*", nil)
-	for i, group in pairs(all_groups) do
-		group.int_parentgroup = tonumber(group.int_parentgroup)
-		if group.int_parentgroup > 0 then
-			local parentgroup = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. group.int_parentgroup .. "'")
-			if parentgroup == nil then
-				count = count + 1
-				YRP:msg("note", "Group is out of space: " .. group.string_name)
-				YRP_SQL_UPDATE(
-					"yrp_ply_groups",
-					{
-						["int_parentgroup"] = 1
-					}, "uniqueID = '" .. group.uniqueID .. "'"
-				)
-			elseif group.uniqueID == parentgroup[1].int_parentgroup then
-				YRP:msg("note", "YOU MADE A LOOP IN PARENTGROUP!!!")
-				YRP_SQL_UPDATE(
-					"yrp_ply_groups",
-					{
-						["int_parentgroup"] = 1
-					}, "uniqueID = '" .. parentgroup[1].uniqueID .. "'"
-				)
-			end
-		end
-	end
-
-	if count > 0 then
-		MoveUnusedGroups()
-	end
-end
-
-function MoveUnusedRolesToDefault()
-	local changed = false
-	local allroles = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID, string_name, int_prerole, int_groupID", nil)
-	if IsNotNilAndNotFalse(allroles) then
-		for i, role in pairs(allroles) do
-			-- If prerole not exists remove the prerole
-			if tonumber(role.int_prerole) ~= 0 then
-				local prerole = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. role.int_prerole .. "'")
-				if not IsNotNilAndNotFalse(prerole) then
-					changed = true
-					YRP_SQL_UPDATE(
-						DATABASE_NAME,
-						{
-							["int_prerole"] = 0
-						}, "uniqueID = '" .. role.uniqueID .. "'"
-					)
-				elseif role.uniqueID == prerole[1].int_prerole then
-					YRP:msg("note", "YOU MADE A LOOP in PREROLES!!!")
-					YRP_SQL_UPDATE(
-						DATABASE_NAME,
-						{
-							["int_prerole"] = 0
-						}, "uniqueID = '" .. prerole[1].uniqueID .. "'"
-					)
-				end
-			end
-
-			MoveUnusedGroups()
-			-- if group not exists move it to default group
-			local group = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. role.int_groupID .. "'")
-			if not IsNotNilAndNotFalse(group) then
-				changed = true
-				YRP_SQL_UPDATE(
-					DATABASE_NAME,
-					{
-						["int_groupID"] = 1,
-						["int_prerole"] = 0
-					}, "uniqueID = '" .. role.uniqueID .. "'"
-				)
-			end
-		end
-	end
-
-	if changed then
-		YRP:msg("note", "Moved unused roles to the default group")
-	end
-end
 
 -- darkrp
 jobByCmd = jobByCmd or {}
