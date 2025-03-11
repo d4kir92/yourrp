@@ -203,31 +203,31 @@ net.Receive(
 function AddExtraTeam(...)
 end
 
+local function RemoveAddonsString(filePath)
+	return filePath:gsub("^addons/.*/lua/", "")
+end
+
+local function GetLuaFilesRecursively(folderPath, collectedFiles)
+	collectedFiles = collectedFiles or {}
+	local files, folders = file.Find(folderPath .. "*", "GAME")
+	if files then
+		for _, fileName in ipairs(files) do
+			if string.EndsWith(fileName, ".lua") and file.Exists(folderPath .. fileName, "GAME") and file.Size(folderPath .. fileName, "GAME") > 0 and string.find(folderPath .. fileName, "lua/darkrp_modules") then
+				table.insert(collectedFiles, folderPath .. fileName)
+			end
+		end
+	end
+
+	if folders then
+		for _, subfolderName in ipairs(folders) do
+			GetLuaFilesRecursively(folderPath .. subfolderName .. "/", collectedFiles)
+		end
+	end
+
+	return collectedFiles
+end
+
 function AddDarkRPModules()
-	local function RemoveAddonsString(filePath)
-		return filePath:gsub("^addons/.*/lua/", "")
-	end
-
-	local function GetLuaFilesRecursively(folderPath, collectedFiles)
-		collectedFiles = collectedFiles or {}
-		local files, folders = file.Find(folderPath .. "*", "GAME")
-		if files then
-			for _, fileName in ipairs(files) do
-				if string.EndsWith(fileName, ".lua") and string.find(folderPath .. fileName, "lua/darkrp_modules") then
-					table.insert(collectedFiles, folderPath .. fileName)
-				end
-			end
-		end
-
-		if folders then
-			for _, subfolderName in ipairs(folders) do
-				GetLuaFilesRecursively(folderPath .. subfolderName .. "/", collectedFiles)
-			end
-		end
-
-		return collectedFiles
-	end
-
 	local rootFolder = "addons/"
 	local luaFiles = GetLuaFilesRecursively(rootFolder)
 	if luaFiles then
