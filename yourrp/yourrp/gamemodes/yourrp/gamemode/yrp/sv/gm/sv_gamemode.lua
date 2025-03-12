@@ -704,6 +704,12 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 	ply:SetYRPInt("int_deathtimestamp_max", CurTime() + GetGlobalYRPInt("int_deathtimestamp_max", 60))
 end
 
+function YRPIsAllowedToDrop(ply, wep)
+	if wep:GetModel() ~= "" and IsNoDefaultWeapon(wep:GetClass()) and IsNoRoleSwep(ply, wep:GetClass()) and IsNoGroupSwep(ply, wep:GetClass()) and IsNoUserGroupWeapon(ply, wep:GetClass()) then return true end
+
+	return false
+end
+
 hook.Add(
 	"DoPlayerDeath",
 	"yrp_player_spawn_DoPlayerDeath",
@@ -735,12 +741,12 @@ hook.Add(
 			local _weapons = ply:GetWeapons()
 			local _cooldown_item = 60
 			for i, wep in pairs(_weapons) do
-				if wep:GetModel() ~= "" and IsNoDefaultWeapon(wep:GetClass()) and IsNoRoleSwep(ply, wep:GetClass()) and IsNoGroupSwep(ply, wep:GetClass()) and IsNoUserGroupWeapon(ply, wep:GetClass()) then
+				if YRPIsAllowedToDrop(ply, wep) then
 					local wepClass = wep:GetClass()
 					timer.Simple(
 						0.04 * i,
 						function()
-							ply:DropSWEP(wepClass, true)
+							ply:DropSWEP(wepClass)
 							timer.Simple(
 								_cooldown_item,
 								function()

@@ -86,7 +86,7 @@ end
 function YRPDropWeapon(sender)
 	if YRPEntityAlive(sender) then
 		local _weapon = sender:GetActiveWeapon()
-		if _weapon ~= nil and PlayersCanDropWeapons() then
+		if _weapon ~= nil and PlayersCanDropWeapons() and YRPIsAllowedToDrop(sender, _weapon) then
 			if YRPEntityAlive(_weapon) then
 				sender:DropSWEP(_weapon:GetClass())
 			end

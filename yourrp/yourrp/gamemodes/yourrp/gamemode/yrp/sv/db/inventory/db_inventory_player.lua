@@ -175,8 +175,7 @@ YRP:AddNetworkString("nws_yrp_dropswep")
 net.Receive(
 	"nws_yrp_dropswep",
 	function(len, ply)
-		local _enabled = PlayersCanDropWeapons()
-		if _enabled then
+		if PlayersCanDropWeapons() then
 			local _weapon = ply:GetActiveWeapon()
 			if _weapon ~= NULL and _weapon ~= nil and _weapon.notdropable == nil then
 				local _wclass = _weapon:GetClass() or ""
