@@ -933,7 +933,7 @@ function YRPIsWhitelisted(ply, id)
 		if YRPWORKED(_plyAllowedAll, "_plyAllowedAll", true) then
 			_plyAllowedAll = _plyAllowedAll[1]
 			if _plyAllowedAll.roleID == "-1" and _plyAllowedAll.groupID == "-1" then
-				YRP:msg("gm", "[YRPIsWhitelisted]" .. ply:RPName() .. " is ALL whitelisted")
+				YRP:msg("gm", "[IsWhitelisted] " .. ply:RPName() .. " is ALL whitelisted")
 
 				return true
 			end
@@ -945,11 +945,11 @@ function YRPIsWhitelisted(ply, id)
 			local _plyAllowedGroup = YRP_SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. steamid .. "' AND groupID = " .. _group.uniqueID)
 			if tonumber(_group.bool_whitelist) == 1 then
 				if IsNotNilAndNotFalse(_plyAllowedGroup) then
-					YRP:msg("gm", "[YRPIsWhitelisted]" .. ply:RPName() .. " is group whitelisted.")
+					YRP:msg("gm", "[IsWhitelisted] " .. ply:RPName() .. " is group whitelisted.")
 
 					return true
 				else
-					YRP:msg("gm", "[YRPIsWhitelisted]" .. ply:RPName() .. " is not group whitelisted.")
+					YRP:msg("gm", "[IsWhitelisted] " .. ply:RPName() .. " is not group whitelisted.")
 
 					return false
 				end
@@ -958,18 +958,18 @@ function YRPIsWhitelisted(ply, id)
 
 		if tonumber(_role.bool_whitelist) == 1 or tonumber(_role.int_prerole) > 0 then
 			local _plyAllowedRole = YRP_SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. steamid .. "' AND roleID = " .. id)
-			if ply:HasAccess("YRPIsWhitelisted", true) then
-				YRP:msg("gm", "[YRPIsWhitelisted]" .. ply:RPName() .. " has access (ADMIN).")
+			if false and ply:HasAccess("IsWhitelisted", true) then
+				YRP:msg("gm", "[IsWhitelisted] " .. ply:RPName() .. " has access (ADMIN).")
 
 				return true
 			else
 				if IsNotNilAndNotFalse(_plyAllowedRole) then
-					YRP:msg("gm", "[YRPIsWhitelisted]" .. ply:RPName() .. " is role whitelisted.")
+					YRP:msg("gm", "[IsWhitelisted] " .. ply:RPName() .. " is role whitelisted.")
 
 					return true
 				else
 					YRPWhitelistInfoPlayer(ply, "LID_youarenotwhitelisted")
-					YRP:msg("gm", "[YRPIsWhitelisted]" .. ply:RPName() .. " is not role whitelisted.")
+					YRP:msg("gm", "[IsWhitelisted] " .. ply:RPName() .. " is not role whitelisted.")
 
 					return false
 				end
@@ -980,7 +980,7 @@ function YRPIsWhitelisted(ply, id)
 	end
 
 	YRPWhitelistInfoPlayer(ply, "ROLE DOESN'T EXISTS ANYMORE")
-	YRP:msg("gm", "[YRPIsWhitelisted]" .. "ROLE DOESN'T EXISTS ANYMORE")
+	YRP:msg("gm", "[IsWhitelisted]" .. "ROLE DOESN'T EXISTS ANYMORE")
 
 	return false
 end
@@ -1083,6 +1083,7 @@ function canGetRole(ply, roleID, want)
 			-- Locked
 			if tonumber(tmpTableRole.bool_locked) == 1 then
 				YRP:msg("note", "[canGetRole] " .. "locked")
+				YRPNotiToPly("Role is locked!", ply)
 
 				return false
 			end
@@ -1118,7 +1119,7 @@ function canGetRole(ply, roleID, want)
 			if (tonumber(tmpTableRole.bool_whitelist) == 1 or tonumber(tmpTableRole.int_prerole) > 0) and not YRPIsWhitelisted(ply, roleID) then
 				local text = ply:YRPName() .. " is not whitelisted."
 				YRP:msg("gm", "[canGetRole] " .. text)
-				--YRPNotiToPly(text, ply)
+				YRPNotiToPly(text, ply)
 
 				return false
 			end
