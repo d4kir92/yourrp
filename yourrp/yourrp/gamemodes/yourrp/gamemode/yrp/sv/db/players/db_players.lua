@@ -933,7 +933,7 @@ function YRPIsWhitelisted(ply, id)
 		if YRPWORKED(_plyAllowedAll, "_plyAllowedAll", true) then
 			_plyAllowedAll = _plyAllowedAll[1]
 			if _plyAllowedAll.roleID == "-1" and _plyAllowedAll.groupID == "-1" then
-				YRP:msg("gm", "[IsWhitelisted] " .. ply:RPName() .. " is ALL whitelisted")
+				YRP:msg("gm", "[IsWhitelisted] " .. ply:RPName() .. " is ALL whitelisted id: " .. id)
 
 				return true
 			end
@@ -945,11 +945,11 @@ function YRPIsWhitelisted(ply, id)
 			local _plyAllowedGroup = YRP_SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. steamid .. "' AND groupID = " .. _group.uniqueID)
 			if tonumber(_group.bool_whitelist) == 1 then
 				if IsNotNilAndNotFalse(_plyAllowedGroup) then
-					YRP:msg("gm", "[IsWhitelisted] " .. ply:RPName() .. " is group whitelisted.")
+					YRP:msg("gm", "[IsWhitelisted] " .. ply:RPName() .. " is group whitelisted.id: " .. id)
 
 					return true
 				else
-					YRP:msg("gm", "[IsWhitelisted] " .. ply:RPName() .. " is not group whitelisted.")
+					YRP:msg("gm", "[IsWhitelisted] " .. ply:RPName() .. " is not group whitelisted.id: " .. id)
 
 					return false
 				end
@@ -958,18 +958,18 @@ function YRPIsWhitelisted(ply, id)
 
 		if tonumber(_role.bool_whitelist) == 1 or tonumber(_role.int_prerole) > 0 then
 			local _plyAllowedRole = YRP_SQL_SELECT("yrp_role_whitelist", "*", "SteamID = '" .. steamid .. "' AND roleID = " .. id)
-			if false and ply:HasAccess("IsWhitelisted", true) then
+			if ply:HasAccess("IsWhitelisted", true) then
 				YRP:msg("gm", "[IsWhitelisted] " .. ply:RPName() .. " has access (ADMIN).")
 
 				return true
 			else
 				if IsNotNilAndNotFalse(_plyAllowedRole) then
-					YRP:msg("gm", "[IsWhitelisted] " .. ply:RPName() .. " is role whitelisted.")
+					YRP:msg("gm", "[IsWhitelisted] " .. ply:RPName() .. " is role whitelisted.id: " .. id)
 
 					return true
 				else
 					YRPWhitelistInfoPlayer(ply, "LID_youarenotwhitelisted")
-					YRP:msg("gm", "[IsWhitelisted] " .. ply:RPName() .. " is not role whitelisted.")
+					YRP:msg("gm", "[IsWhitelisted] " .. ply:RPName() .. " is not role whitelisted.id: " .. id)
 
 					return false
 				end
