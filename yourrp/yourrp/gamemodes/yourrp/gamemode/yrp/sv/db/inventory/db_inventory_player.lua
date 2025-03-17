@@ -77,7 +77,13 @@ function Player:DropSWEP(cname, force)
 
 			self:RemoveWeapon(cname)
 			local ent = ents.Create(cname)
-			if ent.WorldModel == "" then
+			if ent == nil then
+				YRP.msg("note", "[DropSWEP] INVALID CLASSNAME: " .. cname)
+
+				return
+			end
+
+			if ent and ent.WorldModel == "" then
 				ent.WorldModel = "models/props_junk/garbage_takeoutcarton001a.mdl"
 			end
 

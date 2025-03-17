@@ -234,21 +234,21 @@ function AddDarkRPModules()
 		for _, filePath in ipairs(luaFiles) do
 			local fileName = string.match(filePath, ".*/(.*)")
 			local shortPath = RemoveAddonsString(filePath)
-			if file.Exists(filePath, "GAME") and file.Size(filePath, "GAME") > 0 then
+			if file.Exists(shortPath, "GAME") and file.Size(shortPath, "GAME") > 0 then
 				if string.StartWith(fileName, "sh_") then
-					MsgC(Color(0, 255, 0), "LOADED DARKRP MODULE FILE for SHARED: " .. filePath, "\n")
+					MsgC(Color(0, 255, 0), "LOADED DARKRP MODULE FILE for SHARED: " .. shortPath, "\n")
 					if SERVER then
 						AddCSLuaFile(shortPath)
 					end
 
 					include(shortPath)
 				elseif string.StartWith(fileName, "sv_") then
-					MsgC(Color(0, 255, 0), "LOADED DARKRP MODULE FILE for SERVER: " .. filePath, "\n")
+					MsgC(Color(0, 255, 0), "LOADED DARKRP MODULE FILE for SERVER: " .. shortPath, "\n")
 					if SERVER then
 						include(shortPath)
 					end
 				elseif string.StartWith(fileName, "cl_") then
-					MsgC(Color(0, 255, 0), "LOADED DARKRP MODULE FILE for CLIENT: " .. filePath, "\n")
+					MsgC(Color(0, 255, 0), "LOADED DARKRP MODULE FILE for CLIENT: " .. shortPath, "\n")
 					if SERVER then
 						AddCSLuaFile(shortPath)
 					else
