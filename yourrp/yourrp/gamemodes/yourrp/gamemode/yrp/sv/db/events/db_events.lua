@@ -51,7 +51,7 @@ net.Receive(
 		if ply:CanAccess("bool_events") then
 			local name = net.ReadString()
 			if name and name ~= "" then
-				YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_eventname", "'" .. name .. "'")
+				YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_eventname", YRP_SQL_STR_IN(name))
 				YRPSendEvents(ply)
 			end
 		end
