@@ -558,6 +558,8 @@ local COM = {}
 COM.element = "COM"
 local MI = {}
 MI.element = "MI"
+local LO = {}
+LO.element = "LO"
 local PM = {}
 PM.element = "PM"
 function HUDSimple()
