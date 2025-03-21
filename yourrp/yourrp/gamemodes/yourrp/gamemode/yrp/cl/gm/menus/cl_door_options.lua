@@ -23,7 +23,8 @@ net.Receive(
 	"nws_yrp_sendBuildingInfo",
 	function(len)
 		YRP:msg("note", "[DoorOptions] Got Date from Server")
-		if yrp_door.waitforanswer then
+		local force = net.ReadBool()
+		if yrp_door.waitforanswer or force then
 			yrp_door.waitforanswer = false
 			local door = net.ReadEntity()
 			local tab = net.ReadTable()
@@ -222,6 +223,7 @@ function YRPDoorBuyWindow(door, tabBuilding)
 		_ButtonAddNew:SetText("LID_addanewbuilding")
 		function _ButtonAddNew:DoClick()
 			net.Start("nws_yrp_addnewbuilding")
+			net.WriteEntity(door)
 			net.SendToServer()
 			if YRPPanelAlive(yrp_door.window) then
 				yrp_door.window:Close()

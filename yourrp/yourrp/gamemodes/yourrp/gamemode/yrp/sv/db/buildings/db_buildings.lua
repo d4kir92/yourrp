@@ -275,6 +275,7 @@ YRP:AddNetworkString("nws_yrp_addnewbuilding")
 net.Receive(
 	"nws_yrp_addnewbuilding",
 	function(len, ply)
+		local door = net.ReadEntity()
 		if not ply:HasAccess("nws_yrp_addnewbuilding") then
 			YRP:msg("db", ply:Nick() .. " has no rights to change Building.")
 
@@ -282,6 +283,24 @@ net.Receive(
 		end
 
 		YRP_SQL_INSERT_INTO_DEFAULTVALUES("yrp_" .. GetMapNameDB() .. "_buildings")
+		local last = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", nil, "ORDER BY uniqueID DESC LIMIT 1")
+		if last and last[1] then
+			last = last[1]
+			door:SetYRPString("buildingID", last.uniqueID)
+			YRP_SQL_UPDATE(
+				"yrp_" .. GetMapNameDB() .. "_doors",
+				{
+					["buildingID"] = tonumber(last.uniqueID)
+				}, "uniqueID = " .. door:GetYRPString("uniqueID")
+			)
+
+			timer.Simple(
+				0.3,
+				function()
+					getBuildingInfo(ply, door, last.uniqueID, true)
+				end
+			)
+		end
 	end
 )
 
@@ -853,12 +872,76 @@ net.Receive(
 	end
 )
 
-function YRPSendBuildingInfo(ply, ent, tab)
+function YRPSendBuildingInfo(ply, ent, tab, force)
 	local t = tab or {}
 	net.Start("nws_yrp_sendBuildingInfo")
+	net.WriteBool(force)
 	net.WriteEntity(ent)
 	net.WriteTable(t)
 	net.Send(ply)
+end
+
+function getBuildingInfo(ply, door, buid, force)
+	if IsNilOrFalse(buid) or buid == "" then
+		YRP:msg("db", "[getBuildingInfo] -> BuildingID (" .. tostring(buid) .. ") is not valid [Map: " .. GetMapNameDB() .. "]")
+		ply:PrintMessage(HUD_PRINTCENTER, "Building ID is INVALID")
+
+		return
+	end
+
+	if ply:GetYRPBool("bool_" .. "ishobo", false) then
+		YRP:msg("db", "[getBuildingInfo] Is Hobo, not possible to buy as hobo")
+		ply:PrintMessage(HUD_PRINTCENTER, "You are a HOBO, not possible to buy")
+
+		return
+	end
+
+	local tabOwner = {}
+	local tabGroup = {}
+	local tabBuilding = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. buid .. "'")
+	--local owner = ""
+	if IsNotNilAndNotFalse(tabBuilding) then
+		tabBuilding = tabBuilding[1]
+		tabBuilding.name = tabBuilding.name
+		tabBuilding.groupID = tonumber(tabBuilding.groupID)
+		if not strEmpty(tabBuilding.ownerCharID) then
+			tabOwner = YRP_SQL_SELECT("yrp_characters", "*", "uniqueID = '" .. tabBuilding.ownerCharID .. "'")
+			if IsNotNilAndNotFalse(tabOwner) then
+				tabOwner = tabOwner[1]
+				--owner = tabOwner.rpname
+			else
+				YRP:msg("db", "[getBuildingInfo] owner dont exists.")
+				tabOwner = {}
+			end
+		elseif tabBuilding.groupID ~= 0 then
+			tabGroup = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. tabBuilding.groupID .. "'")
+			if IsNotNilAndNotFalse(tabGroup) then
+				tabGroup = tabGroup[1]
+				--owner = _tmpGroTab.string_name
+			else
+				YRP_SQL_UPDATE(
+					"yrp_" .. GetMapNameDB() .. "_buildings",
+					{
+						["groupID"] = 0
+					}, "uniqueID = '" .. buid .. "'"
+				)
+
+				YRP:msg("db", "[getBuildingInfo] group dont exists.")
+				tabGroup = {}
+			end
+		end
+
+		local tab = {}
+		tab["B"] = tabBuilding
+		tab["O"] = tabOwner
+		tab["G"] = tabGroup
+		YRPSendBuildingInfo(ply, door, tab, force)
+
+		return
+	else
+		ply:PrintMessage(HUD_PRINTCENTER, "Building not found in Database")
+		YRP:msg("error", "getBuildingInfo -> Building not found in Database. [Map: " .. GetMapNameDB() .. "][id: " .. buid .. "]")
+	end
 end
 
 net.Receive(
@@ -866,66 +949,7 @@ net.Receive(
 	function(len, ply)
 		local door = net.ReadEntity()
 		local buid = door:GetYRPString("buildingID", "")
-		if IsNilOrFalse(buid) or buid == "" then
-			YRP:msg("db", "[getBuildingInfo] -> BuildingID (" .. tostring(buid) .. ") is not valid [Map: " .. GetMapNameDB() .. "]")
-			ply:PrintMessage(HUD_PRINTCENTER, "Building ID is INVALID")
-
-			return
-		end
-
-		if ply:GetYRPBool("bool_" .. "ishobo", false) then
-			YRP:msg("db", "[getBuildingInfo] Is Hobo, not possible to buy as hobo")
-			ply:PrintMessage(HUD_PRINTCENTER, "You are a HOBO, not possible to buy")
-
-			return
-		end
-
-		local tabOwner = {}
-		local tabGroup = {}
-		local tabBuilding = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. buid .. "'")
-		--local owner = ""
-		if IsNotNilAndNotFalse(tabBuilding) then
-			tabBuilding = tabBuilding[1]
-			tabBuilding.name = tabBuilding.name
-			tabBuilding.groupID = tonumber(tabBuilding.groupID)
-			if not strEmpty(tabBuilding.ownerCharID) then
-				tabOwner = YRP_SQL_SELECT("yrp_characters", "*", "uniqueID = '" .. tabBuilding.ownerCharID .. "'")
-				if IsNotNilAndNotFalse(tabOwner) then
-					tabOwner = tabOwner[1]
-					--owner = tabOwner.rpname
-				else
-					YRP:msg("db", "[getBuildingInfo] owner dont exists.")
-					tabOwner = {}
-				end
-			elseif tabBuilding.groupID ~= 0 then
-				tabGroup = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. tabBuilding.groupID .. "'")
-				if IsNotNilAndNotFalse(tabGroup) then
-					tabGroup = tabGroup[1]
-					--owner = _tmpGroTab.string_name
-				else
-					YRP_SQL_UPDATE(
-						"yrp_" .. GetMapNameDB() .. "_buildings",
-						{
-							["groupID"] = 0
-						}, "uniqueID = '" .. buid .. "'"
-					)
-
-					YRP:msg("db", "[getBuildingInfo] group dont exists.")
-					tabGroup = {}
-				end
-			end
-
-			local tab = {}
-			tab["B"] = tabBuilding
-			tab["O"] = tabOwner
-			tab["G"] = tabGroup
-			YRPSendBuildingInfo(ply, door, tab)
-
-			return
-		else
-			ply:PrintMessage(HUD_PRINTCENTER, "Building not found in Database")
-			YRP:msg("error", "getBuildingInfo -> Building not found in Database. [Map: " .. GetMapNameDB() .. "][id: " .. buid .. "]")
-		end
+		getBuildingInfo(ply, door, buid, false)
 	end
 )
 
