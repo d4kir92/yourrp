@@ -326,32 +326,33 @@ function Player:CharID()
 end
 
 function Player:UpdateMoney()
-	if SERVER and self:HasCharacterSelected() then
-		local _char_id = self:CharID()
-		if _char_id ~= false then
-			local money = self:GetYRPString("money", "FAILED")
-			if money == "FAILED" then return false end
-			if YRPWORKED(money, "ply:money UpdateMoney", true) then
-				YRP_SQL_UPDATE(
-					"yrp_characters",
-					{
-						["money"] = money
-					}, "uniqueID = " .. _char_id
-				)
-			end
-
-			local moneybank = tonumber(self:GetYRPString("moneybank", "FAILED"))
-			if moneybank == "FAILED" then return false end
-			if YRPWORKED(moneybank, "ply:moneybank UpdateMoney", true) then
-				YRP_SQL_UPDATE(
-					"yrp_characters",
-					{
-						["moneybank"] = moneybank
-					}, "uniqueID = " .. _char_id
-				)
-			end
-		end
+	if not SERVER or not self:HasCharacterSelected() then return false end
+	local charID = self:CharID()
+	if not charID then return false end
+	local money = self:GetYRPString("money", "FAILED")
+	if money == "FAILED" then return false end
+	if IsNotNilAndNotFalse(money) then
+		YRP_SQL_UPDATE(
+			"yrp_characters",
+			{
+				["money"] = money
+			}, "uniqueID = " .. charID
+		)
 	end
+
+	local moneyBank = self:GetYRPString("moneybank", "FAILED")
+	moneyBank = tonumber(moneyBank)
+	if not moneyBank then return false end
+	if IsNotNilAndNotFalse(moneyBank) then
+		YRP_SQL_UPDATE(
+			"yrp_characters",
+			{
+				["moneybank"] = moneyBank
+			}, "uniqueID = " .. charID
+		)
+	end
+
+	return true
 end
 
 function Player:GetPlayerModel()
