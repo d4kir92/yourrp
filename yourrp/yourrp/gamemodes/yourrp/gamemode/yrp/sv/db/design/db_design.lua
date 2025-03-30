@@ -62,7 +62,6 @@ hook.Add(
 	end
 )
 
---YRP_SQL_DROPTABLE(DATABASE_NAME)
 local HUDS = {}
 function YRPGetHUDs()
 	hook.Run("RegisterHUDDesign")
