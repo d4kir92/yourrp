@@ -99,7 +99,7 @@ function YRPTestContentAddons()
 end
 
 function YRPTestDarkrpmodification()
-	if file.Exists("addons/darkrpmodification", "GAME") then
+	if file.Exists("addons/darkrpmodification", "MOD") then
 		SetGlobalYRPBool("hasdarkrpmodification", true)
 	else
 		SetGlobalYRPBool("hasdarkrpmodification", false)
