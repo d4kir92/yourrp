@@ -66,6 +66,21 @@ local function _IsReady()
 		end
 	end
 
+	for i, tableName in pairs(GetDBNames()) do
+		if tableName and not YRP_SQL_TABLE_EXISTS(tableName, "_IsReady") then
+			YRP_SQL_UPDATE(
+				"yrp_sql",
+				{
+					["db_version"] = 0
+				}, "uniqueID = '1'", true
+			)
+
+			version = 0
+			YRP.msg("db", "MISSING TABLE: " .. tableName)
+			break
+		end
+	end
+
 	if version ~= db_version then
 		YRP:msg("db", "DATABASE: INIT TABLES (1/5) GENERAL (Can Take Some Time..)")
 		hook.Run("YRP_SQLDBREADY_GENERAL_DB")

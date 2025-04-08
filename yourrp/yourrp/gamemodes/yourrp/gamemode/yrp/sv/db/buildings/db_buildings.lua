@@ -496,21 +496,29 @@ net.Receive(
 						tabChar = tabChar[1]
 					end
 
-					for k, v in pairs(GetAllDoors()) do
-						if tonumber(v:GetYRPString("buildingID")) == tonumber(_tmpBuildingID) then
-							v:SetYRPString("ownerRPName", tabChar.rpname)
-							v:SetYRPInt("ownerCharID", tonumber(ply:CharID()))
-							v:SetYRPString("coownerCharIDs", _tmpTable[1].coownerCharIDs)
-							v:SetYRPBool("bool_hasowner", true)
+					if tabChar then
+						for k, v in pairs(GetAllDoors()) do
+							if tonumber(v:GetYRPString("buildingID")) == tonumber(_tmpBuildingID) then
+								v:SetYRPString("ownerRPName", tabChar.rpname)
+								v:SetYRPInt("ownerCharID", tonumber(ply:CharID()))
+								v:SetYRPString("coownerCharIDs", _tmpTable[1].coownerCharIDs)
+								v:SetYRPBool("bool_hasowner", true)
+							end
+						end
+
+						YRP:msg("gm", ply:RPName() .. " has buyed a building")
+					else
+						if tabChar == nil then
+							YRP:msg("gm", ply:RPName() .. " has FAILED to buy a building, CHAR invalid")
+						else
+							YRP:msg("gm", ply:RPName() .. " has FAILED to buy a building, UNKNOWN")
 						end
 					end
-
-					YRP:msg("gm", ply:RPName() .. " has buyed a door")
 				else
 					YRP:msg("gm", ply:RPName() .. " has already an owner!")
 				end
 			else
-				YRP:msg("gm", ply:RPName() .. " has not enough money to buy door")
+				YRP:msg("gm", ply:RPName() .. " has not enough money to buy building")
 			end
 		else
 			YRP:msg("db", "buildings disabled")
