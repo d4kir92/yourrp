@@ -80,42 +80,41 @@ if CLIENT then
 	local mainColor = Color(40, 40, 255, 255)
 	local textColor = Color(255, 255, 255, 255)
 	function SWEP:DrawHUD()
-		if IsValid(self:GetOwner()) and self:GetOwner().GetVehicle and IsValid(self:GetOwner():GetVehicle()) then return end
-		local Pos = self:GetOwner():GetShootPos()
-		local Aim = self:GetOwner():GetAimVector()
-		local Tr = util.TraceLine{
-			start = Pos,
-			endpos = Pos + Aim * self.Range,
-			filter = player.GetAll(),
-		}
+		if self:GetOwner() and IsValid(self:GetOwner()) and self:GetOwner():IsPlayer() then
+			if self:GetOwner().GetVehicle and IsValid(self:GetOwner():GetVehicle()) then return end
+			local Pos = self:GetOwner():GetShootPos()
+			local Aim = self:GetOwner():GetAimVector()
+			local Tr = util.TraceLine{
+				start = Pos,
+				endpos = Pos + Aim * self.Range,
+				filter = player.GetAll(),
+			}
 
-		local HitEnt = Tr.Entity
-		if IsValid(HitEnt) and HitEnt:GetMoveType() == MOVETYPE_VPHYSICS and not self.rDag and not HitEnt:IsVehicle() and not IsValid(HitEnt:GetParent()) and not HitEnt:GetYRPBool("NoDrag", false) then
-			self.Time = math.min(1, self.Time + 2 * FrameTime())
-		else
-			self.Time = math.max(0, self.Time - 2 * FrameTime())
-		end
-
-		if self.Time > 0 and not self.Drag then
-			textColor.a = mainColor.a * self.Time
-			draw.SimpleText(YRP:trans("LID_drag"), "Y_30_500", x, y, textColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		end
-
-		if self.Drag and IsValid(self.Drag.Entity) then
-			local Pos2 = Pos + Aim * 100 * self.Drag.Fraction
-			local OffPos = self.Drag.Entity:LocalToWorld(self.Drag.OffPos)
-			local A = OffPos:ToScreen()
-			local B = Pos2:ToScreen()
-			surface.SetDrawColor(mainColor)
-			for size = 1, 5 do
-				surface.DrawCircle(A.x, A.y, size, mainColor)
-				surface.DrawCircle(B.x, B.y, size, mainColor)
+			local HitEnt = Tr.Entity
+			if IsValid(HitEnt) and HitEnt:GetMoveType() == MOVETYPE_VPHYSICS and not self.rDag and not HitEnt:IsVehicle() and not IsValid(HitEnt:GetParent()) and not HitEnt:GetYRPBool("NoDrag", false) then
+				self.Time = math.min(1, self.Time + 2 * FrameTime())
+			else
+				self.Time = math.max(0, self.Time - 2 * FrameTime())
 			end
 
-			surface.DrawLine(A.x, A.y, B.x, B.y)
+			if self.Time > 0 and not self.Drag then
+				textColor.a = mainColor.a * self.Time
+				draw.SimpleText(YRP:trans("LID_drag"), "Y_30_500", x, y, textColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			end
+
+			if self.Drag and IsValid(self.Drag.Entity) then
+				local Pos2 = Pos + Aim * 100 * self.Drag.Fraction
+				local OffPos = self.Drag.Entity:LocalToWorld(self.Drag.OffPos)
+				local A = OffPos:ToScreen()
+				local B = Pos2:ToScreen()
+				surface.SetDrawColor(mainColor)
+				for size = 1, 5 do
+					surface.DrawCircle(A.x, A.y, size, mainColor)
+					surface.DrawCircle(B.x, B.y, size, mainColor)
+				end
+
+				surface.DrawLine(A.x, A.y, B.x, B.y)
+			end
 		end
 	end
 end
---[[function SWEP:PreDrawViewModel( vm, pl, wep )
-	return true
-end]]

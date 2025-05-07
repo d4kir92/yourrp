@@ -131,7 +131,7 @@ function MSGChannelEnabled(chan)
 		return true
 	elseif GetGlobalYRPBool("yrp_general_loaded") then
 		if not IsChannelRegistered(chan) then
-			YRP:msg("error", "!!!" .. chan .. "!!!")
+			YRP:msg("error", "Chan: " .. chan .. " is not registered!")
 		elseif GetGlobalYRPBool("bool_msg_channel_" .. chan) == true then
 			return true
 		end
