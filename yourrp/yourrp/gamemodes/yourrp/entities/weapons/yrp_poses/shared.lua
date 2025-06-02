@@ -408,11 +408,13 @@ function YRPDoPoses()
 			if ply.yrpposestatus == "do" then
 				for ii, v in pairs(yrp_poses[ply.yrpposeart][ply.yrppose]) do
 					local boneID = ply:LookupBone(ii)
-					if boneID and v.ang then
+					if boneID and v.ang and ply["posesang"][boneID] then
+						ply["posesang"][boneID] = ply["posesang"][boneID] or Angle(0, 0, 0)
 						ply:ManipulateBoneAngles(boneID, ply["posesang"][boneID])
 					end
 
 					if boneID and v.pos then
+						ply["posespos"][boneID] = ply["posespos"][boneID] or Vector(0, 0, 0)
 						ply:ManipulateBonePosition(boneID, ply["posespos"][boneID])
 					end
 				end
