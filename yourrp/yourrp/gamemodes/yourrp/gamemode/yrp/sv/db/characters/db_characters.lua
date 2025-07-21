@@ -706,7 +706,7 @@ function YRPSendCharacters(ply, from)
 	local _charCount = 0
 	if IsNotNilAndNotFalse(chaTab) then
 		for k, v in pairs(chaTab) do
-			if v.roleID ~= nil and v.groupID ~= nil and tobool(v.bool_archived) == false then
+			if v.roleID ~= nil and v.groupID ~= nil then
 				_charCount = _charCount + 1
 				netTable[_charCount] = {}
 				v.rpname = v.rpname

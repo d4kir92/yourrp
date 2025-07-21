@@ -82,7 +82,7 @@ net.Receive(
 
 function GetBackupCreateTime()
 	local _create = sql.Query("SELECT int_backup_create FROM yrp_sql WHERE uniqueID = 1;")
-	if IsNotNilAndNotFalse(_create) and _create[1] then
+	if IsNotNilAndNotFalse(_create) then
 		local num = tonumber(_create[1].int_backup_create)
 		if isnumber(num) then
 			num = num * 60 * 60
