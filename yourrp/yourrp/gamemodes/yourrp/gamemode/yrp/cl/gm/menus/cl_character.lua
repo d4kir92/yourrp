@@ -159,14 +159,14 @@ function YRPLoadCharacters()
 				local cei = 0
 				for i = 1, #chars do
 					if chars[i].char ~= nil then
+						chars[i].char.bool_archived = tobool(chars[i].char.bool_archived)
+						if GetGlobalYRPBool("bool_characters_removeondeath", false) and chars[i].char.bool_archived then continue end
 						chars[i].char = chars[i].char or {}
 						chars[i].role = chars[i].role or {}
 						chars[i].group = chars[i].group or {}
 						chars[i].faction = chars[i].faction or {}
 						chars[i].char.uniqueID = tonumber(chars[i].char.uniqueID)
-						chars[i].char.bool_archived = tobool(chars[i].char.bool_archived)
 						chars[i].char.bool_eventchar = tobool(chars[i].char.bool_eventchar)
-						if GetGlobalYRPBool("bool_characters_removeondeath", false) and chars[i].char.bool_archived then continue end
 						if chars[i].char.bool_eventchar then
 							CharMenu.character.amountevent = CharMenu.character.amountevent + 1
 							cei = cei + 1
