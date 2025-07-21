@@ -641,6 +641,20 @@ function SendLoopCharacterList(ply, tab)
 	if ply:IsBot() then return end
 	if ply.sendchars then return end
 	ply.sendchars = true
+	local test = 0
+	for i, v in pairs(tab) do
+		test = test + 1
+	end
+
+	if test == 0 then
+		net.Start("nws_yrp_get_characters")
+		net.WriteBool(false)
+		net.Send(ply)
+		ply.sendchars = false
+
+		return
+	end
+
 	local c = 1
 	for i, char in pairs(tab) do
 		char.c = c
@@ -660,9 +674,10 @@ function SendLoopCharacterList(ply, tab)
 
 					if char then
 						net.Start("nws_yrp_get_characters")
+						net.WriteBool(true)
 						net.WriteBool(first)
-						net.WriteTable(char) -- TODO WriteTable get rid off
 						net.WriteBool(last)
+						net.WriteTable(char) -- TODO WriteTable get rid off
 						net.Send(ply)
 					end
 
@@ -707,39 +722,41 @@ function YRPSendCharacters(ply, from)
 	if IsNotNilAndNotFalse(chaTab) then
 		for k, v in pairs(chaTab) do
 			if v.roleID ~= nil and v.groupID ~= nil then
-				_charCount = _charCount + 1
-				netTable[_charCount] = {}
-				v.rpname = v.rpname
-				netTable[_charCount].char = v
-				netTable[_charCount].role = {}
-				netTable[_charCount].group = {}
-				netTable[_charCount].group.string_name = "INVALID GROUP"
-				netTable[_charCount].faction = {}
-				netTable[_charCount].faction.string_name = "INVALID FACTION"
-				netTable[_charCount].faction.string_icon = ""
-				local tmp = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tonumber(v.roleID))
-				if YRPWORKED(tmp, "charGetCharacters role") then
-					tmp = tmp[1]
-					netTable[_charCount].role = tmp
-				else
-					local tmpDefault = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. "1")
-					if YRPWORKED(tmpDefault, "charGetCharacters tmpDefault") then
-						tmpDefault = tmpDefault[1]
-						netTable[_charCount].role = tmpDefault
+				if not tobool(v.bool_archived) then
+					_charCount = _charCount + 1
+					netTable[_charCount] = {}
+					v.rpname = v.rpname
+					netTable[_charCount].char = v
+					netTable[_charCount].role = {}
+					netTable[_charCount].group = {}
+					netTable[_charCount].group.string_name = "INVALID GROUP"
+					netTable[_charCount].faction = {}
+					netTable[_charCount].faction.string_name = "INVALID FACTION"
+					netTable[_charCount].faction.string_icon = ""
+					local tmp = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. tonumber(v.roleID))
+					if YRPWORKED(tmp, "charGetCharacters role") then
+						tmp = tmp[1]
+						netTable[_charCount].role = tmp
+					else
+						local tmpDefault = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. "1")
+						if YRPWORKED(tmpDefault, "charGetCharacters tmpDefault") then
+							tmpDefault = tmpDefault[1]
+							netTable[_charCount].role = tmpDefault
+						end
+
+						v.roleID = 1
 					end
 
-					v.roleID = 1
-				end
-
-				netTable[_charCount].role.string_playermodels = GetPlayermodelsOfRole(v.roleID)
-				local tmp2 = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. tonumber(v.roleID) .. "'")
-				if tmp2 ~= nil and tmp2 ~= false then
-					tmp2 = tmp2[1]
-					local tmp3 = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. tonumber(tmp2.int_groupID) .. "'")
-					if YRPWORKED(tmp3, "charGetCharacters group") then
-						tmp3 = tmp3[1]
-						netTable[_charCount].group = tmp3
-						netTable[_charCount].faction = GetFactionTable(tmp3.uniqueID)
+					netTable[_charCount].role.string_playermodels = GetPlayermodelsOfRole(v.roleID)
+					local tmp2 = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. tonumber(v.roleID) .. "'")
+					if tmp2 ~= nil and tmp2 ~= false then
+						tmp2 = tmp2[1]
+						local tmp3 = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. tonumber(tmp2.int_groupID) .. "'")
+						if YRPWORKED(tmp3, "charGetCharacters group") then
+							tmp3 = tmp3[1]
+							netTable[_charCount].group = tmp3
+							netTable[_charCount].faction = GetFactionTable(tmp3.uniqueID)
+						end
 					end
 				end
 			else

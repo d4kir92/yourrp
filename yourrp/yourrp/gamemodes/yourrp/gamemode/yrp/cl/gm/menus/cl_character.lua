@@ -115,7 +115,6 @@ function YRPCloseCharacterSelection()
 end
 
 local curChar = -1
-local validchar = false
 local _cur = ""
 local chars = {}
 local loading = false
@@ -870,16 +869,23 @@ net.Receive(
 net.Receive(
 	"nws_yrp_get_characters",
 	function(len)
-		local first = net.ReadBool()
-		if first and YRPPanelAlive(CharMenu.characterList, "CharMenu.characterList") and CharMenu.characterList.Clear then
+		local valid = net.ReadBool()
+		if valid then
+			local first = net.ReadBool()
+			local last = net.ReadBool()
+			if first and YRPPanelAlive(CharMenu.characterList, "CharMenu.characterList") and CharMenu.characterList.Clear then
+				chars = {}
+				CharMenu.characterList:Clear()
+			end
+
+			local char = net.ReadTable()
+			table.insert(chars, char)
+			if last then
+				YRPLoadCharacters()
+			end
+		else
 			chars = {}
 			CharMenu.characterList:Clear()
-		end
-
-		local char = net.ReadTable()
-		local last = net.ReadBool()
-		table.insert(chars, char)
-		if last then
 			YRPLoadCharacters()
 		end
 	end
@@ -1675,7 +1681,7 @@ function YRPOCS(force)
 					testid = CharMenu.characterList.OffsetX / (charw + YRP:ctr(200))
 					testid = math.Round(testid)
 					testid = testid + 1
-					if chars[testid] and chars[testid].char and not chars[testid].char.bool_eventchar then
+					if chars[testid] and chars[testid].char and not chars[testid].char.bool_eventchar and not chars[testid].char.bool_archived then
 						validchar = true
 						curChar = chars[testid].char.uniqueID
 						curCharName = chars[testid].char.rpname
@@ -1781,7 +1787,7 @@ function YRPOCS(force)
 				local tab = {}
 				local text = math.Round(LocalPlayer():GetYRPInt("int_deathtimestamp_min", 0) - CurTime(), 0)
 				tab.color = Color(38, 222, 129)
-				if LocalPlayer():GetYRPInt("int_deathtimestamp_min", 0) <= CurTime() and validchar then
+				if LocalPlayer():GetYRPInt("int_deathtimestamp_min", 0) <= CurTime() then
 					text = YRP:trans("LID_play") -- .. " ( " .. curCharName .. " )"
 				else
 					text = ""
@@ -1800,7 +1806,7 @@ function YRPOCS(force)
 
 			charactersEnter:SetText("")
 			function charactersEnter:DoClick()
-				if LocalPlayer() ~= nil and validchar and curChar > -1 and LocalPlayer():GetYRPInt("int_deathtimestamp_min", 0) <= CurTime() then
+				if LocalPlayer() ~= nil and curChar > -1 and LocalPlayer():GetYRPInt("int_deathtimestamp_min", 0) <= CurTime() then
 					if LocalPlayer():Alive() then
 						YRPCloseCharacterSelection()
 					elseif curChar ~= nil then
