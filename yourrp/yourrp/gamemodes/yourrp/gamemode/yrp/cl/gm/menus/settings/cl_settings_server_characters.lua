@@ -16,17 +16,19 @@ net.Receive(
 
 				descr = descr or ""
 				if YRPPanelAlive(YRPCharList) and YRPCharList.AddLine then
-					YRPCharList:AddLine(tab.SteamID, tab.rpname, tab.text_idcardid, descr, tab.groupID, tab.roleID, tab.money, tab.moneybank, tab.int_level, event, archi)
+					YRPCharList:AddLine(tab.uniqueID, tab.SteamID, tab.rpname, tab.text_idcardid, descr, tab.groupID, tab.roleID, tab.money, tab.moneybank, tab.int_level, event, archi)
 				end
 			end
 		end
 	end
 )
 
+local _tmpPanel = nil
 function OpenSettingsCharacters()
 	local PARENT = GetSettingsSite()
 	if YRPPanelAlive(PARENT) then
 		YRPCharList = YRPCreateD("DListView", PARENT, PARENT:GetWide(), PARENT:GetTall(), 0, 0)
+		YRPCharList:AddColumn(YRP:trans("LID_id")):SetFixedWidth(50)
 		YRPCharList:AddColumn("SteamID")
 		YRPCharList:AddColumn(YRP:trans("LID_name"))
 		YRPCharList:AddColumn(YRP:trans("LID_idcardid"))
@@ -38,19 +40,28 @@ function OpenSettingsCharacters()
 		YRPCharList:AddColumn(YRP:trans("LID_level")):SetFixedWidth(50)
 		YRPCharList:AddColumn(YRP:trans("LID_event")):SetFixedWidth(50)
 		YRPCharList:AddColumn("Archived"):SetFixedWidth(50)
-		function YRPCharList:OnRowRightClick(lineID, line)
-			local _tmpSteamID = line:GetValue(1)
-			for i, v in pairs(player.GetAll()) do
-				if v:YRPSteamID() == _tmpSteamID then
-					ply = v
-					break
+		net.Receive(
+			"nws_yrp_character_delete",
+			function(len)
+				if YRPCharList then
+					local id = net.ReadString()
+					for i, v in pairs(YRPCharList:GetLines()) do
+						if v:GetValue(1) == id then
+							YRPCharList:RemoveLine(v:GetID())
+							if _tmpPanel then
+								_tmpPanel:Remove()
+							end
+						end
+					end
 				end
 			end
+		)
 
+		function YRPCharList:OnRowRightClick(lineID, line)
 			local tmpX, tmpY = gui.MousePos()
 			tmpX = tmpX - YRP:ctr(4)
 			tmpY = tmpY - YRP:ctr(4)
-			local _tmpPanel = createVGUI("DPanel", nil, 400 + 10 + 10, 10 + 50 + 10, tmpX * 2 - 10, tmpY * 2 - 10)
+			_tmpPanel = createVGUI("DPanel", nil, 400 + 10 + 10, 10 + 50 + 10 + 50 + 10, tmpX * 2 - 10, tmpY * 2 - 10)
 			_tmpPanel:SetPos(tmpX, tmpY)
 			_tmpPanel.ready = false
 			timer.Simple(
@@ -63,12 +74,21 @@ function OpenSettingsCharacters()
 			local _buttonGetSteamID = createVGUI("DButton", _tmpPanel, 400, 50, 10, 10)
 			_buttonGetSteamID:SetText("SteamID")
 			function _buttonGetSteamID:DoClick()
-				SetClipboardText(line:GetValue(1))
+				SetClipboardText(line:GetValue(2))
+				_tmpPanel:Remove()
+			end
+
+			local _btnDeleteCharacter = createVGUI("DButton", _tmpPanel, 400, 50, 10, 70)
+			_btnDeleteCharacter:SetText("DELETE CHARACTER")
+			function _btnDeleteCharacter:DoClick()
+				net.Start("nws_yrp_character_delete")
+				net.WriteString(line:GetValue(1))
+				net.SendToServer()
 			end
 
 			function _tmpPanel:Paint(pw, ph)
 				draw.RoundedBox(0, 0, 0, pw, ph, get_ds_col())
-				if not _tmpPanel:IsHovered() and not _buttonGetSteamID:IsHovered() and _tmpPanel.ready == true then
+				if not _tmpPanel:IsHovered() and not _buttonGetSteamID:IsHovered() and not _btnDeleteCharacter:IsHovered() and _tmpPanel.ready == true then
 					_tmpPanel:Remove()
 				end
 			end

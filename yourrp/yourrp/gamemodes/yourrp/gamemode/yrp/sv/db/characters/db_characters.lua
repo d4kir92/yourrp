@@ -1360,10 +1360,11 @@ function YRPSetAllCharsToDefaultRole(ply)
 end
 
 YRP:AddNetworkString("nws_yrp_setting_characters")
+YRP:AddNetworkString("nws_yrp_character_delete")
 net.Receive(
 	"nws_yrp_setting_characters",
 	function(len, ply)
-		local tab = YRP_SQL_SELECT(DATABASE_NAME, "SteamID, rpname, text_idcardid, rpdescription, groupID, roleID, money, moneybank, int_level, bool_eventchar, bool_archived", nil)
+		local tab = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID, SteamID, rpname, text_idcardid, rpdescription, groupID, roleID, money, moneybank, int_level, bool_eventchar, bool_archived", nil)
 		if IsNotNilAndNotFalse(tab) then
 			for i, chartab in pairs(tab) do
 				if chartab and type(chartab) == "table" then
@@ -1373,6 +1374,26 @@ net.Receive(
 				end
 			end
 		end
+	end
+)
+
+net.Receive(
+	"nws_yrp_character_delete",
+	function(len, ply)
+		if not ply:GetYRPBool("bool_players", false) then return end
+		local id = tonumber(net.ReadString())
+		for i, v in pairs(player.GetAll()) do
+			if v:CharID() == id then
+				YRP:msg("note", "Can't Delete Character, CURRENTLY IN USE")
+
+				return
+			end
+		end
+
+		YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID == '" .. id .. "'")
+		net.Start("nws_yrp_character_delete")
+		net.WriteString(id)
+		net.Send(ply)
 	end
 )
 
