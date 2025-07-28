@@ -1390,10 +1390,13 @@ net.Receive(
 			end
 		end
 
-		YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID == '" .. id .. "'")
-		net.Start("nws_yrp_character_delete")
-		net.WriteString(id)
-		net.Send(ply)
+		local char = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID = '" .. id .. "'")
+		if char and char[1] then
+			YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. id .. "'")
+			net.Start("nws_yrp_character_delete")
+			net.WriteString(id)
+			net.Send(ply)
+		end
 	end
 )
 
