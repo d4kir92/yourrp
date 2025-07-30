@@ -602,62 +602,70 @@ function openSingleSelector(tab, closeF, web)
 			item.PrintName = item.PrintName or item.Name or ""
 			item.ClassName = item.ClassName or item.Class or ""
 			item.WorldModel = item.WorldModel or item.Model or ""
+			if type(item.WorldModel) == "CSEnt" and item.WorldModel:GetModel() and type(item.WorldModel:GetModel()) == "string" then
+				item.WorldModel = item.WorldModel:GetModel()
+			end
+
 			local searchtext = search:GetText()
 			searchtext = string.Replace(searchtext or "", "[", "")
 			searchtext = string.Replace(searchtext or "", "]", "")
 			searchtext = string.Replace(searchtext or "", "%", "")
-			if type(item) ~= "userdata" and type(item.PrintName) ~= "userdata" and type(item.ClassName) ~= "userdata" and type(item.WorldModel) ~= "userdata" and (string.find(string.lower(item.WorldModel or ""), searchtext, 1, true) or string.find(string.lower(item.PrintName or ""), searchtext, 1, true) or string.find(string.lower(item.ClassName or ""), searchtext, 1, true)) then
-				site.count = site.count + 1
-				if (site.count - 1) >= (site.cur - 1) * _cs and (site.count - 1) < site.cur * _cs then
-					count = count + 1
-					if item.WorldModel == nil then
-						item.WorldModel = item.Model or ""
-					end
+			if type(item) == "table" and type(item.PrintName) == "string" and type(item.ClassName) == "string" and type(item.WorldModel) == "string" then
+				if string.find(string.lower(item.WorldModel or ""), searchtext, 1, true) or string.find(string.lower(item.PrintName or ""), searchtext, 1, true) or string.find(string.lower(item.ClassName or ""), searchtext, 1, true) then
+					site.count = site.count + 1
+					if (site.count - 1) >= (site.cur - 1) * _cs and (site.count - 1) < site.cur * _cs then
+						count = count + 1
+						if item.WorldModel == nil then
+							item.WorldModel = item.Model or ""
+						end
 
-					if item.ClassName == nil then
-						item.ClassName = item.Class or ""
-					end
+						if item.ClassName == nil then
+							item.ClassName = item.Class or ""
+						end
 
-					if item.PrintName == nil then
-						item.PrintName = item.Name or ""
-					end
+						if item.PrintName == nil then
+							item.PrintName = item.Name or ""
+						end
 
-					local icon = YRPCreateD("DPanel", PanelSelect, YRP:ctr(_item.w), YRP:ctr(_item.h), tmpX, tmpY)
-					function icon:Paint(pw, ph)
-						if item.ishidden then
-							draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 100, 100))
-							draw.SimpleText("HIDDEN ENTITY!", "Y_30_500", pw / 2, YRP:ctr(30), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-						else
-							draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
+						local icon = YRPCreateD("DPanel", PanelSelect, YRP:ctr(_item.w), YRP:ctr(_item.h), tmpX, tmpY)
+						function icon:Paint(pw, ph)
+							if item.ishidden then
+								draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 100, 100))
+								draw.SimpleText("HIDDEN ENTITY!", "Y_30_500", pw / 2, YRP:ctr(30), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+							else
+								draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
+							end
+						end
+
+						local spawnicon = YRPCreateD("SpawnIcon", icon, YRP:ctr(_item.h), YRP:ctr(_item.h), 0, 0)
+						spawnicon.item = item
+						spawnicon:SetText("")
+						spawnicon:SetModel(item.WorldModel)
+						spawnicon:SetTooltip(item.PrintName)
+						local _tmpName = YRPCreateD("YButton", icon, YRP:ctr(_item.w), YRP:ctr(_item.h), 0, 0)
+						_tmpName:SetText("")
+						function _tmpName:Paint(pw, ph)
+							draw.SimpleTextOutlined(item.PrintName, "Y_20_500", pw - YRP:ctr(10), ph - YRP:ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0, 255))
+							draw.SimpleTextOutlined(item.ClassName, "Y_20_500", pw - YRP:ctr(10), ph - YRP:ctr(60), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0, 255))
+						end
+
+						function _tmpName:DoClick()
+							LocalPlayer().WorldModel = item.WorldModel
+							LocalPlayer().ClassName = item.ClassName
+							LocalPlayer().PrintName = item.PrintName
+							LocalPlayer().Skin = item.Skin
+							frame:Close()
+						end
+
+						tmpX = tmpX + YRP:ctr(_item.w) + tmpBr
+						if tmpX > _w - YRP:ctr(_item.w) then
+							tmpX = 0
+							tmpY = tmpY + YRP:ctr(_item.h) + tmpBr
 						end
 					end
-
-					local spawnicon = YRPCreateD("SpawnIcon", icon, YRP:ctr(_item.h), YRP:ctr(_item.h), 0, 0)
-					spawnicon.item = item
-					spawnicon:SetText("")
-					spawnicon:SetModel(item.WorldModel)
-					spawnicon:SetTooltip(item.PrintName)
-					local _tmpName = YRPCreateD("YButton", icon, YRP:ctr(_item.w), YRP:ctr(_item.h), 0, 0)
-					_tmpName:SetText("")
-					function _tmpName:Paint(pw, ph)
-						draw.SimpleTextOutlined(item.PrintName, "Y_20_500", pw - YRP:ctr(10), ph - YRP:ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0, 255))
-						draw.SimpleTextOutlined(item.ClassName, "Y_20_500", pw - YRP:ctr(10), ph - YRP:ctr(60), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0, 255))
-					end
-
-					function _tmpName:DoClick()
-						LocalPlayer().WorldModel = item.WorldModel
-						LocalPlayer().ClassName = item.ClassName
-						LocalPlayer().PrintName = item.PrintName
-						LocalPlayer().Skin = item.Skin
-						frame:Close()
-					end
-
-					tmpX = tmpX + YRP:ctr(_item.w) + tmpBr
-					if tmpX > _w - YRP:ctr(_item.w) then
-						tmpX = 0
-						tmpY = tmpY + YRP:ctr(_item.h) + tmpBr
-					end
 				end
+			elseif type(item.WorldModel) ~= "CSEnt" then
+				print(item.PrintName, type(item), type(item.PrintName), type(item.ClassName), type(item.WorldModel))
 			end
 		end
 	end
