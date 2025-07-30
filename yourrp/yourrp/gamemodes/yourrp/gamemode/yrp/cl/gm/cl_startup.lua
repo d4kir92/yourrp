@@ -606,7 +606,7 @@ function openSingleSelector(tab, closeF, web)
 			searchtext = string.Replace(searchtext or "", "[", "")
 			searchtext = string.Replace(searchtext or "", "]", "")
 			searchtext = string.Replace(searchtext or "", "%", "")
-			if string.find(string.lower(item.WorldModel or ""), searchtext, 1, true) or string.find(string.lower(item.PrintName or ""), searchtext, 1, true) or string.find(string.lower(item.ClassName or ""), searchtext, 1, true) then
+			if type(item) ~= "userdata" and type(item.PrintName) ~= "userdata" and type(item.ClassName) ~= "userdata" and type(item.WorldModel) ~= "userdata" and (string.find(string.lower(item.WorldModel or ""), searchtext, 1, true) or string.find(string.lower(item.PrintName or ""), searchtext, 1, true) or string.find(string.lower(item.ClassName or ""), searchtext, 1, true)) then
 				site.count = site.count + 1
 				if (site.count - 1) >= (site.cur - 1) * _cs and (site.count - 1) < site.cur * _cs then
 					count = count + 1
