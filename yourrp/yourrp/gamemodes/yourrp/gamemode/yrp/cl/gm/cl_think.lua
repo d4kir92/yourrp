@@ -201,7 +201,7 @@ function YRPUseFunction(str)
 		elseif string.StartWith(str, "m_") then
 			str = string.Replace(str, "m_", "")
 			local uid = tonumber(str)
-			UseMacro(uid)
+			YRPUseMacro(uid)
 		elseif GetGlobalYRPBool("bool_yrp_combined_menu", false) then
 			local id = 0
 			if str == "OpenHelpMenu" and GetGlobalYRPBool("bool_yrp_help_menu", false) then

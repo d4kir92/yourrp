@@ -555,7 +555,7 @@ net.Receive(
 			CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_char_menu, "LID_charactermenu", "nws_yrp_update_bool_yrp_char_menu")
 			CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_keybinds_menu, "LID_keybindsmenu", "nws_yrp_update_bool_yrp_keybinds_menu")
 			CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_tickets_menu, "LID_ticketsmenu", "nws_yrp_update_bool_yrp_tickets_menu")
-			CreateCheckBoxLine(GAMEMODE_SYSTEMS:GetContent(), GEN.bool_appearance_system, "LID_macromenu", "nws_yrp_update_bool_yrp_macro_menu")
+			CreateCheckBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.bool_yrp_macro_menu, "LID_macromenu", "nws_yrp_update_bool_yrp_macro_menu")
 			CreateHRLine(GAMEMODE_VISUALS:GetContent())
 			CreateTextBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_character_background, "LID_character_background", "nws_yrp_update_text_character_background")
 			CreateComboBoxLine(GAMEMODE_VISUALS:GetContent(), GEN.text_character_design, "LID_characterdesign", "nws_yrp_update_text_character_design", GetGlobalYRPString("text_character_design", "Default"), {"Default", "HorizontalNEW", "Horizontal", "Vertical"})

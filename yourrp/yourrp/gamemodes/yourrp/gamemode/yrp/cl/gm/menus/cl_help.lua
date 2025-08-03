@@ -139,6 +139,7 @@ net.Receive(
 			AddKeybind(keybinds, YRPGetKeybindName("menu_interact"), "LID_interact", "role")
 			AddKeybind(keybinds, YRPGetKeybindName("menu_group"), "LID_groupmenu", "group")
 			AddKeybind(keybinds, YRPGetKeybindName("drop_item"), "LID_drop", "pin_drop", "bool_players_can_YRPDropWeapons")
+			AddKeybind(keybinds, YRPGetKeybindName("macro_menu"), "LID_macromenu", "code")
 			AddKeybindBr(keybinds)
 			AddKeybind(keybinds, YRPGetKeybindName("view_switch"), "LID_switchview", "3d_rotation")
 			AddKeybind(keybinds, YRPGetKeybindName("view_up"), "LID_increaseviewingheight", "64_angle-up")

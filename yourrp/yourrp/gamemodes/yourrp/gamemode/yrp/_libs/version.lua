@@ -64,21 +64,44 @@ function SetYRPChannel(from)
 							body = string.sub(body, cs - 1)
 						end
 
-						test["stable"] = {}
-						test["stable"].stable = YRPGetVersionValue(body, "V" .. "STABLE" .. "STABLE")
-						test["stable"].beta = YRPGetVersionValue(body, "V" .. "STABLE" .. "BETA")
-						test["stable"].canary = YRPGetVersionValue(body, "V" .. "STABLE" .. "CANARY")
-						test["stable"].build = YRPGetVersionValue(body, "V" .. "STABLE" .. "BUILD")
-						test["beta"] = {}
-						test["beta"].stable = YRPGetVersionValue(body, "V" .. "BETA" .. "STABLE")
-						test["beta"].beta = YRPGetVersionValue(body, "V" .. "BETA" .. "BETA")
-						test["beta"].canary = YRPGetVersionValue(body, "V" .. "BETA" .. "CANARY")
-						test["beta"].build = YRPGetVersionValue(body, "V" .. "BETA" .. "BUILD")
-						test["canary"] = {}
-						test["canary"].stable = YRPGetVersionValue(body, "V" .. "CANARY" .. "STABLE")
-						test["canary"].beta = YRPGetVersionValue(body, "V" .. "CANARY" .. "BETA")
-						test["canary"].canary = YRPGetVersionValue(body, "V" .. "CANARY" .. "CANARY")
-						test["canary"].build = YRPGetVersionValue(body, "V" .. "CANARY" .. "BUILD")
+						local s = string.find(body, "*X", 1, true)
+						local e = string.find(body, "/X", 1, true)
+						if s and e then
+							body = string.sub(body, s + 2, e - 1)
+							local verionTab = string.Explode(".", body)
+							test["stable"] = {}
+							test["stable"].stable = tonumber(verionTab[1])
+							test["stable"].beta = tonumber(verionTab[2])
+							test["stable"].canary = tonumber(verionTab[3])
+							test["stable"].build = tonumber(verionTab[4])
+							test["beta"] = {}
+							test["beta"].stable = tonumber(verionTab[1])
+							test["beta"].beta = tonumber(verionTab[2])
+							test["beta"].canary = tonumber(verionTab[3]) + 1
+							test["beta"].build = tonumber(verionTab[4])
+							test["canary"] = {}
+							test["canary"].stable = tonumber(verionTab[1])
+							test["canary"].beta = tonumber(verionTab[2])
+							test["canary"].canary = tonumber(verionTab[3]) + 2
+							test["canary"].build = tonumber(verionTab[4])
+						else
+							test["stable"] = {}
+							test["stable"].stable = YRPGetVersionValue(body, "V" .. "STABLE" .. "STABLE")
+							test["stable"].beta = YRPGetVersionValue(body, "V" .. "STABLE" .. "BETA")
+							test["stable"].canary = YRPGetVersionValue(body, "V" .. "STABLE" .. "CANARY")
+							test["stable"].build = YRPGetVersionValue(body, "V" .. "STABLE" .. "BUILD")
+							test["beta"] = {}
+							test["beta"].stable = YRPGetVersionValue(body, "V" .. "BETA" .. "STABLE")
+							test["beta"].beta = YRPGetVersionValue(body, "V" .. "BETA" .. "BETA")
+							test["beta"].canary = YRPGetVersionValue(body, "V" .. "BETA" .. "CANARY")
+							test["beta"].build = YRPGetVersionValue(body, "V" .. "BETA" .. "BUILD")
+							test["canary"] = {}
+							test["canary"].stable = YRPGetVersionValue(body, "V" .. "CANARY" .. "STABLE")
+							test["canary"].beta = YRPGetVersionValue(body, "V" .. "CANARY" .. "BETA")
+							test["canary"].canary = YRPGetVersionValue(body, "V" .. "CANARY" .. "CANARY")
+							test["canary"].build = YRPGetVersionValue(body, "V" .. "CANARY" .. "BUILD")
+						end
+
 						for art, tab in pairs(test) do
 							if tab.stable == GAMEMODE.VersionStable and tab.beta == GAMEMODE.VersionBeta and tab.canary == GAMEMODE.VersionCanary and tab.build == GAMEMODE.VersionBuild then
 								YRP:msg("gm", "Gamemode channel: " .. string.upper(art))
@@ -228,10 +251,22 @@ function YRPCheckVersion(from)
 						yrpoutdated = false
 					end
 
-					on.stable = YRPGetVersionValue(body, "V" .. serverart .. "STABLE")
-					on.beta = YRPGetVersionValue(body, "V" .. serverart .. "BETA")
-					on.canary = YRPGetVersionValue(body, "V" .. serverart .. "CANARY")
-					on.build = YRPGetVersionValue(body, "V" .. serverart .. "BUILD")
+					local s = string.find(body, "*X", 1, true)
+					local e = string.find(body, "/X", 1, true)
+					if s and e then
+						body = string.sub(body, s + 2, e - 1)
+						local verionTab = string.Explode(".", body)
+						on.stable = tonumber(verionTab[1])
+						on.beta = tonumber(verionTab[2])
+						on.canary = tonumber(verionTab[3])
+						on.build = tonumber(verionTab[4])
+					else
+						on.stable = YRPGetVersionValue(body, "V" .. serverart .. "STABLE")
+						on.beta = YRPGetVersionValue(body, "V" .. serverart .. "BETA")
+						on.canary = YRPGetVersionValue(body, "V" .. serverart .. "CANARY")
+						on.build = YRPGetVersionValue(body, "V" .. serverart .. "BUILD")
+					end
+
 					if on.stable == GAMEMODE.VersionStable and on.beta == GAMEMODE.VersionBeta and on.canary == GAMEMODE.VersionCanary and on.build == GAMEMODE.VersionBuild then
 						GAMEMODE.versioncolor = Color(255, 255, 255, 255)
 						yrpoutdated = false
@@ -247,7 +282,7 @@ function YRPCheckVersion(from)
 								MsgC(Color(255, 255, 0), "[CheckVersion] YOURRP IS OUTDATED, PLEASE DOWNLOAD LATEST AND RESTART SERVER", "\n")
 							end
 
-							MsgC(Color(255, 0, 0), string.format("[CheckVersion] NEW VERSION: %s.%s.%s:%s", on.stable, on.beta, on.canary, on.build), "\n")
+							MsgC(Color(255, 0, 0), string.format("[CheckVersion] NEW VERSION: %s.%s.%s:%s OLD VERSION: %s.%s.%s:%s", on.stable, on.beta, on.canary, on.build, GAMEMODE.VersionStable, GAMEMODE.VersionBeta, GAMEMODE.VersionCanary, GAMEMODE.VersionBuild), "\n")
 						end
 					end
 				else

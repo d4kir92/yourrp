@@ -3,11 +3,11 @@
 local _mm = {}
 function YRPToggleMacroMenu()
 	if YRPIsNoMenuOpen() then
-		OpenMacroMenu()
+		YRPOpenMacroMenu()
 	end
 end
 
-function CloseMacroMenu()
+function YRPCloseMacroMenu()
 	if _mm.window ~= nil then
 		YRPCloseMenu()
 		_mm.window:Remove()
@@ -15,7 +15,7 @@ function CloseMacroMenu()
 	end
 end
 
-function UseMacro(uid)
+function YRPUseMacro(uid)
 	if IsNotNilAndNotFalse(uid) and IsNotNilAndNotFalse(_mm.tab) and IsNotNilAndNotFalse(_mm.tab[uid]) and IsNotNilAndNotFalse(_mm.tab[uid].value) then
 		local mtext = _mm.tab[uid].value
 		local tim = 0
@@ -67,7 +67,7 @@ net.Receive(
 			_mm.use = YRPCreateD("YButton", content, YRP:ctr(300), YRP:ctr(60), YRP:ctr(0), YRP:ctr(600))
 			_mm.use:SetText("LID_use")
 			function _mm.use:DoClick()
-				UseMacro(_mm.uid)
+				YRPUseMacro(_mm.uid)
 			end
 
 			_mm.bind = YRPCreateD("DBinder", content, YRP:ctr(300), YRP:ctr(60), YRP:ctr(320), YRP:ctr(600))
@@ -123,7 +123,7 @@ timer.Simple(
 	end
 )
 
-function OpenMacroMenu()
+function YRPOpenMacroMenu()
 	if GetGlobalYRPBool("bool_yrp_macro_menu", false) then
 		YRPOpenMenu()
 		_mm.window = YRPCreateD("YFrame", nil, YRP:ctr(720 + 36), YRP:ctr(820), 0, 0)
