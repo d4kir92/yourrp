@@ -545,9 +545,33 @@ function YRPRunCommand(sender, command, text)
 	if cmdsS[command] then
 		cmdsS[command](sender)
 	elseif cmdsM[command] then
-		cmdsM[command](sender, text)
+		cmdsM[command](sender, text, command)
 	end
 end
+
+local ruidTab = {}
+function YRPJoinJob(sender, text, command)
+	if not YRPEntityAlive(sender) then return false end
+	local job = ruidTab[command]
+	if job == nil then return false end
+	YRP:TryGetRole(sender, job.uniqueID, 1, {})
+end
+
+timer.Simple(
+	1,
+	function()
+		for k, cat in SortedPairsByMemberValue(DarkRP.getCategories()["jobs"], "sortOrder", false) do
+			for t, job in SortedPairsByMemberValue(cat.members, "sortOrder", false) do
+				if cmdsM[string.lower(job.command)] == nil then
+					ruidTab[string.lower(job.command)] = job
+					cmdsM[string.lower(job.command)] = YRPJoinJob
+				else
+					YRP.msg("note", "[YRPJoinJob] ALREADY EXISTS: " .. string.lower(job.command))
+				end
+			end
+		end
+	end
+)
 
 local eGlobal = 0
 local eLocal = 1

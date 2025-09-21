@@ -1198,6 +1198,35 @@ function canVoteRole(ply, roleID)
 	return false
 end
 
+function YRP:TryGetRole(ply, uniqueIDRole, pmid, bgs)
+	YRP:msg("note", ply:YRPName() .. " wants the role " .. uniqueIDRole)
+	if canGetRole(ply, uniqueIDRole, true) then
+		ply:SetYRPBool("switchrole", true)
+		--Remove Sweps from old role
+		YRPRemRolVals(ply)
+		YRPRemGroVals(ply)
+		if GetGlobalYRPBool("bool_players_die_on_role_switch", false) then
+			ply:KillSilent()
+		end
+
+		--New role
+		YRPSetRole("nws_yrp_want_role_char", ply, uniqueIDRole, false, pmid, bgs)
+		if GetGlobalYRPBool("bool_players_die_on_role_switch", false) then
+			ply:Spawn()
+			YRPTeleportToSpawnpoint(ply, "switchrole")
+		end
+
+		local reusetime = math.Round(CurTime() + ply:GetRoleCooldown(), 0)
+		ply:SetYRPInt("ts_role_" .. ply:GetRoleUID(), reusetime)
+		ply:SetYRPBool("switchrole", false)
+	elseif canVoteRole(ply, uniqueIDRole) then
+		local _role = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. uniqueIDRole)
+		startVote(ply, _role)
+	else
+		YRPNotiToPly("Not allowed to get this role", ply)
+	end
+end
+
 YRP:AddNetworkString("nws_yrp_want_role_char")
 net.Receive(
 	"nws_yrp_want_role_char",
@@ -1205,31 +1234,6 @@ net.Receive(
 		local uniqueIDRole = net.ReadInt(16)
 		local pmid = net.ReadInt(16)
 		local bgs = net.ReadTable()
-		YRP:msg("note", ply:YRPName() .. " wants the role " .. uniqueIDRole)
-		if canGetRole(ply, uniqueIDRole, true) then
-			ply:SetYRPBool("switchrole", true)
-			--Remove Sweps from old role
-			YRPRemRolVals(ply)
-			YRPRemGroVals(ply)
-			if GetGlobalYRPBool("bool_players_die_on_role_switch", false) then
-				ply:KillSilent()
-			end
-
-			--New role
-			YRPSetRole("nws_yrp_want_role_char", ply, uniqueIDRole, false, pmid, bgs)
-			if GetGlobalYRPBool("bool_players_die_on_role_switch", false) then
-				ply:Spawn()
-				YRPTeleportToSpawnpoint(ply, "switchrole")
-			end
-
-			local reusetime = math.Round(CurTime() + ply:GetRoleCooldown(), 0)
-			ply:SetYRPInt("ts_role_" .. ply:GetRoleUID(), reusetime)
-			ply:SetYRPBool("switchrole", false)
-		elseif canVoteRole(ply, uniqueIDRole) then
-			local _role = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = " .. uniqueIDRole)
-			startVote(ply, _role)
-		else
-			YRPNotiToPly("Not allowed to get this role", ply)
-		end
+		YRP:TryGetRole(ply, uniqueIDRole, pmid, bgs)
 	end
 )
