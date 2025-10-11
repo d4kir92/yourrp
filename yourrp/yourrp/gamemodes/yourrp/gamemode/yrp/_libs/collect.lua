@@ -11,8 +11,6 @@ if SERVER then
 					MsgC(Color(255, 255, 0), ">>> Server is online <<<" .. "\t\t\tYourRP Version: " .. YRPGetVersionFull() .. "\n")
 				end
 			)
-
-			timer.Simple(10, YRPSendServerInfo)
 		end
 	)
 end
