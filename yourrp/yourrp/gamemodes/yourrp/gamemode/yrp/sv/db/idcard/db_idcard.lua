@@ -132,9 +132,9 @@ function LoadIDCardSetting(force, from)
 			local name = ele.name
 			local value = ele.value
 			if string.StartWith(name, "bool_") then
-				SetGlobalYRPBool(name, tobool(value.value))
+				SetGlobalYRPBool(name, tobool(value))
 			elseif string.StartWith(name, "int_") then
-				SetGlobalYRPInt(name, tonumber(value.value))
+				SetGlobalYRPInt(name, tonumber(value))
 			end
 
 			register[name] = register[name] or nil
@@ -156,6 +156,8 @@ function LoadIDCardSetting(force, from)
 							SetGlobalYRPBool(n, tobool(v))
 						elseif string.StartWith(n, "int_") and GetGlobalYRPInt(n, v) ~= v then
 							SetGlobalYRPInt(n, v)
+						else
+							YRP:msg("note", "Missing Type - n: " .. tostring(n) .. " v: " .. tostring(v))
 						end
 
 						YRP_SQL_UPDATE(
