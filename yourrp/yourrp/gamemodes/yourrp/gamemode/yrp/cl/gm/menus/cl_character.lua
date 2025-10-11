@@ -43,7 +43,7 @@ surface.CreateFont(
 
 local yrp_logo = Material("yrp/yrp_icon")
 function YRPGetCharBGNotFound()
-	return YRPGetKeybindName("menu_settings") .. " >> " .. YRP:trans("LID_server") .. " >> " .. YRP:trans("LID_general") .. " >> " .. YRP:trans("LID_character_background") .. " (enter a weblink to an image)"
+	return YRP:trans("LID_keybind") .. ": " .. YRPGetKeybindName("menu_settings") .. " >> " .. YRP:trans("LID_server") .. " >> " .. YRP:trans("LID_general") .. " >> " .. YRP:trans("LID_character_background") .. " (enter a weblink to an image)"
 end
 
 local isEventChar = false

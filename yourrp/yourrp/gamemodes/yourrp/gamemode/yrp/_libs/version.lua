@@ -26,7 +26,6 @@ function YRPGetVersionValue(body, name)
 	return 0
 end
 
-local test = {}
 if CLIENT then
 	net.Receive(
 		"YRPGetServerInfo",
@@ -47,6 +46,9 @@ function YRPIsServerDedicated()
 	return GetGlobalYRPBool("isserverdedicated")
 end
 
+function YRPGetVersionNumbers()
+end
+
 function SetYRPChannel(from)
 	if GAMEMODE ~= nil then
 		if CLIENT then
@@ -55,7 +57,7 @@ function SetYRPChannel(from)
 		end
 
 		http.Fetch(
-			"https://docs.google.com/spreadsheets/d/e/2PACX-1vR3aN8b4y0qZbZBBQLkqBy4dKFzKCnPt4cOMp7ghUaq5Bzxf-BtlEc0fruUI18IK-csODjrK6wcpFCX/pubhtml?gid=0&single=true",
+			"https://docs.google.com/spreadsheets/d/1UDF4f7ypJPdklQiz9y4KIU_s3EvjVAlaIk2ullezTCM",
 			function(body, len, headers, code)
 				if body ~= nil then
 					if code == 200 then
@@ -64,50 +66,25 @@ function SetYRPChannel(from)
 							body = string.sub(body, cs - 1)
 						end
 
+						local tab = {}
+						tab.stable = 0
+						tab.beta = 0
+						tab.canary = 0
+						tab.build = 0
 						local s = string.find(body, "*X", 1, true)
 						local e = string.find(body, "/X", 1, true)
 						if s and e then
-							body = string.sub(body, s + 2, e - 1)
-							local verionTab = string.Explode(".", body)
-							test["stable"] = {}
-							test["stable"].stable = tonumber(verionTab[1])
-							test["stable"].beta = tonumber(verionTab[2])
-							test["stable"].canary = tonumber(verionTab[3])
-							test["stable"].build = tonumber(verionTab[4])
-							test["beta"] = {}
-							test["beta"].stable = tonumber(verionTab[1])
-							test["beta"].beta = tonumber(verionTab[2])
-							test["beta"].canary = tonumber(verionTab[3]) + 1
-							test["beta"].build = tonumber(verionTab[4])
-							test["canary"] = {}
-							test["canary"].stable = tonumber(verionTab[1])
-							test["canary"].beta = tonumber(verionTab[2])
-							test["canary"].canary = tonumber(verionTab[3]) + 2
-							test["canary"].build = tonumber(verionTab[4])
-						else
-							test["stable"] = {}
-							test["stable"].stable = YRPGetVersionValue(body, "V" .. "STABLE" .. "STABLE")
-							test["stable"].beta = YRPGetVersionValue(body, "V" .. "STABLE" .. "BETA")
-							test["stable"].canary = YRPGetVersionValue(body, "V" .. "STABLE" .. "CANARY")
-							test["stable"].build = YRPGetVersionValue(body, "V" .. "STABLE" .. "BUILD")
-							test["beta"] = {}
-							test["beta"].stable = YRPGetVersionValue(body, "V" .. "BETA" .. "STABLE")
-							test["beta"].beta = YRPGetVersionValue(body, "V" .. "BETA" .. "BETA")
-							test["beta"].canary = YRPGetVersionValue(body, "V" .. "BETA" .. "CANARY")
-							test["beta"].build = YRPGetVersionValue(body, "V" .. "BETA" .. "BUILD")
-							test["canary"] = {}
-							test["canary"].stable = YRPGetVersionValue(body, "V" .. "CANARY" .. "STABLE")
-							test["canary"].beta = YRPGetVersionValue(body, "V" .. "CANARY" .. "BETA")
-							test["canary"].canary = YRPGetVersionValue(body, "V" .. "CANARY" .. "CANARY")
-							test["canary"].build = YRPGetVersionValue(body, "V" .. "CANARY" .. "BUILD")
+							local version = string.sub(body, s + 2, e - 1)
+							local t = string.Explode(".", version)
+							tab.stable = tonumber(t[1])
+							tab.beta = tonumber(t[2])
+							tab.canary = tonumber(t[3])
+							tab.build = tonumber(t[4])
 						end
 
-						for art, tab in pairs(test) do
-							if tab.stable == GAMEMODE.VersionStable and tab.beta == GAMEMODE.VersionBeta and tab.canary == GAMEMODE.VersionCanary and tab.build == GAMEMODE.VersionBuild then
-								YRP:msg("gm", "Gamemode channel: " .. string.upper(art))
-								GAMEMODE.VersionSort = art
-								break
-							end
+						if tab.stable == GAMEMODE.VersionStable and tab.beta == GAMEMODE.VersionBeta and tab.canary == GAMEMODE.VersionCanary and tab.build == GAMEMODE.VersionBuild then
+							YRP:msg("gm", "Gamemode channel: " .. string.upper("stable"))
+							GAMEMODE.VersionSort = "stable"
 						end
 
 						yrpversionisset = true
@@ -238,7 +215,7 @@ function YRPCheckVersion(from)
 	if CurTime() < yrp_check then return end
 	yrp_check = CurTime() + 60
 	http.Fetch(
-		"https://docs.google.com/spreadsheets/d/e/2PACX-1vR3aN8b4y0qZbZBBQLkqBy4dKFzKCnPt4cOMp7ghUaq5Bzxf-BtlEc0fruUI18IK-csODjrK6wcpFCX/pubhtml?gid=0&single=true",
+		"https://docs.google.com/spreadsheets/d/1UDF4f7ypJPdklQiz9y4KIU_s3EvjVAlaIk2ullezTCM",
 		function(body, len, headers, code)
 			if body ~= nil then
 				if code == 200 then
@@ -254,17 +231,12 @@ function YRPCheckVersion(from)
 					local s = string.find(body, "*X", 1, true)
 					local e = string.find(body, "/X", 1, true)
 					if s and e then
-						body = string.sub(body, s + 2, e - 1)
-						local verionTab = string.Explode(".", body)
-						on.stable = tonumber(verionTab[1])
-						on.beta = tonumber(verionTab[2])
-						on.canary = tonumber(verionTab[3])
-						on.build = tonumber(verionTab[4])
-					else
-						on.stable = YRPGetVersionValue(body, "V" .. serverart .. "STABLE")
-						on.beta = YRPGetVersionValue(body, "V" .. serverart .. "BETA")
-						on.canary = YRPGetVersionValue(body, "V" .. serverart .. "CANARY")
-						on.build = YRPGetVersionValue(body, "V" .. serverart .. "BUILD")
+						local version = string.sub(body, s + 2, e - 1)
+						local t = string.Explode(".", version)
+						on.stable = tonumber(t[1])
+						on.beta = tonumber(t[2])
+						on.canary = tonumber(t[3])
+						on.build = tonumber(t[4])
 					end
 
 					if on.stable == GAMEMODE.VersionStable and on.beta == GAMEMODE.VersionBeta and on.canary == GAMEMODE.VersionCanary and on.build == GAMEMODE.VersionBuild then

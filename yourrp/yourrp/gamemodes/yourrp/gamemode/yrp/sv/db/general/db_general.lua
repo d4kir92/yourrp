@@ -2281,7 +2281,6 @@ net.Receive(
 			YRPAddSubTab(subtabs, "YourRP", "Whats New", "nws_yrp_getsiteyourrpnew")
 			YRPAddSubTab(subtabs, "YourRP", "Discord", "nws_yrp_getsiteyourrpdiscord")
 			YRPAddSubTab(subtabs, "YourRP", "Translations", "nws_yrp_getsiteyourrptranslations", "")
-			YRPAddSubTab(subtabs, "YourRP", "Servers", "nws_yrp_getsiteyourrpservers", "")
 			net.Start("nws_yrp_gethelpmenu")
 			net.WriteTable(tabs)
 			net.WriteTable(subtabs)
@@ -2504,15 +2503,6 @@ net.Receive(
 	"nws_yrp_getsiteyourrpdiscord",
 	function(len, ply)
 		net.Start("nws_yrp_getsiteyourrpdiscord")
-		net.Send(ply)
-	end
-)
-
-YRP:AddNetworkString("nws_yrp_getsiteyourrpservers")
-net.Receive(
-	"nws_yrp_getsiteyourrpservers",
-	function(len, ply)
-		net.Start("nws_yrp_getsiteyourrpservers")
 		net.Send(ply)
 	end
 )
