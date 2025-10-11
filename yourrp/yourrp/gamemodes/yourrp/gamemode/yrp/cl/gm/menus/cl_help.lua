@@ -551,27 +551,6 @@ net.Receive(
 )
 
 net.Receive(
-	"nws_yrp_getsiteyourrpservers",
-	function(len)
-		if YRPPanelAlive(HELPMENU.mainmenu.site) then
-			local link = "https://sites.google.com/view/yourrp-gmod/serverlist"
-			local page = YRPCreateD("DHTML", HELPMENU.mainmenu.site, HELPMENU.content:GetWide() - YRP:ctr(20 + 20), HELPMENU.content:GetTall(), 0, 0)
-			page:OpenURL(link)
-			local openLink = YRPCreateD("YButton", page, YRP:ctr(100), YRP:ctr(100), HELPMENU.content:GetWide() - YRP:ctr(100 + 20 + 20), 0)
-			openLink:SetText("")
-			function openLink:Paint(pw, ph)
-				hook.Run("YButtonPaint", self, pw, ph)
-				YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
-			end
-
-			function openLink:DoClick()
-				gui.OpenURL(link)
-			end
-		end
-	end
-)
-
-net.Receive(
 	"nws_yrp_getsiteyourrptranslations",
 	function(len)
 		if YRPPanelAlive(HELPMENU.mainmenu.site) then
