@@ -911,9 +911,11 @@ net.Receive(
 
 		local namealreadyinuse = false
 		local allchars = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-		for i, v in pairs(allchars) do
-			if string.lower(v.rpname) == string.lower(tab.rpname) then
-				namealreadyinuse = true
+		if allchars then
+			for i, v in pairs(allchars) do
+				if string.lower(v.rpname) == string.lower(tab.rpname) then
+					namealreadyinuse = true
+				end
 			end
 		end
 
