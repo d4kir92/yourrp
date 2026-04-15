@@ -404,7 +404,7 @@ function YRPRevive(sender, text)
 			sender:ChatPrint("\nCommand-FAILED")
 		end
 	else
-		YRP:msg("note", sender:YRPName() .. " tried to use setmoney!")
+		YRP:msg("note", sender:YRPName() .. " tried to use revive!")
 	end
 end
 
