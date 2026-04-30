@@ -11,3 +11,7 @@ end
 function IsInventorySystemEnabled()
 	return GetGlobalYRPBool("bool_inventory_system", false)
 end
+
+function IsRealisticSystemEnabled()
+	return GetGlobalYRPBool("bool_realistic_system", false)
+end

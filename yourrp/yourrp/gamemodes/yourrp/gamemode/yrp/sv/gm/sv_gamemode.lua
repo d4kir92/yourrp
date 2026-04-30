@@ -989,52 +989,54 @@ hook.Add(
 						end
 					end
 
-					if hitgroup == HITGROUP_HEAD then
-						if IsHeadshotDeadlyPlayer() then
-							dmginfo:ScaleDamage(ply:GetMaxHealth())
+					if IsRealisticSystemEnabled() then
+						if hitgroup == HITGROUP_HEAD then
+							if IsHeadshotDeadlyPlayer() then
+								dmginfo:ScaleDamage(ply:GetMaxHealth())
+							else
+								dmginfo:ScaleDamage(GetHitFactorPlayerHead())
+							end
+						elseif hitgroup == HITGROUP_CHEST then
+							dmginfo:ScaleDamage(GetHitFactorPlayerChes())
+						elseif hitgroup == HITGROUP_STOMACH then
+							dmginfo:ScaleDamage(GetHitFactorPlayerStom())
+						elseif hitgroup == HITGROUP_LEFTARM or hitgroup == HITGROUP_RIGHTARM then
+							dmginfo:ScaleDamage(GetHitFactorPlayerArms())
+							if IsBonefracturingEnabled() then
+								local _break = math.Round(math.Rand(0, 100), 0)
+								if _break <= GetBrokeChanceArms() then
+									if hitgroup == HITGROUP_LEFTARM then
+										ply:SetYRPBool("broken_arm_left", true)
+										if not ply:HasWeapon("yrp_unarmed") then
+											ply:Give("yrp_unarmed")
+										end
+
+										ply:SelectWeapon("yrp_unarmed")
+									elseif hitgroup == HITGROUP_RIGHTARM then
+										ply:SetYRPBool("broken_arm_right", true)
+										if not ply:HasWeapon("yrp_unarmed") then
+											ply:Give("yrp_unarmed", true)
+										end
+
+										ply:SelectWeapon("yrp_unarmed")
+									end
+								end
+							end
+						elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
+							dmginfo:ScaleDamage(GetHitFactorPlayerLegs())
+							if IsBonefracturingEnabled() then
+								local _break = math.Round(math.Rand(0, 100), 0)
+								if _break <= GetBrokeChanceLegs() then
+									if hitgroup == HITGROUP_LEFTLEG then
+										ply:SetYRPBool("broken_leg_left", true)
+									elseif hitgroup == HITGROUP_RIGHTLEG then
+										ply:SetYRPBool("broken_leg_right", true)
+									end
+								end
+							end
 						else
-							dmginfo:ScaleDamage(GetHitFactorPlayerHead())
+							dmginfo:ScaleDamage(1)
 						end
-					elseif hitgroup == HITGROUP_CHEST then
-						dmginfo:ScaleDamage(GetHitFactorPlayerChes())
-					elseif hitgroup == HITGROUP_STOMACH then
-						dmginfo:ScaleDamage(GetHitFactorPlayerStom())
-					elseif hitgroup == HITGROUP_LEFTARM or hitgroup == HITGROUP_RIGHTARM then
-						dmginfo:ScaleDamage(GetHitFactorPlayerArms())
-						if IsBonefracturingEnabled() then
-							local _break = math.Round(math.Rand(0, 100), 0)
-							if _break <= GetBrokeChanceArms() then
-								if hitgroup == HITGROUP_LEFTARM then
-									ply:SetYRPBool("broken_arm_left", true)
-									if not ply:HasWeapon("yrp_unarmed") then
-										ply:Give("yrp_unarmed")
-									end
-
-									ply:SelectWeapon("yrp_unarmed")
-								elseif hitgroup == HITGROUP_RIGHTARM then
-									ply:SetYRPBool("broken_arm_right", true)
-									if not ply:HasWeapon("yrp_unarmed") then
-										ply:Give("yrp_unarmed", true)
-									end
-
-									ply:SelectWeapon("yrp_unarmed")
-								end
-							end
-						end
-					elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
-						dmginfo:ScaleDamage(GetHitFactorPlayerLegs())
-						if IsBonefracturingEnabled() then
-							local _break = math.Round(math.Rand(0, 100), 0)
-							if _break <= GetBrokeChanceLegs() then
-								if hitgroup == HITGROUP_LEFTLEG then
-									ply:SetYRPBool("broken_leg_left", true)
-								elseif hitgroup == HITGROUP_RIGHTLEG then
-									ply:SetYRPBool("broken_leg_right", true)
-								end
-							end
-						end
-					else
-						dmginfo:ScaleDamage(1)
 					end
 
 					local damage = dmginfo:GetDamage()
@@ -1059,20 +1061,24 @@ hook.Add(
 			dmginfo:ScaleDamage(0)
 		elseif IsInsideSafezone(npc) then
 			dmginfo:ScaleDamage(0)
-		elseif hitgroup == HITGROUP_HEAD then
-			if IsHeadshotDeadlyNpc() then
-				dmginfo:ScaleDamage(npc:Health())
+		elseif IsRealisticSystemEnabled() then
+			if hitgroup == HITGROUP_HEAD then
+				if IsHeadshotDeadlyNpc() then
+					dmginfo:ScaleDamage(npc:Health())
+				else
+					dmginfo:ScaleDamage(GetHitFactorNpcHead())
+				end
+			elseif hitgroup == HITGROUP_CHEST then
+				dmginfo:ScaleDamage(GetHitFactorNpcChes())
+			elseif hitgroup == HITGROUP_STOMACH then
+				dmginfo:ScaleDamage(GetHitFactorNpcStom())
+			elseif hitgroup == HITGROUP_LEFTARM or hitgroup == HITGROUP_RIGHTARM then
+				dmginfo:ScaleDamage(GetHitFactorNpcArms())
+			elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
+				dmginfo:ScaleDamage(GetHitFactorNpcLegs())
 			else
-				dmginfo:ScaleDamage(GetHitFactorNpcHead())
+				dmginfo:ScaleDamage(1)
 			end
-		elseif hitgroup == HITGROUP_CHEST then
-			dmginfo:ScaleDamage(GetHitFactorNpcChes())
-		elseif hitgroup == HITGROUP_STOMACH then
-			dmginfo:ScaleDamage(GetHitFactorNpcStom())
-		elseif hitgroup == HITGROUP_LEFTARM or hitgroup == HITGROUP_RIGHTARM then
-			dmginfo:ScaleDamage(GetHitFactorNpcArms())
-		elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
-			dmginfo:ScaleDamage(GetHitFactorNpcLegs())
 		else
 			dmginfo:ScaleDamage(1)
 		end
