@@ -102,6 +102,8 @@ if fil then
 		YRP:msg("note", "yframe.lua | " .. dbfile .. " is corrupted (" .. DiagnoseJSON(fil) .. "), resetting to defaults!")
 		file.Write(dbfile .. ".corrupted", fil)
 	end
+elseif file.Exists(dbfile, "DATA") then
+	YRP:msg("note", "yframe.lua | " .. dbfile .. " exists but could not be read (file.Read returned nil) - possibly locked, in use by another process, or a permissions issue!")
 end
 
 function PANEL:CheckSave(maximised, expanded, sw, sh)
