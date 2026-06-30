@@ -156,6 +156,32 @@ net.Receive(
 )
 
 
+function YRPItemBelongsToOtherPlayer(ply, item)
+	local itemSlot = YRP_SQL_SELECT("yrp_inventory_slots", "int_storageID", "uniqueID = '" .. tonumber(item.int_slotID) .. "'")
+	if not IsNotNilAndNotFalse(itemSlot) then return false end
+	local itemStorageID = tonumber(itemSlot[1].int_storageID)
+
+	-- Resolve bag-in-inventory: item's storage is a bag → get the bag item's slot storage
+	local resolvedStorageID = itemStorageID
+	local bagItem = YRP_SQL_SELECT("yrp_inventory_items", "int_slotID", "int_storageID = '" .. itemStorageID .. "'")
+	if IsNotNilAndNotFalse(bagItem) then
+		local bagSlot = YRP_SQL_SELECT("yrp_inventory_slots", "int_storageID", "uniqueID = '" .. tonumber(bagItem[1].int_slotID) .. "'")
+		if IsNotNilAndNotFalse(bagSlot) then
+			resolvedStorageID = tonumber(bagSlot[1].int_storageID)
+		end
+	end
+
+	-- Check if resolvedStorageID is any player character's main storage
+	local charWithStorage = YRP_SQL_SELECT("yrp_characters", "uniqueID", "int_storageID = '" .. resolvedStorageID .. "'")
+	if not IsNotNilAndNotFalse(charWithStorage) then return false end
+
+	-- It belongs to some character — is it the requester?
+	local myChar = ply:YRPGetCharacterTable()
+	if not IsNotNilAndNotFalse(myChar) then return true end
+
+	return tostring(charWithStorage[1].uniqueID) ~= tostring(myChar.uniqueID)
+end
+
 YRP:AddNetworkString("nws_yrp_storage_open")
 function OpenStorage(ply, storageID)
 	storageID = tonumber(storageID)

@@ -219,6 +219,12 @@ function MoveItem(ply, itemID, slotID)
 		slot.int_storageID = tonumber(slot.int_storageID)
 		item.int_fixed = tonumber(item.int_fixed)
 		item.int_storageID = tonumber(item.int_storageID)
+		if IsValid(ply) and YRPItemBelongsToOtherPlayer(ply, item) then
+			YRP:msg("db", "[MoveItem] " .. ply:Nick() .. " tried to steal item from another player")
+
+			return
+		end
+
 		if item.int_fixed == 1 then
 			YRP:msg("db", "[MoveItem] Item is fixed")
 
