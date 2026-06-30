@@ -30,6 +30,14 @@ if SERVER then
 	net.Receive(
 		"YRPGetGlobalYRPTables",
 		function(len, ply)
+			if not IsValid(ply) then return end
+
+			if ply.YRPGlobalTablesSent then
+				return
+			end
+
+			ply.YRPGlobalTablesSent = true
+
 			for key, value in pairs(YRP_Global_Tables) do
 				if key and value and type(key) == "string" and type(value) == "table" then
 					net.Start("YRPSetGlobalYRPTable")
