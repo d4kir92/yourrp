@@ -78,9 +78,30 @@ if not file.Exists("yrp_frames", "DATA") then
 	file.CreateDir("yrp_frames")
 end
 
+local function DiagnoseJSON(str)
+	if not str or str == "" then return "file is empty" end
+	local trimmed = str:match("^%s*(.-)%s*$")
+	if trimmed == "" then return "file only contains whitespace" end
+	local firstChar = trimmed:sub(1, 1)
+	if firstChar ~= "{" and firstChar ~= "[" then return "does not start with '{' or '[' (got '" .. firstChar .. "')" end
+	local opens = select(2, str:gsub("[{%[]", ""))
+	local closes = select(2, str:gsub("[}%]]", ""))
+	if opens ~= closes then return "unbalanced braces/brackets (" .. opens .. " opening vs. " .. closes .. " closing) - likely truncated" end
+	local quotes = select(2, str:gsub('"', ""))
+	if quotes % 2 ~= 0 then return "unbalanced quotes - likely truncated or contains unescaped '\"'" end
+
+	return "unknown reason (possibly malformed key/value syntax)"
+end
+
 local fil = file.Read(dbfile, "DATA")
 if fil then
-	yframes = util.JSONToTable(fil)
+	local parsed = util.JSONToTable(fil)
+	if parsed then
+		yframes = parsed
+	else
+		YRP:msg("note", "yframe.lua | " .. dbfile .. " is corrupted (" .. DiagnoseJSON(fil) .. "), resetting to defaults!")
+		file.Write(dbfile .. ".corrupted", fil)
+	end
 end
 
 function PANEL:CheckSave(maximised, expanded, sw, sh)
