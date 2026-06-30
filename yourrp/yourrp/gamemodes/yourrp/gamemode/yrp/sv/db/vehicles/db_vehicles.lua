@@ -128,7 +128,7 @@ net.Receive(
 			_tmpTable = _tmpTable[1]
 			local item_uniqueID = tonumber(_tmpTable.item_id)
 			for k, v in pairs(ents.GetAll()) do
-				if v:GetYRPInt("item_uniqueID", 0) ~= 0 and item_uniqueID and v:GetYRPInt("item_uniqueID", 0) == item_uniqueID and ply:HasAccess("removeVehicleOwner") or ply == v:GetRPOwner() then
+				if v:GetYRPInt("item_uniqueID", 0) ~= 0 and item_uniqueID and v:GetYRPInt("item_uniqueID", 0) == item_uniqueID and (ply:HasAccess("removeVehicleOwner") or ply == v:GetRPOwner()) then
 					YRP_SQL_UPDATE(
 						DATABASE_NAME,
 						{

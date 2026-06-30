@@ -8,7 +8,7 @@ net.Receive(
 	"nws_yrp_upgradeCPU",
 	function(len, ply)
 		local mp = net.ReadEntity()
-		if IsValid(mp) and mp:GetClass() == "yrp_money_printer" then
+		if IsValid(mp) and mp:GetClass() == "yrp_money_printer" and mp:GetOwner() == ply then
 			local cost = mp:GetYRPInt("cpuCost")
 			if ply:canAfford(cost) and mp:GetYRPInt("cpu") < mp:GetYRPInt("cpuMax") then
 				ply:addMoney(-cost)
@@ -24,7 +24,7 @@ net.Receive(
 	"nws_yrp_upgradeCooler",
 	function(len, ply)
 		local mp = net.ReadEntity()
-		if IsValid(mp) and mp:GetClass() == "yrp_money_printer" then
+		if IsValid(mp) and mp:GetClass() == "yrp_money_printer" and mp:GetOwner() == ply then
 			local cost = mp:GetYRPInt("coolerCost")
 			if ply:canAfford(cost) and mp:GetYRPInt("cooler") < mp:GetYRPInt("coolerMax") then
 				ply:addMoney(-cost)
@@ -40,7 +40,7 @@ net.Receive(
 	"nws_yrp_upgradePrinter",
 	function(len, ply)
 		local mp = net.ReadEntity()
-		if IsValid(mp) and mp:GetClass() == "yrp_money_printer" then
+		if IsValid(mp) and mp:GetClass() == "yrp_money_printer" and mp:GetOwner() == ply then
 			local cost = mp:GetYRPInt("printerCost")
 			if ply:canAfford(cost) and mp:GetYRPInt("printer") < mp:GetYRPInt("printerMax") then
 				ply:addMoney(-cost)
@@ -55,7 +55,7 @@ net.Receive(
 	"nws_yrp_upgradeStorage",
 	function(len, ply)
 		local mp = net.ReadEntity()
-		if IsValid(mp) and mp:GetClass() == "yrp_money_printer" then
+		if IsValid(mp) and mp:GetClass() == "yrp_money_printer" and mp:GetOwner() == ply then
 			local cost = mp:GetYRPInt("storageCost")
 			if ply:canAfford(cost) and mp:GetYRPInt("storage") < mp:GetYRPInt("storageMax") then
 				ply:addMoney(-cost)
@@ -72,7 +72,7 @@ net.Receive(
 	"nws_yrp_fuelUp",
 	function(len, ply)
 		local mp = net.ReadEntity()
-		if IsValid(mp) and mp:GetClass() == "yrp_money_printer" then
+		if IsValid(mp) and mp:GetClass() == "yrp_money_printer" and mp:GetOwner() == ply then
 			local cost = mp:GetYRPInt("fuelCost")
 			if ply:canAfford(cost) and mp:GetYRPInt("fuel", 0) < mp:GetYRPInt("fuelMax", 0) then
 				ply:addMoney(-cost)
@@ -90,7 +90,7 @@ net.Receive(
 	"nws_yrp_repairMP",
 	function(len, ply)
 		local mp = net.ReadEntity()
-		if IsValid(mp) and mp:GetClass() == "yrp_money_printer" then
+		if IsValid(mp) and mp:GetClass() == "yrp_money_printer" and mp:GetOwner() == ply then
 			local cost = mp:GetYRPInt("hpCost")
 			if ply:canAfford(cost) and mp:GetYRPInt("hp") < mp:GetYRPInt("hpMax") then
 				ply:addMoney(-cost)
@@ -108,7 +108,7 @@ net.Receive(
 	"nws_yrp_withdrawMoney",
 	function(len, ply)
 		local mp = net.ReadEntity()
-		if IsValid(mp) and mp:GetClass() == "yrp_money_printer" then
+		if IsValid(mp) and mp:GetClass() == "yrp_money_printer" and mp:GetOwner() == ply then
 			local withdraw = mp:GetYRPInt("money", 0)
 			ply:addMoney(withdraw)
 			mp:SetYRPInt("money", 0)
@@ -121,7 +121,7 @@ net.Receive(
 	"nws_yrp_startMoneyPrinter",
 	function(len, ply)
 		local mp = net.ReadEntity()
-		if IsValid(mp) then
+		if IsValid(mp) and mp:GetOwner() == ply then
 			if mp:GetYRPBool("working", false) then
 				mp:SetYRPBool("working", false)
 			elseif not mp:GetYRPBool("working") then

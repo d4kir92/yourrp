@@ -994,6 +994,8 @@ net.Receive(
 	function(len, ply)
 		if not ply:GetYRPBool("isInstructor") then return end
 		local uid = net.ReadUInt(24)
+		local char = YRP_SQL_SELECT("yrp_characters", "groupID", "uniqueID = '" .. uid .. "'")
+		if not (char and char[1] and tonumber(char[1].groupID) == ply:GetGroupUID()) then return end
 		YRPSendGroupMember(ply, uid)
 	end
 )
@@ -1004,6 +1006,8 @@ net.Receive(
 	function(len, ply)
 		if not ply:GetYRPBool("isInstructor") then return end
 		local uid = net.ReadUInt(24)
+		local char = YRP_SQL_SELECT("yrp_characters", "groupID", "uniqueID = '" .. uid .. "'")
+		if not (char and char[1] and tonumber(char[1].groupID) == ply:GetGroupUID()) then return end
 		YRP_SQL_UPDATE(
 			"yrp_characters",
 			{
