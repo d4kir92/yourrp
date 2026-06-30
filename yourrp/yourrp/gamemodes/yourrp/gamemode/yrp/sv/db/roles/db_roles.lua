@@ -643,12 +643,7 @@ function UpdatePrerolesGroupIDs(uid, gid)
 				}, "uniqueID = '" .. prerole.uniqueID .. "'"
 			)
 
-			timer.Simple(
-				0.1,
-				function()
-					UpdatePrerolesGroupIDs(prerole.uniqueID, gid)
-				end
-			)
+			UpdatePrerolesGroupIDs(prerole.uniqueID, gid)
 		end
 	end
 end

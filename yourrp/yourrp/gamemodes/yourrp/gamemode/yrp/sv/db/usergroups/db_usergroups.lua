@@ -2389,13 +2389,14 @@ local function YRPCheckUGChanged()
 	end
 end
 
-local function YRPCheckUGChangedLoop()
-	local _, err = pcall(YRPCheckUGChanged)
-	if err then
-		YRPMsg(err)
+timer.Create(
+	"YRPCheckUGChanged",
+	1,
+	0,
+	function()
+		local _, err = pcall(YRPCheckUGChanged)
+		if err then
+			YRPMsg(err)
+		end
 	end
-
-	timer.Simple(0.1, YRPCheckUGChangedLoop)
-end
-
-YRPCheckUGChangedLoop()
+)

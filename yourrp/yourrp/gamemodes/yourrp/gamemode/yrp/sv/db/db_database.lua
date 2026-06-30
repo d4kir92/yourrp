@@ -107,8 +107,10 @@ function yrp_db_loaded()
 	return yrp_db.loaded
 end
 
+local _db_init_retries = 0
 function db_init_database()
 	if YRP_SQL_INIT_DATABASE then
+		_db_init_retries = 0
 		YRP:msg("db", "LOAD DATABASES")
 		for i, db in pairs(YRP_DBS) do
 			YRP_SQL_INIT_DATABASE(db, false)
@@ -117,8 +119,13 @@ function db_init_database()
 		yrp_db.loaded = true
 		YRP:msg("db", "DONE Loading DATABASES")
 	else
-		YRP:msg("db", "RETRY LOAD DATABASES")
-		timer.Simple(0.01, db_init_database)
+		_db_init_retries = _db_init_retries + 1
+		if _db_init_retries <= 500 then
+			YRP:msg("db", "RETRY LOAD DATABASES (" .. _db_init_retries .. "/500)")
+			timer.Simple(0.01, db_init_database)
+		else
+			YRP:msg("error", "[db_init_database] YRP_SQL_INIT_DATABASE not available after 500 retries — SQL module missing?")
+		end
 	end
 end
 

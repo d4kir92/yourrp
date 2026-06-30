@@ -100,16 +100,17 @@ local function YRPCheckFinishLoading()
 	end
 end
 
-local function YRPCheckFinishLoadingLoop()
-	local _, err = pcall(YRPCheckFinishLoading)
-	if err then
-		YRPMsg(err)
+timer.Create(
+	"YRPCheckFinishLoading",
+	0.1,
+	0,
+	function()
+		local _, err = pcall(YRPCheckFinishLoading)
+		if err then
+			YRPMsg(err)
+		end
 	end
-
-	timer.Simple(0.1, YRPCheckFinishLoadingLoop)
-end
-
-YRPCheckFinishLoadingLoop()
+)
 local function YRPReceivedReadyMessage(len, ply, tab)
 	if not IsValid(ply) then
 		YRP:msg("error", "[LOADING] player is not valid: " .. tostring(ply))

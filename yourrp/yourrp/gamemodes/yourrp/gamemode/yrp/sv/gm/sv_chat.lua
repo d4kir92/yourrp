@@ -14,23 +14,24 @@ YRPAlertsHOOKED = YRPAlertsHOOKED or false
 if not YRPAlertsHOOKED then
 	YRPAlertsHOOKED = true
 	local d = 0
-	local function YRPSetAlerts()
-		if d < CurTime() then
-			if net.BytesLeft() ~= nil then return end
-			if table.Count(alerts) > 0 then
-				local first = table.GetFirstValue(alerts)
-				d = CurTime() + math.Clamp(string.len(tostring(first)) / 2, 3, 10)
-				SetGlobalYRPString("yrp_alert", first)
-				table.RemoveByValue(alerts, first)
-			elseif GetGlobalYRPString("yrp_alert") ~= "" then
-				SetGlobalYRPString("yrp_alert", "")
+	timer.Create(
+		"YRPAlerts",
+		0.1,
+		0,
+		function()
+			if d < CurTime() then
+				if net.BytesLeft() ~= nil then return end
+				if table.Count(alerts) > 0 then
+					local first = table.GetFirstValue(alerts)
+					d = CurTime() + math.Clamp(string.len(tostring(first)) / 2, 3, 10)
+					SetGlobalYRPString("yrp_alert", first)
+					table.RemoveByValue(alerts, first)
+				elseif GetGlobalYRPString("yrp_alert") ~= "" then
+					SetGlobalYRPString("yrp_alert", "")
+				end
 			end
 		end
-
-		timer.Simple(0.1, YRPSetAlerts)
-	end
-
-	YRPSetAlerts()
+	)
 end
 
 YRP:AddNetworkString("nws_yrp_player_say")
