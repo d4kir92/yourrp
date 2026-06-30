@@ -28,8 +28,6 @@ end
 
 YRP:AddNetworkString("nws_yrp_open_storage")
 function OpenWorldStorage(ply, suid, name)
-	ply.YRPOpenStorages = ply.YRPOpenStorages or {}
-	ply.YRPOpenStorages[tonumber(suid)] = true
 	net.Start("nws_yrp_open_storage")
 	net.WriteString(suid)
 	net.WriteString(name)
