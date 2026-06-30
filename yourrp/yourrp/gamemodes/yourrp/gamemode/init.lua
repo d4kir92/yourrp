@@ -103,20 +103,23 @@ AddCSLuaFile("yrp/cl/gm/menus/cl_chatchannels.lua")
 -- includes 
 include("shared.lua")
 include("yrp/sv/sv_includes.lua")
-function YRPLoadServerInfo()
+function YRPLoadServerInfo(tries)
+	tries = (tries or 0) + 1
 	if game.GetIPAddress() and game.IsDedicated() and not string.StartWith(game.GetIPAddress(), "0.0.0.0:") then
+		SetGlobalYRPBool("isserverdedicated", game.IsDedicated())
+		SetGlobalYRPString("serverip", game.GetIPAddress())
+		SetGlobalYRPInt("serverversion", VERSION)
+		SetGlobalYRPString("serverversionstr", VERSIONSTR)
+	elseif tries < 300 then
 		timer.Simple(
 			0.1,
 			function()
-				SetGlobalYRPBool("isserverdedicated", game.IsDedicated())
-				SetGlobalYRPString("serverip", game.GetIPAddress())
-				SetGlobalYRPInt("serverversion", VERSION)
-				SetGlobalYRPString("serverversionstr", VERSIONSTR)
+				YRPLoadServerInfo(tries)
 			end
 		)
 	else
-		timer.Simple(0.1, YRPLoadServerInfo)
+		YRP:msg("error", "[YRPLoadServerInfo] Gave up waiting for a valid dedicated server IP after " .. tries .. " tries")
 	end
 end
 
-YRPLoadServerInfo()
+hook.Add("InitPostEntity", "YRPLoadServerInfo", YRPLoadServerInfo)

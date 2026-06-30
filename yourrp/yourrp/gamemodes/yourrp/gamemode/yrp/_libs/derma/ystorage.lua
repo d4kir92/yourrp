@@ -8,13 +8,13 @@ local YRP_STORAGES = YRP_STORAGES or {}
 function GetStoragePanel(storageID)
 	if IsNotNilAndNotFalse(storageID) then
 		storageID = tonumber(storageID)
-		if IsNotNilAndNotFalse(YRP_STORAGES[storageID]) then
-			return YRP_STORAGES[storageID]
-		else
-			YRP:msg("note", "[GetStoragePanel] no panel with: " .. tostring(storageID))
-		end
+		if IsNotNilAndNotFalse(YRP_STORAGES[storageID]) then return YRP_STORAGES[storageID] end
+
+		return nil
 	else
 		YRP:msg("note", "[GetStoragePanel] storageID is invalid: " .. tostring(storageID))
+
+		return nil
 	end
 end
 

@@ -8,14 +8,13 @@ local YRP_SLOTS = YRP_SLOTS or {}
 function GetSlotPanel(slotID)
 	if IsNotNilAndNotFalse(slotID) then
 		slotID = tonumber(slotID)
-		if IsNotNilAndNotFalse(YRP_SLOTS[slotID]) then
-			return YRP_SLOTS[slotID]
-		else
-			return nil
-		end
-		--YRP:msg( "note", "[GetSlotPanel] no panel with: " .. tostring(slotID) )
+		if IsNotNilAndNotFalse(YRP_SLOTS[slotID]) then return YRP_SLOTS[slotID] end
+
+		return nil
 	else
 		YRP:msg("note", "[GetSlotPanel] slotID is invalid: " .. tostring(slotID))
+
+		return nil
 	end
 end
 

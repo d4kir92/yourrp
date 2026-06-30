@@ -11,6 +11,9 @@ function ENT:SetStorage(id)
 	else
 		self._suid = tonumber(id)
 	end
+	if IsValid(self) and self._suid then
+		YRPRegisterObject(self)
+	end
 end
 
 function ENT:Use(activator, caller, useType, value)
@@ -45,13 +48,4 @@ function ENT:Initialize()
 
 	self.text_type = "bag"
 	self.bag_size = 4
-	timer.Simple(
-		0.1,
-		function()
-			if YRPEntityAlive(self) then
-				self:SetStorage(self._suid)
-				YRPRegisterObject(self)
-			end
-		end
-	)
 end

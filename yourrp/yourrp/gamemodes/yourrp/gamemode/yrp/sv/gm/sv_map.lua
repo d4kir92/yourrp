@@ -192,14 +192,18 @@ function YRPGetCoords()
 
 	--Ohne Problem durchcgelaufen
 	_map_size.error = 0
-	if (_map_size.sizeN == -9999999999 or _map_size.sizeS == 9999999999 or _map_size.sizeW == 9999999999 or _map_size.sizeE == -9999999999) and tries < 5 then
-		timer.Simple(
-			5,
-			function()
-				YRP:msg("note", "YRPGetMapCoords() retry")
-				YRPGetMapCoords()
-			end
-		)
+	if _map_size.sizeN == -9999999999 or _map_size.sizeS == 9999999999 or _map_size.sizeW == 9999999999 or _map_size.sizeE == -9999999999 then
+		if tries < 5 then
+			timer.Simple(
+				5,
+				function()
+					YRP:msg("note", "YRPGetMapCoords() retry (" .. tries .. "/5)")
+					YRPGetMapCoords()
+				end
+			)
+		else
+			YRP:msg("error", "[YRPGetMapCoords] Gave up after 5 tries, map coordinates could not be determined (no spawn/door entities found)")
+		end
 	end
 end
 

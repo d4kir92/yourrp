@@ -198,14 +198,7 @@ hook.Add(
 		ply.DarkRPVars.salary = 0
 		ply.DarkRPVars.job = ""
 		ply.DarkRPVars.Energy = 0
-		timer.Simple(
-			0.01,
-			function()
-				if IsValid(ply) then
-					ply.yrpauthed = true
-				end
-			end
-		)
+		ply.yrpauthed = true
 	end
 )
 
@@ -347,7 +340,7 @@ hook.Add(
 	function(ply)
 		--YRP:msg( "gm", "[PlayerLoadout] " .. tostring(ply:YRPName() ) .. " loadout." )
 		timer.Simple(
-			0.01,
+			0,
 			function()
 				if IsValid(ply) then
 					YRPPlayerLoadout(ply)
