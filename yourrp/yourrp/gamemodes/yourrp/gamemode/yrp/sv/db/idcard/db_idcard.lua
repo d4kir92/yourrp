@@ -143,7 +143,8 @@ function LoadIDCardSetting(force, from)
 				YRP:AddNetworkString(netstr)
 				net.Receive(
 					netstr,
-					function()
+					function(len, ply)
+						if not ply:HasAccess(netstr, true) then return end
 						local n = net.ReadString()
 						local v = net.ReadString()
 						if v == "true" then

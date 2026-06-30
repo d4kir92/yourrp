@@ -197,16 +197,17 @@ YRP:AddNetworkString("nws_yrp_darkrp_bool")
 net.Receive(
 	"nws_yrp_darkrp_bool",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_darkrp_bool", true) then return end
 		local name = net.ReadString()
 		local b = net.ReadBool()
-		if not IsNotNilAndNotFalse(YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. "bool_" .. name .. "'")) then
+		if not IsNotNilAndNotFalse(YRP_SQL_SELECT(DATABASE_NAME, "*", "name = " .. YRP_SQL_STR_IN("bool_" .. name))) then
 			YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "" .. YRP_SQL_STR_IN("bool_" .. name) .. ", '" .. tonum(b) .. "'")
 		else
 			YRP_SQL_UPDATE(
 				DATABASE_NAME,
 				{
 					["value"] = tonum(b)
-				}, "name = '" .. "bool_" .. name .. "'"
+				}, "name = " .. YRP_SQL_STR_IN("bool_" .. name)
 			)
 		end
 

@@ -139,6 +139,7 @@ for str, val in pairs(yrp_sql) do
 		net.Receive(
 			"nws_yrp_update_" .. str,
 			function(len, ply)
+				if not ply:GetYRPBool("bool_ac_database", false) then return end
 				local i = net.ReadInt(32)
 				DBUpdateInt(DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_sql, i, true)
 			end
@@ -148,6 +149,7 @@ for str, val in pairs(yrp_sql) do
 		net.Receive(
 			"nws_yrp_update_" .. str,
 			function(len, ply)
+				if not ply:GetYRPBool("bool_ac_database", false) then return end
 				local f = net.ReadFloat()
 				DBUpdateFloat(DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_sql, f, true)
 			end
@@ -157,6 +159,7 @@ for str, val in pairs(yrp_sql) do
 		net.Receive(
 			"nws_yrp_update_" .. str,
 			function(len, ply)
+				if not ply:GetYRPBool("bool_ac_database", false) then return end
 				local s = net.ReadString()
 				DBUpdateString(DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_sql, s, true)
 			end

@@ -24,10 +24,10 @@ net.Receive(
 		local _desc = net.ReadString()
 		YRP:msg("note", "[AGENTS] received hit info: " .. _steamid .. ", " .. _reward .. ", " .. _desc)
 		_reward = tonumber(_reward)
-		if ply:canAfford(_reward) then
+		if _reward and _reward > 0 and ply:canAfford(_reward) then
 			ply:addMoney(-_reward)
 			YRP:msg("note", "Set hit")
-			local _res = YRP_SQL_INSERT_INTO(DATABASE_NAME, "target, reward, description, contract_SteamID", "'" .. _steamid .. "', " .. _reward .. ", '" .. _desc .. "', '" .. ply:YRPSteamID() .. "'")
+			local _res = YRP_SQL_INSERT_INTO(DATABASE_NAME, "target, reward, description, contract_SteamID", YRP_SQL_STR_IN(_steamid) .. ", " .. _reward .. ", " .. YRP_SQL_STR_IN(_desc) .. ", '" .. ply:YRPSteamID() .. "'")
 		else
 			YRP:msg("note", "Cant afford hit")
 		end
@@ -76,7 +76,8 @@ end
 net.Receive(
 	"nws_yrp_accepthit",
 	function(len, ply)
-		local _uid = net.ReadString()
+		local _uid = tonumber(net.ReadString())
+		if not _uid then return end
 		local _hit = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. _uid)
 		if _hit ~= nil then
 			_hit = _hit[1]

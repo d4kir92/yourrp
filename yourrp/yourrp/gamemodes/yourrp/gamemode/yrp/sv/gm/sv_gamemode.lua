@@ -1335,6 +1335,7 @@ YRP:AddNetworkString("nws_yrp_voice_channel_add")
 net.Receive(
 	"nws_yrp_voice_channel_add",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_voice_channel_add", true) then return end
 		local name = net.ReadString()
 		local hear = tonum(net.ReadBool())
 		local augs = table.concat(net.ReadTable(), ",")
@@ -1368,6 +1369,7 @@ YRP:AddNetworkString("nws_yrp_voice_channel_save")
 net.Receive(
 	"nws_yrp_voice_channel_save",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_voice_channel_save", true) then return end
 		local name = net.ReadString()
 		local hear = tonum(net.ReadBool())
 		local augs = table.concat(net.ReadTable(), ",")
@@ -1399,6 +1401,7 @@ YRP:AddNetworkString("nws_yrp_voice_channel_rem")
 net.Receive(
 	"nws_yrp_voice_channel_rem",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_voice_channel_rem", true) then return end
 		local uid = net.ReadString()
 		YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. uid .. "'")
 		GenerateVoiceTable()
@@ -1700,7 +1703,8 @@ YRP:AddNetworkString("nws_yrp_voice_set_max_active")
 net.Receive(
 	"nws_yrp_voice_set_max_active",
 	function(len, ply)
-		local maxi = tonumber(net.ReadString())
+		if not ply:HasAccess("nws_yrp_voice_set_max_active", true) then return end
+		local maxi = math.Clamp(tonumber(net.ReadString()) or 0, 0, 64)
 		YRP_SQL_UPDATE(
 			"yrp_general",
 			{
@@ -1716,7 +1720,8 @@ YRP:AddNetworkString("nws_yrp_voice_set_max_passive")
 net.Receive(
 	"nws_yrp_voice_set_max_passive",
 	function(len, ply)
-		local maxi = tonumber(net.ReadString())
+		if not ply:HasAccess("nws_yrp_voice_set_max_passive", true) then return end
+		local maxi = math.Clamp(tonumber(net.ReadString()) or 0, 0, 64)
 		YRP_SQL_UPDATE(
 			"yrp_general",
 			{

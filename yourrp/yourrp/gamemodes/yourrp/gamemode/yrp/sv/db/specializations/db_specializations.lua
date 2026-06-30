@@ -48,6 +48,7 @@ YRP:AddNetworkString("nws_yrp_spec_add_pm")
 net.Receive(
 	"nws_yrp_spec_add_pm",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_spec_add_pm", true) then return end
 		local uid = net.ReadInt(32)
 		local pms = net.ReadTable()
 		for i, pm in pairs(pms) do
@@ -86,6 +87,7 @@ YRP:AddNetworkString("nws_yrp_spec_rem_pm")
 net.Receive(
 	"nws_yrp_spec_rem_pm",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_spec_rem_pm", true) then return end
 		local uid = net.ReadInt(32)
 		local pm = net.ReadString()
 		local tab = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID, pms", "uniqueID = '" .. uid .. "'")
@@ -152,6 +154,7 @@ YRP:AddNetworkString("nws_yrp_spec_add_swep")
 net.Receive(
 	"nws_yrp_spec_add_swep",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_spec_add_swep", true) then return end
 		local uid = net.ReadInt(32)
 		local sweps = net.ReadTable()
 		for i, swep in pairs(sweps) do
@@ -192,6 +195,7 @@ YRP:AddNetworkString("nws_yrp_spec_rem_swep")
 net.Receive(
 	"nws_yrp_spec_rem_swep",
 	function(len, ply)
+		if not ply:CanAccess("bool_specializations") then return end
 		local uid = net.ReadInt(32)
 		local swep = net.ReadString()
 		local tab = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID, sweps", "uniqueID = '" .. uid .. "'")
@@ -281,6 +285,7 @@ YRP:AddNetworkString("nws_yrp_specialization_add")
 net.Receive(
 	"nws_yrp_specialization_add",
 	function(len, ply)
+		if not ply:CanAccess("bool_specializations") then return end
 		local _new = YRP_SQL_INSERT_INTO(DATABASE_NAME, "name", "'new specialization'")
 		YRP:msg("db", "Add new specialization: " .. tostring(_new))
 		send_specializations(ply)
@@ -291,7 +296,9 @@ YRP:AddNetworkString("nws_yrp_specialization_rem")
 net.Receive(
 	"nws_yrp_specialization_rem",
 	function(len, ply)
-		local _uid = net.ReadString()
+		if not ply:CanAccess("bool_specializations") then return end
+		local _uid = tonumber(net.ReadString())
+		if not _uid then return end
 		local _new = YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = " .. _uid)
 		YRP:msg("db", "Removed specialization: " .. tostring(_uid))
 		send_specializations(ply)
@@ -302,8 +309,10 @@ YRP:AddNetworkString("nws_yrp_edit_specialization_name")
 net.Receive(
 	"nws_yrp_edit_specialization_name",
 	function(len, ply)
-		local _uid = net.ReadString()
+		if not ply:CanAccess("bool_specializations") then return end
+		local _uid = tonumber(net.ReadString())
 		local _new_name = net.ReadString()
+		if not _uid then return end
 		local _edit = YRP_SQL_UPDATE(
 			DATABASE_NAME,
 			{
@@ -319,8 +328,10 @@ YRP:AddNetworkString("nws_yrp_edit_specialization_prefix")
 net.Receive(
 	"nws_yrp_edit_specialization_prefix",
 	function(len, ply)
-		local _uid = net.ReadString()
+		if not ply:CanAccess("bool_specializations") then return end
+		local _uid = tonumber(net.ReadString())
 		local _new_prefix = net.ReadString()
+		if not _uid then return end
 		local _edit = YRP_SQL_UPDATE(
 			DATABASE_NAME,
 			{
@@ -336,8 +347,10 @@ YRP:AddNetworkString("nws_yrp_edit_specialization_suffix")
 net.Receive(
 	"nws_yrp_edit_specialization_suffix",
 	function(len, ply)
-		local _uid = net.ReadString()
+		if not ply:CanAccess("bool_specializations") then return end
+		local _uid = tonumber(net.ReadString())
 		local _new_suffix = net.ReadString()
+		if not _uid then return end
 		local _edit = YRP_SQL_UPDATE(
 			DATABASE_NAME,
 			{
@@ -368,8 +381,10 @@ YRP:AddNetworkString("nws_yrp_role_add_specialization")
 net.Receive(
 	"nws_yrp_role_add_specialization",
 	function(len, ply)
-		local _role_uid = net.ReadString()
+		if not ply:CanAccess("bool_specializations") then return end
+		local _role_uid = tonumber(net.ReadString())
 		local _specialization_uid = net.ReadString()
+		if not _role_uid or not tonumber(_specialization_uid) then return end
 		local _role = YRP_SQL_SELECT("yrp_ply_roles", "specializationIDs", "uniqueID = " .. _role_uid)
 		if _role ~= nil then
 			_role = _role[1]
@@ -396,8 +411,10 @@ YRP:AddNetworkString("nws_yrp_role_rem_specialization")
 net.Receive(
 	"nws_yrp_role_rem_specialization",
 	function(len, ply)
-		local _role_uid = net.ReadString()
+		if not ply:CanAccess("bool_specializations") then return end
+		local _role_uid = tonumber(net.ReadString())
 		local _specialization_uid = net.ReadString()
+		if not _role_uid or not tonumber(_specialization_uid) then return end
 		local _role = YRP_SQL_SELECT("yrp_ply_roles", "specializationIDs", "uniqueID = " .. _role_uid)
 		if _role ~= nil then
 			_role = _role[1]

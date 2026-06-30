@@ -320,6 +320,7 @@ YRP:AddNetworkString("nws_yrp_chat_channel_add")
 net.Receive(
 	"nws_yrp_chat_channel_add",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_chat_channel_add", true) then return end
 		local name = string.upper(net.ReadString())
 		local mode = net.ReadString()
 		local structure = net.ReadString()
@@ -340,6 +341,7 @@ YRP:AddNetworkString("nws_yrp_chat_channel_save")
 net.Receive(
 	"nws_yrp_chat_channel_save",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_chat_channel_save", true) then return end
 		local name = string.upper(net.ReadString())
 		local mode = net.ReadString()
 		local structure = net.ReadString()
@@ -377,6 +379,7 @@ YRP:AddNetworkString("nws_yrp_chat_channel_rem")
 net.Receive(
 	"nws_yrp_chat_channel_rem",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_chat_channel_rem", true) then return end
 		local uid = net.ReadString()
 		YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. uid .. "'")
 		GenerateChatTable()

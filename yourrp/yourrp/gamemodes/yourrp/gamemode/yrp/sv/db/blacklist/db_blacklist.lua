@@ -70,11 +70,12 @@ YRP:AddNetworkString("nws_yrp_blacklist_add")
 net.Receive(
 	"nws_yrp_blacklist_add",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_blacklist_add", true) then return end
 		local name = net.ReadString()
 		local value = net.ReadString()
 		if IsNotNilAndNotFalse(name) and IsNotNilAndNotFalse(value) then
 			YRP:msg("db", "Added blacklist entry: " .. value)
-			YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. name .. "', '" .. value .. "'")
+			YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", YRP_SQL_STR_IN(name) .. ", " .. YRP_SQL_STR_IN(value))
 		end
 
 		LoadBlacklist()
@@ -85,10 +86,11 @@ YRP:AddNetworkString("nws_yrp_blacklist_remove")
 net.Receive(
 	"nws_yrp_blacklist_remove",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_blacklist_remove", true) then return end
 		local uid = net.ReadString()
 		if IsNotNilAndNotFalse(uid) then
 			YRP:msg("db", "Removed blacklist entry")
-			YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. uid .. "'")
+			YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = " .. YRP_SQL_STR_IN(uid))
 		end
 
 		LoadBlacklist()

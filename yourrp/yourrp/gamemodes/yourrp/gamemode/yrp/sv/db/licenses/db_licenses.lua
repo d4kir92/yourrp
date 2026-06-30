@@ -94,6 +94,7 @@ YRP:AddNetworkString("nws_yrp_license_add")
 net.Receive(
 	"nws_yrp_license_add",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_license_add", true) then return end
 		local _new = YRP_SQL_INSERT_INTO(DATABASE_NAME, "name", "'new license'")
 		YRP:msg("db", "Add new license: " .. tostring(_new))
 		send_licenses(ply)
@@ -105,7 +106,9 @@ YRP:AddNetworkString("nws_yrp_license_rem")
 net.Receive(
 	"nws_yrp_license_rem",
 	function(len, ply)
-		local _uid = net.ReadString()
+		if not ply:HasAccess("nws_yrp_license_rem", true) then return end
+		local _uid = tonumber(net.ReadString())
+		if not _uid then return end
 		local _new = YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = " .. _uid)
 		YRP:msg("db", "Removed license: " .. tostring(_uid))
 		send_licenses(ply)
@@ -117,8 +120,10 @@ YRP:AddNetworkString("nws_yrp_edit_license_name")
 net.Receive(
 	"nws_yrp_edit_license_name",
 	function(len, ply)
-		local _uid = net.ReadString()
+		if not ply:HasAccess("nws_yrp_edit_license_name", true) then return end
+		local _uid = tonumber(net.ReadString())
 		local _new_name = net.ReadString()
+		if not _uid then return end
 		local _edit = YRP_SQL_UPDATE(
 			DATABASE_NAME,
 			{
@@ -135,8 +140,10 @@ YRP:AddNetworkString("nws_yrp_edit_license_description")
 net.Receive(
 	"nws_yrp_edit_license_description",
 	function(len, ply)
-		local _uid = net.ReadString()
+		if not ply:HasAccess("nws_yrp_edit_license_description", true) then return end
+		local _uid = tonumber(net.ReadString())
 		local _new_description = net.ReadString()
+		if not _uid then return end
 		local _edit = YRP_SQL_UPDATE(
 			DATABASE_NAME,
 			{
@@ -153,8 +160,10 @@ YRP:AddNetworkString("nws_yrp_edit_license_price")
 net.Receive(
 	"nws_yrp_edit_license_price",
 	function(len, ply)
-		local _uid = net.ReadString()
+		if not ply:HasAccess("nws_yrp_edit_license_price", true) then return end
+		local _uid = tonumber(net.ReadString())
 		local _new_price = net.ReadString()
+		if not _uid then return end
 		local _edit = YRP_SQL_UPDATE(
 			DATABASE_NAME,
 			{
@@ -186,8 +195,10 @@ YRP:AddNetworkString("nws_yrp_role_add_license")
 net.Receive(
 	"nws_yrp_role_add_license",
 	function(len, ply)
-		local _role_uid = net.ReadString()
+		if not ply:HasAccess("nws_yrp_role_add_license", true) then return end
+		local _role_uid = tonumber(net.ReadString())
 		local _license_uid = net.ReadString()
+		if not _role_uid or not tonumber(_license_uid) then return end
 		local _role = YRP_SQL_SELECT("yrp_ply_roles", "licenseIDs", "uniqueID = " .. _role_uid)
 		if _role ~= nil then
 			_role = _role[1]
@@ -214,8 +225,10 @@ YRP:AddNetworkString("nws_yrp_role_rem_license")
 net.Receive(
 	"nws_yrp_role_rem_license",
 	function(len, ply)
-		local _role_uid = net.ReadString()
+		if not ply:HasAccess("nws_yrp_role_rem_license", true) then return end
+		local _role_uid = tonumber(net.ReadString())
 		local _license_uid = net.ReadString()
+		if not _role_uid or not tonumber(_license_uid) then return end
 		local _role = YRP_SQL_SELECT("yrp_ply_roles", "licenseIDs", "uniqueID = " .. _role_uid)
 		if _role ~= nil then
 			_role = _role[1]

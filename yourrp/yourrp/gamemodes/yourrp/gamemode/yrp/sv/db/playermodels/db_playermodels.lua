@@ -58,6 +58,7 @@ YRP:AddNetworkString("nws_yrp_rem_playermodel")
 net.Receive(
 	"nws_yrp_rem_playermodel",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_rem_playermodel", true) then return end
 		local muid = net.ReadInt(32)
 		if muid == nil then return end
 		local pms = muid

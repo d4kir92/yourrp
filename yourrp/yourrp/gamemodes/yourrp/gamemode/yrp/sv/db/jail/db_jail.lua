@@ -33,9 +33,10 @@ YRP:AddNetworkString("nws_yrp_addJailNote")
 net.Receive(
 	"nws_yrp_addJailNote",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_addJailNote", true) then return end
 		local steamid = net.ReadString()
 		local note = net.ReadString()
-		YRP_SQL_INSERT_INTO(DBNotes, "note, SteamID", "'" .. note .. "', '" .. steamid .. "'")
+		YRP_SQL_INSERT_INTO(DBNotes, "note, SteamID", YRP_SQL_STR_IN(note) .. ", " .. YRP_SQL_STR_IN(steamid))
 	end
 )
 
@@ -43,8 +44,9 @@ YRP:AddNetworkString("nws_yrp_removeJailNote")
 net.Receive(
 	"nws_yrp_removeJailNote",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_removeJailNote", true) then return end
 		local uid = net.ReadString()
-		YRP_SQL_DELETE_FROM(DBNotes, "uniqueID = '" .. uid .. "'")
+		YRP_SQL_DELETE_FROM(DBNotes, "uniqueID = " .. YRP_SQL_STR_IN(uid))
 	end
 )
 
@@ -169,10 +171,12 @@ YRP:AddNetworkString("nws_yrp_dbAddJail")
 net.Receive(
 	"nws_yrp_dbAddJail",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_dbAddJail", true) then return end
 		local _tmpDBTable = net.ReadString()
 		local _tmpDBCol = net.ReadString()
 		local _tmpDBVal = net.ReadString()
 		local _SteamID = net.ReadString()
+		if _tmpDBTable ~= "yrp_jail" then return end
 		for i, p in pairs(player.GetAll()) do
 			if _SteamID == p:YRPSteamID() then
 				if sql.TableExists(_tmpDBTable) then
@@ -200,7 +204,9 @@ YRP:AddNetworkString("nws_yrp_dbRemJail")
 net.Receive(
 	"nws_yrp_dbRemJail",
 	function(len, ply)
-		local _uid = net.ReadString()
+		if not ply:HasAccess("nws_yrp_dbRemJail", true) then return end
+		local _uid = tonumber(net.ReadString())
+		if not _uid then return end
 		local _SteamID = YRP_SQL_SELECT("yrp_jail", "*", "uniqueID = '" .. _uid .. "'")
 		local _res = YRP_SQL_DELETE_FROM("yrp_jail", "uniqueID = " .. _uid)
 		if IsNotNilAndNotFalse(_SteamID) then

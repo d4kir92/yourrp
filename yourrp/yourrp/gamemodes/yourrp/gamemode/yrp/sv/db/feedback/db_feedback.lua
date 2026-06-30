@@ -64,7 +64,9 @@ YRP:AddNetworkString("nws_yrp_fb_movetoopen")
 net.Receive(
 	"nws_yrp_fb_movetowip",
 	function(len, ply)
-		local uid = net.ReadString()
+		if not ply:HasAccess("nws_yrp_fb_movetowip", true) then return end
+		local uid = tonumber(net.ReadString())
+		if not uid then return end
 		YRP_SQL_UPDATE(
 			DATABASE_NAME,
 			{
@@ -78,7 +80,9 @@ YRP:AddNetworkString("nws_yrp_fb_movetowip")
 net.Receive(
 	"nws_yrp_fb_movetowip",
 	function(len, ply)
-		local uid = net.ReadString()
+		if not ply:HasAccess("nws_yrp_fb_movetowip", true) then return end
+		local uid = tonumber(net.ReadString())
+		if not uid then return end
 		YRP_SQL_UPDATE(
 			DATABASE_NAME,
 			{
@@ -92,7 +96,9 @@ YRP:AddNetworkString("nws_yrp_fb_movetoclosed")
 net.Receive(
 	"nws_yrp_fb_movetoclosed",
 	function(len, ply)
-		local uid = net.ReadString()
+		if not ply:HasAccess("nws_yrp_fb_movetoclosed", true) then return end
+		local uid = tonumber(net.ReadString())
+		if not uid then return end
 		YRP_SQL_UPDATE(
 			DATABASE_NAME,
 			{

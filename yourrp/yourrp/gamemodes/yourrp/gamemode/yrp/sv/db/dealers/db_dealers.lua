@@ -79,6 +79,7 @@ end
 net.Receive(
 	"nws_yrp_dealer_add",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_dealer_add", true) then return end
 		dealer_add(ply)
 	end
 )
@@ -87,8 +88,10 @@ YRP:AddNetworkString("nws_yrp_dealer_add_tab")
 net.Receive(
 	"nws_yrp_dealer_add_tab",
 	function(len, ply)
-		local _dealer_uid = net.ReadString()
+		if not ply:HasAccess("nws_yrp_dealer_add_tab", true) then return end
+		local _dealer_uid = tonumber(net.ReadString())
 		local _tab_uid = net.ReadString()
+		if not _dealer_uid then return end
 		local _dealer = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. _dealer_uid)
 		if _dealer ~= nil then
 			_dealer = _dealer[1]
@@ -113,8 +116,10 @@ YRP:AddNetworkString("nws_yrp_dealer_rem_tab")
 net.Receive(
 	"nws_yrp_dealer_rem_tab",
 	function(len, ply)
-		local _dealer_uid = net.ReadString()
+		if not ply:HasAccess("nws_yrp_dealer_rem_tab", true) then return end
+		local _dealer_uid = tonumber(net.ReadString())
 		local _tab_uid = net.ReadString()
+		if not _dealer_uid then return end
 		local _dealer = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. _dealer_uid)
 		if _dealer ~= nil then
 			_dealer = _dealer[1]
@@ -135,8 +140,10 @@ YRP:AddNetworkString("nws_yrp_dealer_edit_name")
 net.Receive(
 	"nws_yrp_dealer_edit_name",
 	function(len, ply)
-		local _dealer_uid = net.ReadString()
+		if not ply:HasAccess("nws_yrp_dealer_edit_name", true) then return end
+		local _dealer_uid = tonumber(net.ReadString())
 		local _dealer_new_name = net.ReadString()
+		if not _dealer_uid then return end
 		local _dealer = YRP_SQL_UPDATE(
 			DATABASE_NAME,
 			{
@@ -156,8 +163,10 @@ YRP:AddNetworkString("nws_yrp_dealer_edit_worldmodel")
 net.Receive(
 	"nws_yrp_dealer_edit_worldmodel",
 	function(len, ply)
-		local _dealer_uid = net.ReadString()
+		if not ply:HasAccess("nws_yrp_dealer_edit_worldmodel", true) then return end
+		local _dealer_uid = tonumber(net.ReadString())
 		local _dealer_new_wm = net.ReadString()
+		if not _dealer_uid then return end
 		local _dealer = YRP_SQL_UPDATE(
 			DATABASE_NAME,
 			{
@@ -179,8 +188,10 @@ YRP:AddNetworkString("nws_yrp_dealer_edit_storagepoints")
 net.Receive(
 	"nws_yrp_dealer_edit_storagepoints",
 	function(len, ply)
-		local _dealer_uid = net.ReadString()
+		if not ply:HasAccess("nws_yrp_dealer_edit_storagepoints", true) then return end
+		local _dealer_uid = tonumber(net.ReadString())
 		local _dealer_storagepoints = net.ReadString()
+		if not _dealer_uid then return end
 		local _dealer = YRP_SQL_UPDATE(
 			DATABASE_NAME,
 			{

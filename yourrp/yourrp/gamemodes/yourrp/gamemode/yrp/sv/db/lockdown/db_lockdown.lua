@@ -46,6 +46,7 @@ YRP:AddNetworkString("nws_yrp_set_lockdowntext")
 net.Receive(
 	"nws_yrp_set_lockdowntext",
 	function(len, ply)
+		if not ply:GetYRPBool("bool_ismayor", false) then return end
 		local string_lockdowntext = net.ReadString()
 		string_lockdowntext = string_lockdowntext
 		YRP:msg("db", "Changed lockdowntext to: " .. string_lockdowntext)
@@ -98,6 +99,7 @@ YRP:AddNetworkString("nws_yrp_update_lockdown_alarms")
 net.Receive(
 	"nws_yrp_update_lockdown_alarms",
 	function(len, ply)
+		if not ply:GetYRPBool("bool_ismayor", false) then return end
 		local name = net.ReadString()
 		local checked = net.ReadBool()
 		for i, e in pairs(alarms) do
@@ -123,6 +125,7 @@ YRP:AddNetworkString("nws_yrp_set_lockdown")
 net.Receive(
 	"nws_yrp_set_lockdown",
 	function(len, ply)
+		if not ply:GetYRPBool("bool_ismayor", false) then return end
 		local bool_lockdown = net.ReadBool()
 		int_lockdown = tonum(bool_lockdown)
 		YRP:msg("db", "Changed bool_lockdown to: " .. tostring(int_lockdown))

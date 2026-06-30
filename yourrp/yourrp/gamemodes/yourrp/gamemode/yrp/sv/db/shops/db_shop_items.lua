@@ -48,6 +48,7 @@ YRP:AddNetworkString("nws_yrp_shop_item_add")
 net.Receive(
 	"nws_yrp_shop_item_add",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_shop_item_add", true) then return end
 		local _catID = net.ReadString()
 		local _new = YRP_SQL_INSERT_INTO(DATABASE_NAME, "categoryID", _catID)
 		YRP:msg("db", "shop_item_add: " .. YRP_DB_WORKED(_new))
@@ -59,6 +60,7 @@ YRP:AddNetworkString("nws_yrp_shop_item_rem")
 net.Receive(
 	"nws_yrp_shop_item_rem",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_shop_item_rem", true) then return end
 		local _uid = net.ReadString()
 		local _catID = net.ReadString()
 		local _new = YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = " .. _uid)
@@ -71,6 +73,7 @@ YRP:AddNetworkString("nws_yrp_shop_item_edit_name")
 net.Receive(
 	"nws_yrp_shop_item_edit_name",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_shop_item_edit_name", true) then return end
 		local _uid = net.ReadString()
 		local _new_name = net.ReadString()
 		local _catID = net.ReadString()
@@ -89,6 +92,7 @@ YRP:AddNetworkString("nws_yrp_shop_item_edit_desc")
 net.Receive(
 	"nws_yrp_shop_item_edit_desc",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_shop_item_edit_desc", true) then return end
 		local _uid = net.ReadString()
 		local _new_desc = net.ReadString()
 		local _catID = net.ReadString()
@@ -107,6 +111,7 @@ YRP:AddNetworkString("nws_yrp_shop_item_edit_price")
 net.Receive(
 	"nws_yrp_shop_item_edit_price",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_shop_item_edit_price", true) then return end
 		local _uid = net.ReadString()
 		local _new_price = net.ReadString()
 		local _catID = net.ReadString()
@@ -125,6 +130,7 @@ YRP:AddNetworkString("nws_yrp_shop_item_edit_level")
 net.Receive(
 	"nws_yrp_shop_item_edit_level",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_shop_item_edit_level", true) then return end
 		local _uid = net.ReadString()
 		local _new_level = net.ReadString()
 		local _catID = net.ReadString()
@@ -143,6 +149,7 @@ YRP:AddNetworkString("nws_yrp_shop_item_edit_quan")
 net.Receive(
 	"nws_yrp_shop_item_edit_quan",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_shop_item_edit_quan", true) then return end
 		local _uid = net.ReadString()
 		local _new_quan = net.ReadString()
 		local _catID = net.ReadString()
@@ -161,6 +168,7 @@ YRP:AddNetworkString("nws_yrp_shop_item_edit_cool")
 net.Receive(
 	"nws_yrp_shop_item_edit_cool",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_shop_item_edit_cool", true) then return end
 		local _uid = net.ReadString()
 		local _new_cool = net.ReadString()
 		local _catID = net.ReadString()
@@ -179,6 +187,7 @@ YRP:AddNetworkString("nws_yrp_shop_item_edit_lice")
 net.Receive(
 	"nws_yrp_shop_item_edit_lice",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_shop_item_edit_lice", true) then return end
 		local _uid = net.ReadString()
 		local _new_lice = net.ReadString()
 		local _catID = net.ReadString()
@@ -198,6 +207,7 @@ YRP:AddNetworkString("nws_yrp_shop_item_edit_perm")
 net.Receive(
 	"nws_yrp_shop_item_edit_perm",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_shop_item_edit_perm", true) then return end
 		local _uid = net.ReadString()
 		local _new_perm = net.ReadString()
 		local _catID = net.ReadString()
@@ -280,6 +290,7 @@ YRP:AddNetworkString("nws_yrp_shop_item_edit_base")
 net.Receive(
 	"nws_yrp_shop_item_edit_base",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_shop_item_edit_base", true) then return end
 		local _uid = net.ReadString()
 		local _wm = net.ReadString()
 		local _cn = net.ReadString()
@@ -628,7 +639,7 @@ net.Receive(
 	function(len, ply)
 		local duid = net.ReadString()
 		local itemId = net.ReadString()
-		local count = tonumber(net.ReadString())
+		local count = math.Clamp(tonumber(net.ReadString()) or 1, 1, 1000)
 		local itemColor = net.ReadString()
 		local _item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. itemId)
 		if IsNotNilAndNotFalse(_item) then

@@ -59,6 +59,7 @@ YRP:AddNetworkString("nws_yrp_set_lawsymbol")
 net.Receive(
 	"nws_yrp_set_lawsymbol",
 	function(len, ply)
+		if not ply:GetYRPBool("bool_ismayor", false) then return end
 		local lawsymbol = net.ReadString()
 		lawsymbol = lawsymbol
 		YRP:msg("db", "Changed lawsymbol to: " .. lawsymbol)
@@ -75,6 +76,7 @@ YRP:AddNetworkString("nws_yrp_set_laws")
 net.Receive(
 	"nws_yrp_set_laws",
 	function(len, ply)
+		if not ply:GetYRPBool("bool_ismayor", false) then return end
 		local laws = net.ReadString()
 		laws = laws
 		YRP:msg("db", "Changed lawsymbol to: " .. laws)

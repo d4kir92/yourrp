@@ -1149,8 +1149,9 @@ YRP:AddNetworkString("nws_yrp_warning_up")
 net.Receive(
 	"nws_yrp_warning_up",
 	function(len, ply)
+		if not ply:GetYRPBool("bool_players", false) then return end
 		local p = net.ReadEntity()
-		if IsValid(p) then
+		if IsValid(p) and p:IsPlayer() and p.CharID and IsNotNilAndNotFalse(p:CharID()) then
 			local ptab = YRP_SQL_SELECT(DATABASE_NAME, "int_warnings", "uniqueID = '" .. p:CharID() .. "'")
 			if IsNotNilAndNotFalse(ptab) then
 				local int_warnings = ptab[1].int_warnings
@@ -1173,8 +1174,9 @@ YRP:AddNetworkString("nws_yrp_warning_dn")
 net.Receive(
 	"nws_yrp_warning_dn",
 	function(len, ply)
+		if not ply:GetYRPBool("bool_players", false) then return end
 		local p = net.ReadEntity()
-		if IsValid(p) then
+		if IsValid(p) and p:IsPlayer() and p.CharID and IsNotNilAndNotFalse(p:CharID()) then
 			local ptab = YRP_SQL_SELECT(DATABASE_NAME, "int_warnings", "uniqueID = '" .. p:CharID() .. "'")
 			if IsNotNilAndNotFalse(ptab) then
 				local int_warnings = ptab[1].int_warnings
@@ -1197,8 +1199,9 @@ YRP:AddNetworkString("nws_yrp_violation_up")
 net.Receive(
 	"nws_yrp_violation_up",
 	function(len, ply)
+		if not ply:GetYRPBool("bool_players", false) then return end
 		local p = net.ReadEntity()
-		if IsValid(p) then
+		if IsValid(p) and p:IsPlayer() and p.CharID and IsNotNilAndNotFalse(p:CharID()) then
 			local ptab = YRP_SQL_SELECT(DATABASE_NAME, "int_violations", "uniqueID = '" .. p:CharID() .. "'")
 			if IsNotNilAndNotFalse(ptab) then
 				local int_violations = ptab[1].int_violations
@@ -1221,8 +1224,9 @@ YRP:AddNetworkString("nws_yrp_violation_dn")
 net.Receive(
 	"nws_yrp_violation_dn",
 	function(len, ply)
+		if not ply:GetYRPBool("bool_players", false) then return end
 		local p = net.ReadEntity()
-		if IsValid(p) then
+		if IsValid(p) and p:IsPlayer() and p.CharID and IsNotNilAndNotFalse(p:CharID()) then
 			local ptab = YRP_SQL_SELECT(DATABASE_NAME, "int_violations", "uniqueID = '" .. p:CharID() .. "'")
 			if IsNotNilAndNotFalse(ptab) then
 				local int_violations = ptab[1].int_violations

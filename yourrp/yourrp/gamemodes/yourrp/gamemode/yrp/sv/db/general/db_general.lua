@@ -675,6 +675,7 @@ YRP:AddNetworkString("nws_yrp_update_bool_graffiti_disabled")
 net.Receive(
 	"nws_yrp_update_bool_graffiti_disabled",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_update_bool_graffiti_disabled", true) then return end
 		local b = btn(net.ReadBool())
 		GeneralUpdateBool(ply, "nws_yrp_update_bool_graffiti_disabled", "bool_graffiti_disabled", b)
 	end
@@ -1898,6 +1899,7 @@ YRP:AddNetworkString("nws_yrp_update_bool_yrp_money")
 net.Receive(
 	"nws_yrp_update_bool_yrp_money",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_update_bool_yrp_money", true) then return end
 		local b = btn(net.ReadBool())
 		GeneralUpdateBool(ply, "nws_yrp_update_bool_yrp_money", "bool_yrp_money", b)
 	end
@@ -1907,6 +1909,7 @@ YRP:AddNetworkString("nws_yrp_update_bool_YRPDropMoneyChat_on_death")
 net.Receive(
 	"nws_yrp_update_bool_YRPDropMoneyChat_on_death",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_update_bool_YRPDropMoneyChat_on_death", true) then return end
 		local b = btn(net.ReadBool())
 		GeneralUpdateBool(ply, "nws_yrp_update_bool_YRPDropMoneyChat_on_death", "bool_YRPDropMoneyChat_on_death", b)
 	end
@@ -1916,6 +1919,7 @@ YRP:AddNetworkString("nws_yrp_update_text_money_max_amount_of_dropped_money")
 net.Receive(
 	"nws_yrp_update_text_money_max_amount_of_dropped_money",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_update_text_money_max_amount_of_dropped_money", true) then return end
 		local str = net.ReadString()
 		GeneralUpdateString(ply, "nws_yrp_update_text_money_max_amount_of_dropped_money", "text_money_max_amount_of_dropped_money", str)
 	end
@@ -2522,6 +2526,7 @@ YRP:AddNetworkString("nws_yrp_dbUpdate")
 net.Receive(
 	"nws_yrp_dbUpdate",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_dbUpdate", true) then return end
 		local _dbTable = net.ReadString()
 		local _dbSets = net.ReadString()
 		local _dbWhile = net.ReadString()

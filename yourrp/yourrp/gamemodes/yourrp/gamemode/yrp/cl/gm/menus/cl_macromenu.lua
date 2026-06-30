@@ -55,9 +55,9 @@ net.Receive(
 			_mm.tf = YRPCreateD("DTextEntry", content, YRP:ctr(80 * 7 + 20 * 6 + 36), YRP:ctr(80 * 3 + 20 * 2), 0, YRP:ctr(80 * 3 + 20 * 3))
 			_mm.tf:SetMultiline(true)
 			function _mm.tf:OnTextChanged()
-				if _mm.uid then
+				if _mm.uid and IsNotNilAndNotFalse(_mm.tab[_mm.uid]) then
 					net.Start("nws_yrp_update_macro")
-					net.WriteString(_mm.uid)
+					net.WriteString(_mm.tab[_mm.uid].uniqueID)
 					net.WriteString(self:GetText())
 					net.SendToServer()
 					_mm.tab[_mm.uid].value = self:GetText()
