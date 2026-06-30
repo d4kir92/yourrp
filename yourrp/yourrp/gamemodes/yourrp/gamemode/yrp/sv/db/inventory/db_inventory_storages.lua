@@ -155,12 +155,22 @@ net.Receive(
 	end
 )
 
+function PlayerCanAccessStorage(ply, storageID)
+	storageID = tonumber(storageID)
+	if not storageID then return false end
+	local own = GetCharacterStorage(ply)
+	if IsNotNilAndNotFalse(own) and tonumber(own.uniqueID) == storageID then return true end
+	return ply.YRPOpenStorages ~= nil and ply.YRPOpenStorages[storageID] == true
+end
+
 YRP:AddNetworkString("nws_yrp_storage_open")
 function OpenStorage(ply, storageID)
 	storageID = tonumber(storageID)
 	local storage = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. storageID .. "'")
 	if IsNotNilAndNotFalse(storage) then
 		storage = storage[1]
+		ply.YRPOpenStorages = ply.YRPOpenStorages or {}
+		ply.YRPOpenStorages[tonumber(storage.uniqueID)] = true
 		local isinv = false
 		local item = YRP_SQL_SELECT("yrp_inventory_items", "*", "int_storageID = '" .. storage.uniqueID .. "'")
 		if IsNotNilAndNotFalse(item) then

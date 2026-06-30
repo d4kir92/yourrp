@@ -207,7 +207,7 @@ function CloseBag(storID)
 	net.Broadcast()
 end
 
-function MoveItem(itemID, slotID)
+function MoveItem(ply, itemID, slotID)
 	itemID = tonumber(itemID)
 	slotID = tonumber(slotID)
 	local item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. itemID .. "'")
@@ -219,6 +219,12 @@ function MoveItem(itemID, slotID)
 		slot.int_storageID = tonumber(slot.int_storageID)
 		item.int_fixed = tonumber(item.int_fixed)
 		item.int_storageID = tonumber(item.int_storageID)
+		if IsValid(ply) and not (PlayerCanAccessStorage(ply, item.int_storageID) and PlayerCanAccessStorage(ply, slot.int_storageID)) then
+			YRP:msg("db", "[MoveItem] " .. ply:Nick() .. " has no access to source/target storage")
+
+			return
+		end
+
 		if item.int_fixed == 1 then
 			YRP:msg("db", "[MoveItem] Item is fixed")
 
@@ -270,6 +276,17 @@ function MoveItem(itemID, slotID)
 		end
 	else
 		local e = net.ReadEntity()
+		local targetSlot = IsNotNilAndNotFalse(slot) and slot[1] or nil
+		if not IsValid(ply) or not targetSlot or not PlayerCanAccessStorage(ply, targetSlot.int_storageID) then
+			return
+		end
+
+		if not IsValid(e) or ply:GetPos():DistToSqr(e:GetPos()) > (250 * 250) then
+			YRP:msg("db", "[MoveItem] Entity not in range")
+
+			return
+		end
+
 		local added = CreateItemByEntity(slotID, e)
 		if IsNotNilAndNotFalse(e) and added then
 			e:Remove()
@@ -290,6 +307,14 @@ net.Receive(
 		if IsNotNilAndNotFalse(item) then
 			item = item[1]
 			item.int_storageID = tonumber(item.int_storageID)
+			local itemSlot = YRP_SQL_SELECT("yrp_inventory_slots", "*", "uniqueID = '" .. tonumber(item.int_slotID) .. "'")
+			itemSlot = IsNotNilAndNotFalse(itemSlot) and itemSlot[1] or nil
+			if not itemSlot or not PlayerCanAccessStorage(ply, itemSlot.int_storageID) then
+				YRP:msg("db", "[yrp_item_clicked] " .. ply:Nick() .. " has no access to this item's storage")
+
+				return
+			end
+
 			if item.int_storageID ~= 0 then
 				OpenStorage(ply, item.int_storageID)
 			else
@@ -309,7 +334,7 @@ net.Receive(
 		local slotID = net.ReadString()
 		itemID = tonumber(itemID)
 		slotID = tonumber(slotID)
-		MoveItem(itemID, slotID)
+		MoveItem(ply, itemID, slotID)
 	end
 )
 

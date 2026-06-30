@@ -5,7 +5,7 @@ local _show_db_if_not_empty = false
 YRPSQL = YRPSQL or {}
 YRPSQL.mysql_worked = YRPSQL.mysql_worked or false
 YRPSQL.int_mode = YRPSQL.int_mode or 0
-local db_version = 2
+local db_version = 3
 local function YRP_MYSQL_CHECK_OUTDATED()
 	if system.IsLinux() and (not file.Exists("bin/gmsv_mysqloo_linux.dll", "LUA") or not file.Exists("bin/gmsv_mysqloo_linux64.dll", "LUA")) then
 		if not file.Exists("bin/gmsv_mysqloo_linux.dll", "LUA") then
