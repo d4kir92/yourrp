@@ -140,9 +140,11 @@ function Player:HasAccess(from, skip)
 			trace = string.Replace(trace, "\t", "")
 			trace = string.Replace(trace, "\n", "-> ")
 			YRP:msg("access", "[HasAccess] Missing \"from\": " .. trace)
+			YRP:msg("error", "[HasAccess] Missing \"from\": " .. trace)
 		elseif not table.HasValue(accessTab, from) then
 			table.insert(accessTab, from)
 			YRP:msg("access", "[HasAccess] Tried to Access: " .. tostring(from))
+			YRP:msg("error", "[HasAccess] Tried to Access: " .. tostring(from))
 		end
 	end
 
