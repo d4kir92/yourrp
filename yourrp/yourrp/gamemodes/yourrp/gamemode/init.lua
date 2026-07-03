@@ -118,7 +118,7 @@ function YRPLoadServerInfo(tries)
 			end
 		)
 	else
-		YRP:msg("error", "[YRPLoadServerInfo] Gave up waiting for a valid dedicated server IP after " .. tries .. " tries")
+		YRP:msg("note", "[YRPLoadServerInfo] Gave up waiting for a valid dedicated server IP after " .. tries .. " tries")
 	end
 end
 
