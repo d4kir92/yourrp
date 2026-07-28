@@ -201,6 +201,7 @@ function YRP_SQL_STR_IN(str, f, bNoQuotes)
 
 		return str
 	else
+		str = str or ""
 		str = string.Replace(str, "'", "§01§")
 
 		return sql.SQLStr(tostring(str), bNoQuotes)

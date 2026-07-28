@@ -910,9 +910,9 @@ net.Receive(
 		end
 
 		local namealreadyinuse = false
-		local allchars = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-		if allchars then
-			for i, v in pairs(allchars) do
+		local rpnamechars = YRP_SQL_SELECT(DATABASE_NAME, "*", "rpname = " .. YRP_SQL_STR_IN(tab.rpname) .. "")
+		if rpnamechars then
+			for i, v in pairs(rpnamechars) do
 				if string.lower(v.rpname) == string.lower(tab.rpname) then
 					namealreadyinuse = true
 				end
