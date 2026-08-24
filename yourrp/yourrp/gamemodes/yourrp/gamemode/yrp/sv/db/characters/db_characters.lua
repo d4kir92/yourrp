@@ -1313,6 +1313,7 @@ net.Receive(
 	"nws_yrp_set_idcardid",
 	function(len, ply)
 		local p = net.ReadEntity()
+		if not ply:GetYRPBool("bool_players", false) then return end
 		if IsValid(p) then
 			local text_idcardid = net.ReadString()
 			if IsNotNilAndNotFalse(p:CharID()) then
@@ -1525,7 +1526,9 @@ net.Receive(
 		local charid = net.ReadString()
 		local specid = net.ReadString()
 		local ruid = net.ReadString()
+		if not ply:CanAccess("bool_specializations") then return end
 		charid = tonumber(charid)
+		if not charid then return end
 		local newspecs = {}
 		local tab = YRP_SQL_SELECT(DATABASE_NAME, "string_specializations", "uniqueID = '" .. charid .. "'")
 		if IsNotNilAndNotFalse(tab) then
@@ -1575,7 +1578,9 @@ net.Receive(
 		local charid = net.ReadString()
 		local specid = net.ReadString()
 		local ruid = net.ReadString()
+		if not ply:CanAccess("bool_specializations") then return end
 		charid = tonumber(charid)
+		if not charid then return end
 		local newspecs = {}
 		local tab = YRP_SQL_SELECT(DATABASE_NAME, "string_specializations", "uniqueID = '" .. charid .. "'")
 		if IsNotNilAndNotFalse(tab) then

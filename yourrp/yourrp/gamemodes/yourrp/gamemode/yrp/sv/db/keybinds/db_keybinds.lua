@@ -32,6 +32,7 @@ YRP:AddNetworkString("nws_yrp_setserverdefaultkeybind")
 net.Receive(
 	"nws_yrp_setserverdefaultkeybind",
 	function(len, ply)
+		if not ply:HasAccess("nws_yrp_setserverdefaultkeybind", true) then return end
 		local keybinds = net.ReadTable()
 		for name, value in pairs(keybinds) do
 			local selresult = YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. name .. "'")

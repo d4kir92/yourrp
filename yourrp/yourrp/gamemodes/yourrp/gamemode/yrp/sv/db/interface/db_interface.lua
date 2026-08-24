@@ -144,6 +144,7 @@ YRP:AddNetworkString("nws_yrp_update_interface_color")
 net.Receive(
 	"nws_yrp_update_interface_color",
 	function(len, ply)
+		if not ply:GetYRPBool("bool_design", false) then return end
 		local name = net.ReadString()
 		local color = net.ReadString()
 		YRP:msg("db", "value = '" .. color .. "'" .. "name = '" .. name .. "'")

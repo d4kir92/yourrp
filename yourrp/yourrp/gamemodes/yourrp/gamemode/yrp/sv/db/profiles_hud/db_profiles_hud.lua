@@ -29,7 +29,8 @@ end
 YRP:AddNetworkString("nws_yrp_change_to_hud_profile")
 net.Receive(
 	"nws_yrp_change_to_hud_profile",
-	function()
+	function(len, ply)
+		if not ply:GetYRPBool("bool_design", false) then return end
 		local profile_name = net.ReadString()
 		YRP_SQL_UPDATE(
 			"yrp_design",

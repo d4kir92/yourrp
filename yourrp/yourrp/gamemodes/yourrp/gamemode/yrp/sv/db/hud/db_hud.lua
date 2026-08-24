@@ -1069,6 +1069,7 @@ YRP:AddNetworkString("nws_yrp_update_hud_x")
 net.Receive(
 	"nws_yrp_update_hud_x",
 	function(len, ply)
+		if not ply:GetYRPBool("bool_design", false) then return end
 		local element = net.ReadString()
 		local x = net.ReadFloat()
 		YRP_SQL_UPDATE(
@@ -1086,6 +1087,7 @@ YRP:AddNetworkString("nws_yrp_update_hud_y")
 net.Receive(
 	"nws_yrp_update_hud_y",
 	function(len, ply)
+		if not ply:GetYRPBool("bool_design", false) then return end
 		local element = net.ReadString()
 		local y = net.ReadFloat()
 		YRP_SQL_UPDATE(
@@ -1103,6 +1105,7 @@ YRP:AddNetworkString("nws_yrp_update_hud_w")
 net.Receive(
 	"nws_yrp_update_hud_w",
 	function(len, ply)
+		if not ply:GetYRPBool("bool_design", false) then return end
 		local element = net.ReadString()
 		local w = net.ReadFloat()
 		if w > 0.0 then
@@ -1122,6 +1125,7 @@ YRP:AddNetworkString("nws_yrp_update_hud_h")
 net.Receive(
 	"nws_yrp_update_hud_h",
 	function(len, ply)
+		if not ply:GetYRPBool("bool_design", false) then return end
 		local element = net.ReadString()
 		local h = net.ReadFloat()
 		if h > 0.0 then
@@ -1158,6 +1162,7 @@ YRP:AddNetworkString("nws_yrp_update_hud_bool")
 net.Receive(
 	"nws_yrp_update_hud_bool",
 	function(len, ply)
+		if not ply:GetYRPBool("bool_design", false) then return end
 		local element = net.ReadString()
 		local art = net.ReadString()
 		local b = net.ReadBool()
@@ -1176,6 +1181,7 @@ YRP:AddNetworkString("nws_yrp_update_hud_text")
 net.Receive(
 	"nws_yrp_update_hud_text",
 	function(len, ply)
+		if not ply:GetYRPBool("bool_design", false) then return end
 		local element = net.ReadString()
 		local text = net.ReadString()
 		YRP_SQL_UPDATE(
@@ -1193,6 +1199,7 @@ YRP:AddNetworkString("nws_yrp_update_hud_text_position")
 net.Receive(
 	"nws_yrp_update_hud_text_position",
 	function(len, ply)
+		if not ply:GetYRPBool("bool_design", false) then return end
 		local element = net.ReadString()
 		local ax = tonumber(net.ReadInt(4))
 		local ay = tonumber(net.ReadInt(4))
@@ -1224,6 +1231,7 @@ YRP:AddNetworkString("nws_yrp_update_hud_ts")
 net.Receive(
 	"nws_yrp_update_hud_ts",
 	function(len, ply)
+		if not ply:GetYRPBool("bool_design", false) then return end
 		local element = net.ReadString()
 		local ts = net.ReadInt(8)
 		if ts > 0 then
@@ -1243,6 +1251,7 @@ YRP:AddNetworkString("nws_yrp_update_hud_color")
 net.Receive(
 	"nws_yrp_update_hud_color",
 	function(len, ply)
+		if not ply:GetYRPBool("bool_design", false) then return end
 		local element = net.ReadString()
 		local art = net.ReadString()
 		local color = net.ReadString()
@@ -1261,6 +1270,7 @@ YRP:AddNetworkString("nws_yrp_reset_hud_settings")
 net.Receive(
 	"nws_yrp_reset_hud_settings",
 	function(len, ply)
+		if not ply:GetYRPBool("bool_design", false) then return end
 		YRP:msg("db", "Reset Hud Settings by " .. ply:YRPName())
 		DefaultHUDSettings(true)
 		YRPDesignLoadout("reset_hud_settings")

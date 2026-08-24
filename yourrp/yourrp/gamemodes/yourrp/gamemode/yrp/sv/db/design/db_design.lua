@@ -251,6 +251,7 @@ YRP:AddNetworkString("nws_yrp_change_hud_design")
 net.Receive(
 	"nws_yrp_change_hud_design",
 	function(len, ply)
+		if not ply:GetYRPBool("bool_design", false) then return end
 		local string_hud_design = net.ReadString()
 		YRP:msg("db", "[DESIGN] string_hud_design changed to " .. string_hud_design)
 		YRP_SQL_UPDATE(
@@ -287,6 +288,7 @@ YRP:AddNetworkString("nws_yrp_change_interface_design")
 net.Receive(
 	"nws_yrp_change_interface_design",
 	function(len, ply)
+		if not ply:GetYRPBool("bool_design", false) then return end
 		local string_interface_design = net.ReadString()
 		YRP:msg("db", "[DESIGN] string_interface_design changed to " .. string_interface_design)
 		YRP_SQL_UPDATE(
@@ -345,6 +347,7 @@ YRP:AddNetworkString("nws_yrp_update_font")
 net.Receive(
 	"nws_yrp_update_font",
 	function(len, ply)
+		if not ply:GetYRPBool("bool_design", false) then return end
 		local string_fontname = net.ReadString()
 		YRP:msg("db", "[DESIGN] string_fontname changed to " .. string_fontname)
 		YRP_SQL_UPDATE(
@@ -364,8 +367,10 @@ YRP:AddNetworkString("nws_yrp_change_headerheight")
 net.Receive(
 	"nws_yrp_change_headerheight",
 	function(len, ply)
+		if not ply:GetYRPBool("bool_design", false) then return end
 		local newheaderheight = net.ReadString()
 		newheaderheight = tonumber(newheaderheight)
+		if not newheaderheight then return end
 		YRP_SQL_UPDATE(
 			DATABASE_NAME,
 			{

@@ -36,6 +36,7 @@ YRP:AddNetworkString("nws_yrp_shop_add")
 net.Receive(
 	"nws_yrp_shop_add",
 	function(len, ply)
+		if not ply:GetYRPBool("bool_shops", false) then return end
 		local _new = YRP_SQL_INSERT_INTO(DATABASE_NAME, "name", "'new shop'")
 		YRP:msg("db", "shop_add: " .. YRP_DB_WORKED(_new))
 		send_shops(ply)
@@ -46,7 +47,9 @@ YRP:AddNetworkString("nws_yrp_shop_rem")
 net.Receive(
 	"nws_yrp_shop_rem",
 	function(len, ply)
-		local _uid = net.ReadString()
+		if not ply:GetYRPBool("bool_shops", false) then return end
+		local _uid = tonumber(net.ReadString())
+		if not _uid then return end
 		local _new = YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = " .. _uid)
 		YRP:msg("db", "shop_rem: " .. tostring(_uid))
 		send_shops(ply)
@@ -57,8 +60,10 @@ YRP:AddNetworkString("nws_yrp_shop_edit_name")
 net.Receive(
 	"nws_yrp_shop_edit_name",
 	function(len, ply)
-		local _uid = net.ReadString()
+		if not ply:GetYRPBool("bool_shops", false) then return end
+		local _uid = tonumber(net.ReadString())
 		local _new_name = net.ReadString()
+		if not _uid then return end
 		local _new = YRP_SQL_UPDATE(
 			DATABASE_NAME,
 			{
