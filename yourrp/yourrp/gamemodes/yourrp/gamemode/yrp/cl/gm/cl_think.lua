@@ -284,30 +284,35 @@ function YRPKeyPressed(key, str, distance)
 	if ChatIsClosedForChat and ChatIsClosedForChat() then
 		local lply = LocalPlayer()
 		if IsValid(lply) and IsNotNilAndNotFalse(lply.GetEyeTrace) then
-			local plyTrace = lply:GetEyeTrace()
 			local _return = false
-			if plyTrace and distance and YRPEntityAlive(plyTrace.Entity) and plyTrace.Entity:GetPos():Distance(lply:GetPos()) > distance then
-				_return = true
+			if distance then
+				local plyTrace = lply:GetEyeTrace()
+				if plyTrace and YRPEntityAlive(plyTrace.Entity) and plyTrace.Entity:GetPos():Distance(lply:GetPos()) > distance then
+					_return = true
+				end
 			end
 
-			if not _return and key then
-				if keys[tostring(key)] == nil then
-					keys[tostring(key)] = false
-				end
-
+			if not _return then
 				key = tonumber(key)
-				if key and input.IsKeyDown(key) and not keys[tostring(key)] then
-					keys[tostring(key)] = true
-					timer.Simple(
-						0.14,
-						function()
-							if str ~= nil then
-								YRPUseFunction(str)
-							end
+				if key then
+					local kid = tostring(key)
+					if keys[kid] == nil then
+						keys[kid] = false
+					end
 
-							keys[tostring(key)] = false
-						end
-					)
+					if input.IsKeyDown(key) and not keys[kid] then
+						keys[kid] = true
+						timer.Simple(
+							0.14,
+							function()
+								if str ~= nil then
+									YRPUseFunction(str)
+								end
+
+								keys[kid] = false
+							end
+						)
+					end
 				end
 			end
 		end
@@ -318,6 +323,11 @@ local _view_delay = true
 local blink_delay = 0
 local setup = false
 local hudFail = hudFail or false
+local MACRO_KEYBINDS = {}
+for i = 1, 49 do
+	MACRO_KEYBINDS[i] = "m_" .. i
+end
+
 function YRPKeyPress()
 	local lply = LocalPlayer()
 	lply.yrp_view_range = lply.yrp_view_range or 0
@@ -486,9 +496,11 @@ function YRPKeyPress()
 		YRPKeyPressed(YRPGetKeybind("macro_menu"), "macro_menu")
 	end
 
-	for i = 1, 49 do
-		if YRPGetKeybind("m_" .. i) ~= 0 then
-			YRPKeyPressed(YRPGetKeybind("m_" .. i), "m_" .. i)
+	for i = 1, #MACRO_KEYBINDS do
+		local macro = MACRO_KEYBINDS[i]
+		local key = YRPGetKeybind(macro)
+		if key ~= 0 then
+			YRPKeyPressed(key, macro)
 		end
 	end
 end
