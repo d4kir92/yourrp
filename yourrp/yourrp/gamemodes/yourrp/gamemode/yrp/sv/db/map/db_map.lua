@@ -159,6 +159,7 @@ net.Receive(
 		end
 
 		YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = " .. _tmpUniqueID)
+		YRPUpdateAllDBTables()
 	end
 )
 

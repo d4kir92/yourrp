@@ -559,8 +559,21 @@ function YRPRestartServer()
 	RunConsoleCommand("map", game.GetMap())
 end
 
+YRPSpawnerNPCData = YRPSpawnerNPCData or {}
+YRPSpawnerENTData = YRPSpawnerENTData or {}
+local function ReadSpawnerData(v)
+	local d = {}
+	d.int_amount = tonumber(v.int_amount) or 1
+	d.int_respawntime = tonumber(v.int_respawntime) or 1
+	d.string_classname = v.string_classname
+	d.string_swep = v.string_swep
+
+	return d
+end
+
 function UpdateSpawnerNPCTable()
 	local t = {}
+	local data = {}
 	local all = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'spawner_npc'")
 	if IsNotNilAndNotFalse(all) then
 		for i, v in pairs(all) do
@@ -570,14 +583,18 @@ function UpdateSpawnerNPCTable()
 			if not table.HasValue(t, spawner) then
 				table.insert(t, spawner)
 			end
+
+			data[tostring(v.uniqueID)] = ReadSpawnerData(v)
 		end
 	end
 
+	YRPSpawnerNPCData = data
 	SetGlobalYRPTable("yrp_spawner_npc", t)
 end
 
 function UpdateSpawnerENTTable()
 	local t = {}
+	local data = {}
 	local all = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'spawner_ent'")
 	if IsNotNilAndNotFalse(all) then
 		for i, v in pairs(all) do
@@ -587,9 +604,12 @@ function UpdateSpawnerENTTable()
 			if not table.HasValue(t, spawner) then
 				table.insert(t, spawner)
 			end
+
+			data[tostring(v.uniqueID)] = ReadSpawnerData(v)
 		end
 	end
 
+	YRPSpawnerENTData = data
 	SetGlobalYRPTable("yrp_spawner_ent", t)
 end
 
@@ -701,11 +721,8 @@ hook.Add(
 					YNPCs[v.uniqueID].delay = CurTime()
 				end
 
-				local npc_spawner = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'spawner_npc' AND uniqueID = '" .. v.uniqueID .. "'")
-				if IsNotNilAndNotFalse(npc_spawner) then
-					npc_spawner = npc_spawner[1]
-					npc_spawner.int_amount = tonumber(npc_spawner.int_amount)
-					npc_spawner.int_respawntime = tonumber(npc_spawner.int_respawntime)
+				local npc_spawner = YRPSpawnerNPCData[tostring(v.uniqueID)]
+				if npc_spawner ~= nil then
 					for _, npc in pairs(YNPCs[v.uniqueID].npcs) do
 						if not npc:IsValid() then
 							YRP:msg("gm", "A NPC Died, start respawning...")
@@ -715,7 +732,6 @@ hook.Add(
 					end
 
 					if YNPCs[v.uniqueID].delay < CurTime() and table.Count(YNPCs[v.uniqueID].npcs) < npc_spawner.int_amount then
-						npc_spawner.delay = CurTime() + npc_spawner.int_respawntime
 						local npc = ents.Create(npc_spawner.string_classname)
 						if npc:IsValid() then
 							npc:Spawn()
@@ -741,11 +757,8 @@ hook.Add(
 					YENTs[v.uniqueID].delay = CurTime()
 				end
 
-				local ent_spawner = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'spawner_ent' AND uniqueID = '" .. v.uniqueID .. "'")
-				if IsNotNilAndNotFalse(ent_spawner) then
-					ent_spawner = ent_spawner[1]
-					ent_spawner.int_amount = tonumber(ent_spawner.int_amount)
-					ent_spawner.int_respawntime = tonumber(ent_spawner.int_respawntime)
+				local ent_spawner = YRPSpawnerENTData[tostring(v.uniqueID)]
+				if ent_spawner ~= nil then
 					for _, ent in pairs(YENTs[v.uniqueID].ents) do
 						if not ent:IsValid() then
 							YRP:msg("gm", "A ENT Died, start respawning...")
@@ -755,7 +768,6 @@ hook.Add(
 					end
 
 					if YENTs[v.uniqueID].delay < CurTime() and table.Count(YENTs[v.uniqueID].ents) < ent_spawner.int_amount then
-						ent_spawner.delay = CurTime() + ent_spawner.int_respawntime
 						local ent = ents.Create(ent_spawner.string_classname)
 						if ent:IsValid() then
 							local _, err = pcall(YRPEntSpawn, ent)
