@@ -8,6 +8,7 @@ yrp_current_lang["language"] = "Unknown"
 local yrp_button_info = {}
 local yrp_shorts = {}
 local _translationProgress = {}
+local transcache = {}
 table.insert(yrp_shorts, "en")
 table.insert(yrp_shorts, "de")
 table.insert(yrp_shorts, "bg")
@@ -46,6 +47,9 @@ function YRP:set_lang_string(var, str)
 	var = tostring(var)
 	str = tostring(str)
 	yrp_current_lang[string.lower(var)] = str
+	if next(transcache) ~= nil then
+		transcache = {}
+	end
 end
 
 function YRP:get_language_name(ls)
@@ -136,42 +140,38 @@ end
 local nf = {}
 function YRP:trans(var, vals)
 	var = tostring(var)
-	if string.StartWith(var, "LID_") then
+	local translation = transcache[var]
+	if translation == nil then
+		if not string.StartWith(var, "LID_") then return var end
 		local va = "LID_" .. string.lower(string.sub(var, 5))
-		-- if is not modified
-		if va == var then
-			local translation = yrp_current_lang[string.lower(var)]
-			-- IF NOT FOUND
-			if not IsNotNilAndNotFalse(translation) then
-				if CLIENT then
-					LocalPlayer().badyourrpcontent = LocalPlayer().badyourrpcontent or ""
-					if nf[var] == nil and LocalPlayer().LoadedGamemode and LocalPlayer():LoadedGamemode() and LocalPlayer().badyourrpcontent ~= "" then
-						nf[var] = var
-						PrintLIDError(var)
-					end
-				end
-
-				return var
-			end
-
-			-- IF HAVE VALS
-			if IsNotNilAndNotFalse(vals) then
-				if type(vals) == "string" then
-					return YRP:trans(var)
-				else
-					for id, val in pairs(vals) do
-						translation = string.Replace(translation, "%" .. id .. "%", val)
-					end
+		-- if is modified
+		if va ~= var then return var end
+		translation = yrp_current_lang[string.lower(var)]
+		-- IF NOT FOUND
+		if not IsNotNilAndNotFalse(translation) then
+			if CLIENT then
+				LocalPlayer().badyourrpcontent = LocalPlayer().badyourrpcontent or ""
+				if nf[var] == nil and LocalPlayer().LoadedGamemode and LocalPlayer():LoadedGamemode() and LocalPlayer().badyourrpcontent ~= "" then
+					nf[var] = var
+					PrintLIDError(var)
 				end
 			end
-			-- RETURN TRANSLATION
 
-			return translation
+			return var
+		end
+
+		transcache[var] = translation
+	end
+
+	-- IF HAVE VALS
+	if IsNotNilAndNotFalse(vals) and type(vals) ~= "string" then
+		for id, val in pairs(vals) do
+			translation = string.Replace(translation, "%" .. id .. "%", val)
 		end
 	end
-	-- RETURN VAR
+	-- RETURN TRANSLATION
 
-	return var
+	return translation
 end
 
 function YRP:GetAllLanguages()
