@@ -638,9 +638,10 @@ net.Receive(
 	"nws_yrp_item_buy",
 	function(len, ply)
 		local duid = net.ReadString()
-		local itemId = net.ReadString()
+		local itemId = tonumber(net.ReadString())
 		local count = math.Clamp(tonumber(net.ReadString()) or 1, 1, 1000)
 		local itemColor = net.ReadString()
+		if not itemId then return end
 		local _item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. itemId)
 		if IsNotNilAndNotFalse(_item) then
 			_item = _item[1]
@@ -728,6 +729,15 @@ net.Receive(
 	end
 )
 
+function YRPCharOwnsStorageItem(ply, uid)
+	uid = tonumber(uid)
+	if not uid then return false end
+	local _cha = YRP_SQL_SELECT("yrp_characters", "storage", "uniqueID = '" .. ply:CharID() .. "'")
+	if not IsNotNilAndNotFalse(_cha) then return false end
+
+	return table.HasValue(string.Explode(",", _cha[1].storage or ""), tostring(uid))
+end
+
 YRP:AddNetworkString("nws_yrp_item_spawn")
 net.Receive(
 	"nws_yrp_item_spawn",
@@ -735,7 +745,15 @@ net.Receive(
 		local _tab = net.ReadTable()
 		local duid = net.ReadString()
 		if IsNotNilAndNotFalse(_tab) and IsNotNilAndNotFalse(duid) then
-			local _item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. _tab.uniqueID)
+			local uid = tonumber(_tab.uniqueID)
+			if not uid then return end
+			if not YRPCharOwnsStorageItem(ply, uid) then
+				YRP:msg("error", "[item_spawn] " .. ply:YRPName() .. " tried to spawn a not owned item: " .. tostring(_tab.uniqueID))
+
+				return
+			end
+
+			local _item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. uid)
 			if IsNotNilAndNotFalse(_item) then
 				_item = _item[1]
 				if not IsYRPEntityAlive(ply, _item.uniqueID) then
@@ -761,7 +779,10 @@ net.Receive(
 	"nws_yrp_item_despawn",
 	function(len, ply)
 		local _tab = net.ReadTable()
-		local _item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. _tab.uniqueID)
+		if not IsNotNilAndNotFalse(_tab) then return end
+		local uid = tonumber(_tab.uniqueID)
+		if not uid then return end
+		local _item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. uid)
 		if _item ~= nil then
 			_item = _item[1]
 			local _alive, ent = IsYRPEntityAlive(ply, _item.uniqueID)
