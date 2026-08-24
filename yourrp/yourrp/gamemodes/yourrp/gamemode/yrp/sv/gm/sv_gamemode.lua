@@ -300,10 +300,7 @@ function YRPPlayerLoadout(ply)
 						ply:SetYRPString("money", chaTab.money)
 						ply:SetYRPString("moneybank", chaTab.moneybank)
 						ply:SetYRPString("rpname", chaTab.rpname)
-						ply:SetYRPString("rpdescription", chaTab.rpdescription)
-						for i, v in pairs(string.Explode("\n", chaTab.rpdescription)) do
-							ply:SetYRPString("rpdescription" .. i, v)
-						end
+						YRPSetRPDescription(ply, chaTab.rpdescription)
 
 						YRPPlyUpdateStorage(ply)
 						YRPSetBodyGroups(ply)

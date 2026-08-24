@@ -502,22 +502,35 @@ net.Receive(
 	end
 )
 
+local RPDESC_MAX_LINES = 10
+local RPDESC_MAX_LENGTH = 1000
+function YRPSetRPDescription(ply, desc)
+	desc = string.sub(tostring(desc or ""), 1, RPDESC_MAX_LENGTH)
+	local lines = string.Explode("\n", desc)
+	while #lines > RPDESC_MAX_LINES do
+		table.remove(lines)
+	end
+
+	desc = table.concat(lines, "\n")
+	ply:SetYRPString("rpdescription", desc)
+	for i = 1, RPDESC_MAX_LINES do
+		ply:SetYRPString("rpdescription" .. i, lines[i] or "")
+	end
+
+	return desc
+end
+
 YRP:AddNetworkString("nws_yrp_change_rpdescription")
 net.Receive(
 	"nws_yrp_change_rpdescription",
 	function(len, ply)
-		local _new_rp_description = net.ReadString()
+		local _new_rp_description = YRPSetRPDescription(ply, net.ReadString())
 		YRP_SQL_UPDATE(
 			"yrp_characters",
 			{
 				["rpdescription"] = _new_rp_description
 			}, "uniqueID = " .. ply:CharID()
 		)
-
-		ply:SetYRPString("rpdescription", _new_rp_description)
-		for i, v in pairs(string.Explode("\n", _new_rp_description)) do
-			ply:SetYRPString("rpdescription" .. i, v)
-		end
 	end
 )
 

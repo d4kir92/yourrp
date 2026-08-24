@@ -25,8 +25,10 @@ end
 
 if SERVER then
 	local nws = {}
+	YRP.netstrings = YRP.netstrings or {}
 	function YRP:AddNetworkString(name)
 		if name == nil then return end
+		YRP.netstrings[name] = true
 		if nws[name] == nil then
 			util.AddNetworkString(name)
 		else
@@ -35,6 +37,7 @@ if SERVER then
 	end
 end
 
+add_luas("yrp/net/ratelimit.lua")
 add_luas("yrp/net/entity.lua")
 add_luas("yrp/net/global.lua")
 add_luas("yrp/_libs/_libs_includes.lua")
