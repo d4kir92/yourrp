@@ -2349,24 +2349,6 @@ net.Receive(
 	end
 )
 
-YRP:AddNetworkString("nws_yrp_usergroup_update_string_ammos")
-net.Receive(
-	"nws_yrp_usergroup_update_string_ammos",
-	function(len, ply)
-		if not ply:GetYRPBool("bool_usergroups", false) then return end
-		local uid = tonumber(net.ReadString())
-		local string_ammos = net.ReadString()
-		YRP_SQL_UPDATE(
-			DATABASE_NAME,
-			{
-				["string_ammos"] = string_ammos
-			}, "uniqueID = '" .. uid .. "'"
-		)
-
-		YRP:msg("db", ply:YRPName() .. " updated ammos of usergroup ( " .. uid .. " ) to [" .. string_ammos .. "]")
-	end
-)
-
 local function YRPCheckUGChanged()
 	for i, ply in pairs(player.GetAll()) do
 		ply.yrp_ug = ply.yrp_ug or ply:GetUserGroup()

@@ -235,22 +235,6 @@ function send_specializations(ply)
 	net.Send(ply)
 end
 
-YRP:AddNetworkString("nws_yrp_get_all_specializations")
-net.Receive(
-	"nws_yrp_get_all_specializations",
-	function(len, ply)
-		local _all = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-		local _nm = _all
-		if _nm == nil or _nm == false then
-			_nm = {}
-		end
-
-		net.Start("nws_yrp_get_all_specializations")
-		net.WriteTable(_nm)
-		net.Send(ply)
-	end
-)
-
 YRP:AddNetworkString("nws_yrp_get_specializations")
 net.Receive(
 	"nws_yrp_get_specializations",

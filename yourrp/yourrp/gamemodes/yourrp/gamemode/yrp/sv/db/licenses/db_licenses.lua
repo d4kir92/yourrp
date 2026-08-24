@@ -44,22 +44,6 @@ function send_licenses(ply)
 	net.Send(ply)
 end
 
-YRP:AddNetworkString("nws_yrp_get_all_licenses")
-net.Receive(
-	"nws_yrp_get_all_licenses",
-	function(len, ply)
-		local _all = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-		local _nm = _all
-		if _nm == nil or _nm == false then
-			_nm = {}
-		end
-
-		net.Start("nws_yrp_get_all_licenses")
-		net.WriteTable(_nm)
-		net.Send(ply)
-	end
-)
-
 YRP:AddNetworkString("nws_yrp_get_licenses")
 net.Receive(
 	"nws_yrp_get_licenses",

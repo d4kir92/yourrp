@@ -62,9 +62,9 @@ net.Receive(
 
 YRP:AddNetworkString("nws_yrp_fb_movetoopen")
 net.Receive(
-	"nws_yrp_fb_movetowip",
+	"nws_yrp_fb_movetoopen",
 	function(len, ply)
-		if not ply:HasAccess("nws_yrp_fb_movetowip", true) then return end
+		if not ply:HasAccess("nws_yrp_fb_movetoopen", true) then return end
 		local uid = tonumber(net.ReadString())
 		if not uid then return end
 		YRP_SQL_UPDATE(
