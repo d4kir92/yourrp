@@ -1070,7 +1070,7 @@ net.Receive(
 	"nws_yrp_update_hud_x",
 	function(len, ply)
 		if not ply:GetYRPBool("bool_design", false) then return end
-		local element = net.ReadString()
+		local element = YRP_SQL_KEY(net.ReadString())
 		local x = net.ReadFloat()
 		YRP_SQL_UPDATE(
 			DATABASE_NAME,
@@ -1088,7 +1088,7 @@ net.Receive(
 	"nws_yrp_update_hud_y",
 	function(len, ply)
 		if not ply:GetYRPBool("bool_design", false) then return end
-		local element = net.ReadString()
+		local element = YRP_SQL_KEY(net.ReadString())
 		local y = net.ReadFloat()
 		YRP_SQL_UPDATE(
 			DATABASE_NAME,
@@ -1106,7 +1106,7 @@ net.Receive(
 	"nws_yrp_update_hud_w",
 	function(len, ply)
 		if not ply:GetYRPBool("bool_design", false) then return end
-		local element = net.ReadString()
+		local element = YRP_SQL_KEY(net.ReadString())
 		local w = net.ReadFloat()
 		if w > 0.0 then
 			YRP_SQL_UPDATE(
@@ -1126,7 +1126,7 @@ net.Receive(
 	"nws_yrp_update_hud_h",
 	function(len, ply)
 		if not ply:GetYRPBool("bool_design", false) then return end
-		local element = net.ReadString()
+		local element = YRP_SQL_KEY(net.ReadString())
 		local h = net.ReadFloat()
 		if h > 0.0 then
 			YRP_SQL_UPDATE(
@@ -1163,8 +1163,8 @@ net.Receive(
 	"nws_yrp_update_hud_bool",
 	function(len, ply)
 		if not ply:GetYRPBool("bool_design", false) then return end
-		local element = net.ReadString()
-		local art = net.ReadString()
+		local element = YRP_SQL_KEY(net.ReadString())
+		local art = YRP_SQL_KEY(net.ReadString())
 		local b = net.ReadBool()
 		YRP_SQL_UPDATE(
 			DATABASE_NAME,
@@ -1182,7 +1182,7 @@ net.Receive(
 	"nws_yrp_update_hud_text",
 	function(len, ply)
 		if not ply:GetYRPBool("bool_design", false) then return end
-		local element = net.ReadString()
+		local element = YRP_SQL_KEY(net.ReadString())
 		local text = net.ReadString()
 		YRP_SQL_UPDATE(
 			DATABASE_NAME,
@@ -1200,7 +1200,7 @@ net.Receive(
 	"nws_yrp_update_hud_text_position",
 	function(len, ply)
 		if not ply:GetYRPBool("bool_design", false) then return end
-		local element = net.ReadString()
+		local element = YRP_SQL_KEY(net.ReadString())
 		local ax = tonumber(net.ReadInt(4))
 		local ay = tonumber(net.ReadInt(4))
 		if ay == 0 then
@@ -1232,7 +1232,7 @@ net.Receive(
 	"nws_yrp_update_hud_ts",
 	function(len, ply)
 		if not ply:GetYRPBool("bool_design", false) then return end
-		local element = net.ReadString()
+		local element = YRP_SQL_KEY(net.ReadString())
 		local ts = net.ReadInt(8)
 		if ts > 0 then
 			YRP_SQL_UPDATE(
@@ -1252,8 +1252,8 @@ net.Receive(
 	"nws_yrp_update_hud_color",
 	function(len, ply)
 		if not ply:GetYRPBool("bool_design", false) then return end
-		local element = net.ReadString()
-		local art = net.ReadString()
+		local element = YRP_SQL_KEY(net.ReadString())
+		local art = YRP_SQL_KEY(net.ReadString())
 		local color = net.ReadString()
 		YRP_SQL_UPDATE(
 			DATABASE_NAME,

@@ -149,7 +149,7 @@ net.Receive(
 	"nws_yrp_removeMapEntry",
 	function(len, ply)
 		if not ply:GetYRPBool("bool_map", false) then return end
-		local _tmpUniqueID = net.ReadString()
+		local _tmpUniqueID = YRP_SQL_ID(net.ReadString())
 		local _tmpMapTable = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. _tmpUniqueID .. "'")
 		if _tmpMapTable ~= nil then
 			_tmpMapTable = _tmpMapTable[1]
@@ -265,7 +265,7 @@ net.Receive(
 	"nws_yrp_teleportto",
 	function(len, ply)
 		if not ply:GetYRPBool("bool_map", false) then return end
-		local _uid = net.ReadString()
+		local _uid = YRP_SQL_ID(net.ReadString())
 		local _entry = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. _uid .. "'")
 		if _entry ~= nil then
 			_entry = _entry[1]
@@ -282,7 +282,7 @@ net.Receive(
 	"nws_yrp_update_map_name",
 	function(len, ply)
 		if not ply:GetYRPBool("bool_map", false) then return end
-		local uid = net.ReadString()
+		local uid = YRP_SQL_ID(net.ReadString())
 		local i = net.ReadString()
 		YRP_SQL_UPDATE(
 			DATABASE_NAME,
@@ -300,7 +300,7 @@ net.Receive(
 	"nws_yrp_update_map_color",
 	function(len, ply)
 		if not ply:GetYRPBool("bool_map", false) then return end
-		local uid = net.ReadString()
+		local uid = YRP_SQL_ID(net.ReadString())
 		local i = net.ReadString()
 		YRP_SQL_UPDATE(
 			DATABASE_NAME,
@@ -318,7 +318,7 @@ net.Receive(
 	"nws_yrp_update_map_int_respawntime",
 	function(len, ply)
 		if not ply:GetYRPBool("bool_map", false) then return end
-		local uid = net.ReadString()
+		local uid = YRP_SQL_ID(net.ReadString())
 		local i = net.ReadString()
 		YRP_SQL_UPDATE(
 			DATABASE_NAME,
@@ -337,7 +337,7 @@ net.Receive(
 	"nws_yrp_update_map_string_swep",
 	function(len, ply)
 		if not ply:GetYRPBool("bool_map", false) then return end
-		local uid = net.ReadString()
+		local uid = YRP_SQL_ID(net.ReadString())
 		local i = net.ReadString()
 		YRP_SQL_UPDATE(
 			DATABASE_NAME,
@@ -355,7 +355,7 @@ net.Receive(
 	"nws_yrp_update_map_int_amount",
 	function(len, ply)
 		if not ply:GetYRPBool("bool_map", false) then return end
-		local uid = net.ReadString()
+		local uid = YRP_SQL_ID(net.ReadString())
 		local i = net.ReadString()
 		YRP_SQL_UPDATE(
 			DATABASE_NAME,
@@ -374,7 +374,7 @@ net.Receive(
 	"nws_yrp_update_map_string_classname",
 	function(len, ply)
 		if not ply:GetYRPBool("bool_map", false) then return end
-		local uid = net.ReadString()
+		local uid = YRP_SQL_ID(net.ReadString())
 		local s = net.ReadString()
 		YRP_SQL_UPDATE(
 			DATABASE_NAME,

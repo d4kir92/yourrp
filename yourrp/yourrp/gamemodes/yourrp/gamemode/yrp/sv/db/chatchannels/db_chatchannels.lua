@@ -332,7 +332,7 @@ net.Receive(
 		local pugs = table.concat(net.ReadTable(), ",")
 		local pgrps = table.concat(net.ReadTable(), ",")
 		local prols = table.concat(net.ReadTable(), ",")
-		YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, int_mode, string_structure, string_structure2, bool_enabled, string_active_usergroups, string_active_groups, string_active_roles, string_passive_usergroups, string_passive_groups, string_passive_roles", "'" .. name .. "', '" .. mode .. "', '" .. structure .. "', '" .. structure2 .. "', '" .. enabled .. "', '" .. augs .. "', '" .. agrps .. "', '" .. arols .. "', '" .. pugs .. "', '" .. pgrps .. "', '" .. prols .. "'")
+		YRP_SQL_INSERT_INTO(DATABASE_NAME, "string_name, int_mode, string_structure, string_structure2, bool_enabled, string_active_usergroups, string_active_groups, string_active_roles, string_passive_usergroups, string_passive_groups, string_passive_roles", YRP_SQL_STR_IN(name) .. ", '" .. YRP_SQL_ID(mode) .. "', " .. YRP_SQL_STR_IN(structure) .. ", " .. YRP_SQL_STR_IN(structure2) .. ", '" .. YRP_SQL_ID(enabled) .. "', " .. YRP_SQL_STR_IN(augs) .. ", " .. YRP_SQL_STR_IN(agrps) .. ", " .. YRP_SQL_STR_IN(arols) .. ", " .. YRP_SQL_STR_IN(pugs) .. ", " .. YRP_SQL_STR_IN(pgrps) .. ", " .. YRP_SQL_STR_IN(prols))
 		GenerateChatTable()
 	end
 )
@@ -353,7 +353,7 @@ net.Receive(
 		local pugs = table.concat(net.ReadTable(), ",")
 		local pgrps = table.concat(net.ReadTable(), ",")
 		local prols = table.concat(net.ReadTable(), ",")
-		local uid = net.ReadString()
+		local uid = YRP_SQL_ID(net.ReadString())
 		YRP_SQL_UPDATE(
 			DATABASE_NAME,
 			{
@@ -380,7 +380,7 @@ net.Receive(
 	"nws_yrp_chat_channel_rem",
 	function(len, ply)
 		if not ply:HasAccess("nws_yrp_chat_channel_rem", true) then return end
-		local uid = net.ReadString()
+		local uid = YRP_SQL_ID(net.ReadString())
 		YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. uid .. "'")
 		GenerateChatTable()
 	end

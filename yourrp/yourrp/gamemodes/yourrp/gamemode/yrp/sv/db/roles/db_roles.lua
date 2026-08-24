@@ -829,7 +829,7 @@ net.Receive(
 	"nws_yrp_get_grp_roles",
 	function(len, ply)
 		if not ply:CanAccess("bool_groupsandroles") then return end
-		local _uid = net.ReadString()
+		local _uid = YRP_SQL_ID(net.ReadString())
 		local _roles = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_groupID = '" .. _uid .. "'")
 		if IsNotNilAndNotFalse(_roles) then
 			for i, ro in pairs(_roles) do
@@ -851,7 +851,7 @@ net.Receive(
 	"nws_yrp_get_rol_prerole",
 	function(len, ply)
 		if not ply:CanAccess("bool_groupsandroles") then return end
-		local _uid = net.ReadString()
+		local _uid = YRP_SQL_ID(net.ReadString())
 		local _roles = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. _uid .. "'")
 		if IsNotNilAndNotFalse(_roles) then
 			for i, ro in pairs(_roles) do
@@ -1916,7 +1916,7 @@ net.Receive(
 		local ruid = net.ReadInt(32)
 		local WorldModel = net.ReadString()
 		local name = net.ReadString()
-		YRP_SQL_INSERT_INTO("yrp_licenses", "string_model, string_name", "'" .. WorldModel .. "', '" .. name .. "'")
+		YRP_SQL_INSERT_INTO("yrp_licenses", "string_model, string_name", YRP_SQL_STR_IN(WorldModel) .. ", " .. YRP_SQL_STR_IN(name))
 		local lastentry = YRP_SQL_SELECT("yrp_licenses", "*", nil)
 		lastentry = lastentry[table.Count(lastentry)]
 		AddLicenseToRole(ruid, lastentry.uniqueID)
@@ -2388,7 +2388,8 @@ net.Receive(
 	"nws_yrp_invite_accept",
 	function(len, ply)
 		local r = net.ReadTable()
-		local role = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. r.uniqueID .. "'")
+		if not istable(r) then return end
+		local role = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. YRP_SQL_ID(r.uniqueID) .. "'")
 		if IsNotNilAndNotFalse(role) then
 			role = role[1]
 			addToWhitelist(tonumber(role.uniqueID), ply)
@@ -2454,7 +2455,7 @@ YRP:AddNetworkString("nws_yrp_get_next_ranks")
 net.Receive(
 	"nws_yrp_get_next_ranks",
 	function(len, ply)
-		local ruid = net.ReadString()
+		local ruid = YRP_SQL_ID(net.ReadString())
 		local rols = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. ruid .. "'")
 		if IsNotNilAndNotFalse(rols) then
 			for i, rol in pairs(rols) do
@@ -2472,7 +2473,7 @@ YRP:AddNetworkString("nws_yrp_hasnext_ranks")
 net.Receive(
 	"nws_yrp_hasnext_ranks",
 	function(len, ply)
-		local ruid = net.ReadString()
+		local ruid = YRP_SQL_ID(net.ReadString())
 		local rols = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_prerole = '" .. ruid .. "'")
 		local has = false
 		if IsNotNilAndNotFalse(rols) then

@@ -63,7 +63,7 @@ net.Receive(
 	"nws_yrp_event_remove",
 	function(len, ply)
 		if ply:CanAccess("bool_events") then
-			local uid = net.ReadString()
+			local uid = YRP_SQL_ID(net.ReadString())
 			if uid and uid ~= "" then
 				YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. uid .. "'")
 				YRPSendEvents(ply)
@@ -89,7 +89,7 @@ YRP:AddNetworkString("nws_yrp_get_event_chars")
 net.Receive(
 	"nws_yrp_get_event_chars",
 	function(len, ply)
-		local uid = net.ReadString()
+		local uid = YRP_SQL_ID(net.ReadString())
 		YRPSendEventChars(ply, uid)
 	end
 )
@@ -99,7 +99,7 @@ net.Receive(
 	"nws_yrp_event_get_chars",
 	function(len, ply)
 		local steamid = net.ReadString()
-		local tab = YRP_SQL_SELECT("yrp_characters", "*", "SteamID = '" .. steamid .. "' AND bool_eventchar = '1'")
+		local tab = YRP_SQL_SELECT("yrp_characters", "*", "SteamID = " .. YRP_SQL_STR_IN(steamid) .. " AND bool_eventchar = '1'")
 		if not IsNotNilAndNotFalse(tab) then
 			tab = {}
 		end
@@ -115,7 +115,7 @@ net.Receive(
 	"nws_yrp_event_char_add",
 	function(len, ply)
 		if ply:CanAccess("bool_events") then
-			local uid = net.ReadString()
+			local uid = YRP_SQL_ID(net.ReadString())
 			local steamid = net.ReadString()
 			local charuid = net.ReadString()
 			local charname = net.ReadString()
@@ -146,7 +146,7 @@ net.Receive(
 	"nws_yrp_event_char_remove",
 	function(len, ply)
 		if ply:CanAccess("bool_events") then
-			local euid = net.ReadString()
+			local euid = YRP_SQL_ID(net.ReadString())
 			local cuid = net.ReadString()
 			if euid and euid ~= "" then
 				local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. euid .. "'")
@@ -241,7 +241,7 @@ YRP:AddNetworkString("nws_yrp_event_start")
 net.Receive(
 	"nws_yrp_event_start",
 	function(len, ply)
-		local euid = net.ReadString()
+		local euid = YRP_SQL_ID(net.ReadString())
 		local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. euid .. "'")
 		if IsNotNilAndNotFalse(tab) then
 			tab = tab[1]
@@ -267,7 +267,7 @@ YRP:AddNetworkString("nws_yrp_event_end")
 net.Receive(
 	"nws_yrp_event_end",
 	function(len, ply)
-		local euid = net.ReadString()
+		local euid = YRP_SQL_ID(net.ReadString())
 		local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. euid .. "'")
 		if IsNotNilAndNotFalse(tab) then
 			tab = tab[1]

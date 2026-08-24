@@ -61,7 +61,7 @@ net.Receive(
 	"nws_yrp_shop_item_rem",
 	function(len, ply)
 		if not ply:HasAccess("nws_yrp_shop_item_rem", true) then return end
-		local _uid = net.ReadString()
+		local _uid = YRP_SQL_ID(net.ReadString())
 		local _catID = net.ReadString()
 		local _new = YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = " .. _uid)
 		YRP:msg("db", "shop_item_rem: " .. YRP_DB_WORKED(_new))
@@ -74,7 +74,7 @@ net.Receive(
 	"nws_yrp_shop_item_edit_name",
 	function(len, ply)
 		if not ply:HasAccess("nws_yrp_shop_item_edit_name", true) then return end
-		local _uid = net.ReadString()
+		local _uid = YRP_SQL_ID(net.ReadString())
 		local _new_name = net.ReadString()
 		local _catID = net.ReadString()
 		local _new = YRP_SQL_UPDATE(
@@ -93,7 +93,7 @@ net.Receive(
 	"nws_yrp_shop_item_edit_desc",
 	function(len, ply)
 		if not ply:HasAccess("nws_yrp_shop_item_edit_desc", true) then return end
-		local _uid = net.ReadString()
+		local _uid = YRP_SQL_ID(net.ReadString())
 		local _new_desc = net.ReadString()
 		local _catID = net.ReadString()
 		local _new = YRP_SQL_UPDATE(
@@ -112,7 +112,7 @@ net.Receive(
 	"nws_yrp_shop_item_edit_price",
 	function(len, ply)
 		if not ply:HasAccess("nws_yrp_shop_item_edit_price", true) then return end
-		local _uid = net.ReadString()
+		local _uid = YRP_SQL_ID(net.ReadString())
 		local _new_price = net.ReadString()
 		local _catID = net.ReadString()
 		local _new = YRP_SQL_UPDATE(
@@ -131,7 +131,7 @@ net.Receive(
 	"nws_yrp_shop_item_edit_level",
 	function(len, ply)
 		if not ply:HasAccess("nws_yrp_shop_item_edit_level", true) then return end
-		local _uid = net.ReadString()
+		local _uid = YRP_SQL_ID(net.ReadString())
 		local _new_level = net.ReadString()
 		local _catID = net.ReadString()
 		local _new = YRP_SQL_UPDATE(
@@ -150,7 +150,7 @@ net.Receive(
 	"nws_yrp_shop_item_edit_quan",
 	function(len, ply)
 		if not ply:HasAccess("nws_yrp_shop_item_edit_quan", true) then return end
-		local _uid = net.ReadString()
+		local _uid = YRP_SQL_ID(net.ReadString())
 		local _new_quan = net.ReadString()
 		local _catID = net.ReadString()
 		local _new = YRP_SQL_UPDATE(
@@ -169,7 +169,7 @@ net.Receive(
 	"nws_yrp_shop_item_edit_cool",
 	function(len, ply)
 		if not ply:HasAccess("nws_yrp_shop_item_edit_cool", true) then return end
-		local _uid = net.ReadString()
+		local _uid = YRP_SQL_ID(net.ReadString())
 		local _new_cool = net.ReadString()
 		local _catID = net.ReadString()
 		local _new = YRP_SQL_UPDATE(
@@ -188,7 +188,7 @@ net.Receive(
 	"nws_yrp_shop_item_edit_lice",
 	function(len, ply)
 		if not ply:HasAccess("nws_yrp_shop_item_edit_lice", true) then return end
-		local _uid = net.ReadString()
+		local _uid = YRP_SQL_ID(net.ReadString())
 		local _new_lice = net.ReadString()
 		local _catID = net.ReadString()
 		local _new = YRP_SQL_UPDATE(
@@ -208,7 +208,7 @@ net.Receive(
 	"nws_yrp_shop_item_edit_perm",
 	function(len, ply)
 		if not ply:HasAccess("nws_yrp_shop_item_edit_perm", true) then return end
-		local _uid = net.ReadString()
+		local _uid = YRP_SQL_ID(net.ReadString())
 		local _new_perm = net.ReadString()
 		local _catID = net.ReadString()
 		local _new = YRP_SQL_UPDATE(
@@ -226,7 +226,7 @@ YRP:AddNetworkString("nws_yrp_shop_get_items_storage")
 net.Receive(
 	"nws_yrp_shop_get_items_storage",
 	function(len, ply)
-		local _uid = net.ReadString()
+		local _uid = YRP_SQL_ID(net.ReadString())
 		local _cha_perm = YRP_SQL_SELECT("yrp_characters", "storage", "uniqueID = '" .. ply:CharID() .. "'")
 		if _cha_perm ~= nil and _cha_perm ~= false then
 			_cha_perm = _cha_perm[1].storage
@@ -250,7 +250,7 @@ YRP:AddNetworkString("nws_yrp_shop_get_items")
 net.Receive(
 	"nws_yrp_shop_get_items",
 	function(len, ply)
-		local _uid = net.ReadString()
+		local _uid = YRP_SQL_ID(net.ReadString())
 		local _items = YRP_SQL_SELECT(DATABASE_NAME, "*", "categoryID = '" .. _uid .. "'")
 		local _nw = {}
 		if _items ~= nil then
@@ -291,7 +291,7 @@ net.Receive(
 	"nws_yrp_shop_item_edit_base",
 	function(len, ply)
 		if not ply:HasAccess("nws_yrp_shop_item_edit_base", true) then return end
-		local _uid = net.ReadString()
+		local _uid = YRP_SQL_ID(net.ReadString())
 		local _wm = net.ReadString()
 		local _cn = net.ReadString()
 		local _pn = net.ReadString()

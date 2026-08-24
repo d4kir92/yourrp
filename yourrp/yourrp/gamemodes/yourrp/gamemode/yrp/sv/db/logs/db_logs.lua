@@ -39,7 +39,7 @@ net.Receive(
 	function(len, ply)
 		local tab = net.ReadString()
 		if ply:CanAccess("bool_logs") then
-			local dbtab = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_typ = '" .. tab .. "'")
+			local dbtab = YRP_SQL_SELECT(DATABASE_NAME, "*", "string_typ = " .. YRP_SQL_STR_IN(tab))
 			local nettab = {}
 			local count = 0
 			if IsNotNilAndNotFalse(dbtab) then

@@ -412,7 +412,7 @@ net.Receive(
 			return
 		end
 
-		local _tmpBuildingID = net.ReadString()
+		local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
 		local _tmpTable = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'")
 		YRP_SQL_UPDATE(
 			"yrp_" .. GetMapNameDB() .. "_buildings",
@@ -440,7 +440,7 @@ net.Receive(
 net.Receive(
 	"nws_yrp_sellBuilding",
 	function(len, ply)
-		local _tmpBuildingID = net.ReadString()
+		local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
 		local _tmpTable = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'")
 		if not (_tmpTable and _tmpTable[1] and tostring(_tmpTable[1].ownerCharID) == tostring(ply:CharID())) then
 			return
@@ -482,7 +482,7 @@ net.Receive(
 	"nws_yrp_buyBuilding",
 	function(len, ply)
 		if GetGlobalYRPBool("bool_building_system", false) then
-			local _tmpBuildingID = net.ReadString()
+			local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
 			local _tmpTable = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'")
 			if _tmpTable and _tmpTable[1] and ply:canAfford(_tmpTable[1].buildingprice) then
 				if (_tmpTable[1].ownerCharID == "" or _tmpTable[1].ownerCharID == " ") and tonumber(_tmpTable[1].groupID) <= 0 then
@@ -535,7 +535,7 @@ net.Receive(
 	"nws_yrp_addCoownerBuilding",
 	function(len, ply)
 		if GetGlobalYRPBool("bool_building_system", false) then
-			local _tmpBuildingID = net.ReadString()
+			local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
 			local _tmpTable = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'")
 			local newCoowner = net.ReadString()
 			if _tmpTable and _tmpTable[1] and tostring(_tmpTable[1].ownerCharID) == tostring(ply:CharID()) then
@@ -576,7 +576,7 @@ net.Receive(
 	"nws_yrp_removeAllCoownerBuilding",
 	function(len, ply)
 		if GetGlobalYRPBool("bool_building_system", false) then
-			local _tmpBuildingID = net.ReadString()
+			local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
 			local _tmpTable = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'")
 			if _tmpTable and _tmpTable[1] and tostring(_tmpTable[1].ownerCharID) == tostring(ply:CharID()) then
 				YRP_SQL_UPDATE(
@@ -598,7 +598,7 @@ net.Receive(
 	"nws_yrp_setBuildingOwnerGroup",
 	function(len, ply)
 		if not ply:HasAccess("nws_yrp_setBuildingOwnerGroup", true) then return end
-		local _tmpBuildingID = net.ReadString()
+		local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
 		local _tmpGroupID = net.ReadInt(32)
 		YRP_SQL_UPDATE(
 			"yrp_" .. GetMapNameDB() .. "_buildings",
@@ -634,7 +634,7 @@ net.Receive(
 	"nws_yrp_changeBuildingPrice",
 	function(len, ply)
 		if not ply:HasAccess("nws_yrp_changeBuildingPrice", true) then return end
-		local _tmpBuildingID = net.ReadString()
+		local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
 		local _tmpNewPrice = net.ReadString()
 		_tmpNewPrice = tonumber(_tmpNewPrice) or 99
 		local _result = YRP_SQL_UPDATE(
@@ -667,7 +667,7 @@ net.Receive(
 	"nws_yrp_changeBuildingSL",
 	function(len, ply)
 		if not ply:HasAccess("nws_yrp_changeBuildingSL", true) then return end
-		local _tmpBuildingID = net.ReadString()
+		local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
 		local _tmpNewSL = net.ReadString()
 		_tmpNewSL = tonumber(_tmpNewSL) or 0
 		if _tmpNewSL > 1000 then
@@ -690,7 +690,7 @@ net.Receive(
 	"nws_yrp_canBuildingBeOwned",
 	function(len, ply)
 		if not ply:HasAccess("nws_yrp_canBuildingBeOwned", true) then return end
-		local _tmpBuildingID = net.ReadString()
+		local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
 		local _canbeowned = tonum(net.ReadBool())
 		YRP_SQL_UPDATE(
 			"yrp_" .. GetMapNameDB() .. "_buildings",
@@ -730,7 +730,7 @@ net.Receive(
 	function(len, ply)
 		if not ply:HasAccess("nws_yrp_changeBuildingID", true) then return end
 		local _tmpDoor = net.ReadEntity()
-		local _tmpBuildingID = net.ReadString()
+		local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
 		_tmpDoor:SetYRPString("buildingID", _tmpBuildingID)
 		YRP_SQL_UPDATE(
 			"yrp_" .. GetMapNameDB() .. "_doors",
@@ -747,7 +747,7 @@ net.Receive(
 	"nws_yrp_changeBuildingName",
 	function(len, ply)
 		if not ply:HasAccess("nws_yrp_changeBuildingName", true) then return end
-		local _tmpBuildingID = net.ReadString()
+		local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
 		local _tmpNewName = net.ReadString()
 		if IsNotNilAndNotFalse(_tmpBuildingID) then
 			YRP:msg("db", "renamed Building: " .. _tmpNewName)
@@ -797,7 +797,7 @@ net.Receive(
 			return
 		end
 
-		local _tmpBuildingID = net.ReadString()
+		local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
 		local _tmpNewName = net.ReadString()
 		if IsNotNilAndNotFalse(_tmpBuildingID) then
 			YRP:msg("db", "header Building: " .. _tmpNewName)
@@ -824,7 +824,7 @@ net.Receive(
 			return
 		end
 
-		local _tmpBuildingID = net.ReadString()
+		local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
 		local _tmpNewName = net.ReadString()
 		if IsNotNilAndNotFalse(_tmpBuildingID) then
 			YRP:msg("db", "description Building: " .. _tmpNewName)
@@ -976,7 +976,7 @@ net.Receive(
 	"nws_yrp_update_lockdown_buildings",
 	function(len, ply)
 		if not ply:HasAccess("nws_yrp_update_lockdown_buildings", true) then return end
-		local buid = net.ReadString()
+		local buid = YRP_SQL_ID(net.ReadString())
 		local checked = net.ReadBool()
 		YRP_SQL_UPDATE(
 			DATABASE_NAME_BUILDINGS,

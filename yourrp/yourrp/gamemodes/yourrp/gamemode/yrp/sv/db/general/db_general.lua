@@ -420,6 +420,12 @@ function GeneralSendToOther(ply, netstr, str)
 end
 
 function GeneralUpdateValue(ply, netstr, str, value)
+	if not (ply:GetYRPBool("bool_general", false) or ply:GetYRPBool("bool_scale", false) or ply:HasAccess(netstr, true)) then
+		YRP:msg("error", "[GeneralUpdate] " .. ply:YRPName() .. " tried to change " .. tostring(str))
+
+		return
+	end
+
 	yrp_general[str] = value
 	-- str .. " = '" .. yrp_general[str] .. "'"
 	YRP_SQL_UPDATE(

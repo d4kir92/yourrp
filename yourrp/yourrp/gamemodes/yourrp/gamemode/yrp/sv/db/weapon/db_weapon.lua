@@ -131,6 +131,12 @@ net.Receive(
 )
 
 YRP:AddNetworkString("nws_yrp_set_slot_weapon")
+local SLOT_COLUMNS = {}
+SLOT_COLUMNS["slot_primary"] = true
+SLOT_COLUMNS["slot_secondary"] = true
+SLOT_COLUMNS["slot_sidearm"] = true
+SLOT_COLUMNS["slot_gadget"] = true
+SLOT_COLUMNS["slot_no"] = true
 net.Receive(
 	"nws_yrp_set_slot_weapon",
 	function(len, ply)
@@ -138,7 +144,13 @@ net.Receive(
 			local cn = net.ReadString()
 			local ar = net.ReadString()
 			local bo = net.ReadBool()
-			local tab = YRP_SQL_SELECT(DATABASE_NAME2, "*", "classname = '" .. cn .. "'")
+			if not SLOT_COLUMNS[ar] then
+				YRP:msg("error", "[set_slot_weapon] invalid slot column: " .. tostring(ar))
+
+				return
+			end
+
+			local tab = YRP_SQL_SELECT(DATABASE_NAME2, "*", "classname = " .. YRP_SQL_STR_IN(cn))
 			if IsNotNilAndNotFalse(tab) then
 				YRP_SQL_UPDATE(
 					DATABASE_NAME2,

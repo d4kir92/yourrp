@@ -1368,7 +1368,7 @@ net.Receive(
 		local pugs = table.concat(net.ReadTable(), ",")
 		local pgrps = table.concat(net.ReadTable(), ",")
 		local prols = table.concat(net.ReadTable(), ",")
-		local uid = net.ReadString()
+		local uid = YRP_SQL_ID(net.ReadString())
 		YRP_SQL_UPDATE(
 			DATABASE_NAME,
 			{
@@ -1392,7 +1392,7 @@ net.Receive(
 	"nws_yrp_voice_channel_rem",
 	function(len, ply)
 		if not ply:HasAccess("nws_yrp_voice_channel_rem", true) then return end
-		local uid = net.ReadString()
+		local uid = YRP_SQL_ID(net.ReadString())
 		YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. uid .. "'")
 		GenerateVoiceTable()
 		local c = 0
@@ -1418,7 +1418,7 @@ YRP:AddNetworkString("nws_yrp_channel_up")
 net.Receive(
 	"nws_yrp_channel_up",
 	function(len, ply)
-		local uid = net.ReadString()
+		local uid = YRP_SQL_ID(net.ReadString())
 		uid = tonumber(uid)
 		if GetGlobalYRPTable("yrp_voice_channels", {}) then
 			local int_position = GetGlobalYRPTable("yrp_voice_channels", {})[uid].int_position
@@ -1468,7 +1468,7 @@ YRP:AddNetworkString("nws_yrp_channel_dn")
 net.Receive(
 	"nws_yrp_channel_dn",
 	function(len, ply)
-		local uid = net.ReadString()
+		local uid = YRP_SQL_ID(net.ReadString())
 		uid = tonumber(uid)
 		if GetGlobalYRPTable("yrp_voice_channels", {}) then
 			local int_position = GetGlobalYRPTable("yrp_voice_channels", {})[uid].int_position
@@ -1576,7 +1576,7 @@ YRP:AddNetworkString("nws_yrp_mutemic_channel")
 net.Receive(
 	"nws_yrp_mutemic_channel",
 	function(len, ply)
-		local uid = net.ReadString()
+		local uid = YRP_SQL_ID(net.ReadString())
 		uid = uid or "0"
 		uid = tonumber(uid)
 		if not ply:GetYRPBool("yrp_voice_channel_mute_" .. uid, false) then
@@ -1593,7 +1593,7 @@ YRP:AddNetworkString("nws_yrp_mute_channel")
 net.Receive(
 	"nws_yrp_mute_channel",
 	function(len, ply)
-		local uid = net.ReadString()
+		local uid = YRP_SQL_ID(net.ReadString())
 		if not ply:GetYRPBool("yrp_voice_channel_mutemic_" .. uid, false) then
 			ply:SetYRPBool("yrp_voice_channel_mutemic_" .. uid, true)
 		end

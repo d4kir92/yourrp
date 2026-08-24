@@ -40,7 +40,7 @@ net.Receive(
 		)
 
 		SetGlobalYRPString("string_hud_profile", profile_name)
-		local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "profile_name = '" .. profile_name .. "'")
+		local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "profile_name = " .. YRP_SQL_STR_IN(profile_name))
 		if IsNotNilAndNotFalse(tab) then
 			for i, v in pairs(tab) do
 				local name = v.name

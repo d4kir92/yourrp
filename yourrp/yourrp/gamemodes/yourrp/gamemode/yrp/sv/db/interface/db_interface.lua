@@ -129,7 +129,7 @@ YRP:AddNetworkString("nws_yrp_get_interface_settings")
 net.Receive(
 	"nws_yrp_get_interface_settings",
 	function(len, ply)
-		local element = net.ReadString()
+		local element = YRP_SQL_KEY(net.ReadString())
 		local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "name LIKE '" .. "%_IF_" .. element .. "_%'")
 		if IsNotNilAndNotFalse(tab) then
 			table.SortByMember(tab, "name", true)
@@ -145,7 +145,7 @@ net.Receive(
 	"nws_yrp_update_interface_color",
 	function(len, ply)
 		if not ply:GetYRPBool("bool_design", false) then return end
-		local name = net.ReadString()
+		local name = YRP_SQL_KEY(net.ReadString())
 		local color = net.ReadString()
 		YRP:msg("db", "value = '" .. color .. "'" .. "name = '" .. name .. "'")
 		YRP_SQL_UPDATE(
@@ -210,6 +210,7 @@ YRP:AddNetworkString("nws_yrp_reset_interface_design")
 net.Receive(
 	"nws_yrp_reset_interface_design",
 	function(len, ply)
+		if not ply:GetYRPBool("bool_design", false) then return end
 		ResetDesign()
 	end
 )

@@ -83,7 +83,7 @@ YRP:AddNetworkString("nws_yrp_shop_get_categories")
 net.Receive(
 	"nws_yrp_shop_get_categories",
 	function(len, ply)
-		local _uid = net.ReadString()
+		local _uid = YRP_SQL_ID(net.ReadString())
 		local _cats = YRP_SQL_SELECT(DATABASE_NAME, "*", "shopID = '" .. _uid .. "'")
 		local _nw = {}
 		if _cats ~= nil then

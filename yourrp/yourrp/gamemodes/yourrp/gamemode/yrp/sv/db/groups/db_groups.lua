@@ -665,7 +665,7 @@ YRP:AddNetworkString("nws_yrp_roleselection_getgroups")
 net.Receive(
 	"nws_yrp_roleselection_getgroups",
 	function(len, ply)
-		local fuid = net.ReadString()
+		local fuid = YRP_SQL_ID(net.ReadString())
 		local dbtab2 = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. fuid .. "'")
 		local nettab = {}
 		if IsNotNilAndNotFalse(dbtab2) then
@@ -693,7 +693,7 @@ YRP:AddNetworkString("nws_yrp_roleselection_getcontent_group")
 net.Receive(
 	"nws_yrp_roleselection_getcontent",
 	function(len, ply)
-		local guid = net.ReadString()
+		local guid = YRP_SQL_ID(net.ReadString())
 		local roltab = YRP_SQL_SELECT("yrp_ply_roles", "*", "int_groupID = '" .. guid .. "'")
 		local grptab = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_parentgroup = '" .. guid .. "'")
 		if IsNotNilAndNotFalse(roltab) then
@@ -729,7 +729,7 @@ YRP:AddNetworkString("nws_yrp_roleselection_getrole")
 net.Receive(
 	"nws_yrp_roleselection_getrole",
 	function(len, ply)
-		local ruid = net.ReadString()
+		local ruid = YRP_SQL_ID(net.ReadString())
 		local roltab = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. ruid .. "'")
 		if IsNotNilAndNotFalse(roltab) then
 			for i, v in pairs(roltab) do
@@ -750,7 +750,7 @@ YRP:AddNetworkString("nws_yrp_char_getrole")
 net.Receive(
 	"nws_yrp_char_getrole",
 	function(len, ply)
-		local ruid = net.ReadString()
+		local ruid = YRP_SQL_ID(net.ReadString())
 		local roltab = YRP_SQL_SELECT("yrp_ply_roles", "*", "uniqueID = '" .. ruid .. "'")
 		if IsNotNilAndNotFalse(roltab) then
 			for i, v in pairs(roltab) do

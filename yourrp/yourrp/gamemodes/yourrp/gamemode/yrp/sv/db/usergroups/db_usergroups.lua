@@ -2167,7 +2167,7 @@ net.Receive(
 	"nws_yrp_permaprops_remove",
 	function(len, ply)
 		if not ply:GetYRPBool("bool_permaprops", false) then return end
-		local ppid = net.ReadString()
+		local ppid = YRP_SQL_ID(net.ReadString())
 		if YRP_SQL_TABLE_EXISTS("permaprops", "nws_yrp_permaprops_remove") then
 			YRP_SQL_DELETE_FROM("permaprops", "id = '" .. ppid .. "'")
 		end
@@ -2189,7 +2189,7 @@ net.Receive(
 	"nws_yrp_permaprops_teleport",
 	function(len, ply)
 		if not ply:GetYRPBool("bool_permaprops", false) then return end
-		local ppid = net.ReadString()
+		local ppid = YRP_SQL_ID(net.ReadString())
 		if YRP_SQL_TABLE_EXISTS("permaprops", "nws_yrp_permaprops_teleport") then
 			local tab = YRP_SQL_SELECT("permaprops", "*", "id = '" .. ppid .. "'")
 			if IsNotNilAndNotFalse(tab) then
@@ -2265,7 +2265,7 @@ net.Receive(
 	"nws_yrp_permaprops_remove2",
 	function(len, ply)
 		if not ply:GetYRPBool("bool_permaprops", false) then return end
-		local ppid = net.ReadString()
+		local ppid = YRP_SQL_ID(net.ReadString())
 		if YRP_SQL_TABLE_EXISTS("permaprops_system", "nws_yrp_permaprops_remove2") then
 			YRP_SQL_DELETE_FROM("permaprops_system", "id = '" .. ppid .. "'")
 		end
@@ -2287,7 +2287,7 @@ net.Receive(
 	"nws_yrp_permaprops_teleport2",
 	function(len, ply)
 		if not ply:GetYRPBool("bool_permaprops", false) then return end
-		local ppid = net.ReadString()
+		local ppid = YRP_SQL_ID(net.ReadString())
 		if YRP_SQL_TABLE_EXISTS("permaprops_system", "nws_yrp_permaprops_teleport2") then
 			local tab = YRP_SQL_SELECT("permaprops_system", "*", "id = '" .. ppid .. "'")
 			if IsNotNilAndNotFalse(tab) then

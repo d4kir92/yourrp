@@ -208,6 +208,16 @@ function YRP_SQL_STR_IN(str, f, bNoQuotes)
 	end
 end
 
+function YRP_SQL_ID(id)
+	return tonumber(id) or -1
+end
+
+function YRP_SQL_KEY(str)
+	local res = string.gsub(tostring(str or ""), "[^%w_]", "")
+
+	return res
+end
+
 function YRP_SQL_STR_OUT(str)
 	local _res = str
 	if _type(_res) == "string" then
