@@ -101,7 +101,22 @@ function YRPUpdateResetLevel(ply)
 	end
 end
 
+local SLOT_ARTS = {}
+SLOT_ARTS["primary"] = true
+SLOT_ARTS["secondary"] = true
+SLOT_ARTS["sidearm"] = true
+SLOT_ARTS["gadget"] = true
+function YRPIsValidSlotArt(art)
+	return isstring(art) and SLOT_ARTS[art] == true
+end
+
 function YRPUpdateCharSlot(ply, art, pri)
+	if not YRPIsValidSlotArt(art) then
+		YRP:msg("error", "[YRPUpdateCharSlot] invalid slot: " .. tostring(art))
+
+		return
+	end
+
 	local tab = {}
 	for i, v in pairs(pri) do
 		if not strEmpty(v) and not table.HasValue(tab, v) and #tab < GetGlobalYRPInt("yrp_max_slots_" .. art, 0) then
@@ -138,48 +153,53 @@ function YRPGetCharSWEPS(ply)
 	return tab
 end
 
-YRP:AddNetworkString("nws_yrp_get_sweps_role_art")
-net.Receive(
-	"nws_yrp_get_sweps_role_art",
-	function(len, ply)
-		local art = net.ReadString()
-		local sweps = {}
-		local rolTab = ply:YRPGetRoleTable()
-		if IsNotNilAndNotFalse(rolTab) then
-			for i, v in pairs(string.Explode(",", rolTab.string_sweps)) do
-				local tab = YRP_SQL_SELECT("yrp_weapon_slots", "*", "classname = '" .. v .. "'")
-				if IsNotNilAndNotFalse(tab) then
-					tab = tab[1]
-					if tobool(tab["slot_" .. art]) then
-						table.insert(sweps, v)
-					end
+function YRPGetAllowedSlotSWEPs(ply, art)
+	local sweps = {}
+	if not YRPIsValidSlotArt(art) then return sweps end
+	local rolTab = ply:YRPGetRoleTable()
+	if IsNotNilAndNotFalse(rolTab) then
+		for i, v in pairs(string.Explode(",", rolTab.string_sweps)) do
+			local tab = YRP_SQL_SELECT("yrp_weapon_slots", "*", "classname = '" .. v .. "'")
+			if IsNotNilAndNotFalse(tab) then
+				tab = tab[1]
+				if tobool(tab["slot_" .. art]) then
+					table.insert(sweps, v)
 				end
 			end
 		end
+	end
 
-		local charid = ply:CharID()
-		local tab = YRP_SQL_SELECT(DATABASE_NAME, "string_specializations", "uniqueID = '" .. charid .. "'")
-		if IsNotNilAndNotFalse(tab) then
-			tab = tab[1]
-			for i, v in pairs(string.Explode(",", tab.string_specializations)) do
-				local tabSpec = YRP_SQL_SELECT("yrp_specializations", "*", "uniqueID = '" .. v .. "'")
-				if IsNotNilAndNotFalse(tabSpec) then
-					tabSpec = tabSpec[1]
-					for id, w in pairs(string.Explode(",", tabSpec.sweps)) do
-						local tab2 = YRP_SQL_SELECT("yrp_weapon_slots", "*", "classname = '" .. w .. "'")
-						if IsNotNilAndNotFalse(tab2) then
-							tab2 = tab2[1]
-							if tobool(tab2["slot_" .. art]) then
-								table.insert(sweps, w)
-							end
+	local charid = ply:CharID()
+	local tab = YRP_SQL_SELECT(DATABASE_NAME, "string_specializations", "uniqueID = '" .. charid .. "'")
+	if IsNotNilAndNotFalse(tab) then
+		tab = tab[1]
+		for i, v in pairs(string.Explode(",", tab.string_specializations)) do
+			local tabSpec = YRP_SQL_SELECT("yrp_specializations", "*", "uniqueID = '" .. v .. "'")
+			if IsNotNilAndNotFalse(tabSpec) then
+				tabSpec = tabSpec[1]
+				for id, w in pairs(string.Explode(",", tabSpec.sweps)) do
+					local tab2 = YRP_SQL_SELECT("yrp_weapon_slots", "*", "classname = '" .. w .. "'")
+					if IsNotNilAndNotFalse(tab2) then
+						tab2 = tab2[1]
+						if tobool(tab2["slot_" .. art]) then
+							table.insert(sweps, w)
 						end
 					end
 				end
 			end
 		end
+	end
 
+	return sweps
+end
+
+YRP:AddNetworkString("nws_yrp_get_sweps_role_art")
+net.Receive(
+	"nws_yrp_get_sweps_role_art",
+	function(len, ply)
+		local art = net.ReadString()
 		net.Start("nws_yrp_get_sweps_role_art")
-		net.WriteTable(sweps)
+		net.WriteTable(YRPGetAllowedSlotSWEPs(ply, art))
 		net.Send(ply)
 	end
 )
@@ -198,6 +218,18 @@ net.Receive(
 	function(len, ply)
 		local art = net.ReadString()
 		local cname = net.ReadString()
+		if not YRPIsValidSlotArt(art) then
+			YRP:msg("error", "[slot_swep_add] " .. ply:YRPName() .. " tried invalid slot: " .. tostring(art))
+
+			return
+		end
+
+		if not table.HasValue(YRPGetAllowedSlotSWEPs(ply, art), cname) then
+			YRP:msg("error", "[slot_swep_add] " .. ply:YRPName() .. " tried not allowed swep: " .. tostring(cname))
+
+			return
+		end
+
 		local currentsweps = ply:GetYRPString("slot_" .. art, "")
 		local tab = nil
 		if strEmpty(currentsweps) then
@@ -221,6 +253,12 @@ net.Receive(
 	function(len, ply)
 		local art = net.ReadString()
 		local cname = net.ReadString()
+		if not YRPIsValidSlotArt(art) then
+			YRP:msg("error", "[slot_swep_rem] " .. ply:YRPName() .. " tried invalid slot: " .. tostring(art))
+
+			return
+		end
+
 		local currentsweps = ply:GetYRPString("slot_" .. art, "")
 		local tab = string.Explode(",", currentsweps)
 		table.RemoveByValue(tab, cname)
