@@ -338,6 +338,12 @@ function YRPChatAlert(sender, text)
 end
 
 function YRPChatGiveLicense(sender, text)
+	if not sender:HasAccess("YRPChatGiveLicense") then
+		YRP:msg("note", sender:Nick() .. " tried to use givelicense!")
+
+		return
+	end
+
 	local args = string.Explode(" ", text)
 	local name = args[1]
 	local lname = args[2]

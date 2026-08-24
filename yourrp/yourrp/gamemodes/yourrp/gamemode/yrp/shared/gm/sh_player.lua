@@ -151,6 +151,14 @@ function Player:HasAccess(from, skip)
 	return hasAccess
 end
 
+function YRPConCommandAccess(ply, from)
+	if not IsValid(ply) or not ply:IsPlayer() then return true end
+	if ply:HasAccess(from, true) or ply:IPAddress() == "loopback" then return true end
+	YRP:msg("error", "[" .. tostring(from) .. "] " .. ply:SteamName() .. " ( " .. ply:SteamID() .. " ) tried to use this command!")
+
+	return false
+end
+
 function Player:YRPHasStorageItem(uid)
 	if not IsNotNilAndNotFalse(uid) then return false end
 	if self.yrpstorage == nil or self:GetYRPString("storage", "") ~= self.yrpstoragestr then

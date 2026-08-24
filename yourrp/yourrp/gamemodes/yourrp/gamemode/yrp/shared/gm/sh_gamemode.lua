@@ -277,6 +277,7 @@ concommand.Add(
 		local map = allmaps[id]
 		if map ~= nil then
 			if SERVER then
+				if not YRPConCommandAccess(ply, "yrp_map") then return end
 				YRPMsg("[yrp_map] Changelevel to " .. map)
 				RunConsoleCommand("changelevel", map)
 			else

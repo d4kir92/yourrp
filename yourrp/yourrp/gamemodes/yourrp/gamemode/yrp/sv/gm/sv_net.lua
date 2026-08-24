@@ -133,6 +133,7 @@ concommand.Add(
 		end
 
 		if args[1] and args[1] == "forcerpname" then
+			if not YRPConCommandAccess(ply, "darkrp forcerpname") then return end
 			local playername = args[2]
 			local newrpname = args[3]
 			local pl = YRPGetPlayerByName(playername)
@@ -159,6 +160,7 @@ concommand.Add(
 		elseif args[1] and args[1] == "job" then
 			YRP:msg("note", string.format("%s tried to change job/role", ply:SteamName()))
 		elseif args[1] and args[1] == "job" then
+			if not YRPConCommandAccess(ply, "darkrp job") then return end
 			local playername = args[2]
 			local rolename = args[3]
 			if playername and rolename then
@@ -183,15 +185,8 @@ concommand.Add(
 			end
 		elseif args[1] and jobByCmd[string.upper(args[1])] then
 			local jobtab = RPExtraTeams[jobByCmd[string.upper(args[1])]]
-			if jobtab then
-				if GetGlobalYRPBool("bool_players_die_on_role_switch", false) then
-					ply:KillSilent()
-				end
-
-				YRPSetRole("darkrp", ply, jobtab.uniqueID)
-				if GetGlobalYRPBool("bool_players_die_on_role_switch", false) then
-					ply:Spawn()
-				end
+			if jobtab and YRPEntityAlive(ply) then
+				YRP:TryGetRole(ply, jobtab.uniqueID, 1, {})
 			end
 		elseif args[1] and unhandled[args[1]] == nil then
 			if args[1] and not string.StartsWith(string.lower(args[1]), "team_") then
@@ -204,6 +199,7 @@ concommand.Add(
 concommand.Add(
 	"yrp_force_sqlite",
 	function(ply, cmd, args)
+		if not YRPConCommandAccess(ply, "yrp_force_sqlite") then return end
 		SetSQLMode(0, true)
 		timer.Simple(
 			1,
@@ -224,6 +220,7 @@ concommand.Add(
 concommand.Add(
 	"yrp_givelicense",
 	function(ply, cmd, args)
+		if not YRPConCommandAccess(ply, "yrp_givelicense") then return end
 		if #args ~= 2 then
 			YRP:msg("note", "to much/less commands")
 		end
@@ -243,6 +240,7 @@ concommand.Add(
 concommand.Add(
 	"yrp_allowallcountries",
 	function(ply, cmd, args)
+		if not YRPConCommandAccess(ply, "yrp_allowallcountries") then return end
 		SetGlobalYRPBool("yrp_allowallcountries", not GetGlobalYRPBool("yrp_allowallcountries", false))
 		MsgC(Color(255, 255, 0), "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -" .. "\n")
 		if GetGlobalYRPBool("yrp_allowallcountries", false) then
