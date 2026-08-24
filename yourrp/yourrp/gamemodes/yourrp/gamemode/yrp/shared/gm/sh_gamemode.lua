@@ -402,10 +402,42 @@ concommand.Add(
 	end
 )
 
-function IsYRPEntityAlive(ply, uid)
-	for i, ent in pairs(ents.GetAll()) do
-		if tostring(ent:GetYRPInt("item_uniqueID", "")) == tostring(uid) and ent:GetRPOwner() == ply then return true, ent end
+local yrp_alive_frame = -1
+local yrp_alive_cache = {}
+local function YRPFindOwnedItems(ply)
+	local owned = {}
+	local all = ents.GetAll()
+	for i = 1, #all do
+		local ent = all[i]
+		local id = tostring(ent:GetYRPInt("item_uniqueID", ""))
+		if owned[id] == nil and ent:GetRPOwner() == ply then
+			owned[id] = ent
+		end
 	end
+
+	return owned
+end
+
+function IsYRPEntityAlive(ply, uid)
+	local owned
+	if CLIENT then
+		local frame = FrameNumber()
+		if frame ~= yrp_alive_frame then
+			yrp_alive_frame = frame
+			yrp_alive_cache = {}
+		end
+
+		owned = yrp_alive_cache[ply]
+		if owned == nil then
+			owned = YRPFindOwnedItems(ply)
+			yrp_alive_cache[ply] = owned
+		end
+	else
+		owned = YRPFindOwnedItems(ply)
+	end
+
+	local ent = owned[tostring(uid)]
+	if ent ~= nil then return true, ent end
 
 	return false
 end
