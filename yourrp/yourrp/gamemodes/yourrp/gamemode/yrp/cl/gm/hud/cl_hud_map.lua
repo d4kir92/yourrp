@@ -89,18 +89,24 @@ function openMap()
 				CamDataMap.orthoright = map.sizeE
 				CamDataMap.orthotop = map.sizeS
 				CamDataMap.orthobottom = map.sizeN
-				map_RT = GetRenderTarget("YRP_Map", win.w, win.h, true)
-				map_RT_mat = CreateMaterial(
-					"YRP_Map",
-					"UnlitGeneric",
-					{
-						["$basetexture"] = "YRP_Map"
-					}
-				)
+				local rtw, rth = math.floor(win.w), math.floor(win.h)
+				if _map.rtw ~= rtw or _map.rth ~= rth then
+					local rtname = "YRP_Map_" .. rtw .. "x" .. rth
+					_map.rtw = rtw
+					_map.rth = rth
+					_map.rt = GetRenderTarget(rtname, rtw, rth, true)
+					_map.rt_mat = CreateMaterial(
+						rtname,
+						"UnlitGeneric",
+						{
+							["$basetexture"] = rtname
+						}
+					)
+				end
 
 				local old_RT = render.GetRenderTarget()
 				local old_w, old_h = ScrW(), ScrH()
-				render.SetRenderTarget(map_RT)
+				render.SetRenderTarget(_map.rt)
 				render.SetViewPort(win.x, win.y, win.w, win.h)
 				render.Clear(0, 0, 0, 0)
 				cam.Start2D()
@@ -112,7 +118,7 @@ function openMap()
 				render.SetViewPort(0, 0, old_w, old_h)
 				render.SetRenderTarget(old_RT)
 				surface.SetDrawColor(Color(255, 255, 255, 255))
-				surface.SetMaterial(map_RT_mat)
+				surface.SetMaterial(_map.rt_mat)
 				surface.DrawTexturedRect(win.x, win.y, win.w, win.h)
 				local plyPos = {}
 				plyPos.xMax = map.sizeX
