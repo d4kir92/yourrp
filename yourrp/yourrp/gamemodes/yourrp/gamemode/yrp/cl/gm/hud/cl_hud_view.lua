@@ -1,4 +1,34 @@
 --Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+local _coowner = {}
+local function GetCoownerNames(ent, coownerIDs)
+	if _coowner.ent == ent and _coowner.ids == coownerIDs and (_coowner.time or 0) > CurTime() then return _coowner.names end
+	local ids = {}
+	for i, v in pairs(string.Explode(",", coownerIDs)) do
+		local id = tonumber(v)
+		if id ~= nil then
+			ids[id] = true
+		end
+	end
+
+	local names = ""
+	for x, p in pairs(player.GetAll()) do
+		if ids[p:CharID()] then
+			if not strEmpty(names) then
+				names = names .. ", "
+			end
+
+			names = names .. p:RPName()
+		end
+	end
+
+	_coowner.ent = ent
+	_coowner.ids = coownerIDs
+	_coowner.names = names
+	_coowner.time = CurTime() + 0.5
+
+	return names
+end
+
 function showOwner(eyeTrace)
 	if GetGlobalYRPBool("bool_yrp_showowner", true) then
 		if eyeTrace.Entity:GetOwner() ~= nil and eyeTrace.Entity:GetOwner() ~= NULL then
@@ -17,19 +47,7 @@ function showOwner(eyeTrace)
 				draw.SimpleText(YRP:trans("LID_owner") .. ": " .. eyeTrace.Entity:GetYRPString("ownerRPName", "") .. groupname, "Y_16_500", ScrW() / 2, ScrH2() + YRP:ctr(750), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 				local coownerIDs = eyeTrace.Entity:GetYRPString("coownerCharIDs", "")
 				if not strEmpty(coownerIDs) then
-					local coowners = ""
-					for i, v in pairs(string.Explode(",", coownerIDs)) do
-						for x, p in pairs(player.GetAll()) do
-							if p:CharID() == tonumber(v) then
-								if not strEmpty(coowners) then
-									coowners = coowners .. ", "
-								end
-
-								coowners = coowners .. p:RPName()
-							end
-						end
-					end
-
+					local coowners = GetCoownerNames(eyeTrace.Entity, coownerIDs)
 					draw.SimpleText(YRP:trans("LID_coowners") .. ": " .. coowners, "Y_16_500", ScrW() / 2, ScrH2() + YRP:ctr(800), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 				end
 			end
