@@ -91,15 +91,17 @@ hook.Add(
 		-- Network Things
 		for str, val in pairs(yrp_groups) do
 			if string.find(str, "string_", 1, true) then
-				local tab = {}
-				tab.netstr = "nws_yrp_update_group_" .. str
-				YRP:AddNetworkString(tab.netstr)
+				local netstr = "nws_yrp_update_group_" .. str
+				YRP:AddNetworkString(netstr)
 				net.Receive(
-					tab.netstr,
+					netstr,
 					function(len, ply)
 						if not ply:CanAccess("bool_groupsandroles") then return end
 						local uid = tonumber(net.ReadString())
+						if uid == nil then return end
 						local s = net.ReadString()
+						local tab = {}
+						tab.netstr = netstr
 						tab.ply = ply
 						tab.id = str
 						tab.value = s
@@ -145,16 +147,18 @@ hook.Add(
 					end
 				)
 			elseif string.find(str, "int_", 1, true) then
-				local tab = {}
-				tab.netstr = "nws_yrp_update_group_" .. str
-				YRP:AddNetworkString(tab.netstr)
+				local netstr = "nws_yrp_update_group_" .. str
+				YRP:AddNetworkString(netstr)
 				net.Receive(
-					tab.netstr,
+					netstr,
 					function(len, ply)
 						if not ply:CanAccess("bool_groupsandroles") then return end
 						local uid = tonumber(net.ReadString())
+						if uid == nil then return end
 						local int = tonumber(net.ReadString())
 						local cur = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+						local tab = {}
+						tab.netstr = netstr
 						tab.ply = ply
 						tab.id = str
 						tab.value = int
@@ -164,7 +168,7 @@ hook.Add(
 						tab.handler = HANDLER_GROUPSANDROLES["groups"][tonumber(tab.uniqueID)]
 						BroadcastInt(tab)
 						if tab.netstr == "nws_yrp_update_group_int_parentgroup" then
-							if IsNotNilAndNotFalse(cur) then
+							if IsNotNilAndNotFalse(cur) and cur[1] ~= nil then
 								cur = cur[1]
 								SendGroupList(tonumber(cur.int_parentgroup))
 							end
@@ -174,15 +178,17 @@ hook.Add(
 					end
 				)
 			elseif string.find(str, "bool_", 1, true) then
-				local tab = {}
-				tab.netstr = "nws_yrp_update_group_" .. str
-				YRP:AddNetworkString(tab.netstr)
+				local netstr = "nws_yrp_update_group_" .. str
+				YRP:AddNetworkString(netstr)
 				net.Receive(
-					tab.netstr,
+					netstr,
 					function(len, ply)
 						if not ply:CanAccess("bool_groupsandroles") then return end
 						local uid = tonumber(net.ReadString())
+						if uid == nil then return end
 						local bool = tonumber(net.ReadString())
+						local tab = {}
+						tab.netstr = netstr
 						tab.ply = ply
 						tab.id = str
 						tab.value = bool

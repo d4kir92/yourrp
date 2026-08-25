@@ -308,15 +308,17 @@ hook.Add(
 
 		for str, val in pairs(yrp_roles) do
 			if string.find(str, "string_", 1, true) then
-				local tab = {}
-				tab.netstr = "nws_yrp_update_role_" .. str
-				YRP:AddNetworkString(tab.netstr)
+				local netstr = "nws_yrp_update_role_" .. str
+				YRP:AddNetworkString(netstr)
 				net.Receive(
-					tab.netstr,
+					netstr,
 					function(len, ply)
 						if not ply:CanAccess("bool_groupsandroles") then return end
 						local uid = tonumber(net.ReadString())
+						if uid == nil then return end
 						local s = net.ReadString()
+						local tab = {}
+						tab.netstr = netstr
 						tab.ply = ply
 						tab.id = str
 						tab.value = s
@@ -362,16 +364,18 @@ hook.Add(
 					end
 				)
 			elseif string.find(str, "int_", 1, true) then
-				local tab = {}
-				tab.netstr = "nws_yrp_update_role_" .. str
-				YRP:AddNetworkString(tab.netstr)
+				local netstr = "nws_yrp_update_role_" .. str
+				YRP:AddNetworkString(netstr)
 				net.Receive(
-					tab.netstr,
+					netstr,
 					function(len, ply)
 						if not ply:CanAccess("bool_groupsandroles") then return end
 						local uid = tonumber(net.ReadString())
+						if uid == nil then return end
 						local int = tonumber(net.ReadString())
 						local cur = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+						local tab = {}
+						tab.netstr = netstr
 						tab.ply = ply
 						tab.id = str
 						tab.value = int
@@ -381,28 +385,28 @@ hook.Add(
 						tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
 						BroadcastInt(tab)
 						if tab.netstr == "nws_yrp_update_role_int_prerole" then
-							if IsNotNilAndNotFalse(cur) then
+							if IsNotNilAndNotFalse(cur) and cur[1] ~= nil then
 								cur = cur[1]
 								SendRoleList(nil, tonumber(cur.int_groupID), tonumber(cur.int_prerole))
+								SendRoleList(nil, tonumber(cur.int_groupID), 0)
 							end
-
-							SendRoleList(nil, tonumber(cur.int_groupID), 0)
 						elseif tab.netstr == "nws_yrp_update_role_int_groupID" then
 							UpdatePrerolesGroupIDs(tab.uniqueID, tab.value)
 						end
 					end
 				)
 			elseif string.find(str, "float_", 1, true) then
-				local tab = {}
-				tab.netstr = "nws_yrp_update_role_" .. str
-				YRP:AddNetworkString(tab.netstr)
+				local netstr = "nws_yrp_update_role_" .. str
+				YRP:AddNetworkString(netstr)
 				net.Receive(
-					tab.netstr,
+					netstr,
 					function(len, ply)
 						if not ply:CanAccess("bool_groupsandroles") then return end
 						local uid = tonumber(net.ReadString())
+						if uid == nil then return end
 						local float = tonumber(net.ReadString())
-						local cur = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+						local tab = {}
+						tab.netstr = netstr
 						tab.ply = ply
 						tab.id = str
 						tab.value = float
@@ -411,27 +415,20 @@ hook.Add(
 						UpdateFloat(tab)
 						tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
 						BroadcastFloat(tab)
-						if tab.netstr == "nws_yrp_update_role_int_prerole" then
-							if IsNotNilAndNotFalse(cur) then
-								cur = cur[1]
-								SendGroupList(tonumber(cur.float_parentrole))
-							end
-
-							SendGroupList(float)
-						end
 					end
 				)
 			elseif string.find(str, "bool_", 1, true) then
-				local tab = {}
-				tab.netstr = "nws_yrp_update_role_" .. str
-				YRP:AddNetworkString(tab.netstr)
+				local netstr = "nws_yrp_update_role_" .. str
+				YRP:AddNetworkString(netstr)
 				net.Receive(
-					tab.netstr,
+					netstr,
 					function(len, ply)
 						if not ply:CanAccess("bool_groupsandroles") then return end
 						local uid = tonumber(net.ReadString())
+						if uid == nil then return end
 						local int = tonumber(net.ReadString())
-						local cur = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
+						local tab = {}
+						tab.netstr = netstr
 						tab.ply = ply
 						tab.id = str
 						tab.value = int
@@ -440,14 +437,6 @@ hook.Add(
 						UpdateInt(tab)
 						tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
 						BroadcastInt(tab)
-						if tab.netstr == "nws_yrp_update_role_int_prerole" then
-							if IsNotNilAndNotFalse(cur) then
-								cur = cur[1]
-								SendGroupList(tonumber(cur.int_parentrole))
-							end
-
-							SendGroupList(int)
-						end
 					end
 				)
 			end
