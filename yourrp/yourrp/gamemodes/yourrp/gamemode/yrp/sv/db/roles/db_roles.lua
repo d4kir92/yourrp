@@ -347,17 +347,17 @@ hook.Add("YRP_SQLDBREADY_GENERAL", "yrp_ply_roles", function()
 				if not ply:CanAccess("bool_groupsandroles") then return end
 				local uid = tonumber(net.ReadString())
 				if uid == nil then return end
-				local int = tonumber(net.ReadString())
+				local bool = tonumber(net.ReadString())
 				local tab = {}
 				tab.netstr = netstr
 				tab.ply = ply
 				tab.id = str
-				tab.value = int
+				tab.value = bool
 				tab.db = DATABASE_NAME
 				tab.uniqueID = uid
-				UpdateInt(tab)
+				UpdateBool(tab)
 				tab.handler = HANDLER_GROUPSANDROLES["roles"][tonumber(tab.uniqueID)]
-				BroadcastInt(tab)
+				BroadcastBool(tab)
 			end)
 		end
 	end
