@@ -1,6 +1,4 @@
 --Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
-_filterENTS = ents.GetAll()
-local _filterTime = CurTime()
 local hud = {}
 hud["hp"] = 100
 hud["ar"] = 100

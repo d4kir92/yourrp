@@ -67,7 +67,7 @@ function openMap()
 					{
 						start = lply:GetPos() + Vector(0, 0, 16),
 						endpos = lply:GetPos() + Vector(0, 0, _testHeight),
-						filter = _filterENTS
+						filter = lply
 					}
 				)
 
