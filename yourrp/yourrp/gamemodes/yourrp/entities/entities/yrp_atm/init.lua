@@ -33,6 +33,26 @@ function ENT:Use(activator, caller)
 end
 
 local OTHERMONEY_MAX_DIGITS = 9
+local ATM_USER_TIMEOUT = 30
+function ENT:ATMRelease()
+	self.user = nil
+	self.user_time = nil
+	self:SetYRPString("othermoney", "")
+	self:SetYRPString("name", "")
+	self:SetYRPString("SteamID", "")
+end
+
+function ENT:ATMClaim(ply)
+	if IsValid(self.user) and self.user ~= ply and (self.user_time or 0) > CurTime() then
+		ply:ChatPrint("[ATM] " .. self.user:RPName() .. " is using this ATM")
+		return false
+	end
+
+	self.user = ply
+	self.user_time = CurTime() + ATM_USER_TIMEOUT
+	return true
+end
+
 function ENT:ChangeMenu()
 	self.menu.home = false
 	self.menu.withdraw = false
@@ -130,7 +150,10 @@ function ENT:createButtonNumber(parent, up, forward, right, add)
 	tmp.parent = parent
 	function tmp:Use(activator, caller, useType, value)
 		if not IsValid(parent) or parent.pressed then return end
+		if not IsValid(activator) or not activator:IsPlayer() then return end
 		parent.pressed = true
+		timer.Simple(0.2, function() if IsValid(parent) then parent.pressed = false end end)
+		if not parent:ATMClaim(activator) then return end
 		local filename = "buttons/button14.wav"
 		util.PrecacheSound(filename)
 		self:EmitSound(filename, 75, 100, 1, CHAN_AUTO)
@@ -140,8 +163,6 @@ function ENT:createButtonNumber(parent, up, forward, right, add)
 		else
 			parent:SetYRPString("othermoney", string.sub(cur, 1, string.len(cur) - 1))
 		end
-
-		timer.Simple(0.2, function() if IsValid(parent) then parent.pressed = false end end)
 	end
 	return tmp
 end
@@ -195,6 +216,7 @@ function ENT:createButton(parent, up, forward, right, status, _money, func)
 		if not IsValid(activator) or not activator:IsPlayer() then return end
 		parent.pressed = true
 		timer.Simple(0.2, function() if IsValid(parent) then parent.pressed = false end end)
+		if not parent:ATMClaim(activator) then return end
 		local filename = "buttons/button14.wav"
 		util.PrecacheSound(filename)
 		self:EmitSound(filename, 75, 100, 1, CHAN_AUTO)
@@ -249,9 +271,18 @@ function ENT:createButton(parent, up, forward, right, status, _money, func)
 end
 
 function ENT:Think()
+	if self.user ~= nil and (not IsValid(self.user) or (self.user_time or 0) < CurTime()) then
+		self:ATMRelease()
+		if self:GetYRPString("status") ~= "home" then
+			self:SetYRPString("status", "home")
+			self:ChangeMenu()
+		end
+	end
+
 	if self:GetYRPString("status") == "home" then
 		if not self.menu.home then
 			self.menu.home = true
+			self:ATMRelease()
 			self.buttons.withdraw = self:createButton(self, 49.74, 7.14, 8.8, "withdraw", nil, nil)
 			self.buttons.deposit = self:createButton(self, 48.0, 8.84, 8.8, "deposit", nil, nil)
 			self.buttons.transfer = self:createButton(self, 46.36, 10.54, 8.8, "transfer", nil, "ATMPressPrev")
