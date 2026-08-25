@@ -20,15 +20,27 @@ function ENT:Initialize()
 end
 
 function ENT:Getamount()
-	return self:GetYRPString("money")
+	return tonumber(self:GetYRPString("money", "0")) or 0
 end
 
 function ENT:Setamount(money)
+	money = tonumber(money)
+	if money == nil then
+		YRP:msg("note", "[spawned_money] Setamount got a non-number")
+
+		return
+	end
+
 	self:SetYRPString("money", money)
 end
 
 function ENT:Use(activator, caller)
-	caller:addMoney(self:Getamount())
+	if not IsValid(activator) or not activator:IsPlayer() then return end
+	local amount = self:Getamount()
+	if amount > 0 then
+		activator:addMoney(amount)
+	end
+
 	self:Remove()
 end
 
