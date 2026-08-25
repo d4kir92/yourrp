@@ -85,6 +85,12 @@ net.Receive(
 	function(len, ply)
 		local storageID = net.ReadString()
 		storageID = tonumber(storageID)
+		if YRPStorageBelongsToOtherPlayer(ply, storageID) then
+			YRP:msg("db", "[yrp_storage_get_slots] " .. ply:Nick() .. " tried to read a storage of another player")
+
+			return
+		end
+
 		local slots = GetStorageSlots(storageID)
 		if IsNotNilAndNotFalse(slots) then
 			if slots[5] then

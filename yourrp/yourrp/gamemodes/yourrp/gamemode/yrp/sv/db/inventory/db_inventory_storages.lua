@@ -156,16 +156,17 @@ net.Receive(
 )
 
 
-function YRPItemBelongsToOtherPlayer(ply, item)
-	local itemSlot = YRP_SQL_SELECT("yrp_inventory_slots", "int_storageID", "uniqueID = '" .. tonumber(item.int_slotID) .. "'")
-	if not IsNotNilAndNotFalse(itemSlot) then return false end
-	local itemStorageID = tonumber(itemSlot[1].int_storageID)
+function YRPStorageBelongsToOtherPlayer(ply, storageID)
+	storageID = tonumber(storageID)
+	if storageID == nil then return true end
 
-	-- Resolve bag-in-inventory: item's storage is a bag → get the bag item's slot storage
-	local resolvedStorageID = itemStorageID
-	local bagItem = YRP_SQL_SELECT("yrp_inventory_items", "int_slotID", "int_storageID = '" .. itemStorageID .. "'")
+	-- Resolve bag-in-inventory: the storage is a bag → get the bag item's slot storage
+	local resolvedStorageID = storageID
+	local bagItem = YRP_SQL_SELECT("yrp_inventory_items", "int_slotID", "int_storageID = '" .. storageID .. "'")
 	if IsNotNilAndNotFalse(bagItem) then
-		local bagSlot = YRP_SQL_SELECT("yrp_inventory_slots", "int_storageID", "uniqueID = '" .. tonumber(bagItem[1].int_slotID) .. "'")
+		local bagSlotID = tonumber(bagItem[1].int_slotID)
+		if bagSlotID == nil then return true end
+		local bagSlot = YRP_SQL_SELECT("yrp_inventory_slots", "int_storageID", "uniqueID = '" .. bagSlotID .. "'")
 		if IsNotNilAndNotFalse(bagSlot) then
 			resolvedStorageID = tonumber(bagSlot[1].int_storageID)
 		end
@@ -180,6 +181,15 @@ function YRPItemBelongsToOtherPlayer(ply, item)
 	if not IsNotNilAndNotFalse(myChar) then return true end
 
 	return tostring(charWithStorage[1].uniqueID) ~= tostring(myChar.uniqueID)
+end
+
+function YRPItemBelongsToOtherPlayer(ply, item)
+	local slotID = tonumber(item.int_slotID)
+	if slotID == nil then return true end
+	local itemSlot = YRP_SQL_SELECT("yrp_inventory_slots", "int_storageID", "uniqueID = '" .. slotID .. "'")
+	if not IsNotNilAndNotFalse(itemSlot) then return false end
+
+	return YRPStorageBelongsToOtherPlayer(ply, itemSlot[1].int_storageID)
 end
 
 YRP:AddNetworkString("nws_yrp_storage_open")

@@ -301,6 +301,12 @@ net.Receive(
 		local item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. itemID .. "'")
 		if IsNotNilAndNotFalse(item) then
 			item = item[1]
+			if YRPItemBelongsToOtherPlayer(ply, item) then
+				YRP:msg("db", "[yrp_item_clicked] " .. ply:Nick() .. " tried to open a storage of another player")
+
+				return
+			end
+
 			item.int_storageID = tonumber(item.int_storageID)
 			if item.int_storageID ~= 0 then
 				OpenStorage(ply, item.int_storageID)
@@ -334,6 +340,12 @@ net.Receive(
 		local item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. itemID .. "'")
 		if IsNotNilAndNotFalse(item) then
 			item = item[1]
+			if YRPItemBelongsToOtherPlayer(ply, item) then
+				YRP:msg("db", "[yrp_item_drop] " .. ply:Nick() .. " tried to drop an item of another player")
+
+				return
+			end
+
 			DropItem(ply, item.int_slotID)
 		end
 	end
