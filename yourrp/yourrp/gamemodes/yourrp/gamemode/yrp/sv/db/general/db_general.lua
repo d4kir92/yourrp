@@ -423,7 +423,7 @@ function GeneralUpdateValue(ply, netstr, str, value)
 	if not (ply:GetYRPBool("bool_general", false) or ply:GetYRPBool("bool_scale", false) or ply:HasAccess(netstr, true)) then
 		YRP:msg("error", "[GeneralUpdate] " .. ply:YRPName() .. " tried to change " .. tostring(str))
 
-		return
+		return false
 	end
 
 	yrp_general[str] = value
@@ -436,37 +436,39 @@ function GeneralUpdateValue(ply, netstr, str, value)
 	)
 
 	GeneralSendToOther(ply, netstr, yrp_general[str])
+
+	return true
 end
 
 function GeneralUpdateBool(ply, netstr, str, value)
+	if not GeneralUpdateValue(ply, netstr, str, value) then return end
 	YRP:msg("db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring(tobool(value)))
-	GeneralUpdateValue(ply, netstr, str, value)
 	SetGlobalYRPBool(str, tobool(value))
 end
 
 function GeneralUpdateString(ply, netstr, str, value)
+	if not GeneralUpdateValue(ply, netstr, str, value) then return end
 	YRP:msg("db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring(value))
-	GeneralUpdateValue(ply, netstr, str, value)
 	SetGlobalYRPString(str, value)
 end
 
 function GeneralUpdateTable(ply, netstr, str, value)
+	if not GeneralUpdateValue(ply, netstr, str, value) then return end
 	YRP:msg("db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring(value))
-	GeneralUpdateValue(ply, netstr, str, value)
 	SetGlobalYRPTable(str, string.Explode("\n", value))
 end
 
 function GeneralUpdateInt(ply, netstr, str, value)
+	if not GeneralUpdateValue(ply, netstr, str, value) then return end
 	YRP:msg("db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring(value))
-	GeneralUpdateValue(ply, netstr, str, value)
 	SetGlobalYRPInt(str, value)
 end
 
 function GeneralUpdateFloat(ply, netstr, str, value)
 	value = tonumber(string.format("%0.2f", value))
 	value = math.Clamp(value, 0.01, 100)
+	if not GeneralUpdateValue(ply, netstr, str, value) then return end
 	YRP:msg("db", ply:YRPName() .. " updated " .. str .. " to: " .. tostring(value))
-	GeneralUpdateValue(ply, netstr, str, value)
 	SetGlobalYRPFloat(str, value)
 end
 

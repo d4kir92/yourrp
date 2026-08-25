@@ -57,6 +57,7 @@ hook.Add(
 				net.Receive(
 					"nws_yrp_update_" .. str,
 					function(len, ply)
+						if not ply:CanAccess("bool_realistic") then return end
 						local b = btn(net.ReadBool())
 						YRPUpdateBool(HANDLER_REALISTIC, DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_realistic, b)
 					end
@@ -66,6 +67,7 @@ hook.Add(
 				net.Receive(
 					"nws_yrp_update_" .. str,
 					function(len, ply)
+						if not ply:CanAccess("bool_realistic") then return end
 						local f = net.ReadFloat()
 						YRPUpdateFloat(HANDLER_REALISTIC, DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_realistic, f)
 					end
