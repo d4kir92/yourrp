@@ -12,6 +12,7 @@ net.Receive(
 	end
 )
 
+local SERVERDATA_MAX_RETRIES = 3
 local function YRPPlayerLoadedGame(ply)
 	ply:SetYRPBool("finishedloadingcharacter", true)
 	YRPSendCharCount(ply)
@@ -59,6 +60,13 @@ local function YRPPlayerLoadedGame(ply)
 					if not IsValid(ply) then return end
 					if not ply.receivedserverdata then
 						MsgC(Color(255, 255, 0), "[LOADING] FAILED SEND SERVER DATA: " .. ply:Nick(), "\n")
+						ply.yrp_serverdata_retries = (ply.yrp_serverdata_retries or 0) + 1
+						if ply.yrp_serverdata_retries > SERVERDATA_MAX_RETRIES then
+							YRP:msg("error", "[LOADING] gave up sending server data to " .. ply:Nick() .. " after " .. SERVERDATA_MAX_RETRIES .. " retries")
+
+							return
+						end
+
 						YRPPlayerLoadedGame(ply)
 					end
 				end
@@ -71,6 +79,7 @@ end
 
 local function YRPStartSendingData(ply)
 	ply.receivedserverdata = false
+	ply.yrp_serverdata_retries = 0
 	YRPPlayerLoadedGame(ply)
 end
 
@@ -178,7 +187,7 @@ net.Receive(
 		tab["country"] = country
 		tab["beta"] = beta
 		if not YRPCheckReadyTable(tab) then
-			YRP:msg("error", "[LOADING] Ready Table is broken! #" .. ply.readycounter)
+			YRP:msg("error", "[LOADING] Ready Table is broken! " .. ply:Nick())
 
 			return
 		end
