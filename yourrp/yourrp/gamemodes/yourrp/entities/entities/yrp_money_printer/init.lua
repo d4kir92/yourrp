@@ -121,7 +121,7 @@ net.Receive(
 	"nws_yrp_startMoneyPrinter",
 	function(len, ply)
 		local mp = net.ReadEntity()
-		if IsValid(mp) and mp:GetOwner() == ply then
+		if IsValid(mp) and mp:GetClass() == "yrp_money_printer" and mp:GetOwner() == ply then
 			if mp:GetYRPBool("working", false) then
 				mp:SetYRPBool("working", false)
 			elseif not mp:GetYRPBool("working") then

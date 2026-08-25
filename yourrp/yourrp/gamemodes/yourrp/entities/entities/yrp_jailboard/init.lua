@@ -44,7 +44,7 @@ net.Receive(
 	function(len, ply)
 		if not ply:GetYRPBool("bool_canusewarnsystem", false) then return end
 		local target = net.ReadEntity()
-		if not IsValid(target) then return end
+		if not IsValid(target) or not target:IsPlayer() then return end
 		local jail = YRP_SQL_SELECT("yrp_jail", "*", "SteamID = '" .. target:YRPSteamID() .. "'")
 		if IsNotNilAndNotFalse(jail) then
 			jail = jail[1]
@@ -60,7 +60,7 @@ net.Receive(
 	function(len, ply)
 		if not ply:GetYRPBool("bool_canusewarnsystem", false) then return end
 		local target = net.ReadEntity()
-		if not IsValid(target) then return end
+		if not IsValid(target) or not target:IsPlayer() then return end
 		YRP_SQL_DELETE_FROM("yrp_jail", "SteamID = '" .. target:YRPSteamID() .. "'")
 		teleportToReleasepoint(target)
 	end
