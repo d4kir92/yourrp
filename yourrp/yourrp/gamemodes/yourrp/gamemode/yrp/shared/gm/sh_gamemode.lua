@@ -794,9 +794,15 @@ if CLIENT then
 	end)
 end
 
+local RPNAME_MAX_LENGTH = 32
 function YRPCleanUpName(name)
-	if name then name = string.Replace(name, "'", "") end
-	return name
+	if not name then return name end
+	name = tostring(name)
+	name = string.Replace(name, "'", "")
+	name = string.gsub(name, "%c", "")
+	name = string.Trim(name)
+
+	return string.sub(name, 1, RPNAME_MAX_LENGTH)
 end
 
 function loadLanguages()

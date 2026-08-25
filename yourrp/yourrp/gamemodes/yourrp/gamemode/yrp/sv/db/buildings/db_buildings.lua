@@ -2,6 +2,7 @@
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME_DOORS = "yrp_" .. GetMapNameDB() .. "_doors"
+local COOWNER_MAX = 32
 hook.Add(
 	"YRP_SQLDBREADY_GAMEPLAY",
 	"yrp_MAPNAME_doors_DB",
@@ -537,7 +538,13 @@ net.Receive(
 		if GetGlobalYRPBool("bool_building_system", false) then
 			local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
 			local _tmpTable = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'")
-			local newCoowner = net.ReadString()
+			local newCoowner = tonumber(net.ReadString())
+			if newCoowner == nil then
+				YRP:msg("db", "[addCoownerBuilding] invalid character id")
+
+				return
+			end
+
 			if _tmpTable and _tmpTable[1] and tostring(_tmpTable[1].ownerCharID) == tostring(ply:CharID()) then
 				local coownerCharIDs = _tmpTable[1].coownerCharIDs
 				local cotab = string.Explode(",", coownerCharIDs)
@@ -546,6 +553,13 @@ net.Receive(
 					if not strEmpty(v) then
 						table.insert(newCoTab, v)
 					end
+				end
+
+				if table.HasValue(newCoTab, tostring(newCoowner)) then return end
+				if #newCoTab >= COOWNER_MAX then
+					YRP:msg("db", "[addCoownerBuilding] coowner limit reached")
+
+					return
 				end
 
 				table.insert(newCoTab, newCoowner)

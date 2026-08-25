@@ -190,6 +190,14 @@ function YRP:GetCurrentLanguageInEnglish()
 	end
 end
 
+function YRP:IsValidLanguageShort(short)
+	for k, v in pairs(yrp_shorts) do
+		if v == short then return true end
+	end
+
+	return false
+end
+
 function YRP:check_languagepack()
 	for k, v in pairs(yrp_shorts) do
 		if yrp_current_lang.get_language == v then return true end

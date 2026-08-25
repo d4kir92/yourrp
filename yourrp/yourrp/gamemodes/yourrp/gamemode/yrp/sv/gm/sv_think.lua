@@ -21,7 +21,8 @@ net.Receive(
 	function(len, ply)
 		local _lang = net.ReadString()
 		--YRP:msg( "db", ply:YRPName() .. " using language: " .. string.upper(_lang) )
-		ply:SetYRPString("client_lang", _lang or "NONE")
+		if not YRP:IsValidLanguageShort(_lang) then return end
+		ply:SetYRPString("client_lang", _lang)
 	end
 )
 

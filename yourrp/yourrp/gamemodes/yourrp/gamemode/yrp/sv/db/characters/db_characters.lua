@@ -406,8 +406,14 @@ function Player:UpdateBackpack()
 end
 
 function Player:SetRPName(str, from)
-	if GetGlobalYRPBool("bool_characters_changeable_name", false) or self:GetYRPBool("bool_players", false) and isstring(str) then
+	if (GetGlobalYRPBool("bool_characters_changeable_name", false) or self:GetYRPBool("bool_players", false)) and isstring(str) then
 		str = YRPCleanUpName(str)
+		if strEmpty(str) then
+			YRP:msg("note", self:Nick() .. " tried to set an empty name")
+
+			return
+		end
+
 		local oldname = self:Nick()
 		local newname = str
 		YRP_SQL_UPDATE(
@@ -504,6 +510,7 @@ net.Receive(
 
 local RPDESC_MAX_LINES = 10
 local RPDESC_MAX_LENGTH = 1000
+local BIRTHDAY_MAX_LENGTH = 16
 function YRPSetRPDescription(ply, desc)
 	desc = string.sub(tostring(desc or ""), 1, RPDESC_MAX_LENGTH)
 	local lines = string.Explode("\n", desc)
@@ -538,7 +545,8 @@ YRP:AddNetworkString("nws_yrp_change_birthday")
 net.Receive(
 	"nws_yrp_change_birthday",
 	function(len, ply)
-		local _new_birthday = net.ReadString()
+		local _new_birthday = string.gsub(net.ReadString(), "%c", "")
+		_new_birthday = string.sub(string.Trim(_new_birthday), 1, BIRTHDAY_MAX_LENGTH)
 		YRP_SQL_UPDATE(
 			"yrp_characters",
 			{

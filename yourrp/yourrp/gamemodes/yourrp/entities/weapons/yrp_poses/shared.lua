@@ -360,7 +360,7 @@ function YRPDoPoses()
 				vel = Vector(vel[1], vel[2], 0)
 				if ply:IsSprinting() or not ply:IsOnGround() or vel:Length() > 110 then
 					ply.yrpposestatus = "reset"
-				elseif yrp_poses[ply.yrpposeart][ply.yrppose] then
+				elseif yrp_poses[ply.yrpposeart] and yrp_poses[ply.yrpposeart][ply.yrppose] then
 					if ply:GetYRPBool("yrp_pose_status", false) then
 						ply.yrpposestatus = "do"
 					else
@@ -442,7 +442,7 @@ if SERVER then
 		function(len, ply)
 			local pose_art = net.ReadString()
 			local pose = net.ReadString()
-			if pose then
+			if yrp_poses[pose_art] and yrp_poses[pose_art][pose] then
 				ply:SetYRPBool("yrp_pose_status", false)
 				ply:SetYRPString("yrp_pose_art", pose_art)
 				ply:SetYRPString("yrp_pose", pose)
