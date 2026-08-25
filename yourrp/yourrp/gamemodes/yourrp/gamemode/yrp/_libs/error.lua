@@ -31,6 +31,11 @@ function YRPEntityAlive(obj)
 	return _IsValid(obj)
 end
 
+function YRPPlayerAlive(obj)
+	if not YRPEntityAlive(obj) then return false end
+	return obj:IsPlayer()
+end
+
 function YRPPanelAlive(obj, from)
 	if _type(obj) == "table" then
 		YRP:msg("error", "YRPPanelAlive > IS TABLE " .. _tostring(from) .. " " .. _table.ToString(obj, "X", false))

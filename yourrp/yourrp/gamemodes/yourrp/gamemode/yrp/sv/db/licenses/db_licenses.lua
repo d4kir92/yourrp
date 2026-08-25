@@ -287,7 +287,7 @@ function GetLicenseIDByName(lname)
 end
 
 function GiveLicense(ply, lid)
-	if not IsValid(ply) then return end
+	if not YRPPlayerAlive(ply) then return end
 	if not IsNotNilAndNotFalse(lid) then return end
 	YRP:msg("gm", "Give " .. ply:RPName() .. " LicenseID: " .. lid)
 	ply:AddLicense(lid)
@@ -295,7 +295,7 @@ function GiveLicense(ply, lid)
 end
 
 function RemoveLicense(ply, lid)
-	if not IsValid(ply) then return end
+	if not YRPPlayerAlive(ply) then return end
 	if not IsNotNilAndNotFalse(lid) then return end
 	YRP:msg("gm", "Removed from " .. ply:RPName() .. " LicenseID " .. lid)
 	ply:RemoveLicense(lid)

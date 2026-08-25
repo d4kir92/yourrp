@@ -244,6 +244,8 @@ net.Receive("nws_yrp_addnewbuilding", function(len, ply)
 		return
 	end
 
+	if not YRPEntityAlive(door) then return end
+
 	YRP_SQL_INSERT_INTO_DEFAULTVALUES("yrp_" .. GetMapNameDB() .. "_buildings")
 	local last = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", nil, "ORDER BY uniqueID DESC LIMIT 1")
 	if last and last[1] then
@@ -601,6 +603,7 @@ end
 net.Receive("nws_yrp_changeBuildingID", function(len, ply)
 	if not ply:HasAccess("nws_yrp_changeBuildingID", true) then return end
 	local _tmpDoor = net.ReadEntity()
+	if not YRPEntityAlive(_tmpDoor) then return end
 	local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
 	_tmpDoor:SetYRPString("buildingID", _tmpBuildingID)
 	YRP_SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_doors", {
@@ -791,6 +794,7 @@ end
 
 net.Receive("nws_yrp_getBuildingInfo", function(len, ply)
 	local door = net.ReadEntity()
+	if not YRPEntityAlive(door) then return end
 	local buid = door:GetYRPString("buildingID", "")
 	getBuildingInfo(ply, door, buid, false)
 end)

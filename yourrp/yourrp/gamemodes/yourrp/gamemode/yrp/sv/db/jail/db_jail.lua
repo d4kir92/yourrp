@@ -10,7 +10,7 @@ end)
 YRP:AddNetworkString("nws_yrp_getPlayerNotes")
 net.Receive("nws_yrp_getPlayerNotes", function(len, ply)
 	local p = net.ReadEntity()
-	if YRPEntityAlive(p) then
+	if YRPPlayerAlive(p) then
 		local notes = YRP_SQL_SELECT(DBNotes, "*", "SteamID = '" .. p:YRPSteamID() .. "'")
 		if not IsNotNilAndNotFalse(notes) then notes = {} end
 		net.Start("nws_yrp_getPlayerNotes")

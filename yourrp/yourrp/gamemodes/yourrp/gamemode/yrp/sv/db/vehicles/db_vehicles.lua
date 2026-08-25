@@ -32,6 +32,7 @@ end
 
 net.Receive("nws_yrp_getVehicleInfo", function(len, ply)
 	local _vehicle = net.ReadEntity()
+	if not YRPEntityAlive(_vehicle) then return end
 	local _vehicleID = YRP_SQL_ID(net.ReadString())
 	local _vehicleTab = YRP_SQL_SELECT(DATABASE_NAME, "*", "ownerCharID = '" .. _vehicle:GetYRPInt("ownerCharID", 0) .. "' AND item_id = " .. _vehicleID)
 	if YRPWORKED(_vehicleTab, "getVehicleInfo | No buyed vehicle! Dont work on spawnmenu vehicle") then

@@ -1884,14 +1884,14 @@ YRP:AddNetworkString("nws_yrp_ply_kick")
 net.Receive("nws_yrp_ply_kick", function(len, ply)
 	if not ply:HasAccess("nws_yrp_ply_kick", true) then return end
 	local _target = net.ReadEntity()
-	if YRPEntityAlive(_target) then _target:Kick("You get kicked by " .. ply:YRPName()) end
+	if YRPPlayerAlive(_target) then _target:Kick("You get kicked by " .. ply:YRPName()) end
 end)
 
 YRP:AddNetworkString("nws_yrp_ply_ban")
 net.Receive("nws_yrp_ply_ban", function(len, ply)
 	if not ply:HasAccess("nws_yrp_ply_ban", true) then return end
 	local _target = net.ReadEntity()
-	if YRPEntityAlive(_target) then
+	if YRPPlayerAlive(_target) then
 		_target:Ban(24 * 60, false)
 		_target:Kick("You get banned for 24 hours by " .. ply:YRPName())
 	else
@@ -1926,7 +1926,7 @@ YRP:AddNetworkString("nws_yrp_tp_tpto")
 net.Receive("nws_yrp_tp_tpto", function(len, ply)
 	if IsValid(ply) and ply:HasAccess("nws_yrp_tp_tpto", true) then
 		local _target = net.ReadEntity()
-		if _target and IsValid(_target) then
+		if YRPPlayerAlive(_target) then
 			ply:SetYRPVector("yrpoldpos", ply:GetPos())
 			YRPTeleportToPoint(ply, _target:GetPos())
 		end
@@ -1937,7 +1937,7 @@ YRP:AddNetworkString("nws_yrp_tp_bring")
 net.Receive("nws_yrp_tp_bring", function(len, ply)
 	if not ply:HasAccess("nws_yrp_tp_bring", true) then return end
 	local _target = net.ReadEntity()
-	if _target and IsValid(_target) then
+	if YRPPlayerAlive(_target) then
 		_target:SetYRPVector("yrpoldpos", _target:GetPos())
 		YRPTeleportToPoint(_target, ply:GetPos())
 	end
@@ -1947,7 +1947,7 @@ YRP:AddNetworkString("nws_yrp_tp_return")
 net.Receive("nws_yrp_tp_return", function(len, ply)
 	if not ply:HasAccess("nws_yrp_tp_return", true) then return end
 	local _target = net.ReadEntity()
-	if _target and IsValid(_target) and _target:GetYRPVector("yrpoldpos") ~= Vector(0, 0, 0) then
+	if YRPPlayerAlive(_target) and _target:GetYRPVector("yrpoldpos") ~= Vector(0, 0, 0) then
 		YRPTeleportToPoint(_target, _target:GetYRPVector("yrpoldpos"))
 		_target:SetYRPVector("yrpoldpos", Vector(0, 0, 0)) -- RESET
 	end
@@ -1957,14 +1957,14 @@ YRP:AddNetworkString("nws_yrp_tp_jail")
 net.Receive("nws_yrp_tp_jail", function(len, ply)
 	if not ply:HasAccess("nws_yrp_tp_jail", true) then return end
 	local _target = net.ReadEntity()
-	if _target and IsValid(_target) then teleportToJailpoint(_target, 5 * 60) end
+	if YRPPlayerAlive(_target) then teleportToJailpoint(_target, 5 * 60) end
 end)
 
 YRP:AddNetworkString("nws_yrp_tp_unjail")
 net.Receive("nws_yrp_tp_unjail", function(len, ply)
 	if not ply:HasAccess("nws_yrp_tp_unjail", true) then return end
 	local _target = net.ReadEntity()
-	if _target and IsValid(_target) then teleportToReleasepoint(_target) end
+	if YRPPlayerAlive(_target) then teleportToReleasepoint(_target) end
 end)
 
 function YRPIsRagdoll(ply)
@@ -2010,35 +2010,35 @@ YRP:AddNetworkString("nws_yrp_ragdoll")
 net.Receive("nws_yrp_ragdoll", function(len, ply)
 	if not ply:HasAccess("nws_yrp_ragdoll", true) then return end
 	local _target = net.ReadEntity()
-	if YRPEntityAlive(_target) then YRPDoRagdoll(_target) end
+	if YRPPlayerAlive(_target) then YRPDoRagdoll(_target) end
 end)
 
 YRP:AddNetworkString("nws_yrp_unragdoll")
 net.Receive("nws_yrp_unragdoll", function(len, ply)
 	if not ply:HasAccess("nws_yrp_unragdoll", true) then return end
 	local _target = net.ReadEntity()
-	if YRPEntityAlive(_target) then YRPDoUnRagdoll(_target) end
+	if YRPPlayerAlive(_target) then YRPDoUnRagdoll(_target) end
 end)
 
 YRP:AddNetworkString("nws_yrp_freeze")
 net.Receive("nws_yrp_freeze", function(len, ply)
 	if not ply:HasAccess("nws_yrp_freeze", true) then return end
 	local _target = net.ReadEntity()
-	if YRPEntityAlive(_target) and _target.Freeze then _target:Freeze(true) end
+	if YRPPlayerAlive(_target) and _target.Freeze then _target:Freeze(true) end
 end)
 
 YRP:AddNetworkString("nws_yrp_unfreeze")
 net.Receive("nws_yrp_unfreeze", function(len, ply)
 	if not ply:HasAccess("nws_yrp_unfreeze", true) then return end
 	local _target = net.ReadEntity()
-	if YRPEntityAlive(_target) then _target:Freeze(false) end
+	if YRPPlayerAlive(_target) then _target:Freeze(false) end
 end)
 
 YRP:AddNetworkString("nws_yrp_god")
 net.Receive("nws_yrp_god", function(len, ply)
 	if not ply:HasAccess("nws_yrp_god", true) then return end
 	local _target = net.ReadEntity()
-	if YRPEntityAlive(_target) then
+	if YRPPlayerAlive(_target) then
 		_target:GodEnable()
 		_target:AddFlags(FL_GODMODE)
 		_target:SetYRPBool("godmode", true)
@@ -2049,7 +2049,7 @@ YRP:AddNetworkString("nws_yrp_ungod")
 net.Receive("nws_yrp_ungod", function(len, ply)
 	if not ply:HasAccess("nws_yrp_ungod", true) then return end
 	local _target = net.ReadEntity()
-	if YRPEntityAlive(_target) then
+	if YRPPlayerAlive(_target) then
 		_target:GodDisable()
 		_target:RemoveFlags(FL_GODMODE)
 		_target:SetYRPBool("godmode", false)
@@ -2060,56 +2060,56 @@ YRP:AddNetworkString("nws_yrp_cloak")
 net.Receive("nws_yrp_cloak", function(len, ply)
 	if not ply:HasAccess("nws_yrp_cloak", true) then return end
 	local _target = net.ReadEntity()
-	if YRPEntityAlive(_target) then _target:SetYRPBool("cloaked", true) end
+	if YRPPlayerAlive(_target) then _target:SetYRPBool("cloaked", true) end
 end)
 
 YRP:AddNetworkString("nws_yrp_uncloak")
 net.Receive("nws_yrp_uncloak", function(len, ply)
 	if not ply:HasAccess("nws_yrp_uncloak", true) then return end
 	local _target = net.ReadEntity()
-	if YRPEntityAlive(_target) then _target:SetYRPBool("cloaked", false) end
+	if YRPPlayerAlive(_target) then _target:SetYRPBool("cloaked", false) end
 end)
 
 YRP:AddNetworkString("nws_yrp_blind")
 net.Receive("nws_yrp_blind", function(len, ply)
 	if not ply:HasAccess("nws_yrp_blind", true) then return end
 	local _target = net.ReadEntity()
-	if YRPEntityAlive(_target) then _target:SetYRPBool("blinded", true) end
+	if YRPPlayerAlive(_target) then _target:SetYRPBool("blinded", true) end
 end)
 
 YRP:AddNetworkString("nws_yrp_unblind")
 net.Receive("nws_yrp_unblind", function(len, ply)
 	if not ply:HasAccess("nws_yrp_unblind", true) then return end
 	local _target = net.ReadEntity()
-	if YRPEntityAlive(_target) then _target:SetYRPBool("blinded", false) end
+	if YRPPlayerAlive(_target) then _target:SetYRPBool("blinded", false) end
 end)
 
 YRP:AddNetworkString("nws_yrp_ignite")
 net.Receive("nws_yrp_ignite", function(len, ply)
 	if not ply:HasAccess("nws_yrp_ignite", true) then return end
 	local _target = net.ReadEntity()
-	if YRPEntityAlive(_target) then _target:Ignite(10, 10) end
+	if YRPPlayerAlive(_target) then _target:Ignite(10, 10) end
 end)
 
 YRP:AddNetworkString("nws_yrp_extinguish")
 net.Receive("nws_yrp_extinguish", function(len, ply)
 	if not ply:HasAccess("nws_yrp_extinguish", true) then return end
 	local _target = net.ReadEntity()
-	if YRPEntityAlive(_target) then _target:Extinguish() end
+	if YRPPlayerAlive(_target) then _target:Extinguish() end
 end)
 
 YRP:AddNetworkString("nws_yrp_slay")
 net.Receive("nws_yrp_slay", function(len, ply)
 	if not ply:HasAccess("nws_yrp_slay", true) then return end
 	local _target = net.ReadEntity()
-	if YRPEntityAlive(_target) then _target:Kill() end
+	if YRPPlayerAlive(_target) then _target:Kill() end
 end)
 
 YRP:AddNetworkString("nws_yrp_slap")
 net.Receive("nws_yrp_slap", function(len, ply)
 	if not ply:HasAccess("nws_yrp_slap", true) then return end
 	local _target = net.ReadEntity()
-	if YRPEntityAlive(_target) then _target:SetVelocity(Vector(0, 0, 600)) end
+	if YRPPlayerAlive(_target) then _target:SetVelocity(Vector(0, 0, 600)) end
 end)
 
 -- YRPRepairSQLDB

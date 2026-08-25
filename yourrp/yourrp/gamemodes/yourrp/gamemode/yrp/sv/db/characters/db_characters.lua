@@ -1063,7 +1063,7 @@ YRP:AddNetworkString("nws_yrp_set_rpname")
 net.Receive("nws_yrp_set_rpname", function(len, ply)
 	local p = net.ReadEntity()
 	if not ply:GetYRPBool("bool_players", false) then return end
-	if IsValid(p) then
+	if YRPPlayerAlive(p) then
 		local rpname = net.ReadString()
 		rpname = YRPCleanUpName(rpname)
 		p:SetRPName(rpname, "set_rpname", true)
@@ -1074,7 +1074,7 @@ YRP:AddNetworkString("nws_yrp_set_idcardid")
 net.Receive("nws_yrp_set_idcardid", function(len, ply)
 	local p = net.ReadEntity()
 	if not ply:GetYRPBool("bool_players", false) then return end
-	if IsValid(p) then
+	if YRPPlayerAlive(p) then
 		local text_idcardid = net.ReadString()
 		if IsNotNilAndNotFalse(p:CharID()) then
 			local ptab = YRP_SQL_SELECT(DATABASE_NAME, "text_idcardid", "uniqueID = '" .. p:CharID() .. "'")
