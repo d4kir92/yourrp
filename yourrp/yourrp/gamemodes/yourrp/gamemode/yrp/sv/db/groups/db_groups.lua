@@ -97,6 +97,7 @@ hook.Add(
 				net.Receive(
 					tab.netstr,
 					function(len, ply)
+						if not ply:CanAccess("bool_groupsandroles") then return end
 						local uid = tonumber(net.ReadString())
 						local s = net.ReadString()
 						tab.ply = ply
@@ -150,6 +151,7 @@ hook.Add(
 				net.Receive(
 					tab.netstr,
 					function(len, ply)
+						if not ply:CanAccess("bool_groupsandroles") then return end
 						local uid = tonumber(net.ReadString())
 						local int = tonumber(net.ReadString())
 						local cur = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. uid .. "'")
@@ -178,6 +180,7 @@ hook.Add(
 				net.Receive(
 					tab.netstr,
 					function(len, ply)
+						if not ply:CanAccess("bool_groupsandroles") then return end
 						local uid = tonumber(net.ReadString())
 						local bool = tonumber(net.ReadString())
 						tab.ply = ply
