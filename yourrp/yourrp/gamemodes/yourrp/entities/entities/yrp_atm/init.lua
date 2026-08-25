@@ -65,78 +65,32 @@ function ENT:ChangeMenu()
 	end
 end
 
-function ENT:ATMPressPrev(ply)
-	local _tmpPlayers = YRP_SQL_SELECT("yrp_characters", "*", nil)
-	self.namePos = self.namePos - 4
-	if self.namePos < 1 then self.namePos = 1 end
-	local names = {}
-	local SteamIDs = {}
-	local i = 1
-	self.names = {}
-	self.SteamIDs = {}
-	if _tmpPlayers then
-		for k, v in pairs(_tmpPlayers) do
-			if k >= self.namePos then
-				if v.rpname ~= nil and v.rpname ~= NULL then
-					names[i] = v.rpname
-					SteamIDs[i] = v.uniqueID
-				else
-					names[i] = ""
-					SteamIDs[i] = ""
-				end
-
-				i = i + 1
-				if i > 4 then break end
-			end
-		end
-	end
-
-	for n = 1, 4 do
-		if names[n] and SteamIDs[n] and not strEmpty(tostring(names[n])) then
-			self:SetYRPString("name" .. n, tostring(names[n]))
-			self:SetYRPString("SteamID" .. n, tostring(SteamIDs[n]))
+local ATM_NAMES_PER_PAGE = 4
+function ENT:ATMShowPage(pos)
+	if pos < 1 then pos = 1 end
+	local rows = YRP_SQL_SELECT("yrp_characters", "uniqueID, rpname", nil, "ORDER BY uniqueID LIMIT " .. ATM_NAMES_PER_PAGE .. " OFFSET " .. (pos - 1))
+	if not IsNotNilAndNotFalse(rows) or rows[1] == nil then return false end
+	self.namePos = pos
+	for n = 1, ATM_NAMES_PER_PAGE do
+		local row = rows[n]
+		if row ~= nil and row.uniqueID ~= nil and not strEmpty(tostring(row.rpname or "")) then
+			self:SetYRPString("name" .. n, tostring(row.rpname))
+			self:SetYRPString("SteamID" .. n, tostring(row.uniqueID))
 		else
 			self:SetYRPString("name" .. n, "nil")
 			self:SetYRPString("SteamID" .. n, "nil")
 		end
 	end
+
+	return true
+end
+
+function ENT:ATMPressPrev(ply)
+	self:ATMShowPage(self.namePos - ATM_NAMES_PER_PAGE)
 end
 
 function ENT:ATMPressNext(ply)
-	local _tmpPlayers = YRP_SQL_SELECT("yrp_characters", "*", nil)
-	if not IsNotNilAndNotFalse(_tmpPlayers) or self.namePos + 4 > #_tmpPlayers then return end
-	self.namePos = self.namePos + 4
-	local names = {}
-	local SteamIDs = {}
-	local i = 1
-	self.names = {}
-	self.SteamIDs = {}
-	if _tmpPlayers then
-		for k, v in pairs(_tmpPlayers) do
-			if k >= self.namePos then
-				if v.rpname ~= nil and v.rpname ~= NULL then
-					names[i] = v.rpname
-					SteamIDs[i] = v.uniqueID
-				else
-					names[i] = ""
-					SteamIDs[i] = ""
-				end
-
-				i = i + 1
-				if i > 4 then break end
-			end
-		end
-	end
-
-	for n = 1, 4 do
-		if names[n] and SteamIDs[n] and not strEmpty(tostring(names[n])) then
-			self:SetYRPString("name" .. n, tostring(names[n]))
-			self:SetYRPString("SteamID" .. n, tostring(SteamIDs[n]))
-		else
-			self:SetYRPString("name" .. n, "nil")
-			self:SetYRPString("SteamID" .. n, "nil")
-		end
-	end
+	self:ATMShowPage(self.namePos + ATM_NAMES_PER_PAGE)
 end
 
 function ENT:createButtonNumber(parent, up, forward, right, add)
