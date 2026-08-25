@@ -38,7 +38,6 @@ function ENT:Initialize()
 	self.buttons = {}
 	self.namePos = 1
 	self:SetYRPString("prevstatus", "")
-	ent = self
 end
 
 function ENT:OnRemove()
@@ -51,13 +50,13 @@ function ENT:Use(activator, caller)
 	return
 end
 
-local pressed = false
+local OTHERMONEY_MAX_DIGITS = 9
 function ENT:ChangeMenu()
 	self.menu.home = false
 	self.menu.withdraw = false
 	self.menu.deposit = false
 	self.menu.transfer = false
-	self.menu.other = falsecha
+	self.menu.other = false
 	self.menu.fail = false
 	for k, v in pairs(self.buttons) do
 		if v ~= nil and v ~= NULL then
@@ -90,34 +89,25 @@ function ENT:ATMPressPrev(ply)
 				end
 
 				i = i + 1
-				if self.namePos > self.namePos + 4 then break end
+				if i > 4 then break end
 			end
 		end
 	end
 
-	if names[1] and SteamIDs[1] then
-		self:SetYRPString("name1", tostring(names[1]))
-		self:SetYRPString("SteamID1", tostring(SteamIDs[1]))
-	end
-
-	if names[2] and SteamIDs[2] then
-		self:SetYRPString("name2", tostring(names[2]))
-		self:SetYRPString("SteamID2", tostring(SteamIDs[2]))
-	end
-
-	if names[3] and SteamIDs[3] then
-		self:SetYRPString("name3", tostring(names[3]))
-		self:SetYRPString("SteamID3", tostring(SteamIDs[3]))
-	end
-
-	if names[4] and SteamIDs[4] then
-		self:SetYRPString("name4", tostring(names[4]))
-		self:SetYRPString("SteamID4", tostring(SteamIDs[4]))
+	for n = 1, 4 do
+		if names[n] and SteamIDs[n] and not strEmpty(tostring(names[n])) then
+			self:SetYRPString("name" .. n, tostring(names[n]))
+			self:SetYRPString("SteamID" .. n, tostring(SteamIDs[n]))
+		else
+			self:SetYRPString("name" .. n, "nil")
+			self:SetYRPString("SteamID" .. n, "nil")
+		end
 	end
 end
 
 function ENT:ATMPressNext(ply)
-	local _tmpPlayers = YRP_SQL_SELECT("yrp_players", "*", nil)
+	local _tmpPlayers = YRP_SQL_SELECT("yrp_characters", "*", nil)
+	if not IsNotNilAndNotFalse(_tmpPlayers) or self.namePos + 4 > #_tmpPlayers then return end
 	self.namePos = self.namePos + 4
 	local names = {}
 	local SteamIDs = {}
@@ -136,29 +126,19 @@ function ENT:ATMPressNext(ply)
 				end
 
 				i = i + 1
-				if self.namePos > self.namePos + 4 then break end
+				if i > 4 then break end
 			end
 		end
 	end
 
-	if names[1] and SteamIDs[1] then
-		self:SetYRPString("name1", tostring(names[1]))
-		self:SetYRPString("SteamID1", tostring(SteamIDs[1]))
-	end
-
-	if names[2] and SteamIDs[2] then
-		self:SetYRPString("name2", tostring(names[2]))
-		self:SetYRPString("SteamID2", tostring(SteamIDs[2]))
-	end
-
-	if names[3] and SteamIDs[3] then
-		self:SetYRPString("name3", tostring(names[3]))
-		self:SetYRPString("SteamID3", tostring(SteamIDs[3]))
-	end
-
-	if names[4] and SteamIDs[4] then
-		self:SetYRPString("name4", tostring(names[4]))
-		self:SetYRPString("SteamID4", tostring(SteamIDs[4]))
+	for n = 1, 4 do
+		if names[n] and SteamIDs[n] and not strEmpty(tostring(names[n])) then
+			self:SetYRPString("name" .. n, tostring(names[n]))
+			self:SetYRPString("SteamID" .. n, tostring(SteamIDs[n]))
+		else
+			self:SetYRPString("name" .. n, "nil")
+			self:SetYRPString("SteamID" .. n, "nil")
+		end
 	end
 end
 
@@ -172,28 +152,72 @@ function ENT:createButtonNumber(parent, up, forward, right, add)
 	tmp:SetRenderMode(RENDERMODE_TRANSALPHA)
 	tmp.parent = parent
 	function tmp:Use(activator, caller, useType, value)
-		if not pressed then
-			pressed = true
-			local filename = "buttons/button14.wav"
-			util.PrecacheSound(filename)
-			self:EmitSound(filename, 75, 100, 1, CHAN_AUTO)
-			if add ~= "<" then
-				tmp.parent:SetYRPString("othermoney", tmp.parent:GetYRPString("othermoney", "") .. add)
-			else
-				local stringExp = string.sub(tmp.parent:GetYRPString("othermoney"), 1, string.len(tmp.parent:GetYRPString("othermoney")) - 1)
-				tmp.parent:SetYRPString("othermoney", stringExp)
+		if not IsValid(parent) or parent.pressed then return end
+		parent.pressed = true
+		local filename = "buttons/button14.wav"
+		util.PrecacheSound(filename)
+		self:EmitSound(filename, 75, 100, 1, CHAN_AUTO)
+		local cur = parent:GetYRPString("othermoney", "")
+		if add ~= "<" then
+			if string.len(cur) < OTHERMONEY_MAX_DIGITS then
+				parent:SetYRPString("othermoney", cur .. add)
 			end
-
-			timer.Simple(
-				0.2,
-				function()
-					pressed = false
-				end
-			)
+		else
+			parent:SetYRPString("othermoney", string.sub(cur, 1, string.len(cur) - 1))
 		end
+
+		timer.Simple(
+			0.2,
+			function()
+				if IsValid(parent) then
+					parent.pressed = false
+				end
+			end
+		)
 	end
 
 	return tmp
+end
+
+function ATMTransfer(atm, activator, amount)
+	if not activator:canAffordBank(amount) then return end
+	local targetID = tonumber(atm:GetYRPString("SteamID"))
+	if targetID == nil then
+		YRP:msg("note", "[ATM] no valid transfer target")
+
+		return
+	end
+
+	local dbSelectActivator = YRP_SQL_SELECT("yrp_characters", "*", "uniqueID = " .. activator:CharID())
+	local dbSelectTarget = YRP_SQL_SELECT("yrp_characters", "*", "uniqueID = " .. targetID)
+	if not IsNotNilAndNotFalse(dbSelectActivator) or dbSelectActivator[1] == nil then return end
+	if not IsNotNilAndNotFalse(dbSelectTarget) or dbSelectTarget[1] == nil then return end
+	if dbSelectTarget[1].SteamID == activator:YRPSteamID() then return end
+	local fromBank = (tonumber(dbSelectActivator[1].moneybank) or 0) - amount
+	local toBank = (tonumber(dbSelectTarget[1].moneybank) or 0) + amount
+	YRP_SQL_UPDATE(
+		"yrp_characters",
+		{
+			["moneybank"] = fromBank
+		}, "uniqueID = " .. activator:CharID()
+	)
+
+	YRP_SQL_UPDATE(
+		"yrp_characters",
+		{
+			["moneybank"] = toBank
+		}, "uniqueID = " .. targetID
+	)
+
+	activator:SetYRPString("moneybank", fromBank)
+	for k, v in pairs(player.GetAll()) do
+		if tonumber(v:CharID()) == targetID then
+			v:SetYRPString("moneybank", toBank)
+			break
+		end
+	end
+
+	YRP:msg("note", activator:RPName() .. " transfered " .. GetGlobalYRPString("text_money_pre", "") .. amount .. GetGlobalYRPString("text_money_pos", "") .. " to " .. dbSelectTarget[1].rpname)
 end
 
 function ENT:createButton(parent, up, forward, right, status, _money, func)
@@ -207,103 +231,70 @@ function ENT:createButton(parent, up, forward, right, status, _money, func)
 	tmp.parent = parent
 	tmp.money = tonumber(_money)
 	function tmp:Use(activator, caller, useType, value)
-		if not pressed then
-			pressed = true
-			local filename = "buttons/button14.wav"
-			util.PrecacheSound(filename)
-			self:EmitSound(filename, 75, 100, 1, CHAN_AUTO)
-			if func ~= nil then
-				if func == "ATMPressNext" then
-					self.parent:ATMPressNext(activator)
-				elseif func == "ATMPressPrev" then
-					self.parent:ATMPressPrev(activator)
-				elseif func == "ATMPressPlayer1" then
-					self.parent:SetYRPString("name", self.parent:GetYRPString("name1"))
-					self.parent:SetYRPString("SteamID", self.parent:GetYRPString("SteamID1"))
-				elseif func == "ATMPressPlayer2" then
-					self.parent:SetYRPString("name", self.parent:GetYRPString("name2"))
-					self.parent:SetYRPString("SteamID", self.parent:GetYRPString("SteamID2"))
-				elseif func == "ATMPressPlayer3" then
-					self.parent:SetYRPString("name", self.parent:GetYRPString("name3"))
-					self.parent:SetYRPString("SteamID", self.parent:GetYRPString("SteamID3"))
-				elseif func == "ATMPressPlayer4" then
-					self.parent:SetYRPString("name", self.parent:GetYRPString("name4"))
-					self.parent:SetYRPString("SteamID", self.parent:GetYRPString("SteamID4"))
-				elseif func == "confirm" then
-					if self.parent:GetYRPString("prevstatus") == "withdraw" then
-						self.money = -tonumber(self.parent:GetYRPString("othermoney", "0"))
-					elseif self.parent:GetYRPString("prevstatus") == "deposit" then
-						self.money = tonumber(self.parent:GetYRPString("othermoney", "0"))
-					elseif self.parent:GetYRPString("prevstatus") == "transfer" then
-						self.money = tonumber(self.parent:GetYRPString("othermoney", "0"))
-						if self.money ~= nil and isnumber(self.money) then
-							if self.money > 0 and activator:canAffordBank(self.money) then
-								local dbSelectActivator = YRP_SQL_SELECT("yrp_characters", "*", "uniqueID = " .. activator:CharID())
-								local dbSelectTarget = YRP_SQL_SELECT("yrp_characters", "*", "uniqueID = " .. tostring(self.parent:GetYRPString("SteamID")))
-								if dbSelectActivator and dbSelectTarget and dbSelectTarget[1] ~= nil and dbSelectTarget[1].SteamID ~= activator:YRPSteamID() then
-									dbSelectActivator[1].moneybank = dbSelectActivator[1].moneybank - self.money
-									YRP_SQL_UPDATE(
-										"yrp_characters",
-										{
-											["moneybank"] = dbSelectActivator[1].moneybank
-										}, "uniqueID = " .. activator:CharID()
-									)
-
-									dbSelectTarget[1].moneybank = dbSelectTarget[1].moneybank + self.money
-									YRP_SQL_UPDATE(
-										"yrp_characters",
-										{
-											["moneybank"] = dbSelectTarget[1].moneybank
-										}, "uniqueID = '" .. self.parent:GetYRPString("SteamID") .. "'"
-									)
-
-									activator:SetYRPString("moneybank", dbSelectActivator[1].moneybank)
-									for k, v in pairs(player.GetAll()) do
-										if v:YRPSteamID() == dbSelectTarget[1].SteamID then
-											v:SetYRPString("moneybank", dbSelectTarget[1].moneybank)
-											break
-										end
-									end
-
-									YRP:msg("note", activator:RPName() .. " transfered " .. GetGlobalYRPString("text_money_pre", "") .. self.money .. GetGlobalYRPString("text_money_pos", "") .. " to " .. dbSelectTarget[1].rpname)
-								end
-							end
-						else
-							YRP:msg("note", "self.money is not a number.")
-						end
-
-						self.money = nil
-					end
+		if not IsValid(parent) or parent.pressed then return end
+		if not IsValid(activator) or not activator:IsPlayer() then return end
+		parent.pressed = true
+		timer.Simple(
+			0.2,
+			function()
+				if IsValid(parent) then
+					parent.pressed = false
 				end
 			end
+		)
 
-			if status ~= nil then
-				self.parent:SetYRPString("status", status)
+		local filename = "buttons/button14.wav"
+		util.PrecacheSound(filename)
+		self:EmitSound(filename, 75, 100, 1, CHAN_AUTO)
+		local money = self.money
+		if func == "ATMPressNext" then
+			parent:ATMPressNext(activator)
+		elseif func == "ATMPressPrev" then
+			parent:ATMPressPrev(activator)
+		elseif func == "ATMPressPlayer1" then
+			parent:SetYRPString("name", parent:GetYRPString("name1"))
+			parent:SetYRPString("SteamID", parent:GetYRPString("SteamID1"))
+		elseif func == "ATMPressPlayer2" then
+			parent:SetYRPString("name", parent:GetYRPString("name2"))
+			parent:SetYRPString("SteamID", parent:GetYRPString("SteamID2"))
+		elseif func == "ATMPressPlayer3" then
+			parent:SetYRPString("name", parent:GetYRPString("name3"))
+			parent:SetYRPString("SteamID", parent:GetYRPString("SteamID3"))
+		elseif func == "ATMPressPlayer4" then
+			parent:SetYRPString("name", parent:GetYRPString("name4"))
+			parent:SetYRPString("SteamID", parent:GetYRPString("SteamID4"))
+		elseif func == "confirm" then
+			money = nil
+			local amount = tonumber(parent:GetYRPString("othermoney", ""))
+			local prev = parent:GetYRPString("prevstatus")
+			if amount == nil or amount <= 0 then
+				YRP:msg("note", "[ATM] no valid amount entered")
+			elseif prev == "withdraw" then
+				money = -amount
+			elseif prev == "deposit" then
+				money = amount
+			elseif prev == "transfer" then
+				ATMTransfer(parent, activator, amount)
 			end
-
-			timer.Simple(
-				0.2,
-				function()
-					pressed = false
-				end
-			)
-
-			if self.money ~= nil and isnumber(tonumber(self.money)) then
-				if self.money > 0 then
-					if activator:canAfford(self.money) then
-						activator:addMoneyBank(self.money)
-						activator:addMoney(-self.money)
-					end
-				else
-					if activator:canAffordBank(self.money) then
-						activator:addMoneyBank(self.money)
-						activator:addMoney(-self.money)
-					end
-				end
-			end
-
-			self.parent:ChangeMenu()
 		end
+
+		if status ~= nil then
+			parent:SetYRPString("status", status)
+		end
+
+		if money ~= nil then
+			if money > 0 then
+				if activator:canAfford(money) then
+					activator:addMoneyBank(money)
+					activator:addMoney(-money)
+				end
+			elseif activator:canAffordBank(money) then
+				activator:addMoneyBank(money)
+				activator:addMoney(-money)
+			end
+		end
+
+		parent:ChangeMenu()
 	end
 
 	return tmp
@@ -368,6 +359,7 @@ function ENT:Think()
 	elseif self:GetYRPString("status") == "other" then
 		if not self.menu.other then
 			self.menu.other = true
+			self:SetYRPString("othermoney", "")
 			self.buttons.remove = self:createButtonNumber(self, 50.5, 6.7, -0.8, "<")
 			self.buttons.add1 = self:createButtonNumber(self, 48.8, 8.4, 6.4, "1")
 			self.buttons.add2 = self:createButtonNumber(self, 48.8, 8.4, 4.0, "2")
@@ -384,6 +376,7 @@ function ENT:Think()
 		end
 	else
 		if self:GetYRPString("status") ~= "startup" and self:GetYRPString("status") ~= "logo" and not self.menu.fail then
+			self.menu.fail = true
 			self.buttons.failBack = self:createButton(self, 43.48, 13.32, 8.8, "home", nil)
 		end
 	end
