@@ -258,13 +258,8 @@ function YRP_SQL_QUERY(query, sqlite)
 
 	if GetSQLMode() == 0 or sqlite then
 		local _result = sql.Query(query)
-		if _result == nil then
-			return _result
-		elseif _result == false then
-			return _result
-		else
-			return _result
-		end
+		if istable(_result) and #_result == 0 then return nil end
+		return _result
 	elseif GetSQLMode() == 1 then
 		if YRPSQL.db ~= nil then
 			local que = YRPSQL.db:query(query)
