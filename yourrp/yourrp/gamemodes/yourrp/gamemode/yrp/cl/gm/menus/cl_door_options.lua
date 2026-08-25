@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local yrp_door = {}
 yrp_door.waitforanswer = false
 function YRPToggleDoorOptions(door)
@@ -19,46 +19,43 @@ function YRPCloseDoorOptions()
 	end
 end
 
-net.Receive(
-	"nws_yrp_sendBuildingInfo",
-	function(len)
-		YRP:msg("note", "[DoorOptions] Got Date from Server")
-		local force = net.ReadBool()
-		if yrp_door.waitforanswer or force then
-			yrp_door.waitforanswer = false
-			local door = net.ReadEntity()
-			local tab = net.ReadTable()
-			if IsNotNilAndNotFalse(tab) then
-				local tabBuilding = tab["B"]
-				local tabOwner = tab["O"]
-				local tabGroup = tab["G"]
-				if GetGlobalYRPBool("bool_building_system", false) then
-					if YRPEntityAlive(door) then
-						if LocalPlayer():GetYRPBool("bool_" .. "ishobo", false) then
-							YRP:msg("note", "[Building] You are a HOBO")
-							LocalPlayer():PrintMessage(HUD_PRINTCENTER, "[Building] You are a HOBO")
-						elseif table.Count(tabOwner) > 0 or table.Count(tabGroup) > 0 then
-							YRPDoorOptionWindow(door, tabBuilding, tabOwner, tabGroup)
-						else
-							YRPDoorBuyWindow(door, tabBuilding)
-						end
+net.Receive("nws_yrp_sendBuildingInfo", function(len)
+	YRP:msg("note", "[DoorOptions] Got Date from Server")
+	local force = net.ReadBool()
+	if yrp_door.waitforanswer or force then
+		yrp_door.waitforanswer = false
+		local door = net.ReadEntity()
+		local tab = net.ReadTable()
+		if IsNotNilAndNotFalse(tab) then
+			local tabBuilding = tab["B"]
+			local tabOwner = tab["O"]
+			local tabGroup = tab["G"]
+			if GetGlobalYRPBool("bool_building_system", false) then
+				if YRPEntityAlive(door) then
+					if LocalPlayer():GetYRPBool("bool_" .. "ishobo", false) then
+						YRP:msg("note", "[Building] You are a HOBO")
+						LocalPlayer():PrintMessage(HUD_PRINTCENTER, "[Building] You are a HOBO")
+					elseif table.Count(tabOwner) > 0 or table.Count(tabGroup) > 0 then
+						YRPDoorOptionWindow(door, tabBuilding, tabOwner, tabGroup)
 					else
-						YRP:msg("note", "[Building] Building not alive")
-						LocalPlayer():PrintMessage(HUD_PRINTCENTER, "[Building] Building not alive")
+						YRPDoorBuyWindow(door, tabBuilding)
 					end
 				else
-					YRP:msg("note", "[Building] Building System Disabled")
-					LocalPlayer():PrintMessage(HUD_PRINTCENTER, "[Building] Building System Disabled")
+					YRP:msg("note", "[Building] Building not alive")
+					LocalPlayer():PrintMessage(HUD_PRINTCENTER, "[Building] Building not alive")
 				end
 			else
-				YRP:msg("note", "getBuildingInfo net Table broken")
-				LocalPlayer():PrintMessage(HUD_PRINTCENTER, "[Building] net Table broken")
+				YRP:msg("note", "[Building] Building System Disabled")
+				LocalPlayer():PrintMessage(HUD_PRINTCENTER, "[Building] Building System Disabled")
 			end
 		else
-			YRP:msg("note", "Got Door Data to late!")
+			YRP:msg("note", "getBuildingInfo net Table broken")
+			LocalPlayer():PrintMessage(HUD_PRINTCENTER, "[Building] net Table broken")
 		end
+	else
+		YRP:msg("note", "Got Door Data to late!")
 	end
-)
+end)
 
 function YRPDoorBuyWindow(door, tabBuilding)
 	tabBuilding.bool_canbeowned = tobool(tabBuilding.bool_canbeowned)
@@ -67,31 +64,22 @@ function YRPDoorBuyWindow(door, tabBuilding)
 	local _doors = 0
 	local _tmpDoors = ents.FindByClass("prop_door_rotating")
 	for k, v in pairs(_tmpDoors) do
-		if tonumber(v:GetYRPString("buildingID", "-1")) == tonumber(tabBuilding.uniqueID) then
-			_doors = _doors + 1
-		end
+		if tonumber(v:GetYRPString("buildingID", "-1")) == tonumber(tabBuilding.uniqueID) then _doors = _doors + 1 end
 	end
 
 	local _tmpFDoors = ents.FindByClass("func_door")
 	for k, v in pairs(_tmpFDoors) do
-		if tonumber(v:GetYRPString("buildingID", "-1")) == tonumber(tabBuilding.uniqueID) then
-			_doors = _doors + 1
-		end
+		if tonumber(v:GetYRPString("buildingID", "-1")) == tonumber(tabBuilding.uniqueID) then _doors = _doors + 1 end
 	end
 
 	local _tmpFRDoors = ents.FindByClass("func_door_rotating")
 	for k, v in pairs(_tmpFRDoors) do
-		if tonumber(v:GetYRPString("buildingID", "-1")) == tonumber(tabBuilding.uniqueID) then
-			_doors = _doors + 1
-		end
+		if tonumber(v:GetYRPString("buildingID", "-1")) == tonumber(tabBuilding.uniqueID) then _doors = _doors + 1 end
 	end
 
 	local br = YRP:ctr(20)
 	yrp_door.window = YRPCreateD("YFrame", nil, YRP:ctr(1100), YRP:ctr(760), 0, 0)
-	if not lply:HasAccess("YRPDoorBuyWindow1") then
-		yrp_door.window:SetTall(YRP:ctr(300))
-	end
-
+	if not lply:HasAccess("YRPDoorBuyWindow1") then yrp_door.window:SetTall(YRP:ctr(300)) end
 	yrp_door.window:SetHeaderHeight(YRP:ctr(100))
 	yrp_door.window:Center()
 	yrp_door.window:MakePopup()
@@ -118,10 +106,7 @@ function YRPDoorBuyWindow(door, tabBuilding)
 	function yrp_door.window.con:Paint(pw, ph)
 		draw.SimpleTextOutlined(YRP:trans("LID_name") .. ": " .. tabBuilding.name, "Y_24_500", br, br, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 255))
 		draw.SimpleTextOutlined(YRP:trans("LID_doors") .. ": " .. _doors, "Y_24_500", br, YRP:ctr(20 + 50), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 255))
-		if GetGlobalYRPBool("bool_canbeowned", true) and tabBuilding.bool_canbeowned then
-			draw.SimpleTextOutlined(YRP:trans("LID_price") .. ": " .. GetGlobalYRPString("text_money_pre", "") .. tabBuilding.buildingprice .. GetGlobalYRPString("text_money_pos", ""), "Y_24_500", br, YRP:ctr(20 + 100), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 255))
-		end
-
+		if GetGlobalYRPBool("bool_canbeowned", true) and tabBuilding.bool_canbeowned then draw.SimpleTextOutlined(YRP:trans("LID_price") .. ": " .. GetGlobalYRPString("text_money_pre", "") .. tabBuilding.buildingprice .. GetGlobalYRPString("text_money_pos", ""), "Y_24_500", br, YRP:ctr(20 + 100), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 255)) end
 		if tostring(door:GetYRPString("buildingID", "-1")) == "-1" then
 			draw.SimpleTextOutlined("Loading IDs", "Y_18_500", pw - br, YRP:ctr(250), Color(255, 255, 255, 255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0, 255))
 		else
@@ -137,10 +122,7 @@ function YRPDoorBuyWindow(door, tabBuilding)
 			draw.SimpleTextOutlined(YRP:trans("LID_price") .. ":", "Y_18_500", br, YRP:ctr(550), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0, 255))
 		end
 
-		if GetGlobalYRPBool("bool_canbeowned", true) then
-			draw.SimpleTextOutlined(YRP:trans("LID_canbeowned"), "Y_18_500", pw - YRP:ctr(450 - 10) - br, YRP:ctr(475), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-		end
-
+		if GetGlobalYRPBool("bool_canbeowned", true) then draw.SimpleTextOutlined(YRP:trans("LID_canbeowned"), "Y_18_500", pw - YRP:ctr(450 - 10) - br, YRP:ctr(475), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255)) end
 		draw.SimpleTextOutlined(YRP:trans("LID_securitylevel") .. ":", "Y_18_500", pw - YRP:ctr(500) - br, YRP:ctr(550), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1, Color(0, 0, 0, 255))
 	end
 
@@ -152,16 +134,12 @@ function YRPDoorBuyWindow(door, tabBuilding)
 				net.Start("nws_yrp_buyBuilding")
 				net.WriteString(tabBuilding.uniqueID)
 				net.SendToServer()
-				if yrp_door.window.Close ~= nil then
-					yrp_door.window:Close()
-				end
+				if yrp_door.window.Close ~= nil then yrp_door.window:Close() end
 			end
 		end
 
 		function _buyButton:Paint(pw, ph)
-			if tabBuilding.bool_canbeowned then
-				hook.Run("YButtonPaint", self, pw, ph)
-			end
+			if tabBuilding.bool_canbeowned then hook.Run("YButtonPaint", self, pw, ph) end
 		end
 	end
 
@@ -179,33 +157,27 @@ function YRPDoorBuyWindow(door, tabBuilding)
 		local _ComboBoxHouseName = YRPCreateD("DComboBox", yrp_door.window.con, YRP:ctr(500), YRP:ctr(50), br, YRP:ctr(350))
 		net.Start("nws_yrp_getBuildings")
 		net.SendToServer()
-		net.Receive(
-			"nws_yrp_getBuildings",
-			function()
-				local _tmpBuildings = net.ReadTable()
-				tabBuilding.uniqueID = tonumber(tabBuilding.uniqueID)
-				if YRPPanelAlive(_ComboBoxHouseName, "_ComboBoxHouseName 1") then
-					_ComboBoxHouseName.setup = true
-					if _ComboBoxHouseName ~= NULL then
-						for k, v in pairs(_tmpBuildings) do
-							v.uniqueID = tonumber(v.uniqueID)
-							if YRPPanelAlive(_ComboBoxHouseName, "_ComboBoxHouseName 2") then
-								local isbuilding = false
-								if v.uniqueID == tabBuilding.uniqueID then
-									isbuilding = true
-								end
-
-								_ComboBoxHouseName:AddChoice(v.name .. " [" .. YRP:trans("LID_doors") .. ": " .. v.doors .. "] [BUID: " .. v.uniqueID .. "]", v.uniqueID, isbuilding)
-							else
-								break
-							end
+		net.Receive("nws_yrp_getBuildings", function()
+			local _tmpBuildings = net.ReadTable()
+			tabBuilding.uniqueID = tonumber(tabBuilding.uniqueID)
+			if YRPPanelAlive(_ComboBoxHouseName, "_ComboBoxHouseName 1") then
+				_ComboBoxHouseName.setup = true
+				if _ComboBoxHouseName ~= NULL then
+					for k, v in pairs(_tmpBuildings) do
+						v.uniqueID = tonumber(v.uniqueID)
+						if YRPPanelAlive(_ComboBoxHouseName, "_ComboBoxHouseName 2") then
+							local isbuilding = false
+							if v.uniqueID == tabBuilding.uniqueID then isbuilding = true end
+							_ComboBoxHouseName:AddChoice(v.name .. " [" .. YRP:trans("LID_doors") .. ": " .. v.doors .. "] [BUID: " .. v.uniqueID .. "]", v.uniqueID, isbuilding)
+						else
+							break
 						end
 					end
-
-					_ComboBoxHouseName.setup = false
 				end
+
+				_ComboBoxHouseName.setup = false
 			end
-		)
+		end)
 
 		function _ComboBoxHouseName:OnSelect(index, value, data)
 			local _tmpData = _ComboBoxHouseName:GetOptionData(index)
@@ -225,35 +197,30 @@ function YRPDoorBuyWindow(door, tabBuilding)
 			net.Start("nws_yrp_addnewbuilding")
 			net.WriteEntity(door)
 			net.SendToServer()
-			if YRPPanelAlive(yrp_door.window) then
-				yrp_door.window:Close()
-			end
+			if YRPPanelAlive(yrp_door.window) then yrp_door.window:Close() end
 		end
 
 		if GetGlobalYRPBool("bool_canbeowned", true) then
 			local _ComboBoxGroupName = YRPCreateD("DComboBox", yrp_door.window.con, YRP:ctr(500), YRP:ctr(50), br, YRP:ctr(450))
 			net.Start("nws_yrp_getBuildingGroups")
 			net.SendToServer()
-			net.Receive(
-				"nws_yrp_getBuildingGroups",
-				function()
-					local _tmpGroups = net.ReadTable()
-					if YRPPanelAlive(_ComboBoxGroupName, "_ComboBoxHouseName 3") then
-						for k, v in pairs(_tmpGroups) do
-							if YRPPanelAlive(_ComboBoxGroupName, "_ComboBoxHouseName 4") then
-								v.uniqueID = tonumber(v.uniqueID)
-								if v.uniqueID == 0 then
-									_ComboBoxGroupName:AddChoice(YRP:trans("LID_public"), v.uniqueID, false)
-								else
-									_ComboBoxGroupName:AddChoice(v.string_name, v.uniqueID, false)
-								end
+			net.Receive("nws_yrp_getBuildingGroups", function()
+				local _tmpGroups = net.ReadTable()
+				if YRPPanelAlive(_ComboBoxGroupName, "_ComboBoxHouseName 3") then
+					for k, v in pairs(_tmpGroups) do
+						if YRPPanelAlive(_ComboBoxGroupName, "_ComboBoxHouseName 4") then
+							v.uniqueID = tonumber(v.uniqueID)
+							if v.uniqueID == 0 then
+								_ComboBoxGroupName:AddChoice(YRP:trans("LID_public"), v.uniqueID, false)
 							else
-								break
+								_ComboBoxGroupName:AddChoice(v.string_name, v.uniqueID, false)
 							end
+						else
+							break
 						end
 					end
 				end
-			)
+			end)
 
 			function _ComboBoxGroupName:OnSelect(index, value, data)
 				local _tmpData = _ComboBoxGroupName:GetOptionData(index)
@@ -322,37 +289,25 @@ function YRPDoorOptionWindow(door, tabBuilding, tabOwner, tabGroup)
 	YRPOpenMenu()
 	local lply = LocalPlayer()
 	local OWNER = false
-	if door:GetYRPString("ownerGroup", "") == "" and door:GetYRPInt("ownerCharID", 0) == LocalPlayer():CharID() then
-		OWNER = true
-	end
-
+	if door:GetYRPString("ownerGroup", "") == "" and door:GetYRPInt("ownerCharID", 0) == LocalPlayer():CharID() then OWNER = true end
 	local _doors = 0
 	local _tmpDoors = ents.FindByClass("prop_door_rotating")
 	for k, v in pairs(_tmpDoors) do
-		if tonumber(v:GetYRPString("buildingID", "-1")) == tonumber(tabBuilding.uniqueID) then
-			_doors = _doors + 1
-		end
+		if tonumber(v:GetYRPString("buildingID", "-1")) == tonumber(tabBuilding.uniqueID) then _doors = _doors + 1 end
 	end
 
 	local _tmpFDoors = ents.FindByClass("func_door")
 	for k, v in pairs(_tmpFDoors) do
-		if tonumber(v:GetYRPString("buildingID", "-1")) == tonumber(tabBuilding.uniqueID) then
-			_doors = _doors + 1
-		end
+		if tonumber(v:GetYRPString("buildingID", "-1")) == tonumber(tabBuilding.uniqueID) then _doors = _doors + 1 end
 	end
 
 	local _tmpFRDoors = ents.FindByClass("func_door_rotating")
 	for k, v in pairs(_tmpFRDoors) do
-		if tonumber(v:GetYRPString("buildingID", "-1")) == tonumber(tabBuilding.uniqueID) then
-			_doors = _doors + 1
-		end
+		if tonumber(v:GetYRPString("buildingID", "-1")) == tonumber(tabBuilding.uniqueID) then _doors = _doors + 1 end
 	end
 
 	yrp_door.window = YRPCreateD("YFrame", nil, YRP:ctr(1100), YRP:ctr(sh), 0, 0)
-	if lply:HasAccess("YRPDoorOptionWindow1") then
-		yrp_door.window:SetTall(YRP:ctr(sh + 240))
-	end
-
+	if lply:HasAccess("YRPDoorOptionWindow1") then yrp_door.window:SetTall(YRP:ctr(sh + 240)) end
 	yrp_door.window:SetHeaderHeight(YRP:ctr(100))
 	yrp_door.window:Center()
 	yrp_door.window:MakePopup()
@@ -384,10 +339,7 @@ function YRPDoorOptionWindow(door, tabBuilding, tabOwner, tabGroup)
 			for i, v in pairs(string.Explode(",", coownerIDs)) do
 				for x, p in pairs(player.GetAll()) do
 					if p:CharID() == tonumber(v) then
-						if not strEmpty(coowners) then
-							coowners = coowners .. ", "
-						end
-
+						if not strEmpty(coowners) then coowners = coowners .. ", " end
 						coowners = coowners .. p:RPName()
 					end
 				end
@@ -516,14 +468,11 @@ function YRPOpenDoorOptions(door)
 		net.WriteEntity(door)
 		net.SendToServer()
 		local lid = id
-		timer.Simple(
-			14,
-			function()
-				if yrp_door.waitforanswer and lid == id then
-					YRP:msg("note", "[DoorOptions] Waited to long for answer from Server")
-					yrp_door.waitforanswer = false
-				end
+		timer.Simple(14, function()
+			if yrp_door.waitforanswer and lid == id then
+				YRP:msg("note", "[DoorOptions] Waited to long for answer from Server")
+				yrp_door.waitforanswer = false
 			end
-		)
+		end)
 	end
 end

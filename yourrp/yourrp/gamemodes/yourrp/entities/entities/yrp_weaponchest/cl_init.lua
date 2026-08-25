@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 include("shared.lua")
 local win = nil
 local w = 300
@@ -6,16 +6,13 @@ local h = 150
 local currentId = 0
 local currentArt = ""
 function ENT:Draw()
-	if LocalPlayer():GetPos():Distance(self:GetPos()) < 2000 then
-		self:DrawModel()
-	end
+	if LocalPlayer():GetPos():Distance(self:GetPos()) < 2000 then self:DrawModel() end
 end
 
 local function YRPGetSlotSWEP(art, id)
 	local sweps = LocalPlayer():GetYRPString(art, "")
 	local tab = string.Explode(",", sweps)
 	if tab[id] and not strEmpty(tab[id]) then return tab[id] end
-
 	return "LID_empty"
 end
 
@@ -27,7 +24,6 @@ local function YRPGetModelOfSWEP(cname)
 	for i, v in pairs(YRPGetSWEPsList()) do
 		if v and v.ClassName == cname then return v.WorldModel end
 	end
-
 	return ""
 end
 
@@ -40,7 +36,6 @@ local function YRPGetPrintNameOfSWEP(cname)
 		if v and v.ClassName == cname then return v.PrintName end
 	end
 	--"LID_empty"
-
 	return cname
 end
 
@@ -48,10 +43,7 @@ local function YRPCreateSlot(x, y, art, id)
 	local slot = YRPCreateD("DPanel", nil, w + 50, h, x, y)
 	function slot:Paint(pw, ph)
 		local color = Color(40, 40, 40)
-		if id == currentId and currentArt == art then
-			color = Color(80, 80, 80)
-		end
-
+		if id == currentId and currentArt == art then color = Color(80, 80, 80) end
 		draw.RoundedBox(3, 0, 0, pw, ph, color)
 	end
 
@@ -99,10 +91,7 @@ local function YRPCreateSlot(x, y, art, id)
 	slot.btnlist:SetText(">")
 	function slot.btnlist:Paint(pw, ph)
 		local cname = YRPGetSlotSWEP("slot_" .. art, id)
-		if cname and (cname == "LID_empty" or strEmpty(cname)) then
-			hook.Run("YButtonPaint", self, pw, ph)
-		end
-
+		if cname and (cname == "LID_empty" or strEmpty(cname)) then hook.Run("YButtonPaint", self, pw, ph) end
 		if id == currentId and currentArt == art then
 			slot.btnlist:SetText("<")
 		else
@@ -114,11 +103,8 @@ local function YRPCreateSlot(x, y, art, id)
 		currentId = id
 		currentArt = art
 		local cname = YRPGetSlotSWEP("slot_" .. art, id)
-		if cname and (cname == "LID_empty" or strEmpty(cname)) then
-			win:UpdateArtList(art)
-		end
+		if cname and (cname == "LID_empty" or strEmpty(cname)) then win:UpdateArtList(art) end
 	end
-
 	return slot
 end
 
@@ -169,134 +155,127 @@ local function YRPCreateSWEP(x, y, art, cname)
 
 		win:ClearList()
 	end
-
 	return slot
 end
 
-net.Receive(
-	"nws_yrp_open_weaponchest",
-	function(len)
-		if win == nil then
-			win = YRPCreateD("YFrame", nil, 30 + 300 + 50 + 12 + 300 + 12 + 30, ScrH(), 0, 0)
-			win:SetTitle("LID_weaponchest")
-			win:Center()
-			win:MakePopup()
-			currentId = 0
-			currentArt = ""
-			win.art = "primary"
-			function win:OnRemove()
-				win = nil
-			end
+net.Receive("nws_yrp_open_weaponchest", function(len)
+	if win == nil then
+		win = YRPCreateD("YFrame", nil, 30 + 300 + 50 + 12 + 300 + 12 + 30, ScrH(), 0, 0)
+		win:SetTitle("LID_weaponchest")
+		win:Center()
+		win:MakePopup()
+		currentId = 0
+		currentArt = ""
+		win.art = "primary"
+		function win:OnRemove()
+			win = nil
+		end
 
-			function win:OnClose()
-				win = nil
-			end
+		function win:OnClose()
+			win = nil
+		end
 
-			local content = win:GetContent()
-			local slots = 0
-			-- SLOTS
-			win.slots = YRPCreateD("DPanelList", content, 300 + 50 + 12, content:GetTall(), 0, 0)
-			win.slots:EnableVerticalScrollbar()
-			win.slots:SetSpacing(10)
-			function win.slots:Paint(pw, ph)
-				draw.RoundedBox(3, 0, 0, pw, ph, Color(0, 0, 0, 20))
-			end
+		local content = win:GetContent()
+		local slots = 0
+		-- SLOTS
+		win.slots = YRPCreateD("DPanelList", content, 300 + 50 + 12, content:GetTall(), 0, 0)
+		win.slots:EnableVerticalScrollbar()
+		win.slots:SetSpacing(10)
+		function win.slots:Paint(pw, ph)
+			draw.RoundedBox(3, 0, 0, pw, ph, Color(0, 0, 0, 20))
+		end
 
-			local sbar = win.slots.VBar
-			function sbar:Paint(bw, bh)
-				draw.RoundedBox(0, 0, 0, bw, bh, YRPInterfaceValue("YFrame", "NC"))
-			end
+		local sbar = win.slots.VBar
+		function sbar:Paint(bw, bh)
+			draw.RoundedBox(0, 0, 0, bw, bh, YRPInterfaceValue("YFrame", "NC"))
+		end
 
-			function sbar.btnUp:Paint(bw, bh)
-				draw.RoundedBox(0, 0, 0, bw, bh, Color(60, 60, 60))
-			end
+		function sbar.btnUp:Paint(bw, bh)
+			draw.RoundedBox(0, 0, 0, bw, bh, Color(60, 60, 60))
+		end
 
-			function sbar.btnDown:Paint(bw, bh)
-				draw.RoundedBox(0, 0, 0, bw, bh, Color(60, 60, 60))
-			end
+		function sbar.btnDown:Paint(bw, bh)
+			draw.RoundedBox(0, 0, 0, bw, bh, Color(60, 60, 60))
+		end
 
-			function sbar.btnGrip:Paint(bw, bh)
-				draw.RoundedBox(bw / 2, 0, 0, bw, bh, YRPInterfaceValue("YFrame", "HI"))
-			end
+		function sbar.btnGrip:Paint(bw, bh)
+			draw.RoundedBox(bw / 2, 0, 0, bw, bh, YRPInterfaceValue("YFrame", "HI"))
+		end
 
-			for i = 1, GetGlobalYRPInt("yrp_max_slots_primary", 0) do
-				local slot = YRPCreateSlot(0, 0, "primary", i)
-				win.slots:AddItem(slot)
-				slots = slots + 1
-			end
+		for i = 1, GetGlobalYRPInt("yrp_max_slots_primary", 0) do
+			local slot = YRPCreateSlot(0, 0, "primary", i)
+			win.slots:AddItem(slot)
+			slots = slots + 1
+		end
 
-			for i = 1, GetGlobalYRPInt("yrp_max_slots_secondary", 0) do
-				local slot = YRPCreateSlot(0, 0, "secondary", i)
-				win.slots:AddItem(slot)
-				slots = slots + 1
-			end
+		for i = 1, GetGlobalYRPInt("yrp_max_slots_secondary", 0) do
+			local slot = YRPCreateSlot(0, 0, "secondary", i)
+			win.slots:AddItem(slot)
+			slots = slots + 1
+		end
 
-			for i = 1, GetGlobalYRPInt("yrp_max_slots_sidearm", 0) do
-				local slot = YRPCreateSlot(0, 0, "sidearm", i)
-				win.slots:AddItem(slot)
-				slots = slots + 1
-			end
+		for i = 1, GetGlobalYRPInt("yrp_max_slots_sidearm", 0) do
+			local slot = YRPCreateSlot(0, 0, "sidearm", i)
+			win.slots:AddItem(slot)
+			slots = slots + 1
+		end
 
-			for i = 1, GetGlobalYRPInt("yrp_max_slots_gadget", 0) do
-				local slot = YRPCreateSlot(0, 0, "gadget", i)
-				win.slots:AddItem(slot)
-				slots = slots + 1
-			end
+		for i = 1, GetGlobalYRPInt("yrp_max_slots_gadget", 0) do
+			local slot = YRPCreateSlot(0, 0, "gadget", i)
+			win.slots:AddItem(slot)
+			slots = slots + 1
+		end
 
-			local sh = math.Clamp(slots * (h + 10), 450, content:GetTall())
-			sh = sh + 10
-			win.slots:SetTall(sh)
-			win:SetTall(sh + win:GetHeaderHeight())
-			win:Center()
-			-- List
-			win.selectionlist = YRPCreateD("DPanelList", content, 300 + 12, sh, 400, 0)
-			win.selectionlist:EnableVerticalScrollbar()
-			win.selectionlist:SetSpacing(10)
-			function win.selectionlist:Paint(pw, ph)
-				draw.RoundedBox(3, 0, 0, pw, ph, Color(0, 0, 0, 20))
-			end
+		local sh = math.Clamp(slots * (h + 10), 450, content:GetTall())
+		sh = sh + 10
+		win.slots:SetTall(sh)
+		win:SetTall(sh + win:GetHeaderHeight())
+		win:Center()
+		-- List
+		win.selectionlist = YRPCreateD("DPanelList", content, 300 + 12, sh, 400, 0)
+		win.selectionlist:EnableVerticalScrollbar()
+		win.selectionlist:SetSpacing(10)
+		function win.selectionlist:Paint(pw, ph)
+			draw.RoundedBox(3, 0, 0, pw, ph, Color(0, 0, 0, 20))
+		end
 
-			net.Receive(
-				"nws_yrp_get_sweps_role_art",
-				function(ilen)
-					local tab = net.ReadTable()
-					if YRPPanelAlive(win, "nws_yrp_get_sweps_role_art") then
-						local none = true
-						local alreadyinuse = LocalPlayer():GetWeapons()
-						local disallowed = {}
-						for i, v in pairs(alreadyinuse) do
-							disallowed[v:GetClass()] = true
-						end
+		net.Receive("nws_yrp_get_sweps_role_art", function(ilen)
+			local tab = net.ReadTable()
+			if YRPPanelAlive(win, "nws_yrp_get_sweps_role_art") then
+				local none = true
+				local alreadyinuse = LocalPlayer():GetWeapons()
+				local disallowed = {}
+				for i, v in pairs(alreadyinuse) do
+					disallowed[v:GetClass()] = true
+				end
 
-						for i, v in pairs(tab) do
-							if not disallowed[v] then
-								local swep = YRPCreateSWEP(0, 0, win.art, v)
-								win.selectionlist:AddItem(swep)
-								none = false
-							end
-						end
-
-						if none then
-							local info = YRPCreateD("YLabel", nil, 300, h, 0, 0)
-							info:SetText("LID_empty")
-							win.selectionlist:AddItem(info)
-						end
+				for i, v in pairs(tab) do
+					if not disallowed[v] then
+						local swep = YRPCreateSWEP(0, 0, win.art, v)
+						win.selectionlist:AddItem(swep)
+						none = false
 					end
 				end
-			)
 
-			function win:ClearList()
-				win.selectionlist:Clear()
+				if none then
+					local info = YRPCreateD("YLabel", nil, 300, h, 0, 0)
+					info:SetText("LID_empty")
+					win.selectionlist:AddItem(info)
+				end
 			end
+		end)
 
-			function win:UpdateArtList(art)
-				win.art = art
-				win:ClearList()
-				net.Start("nws_yrp_get_sweps_role_art")
-				net.WriteString(win.art)
-				net.SendToServer()
-			end
-			--win:UpdateArtList(win.art)
+		function win:ClearList()
+			win.selectionlist:Clear()
 		end
+
+		function win:UpdateArtList(art)
+			win.art = art
+			win:ClearList()
+			net.Start("nws_yrp_get_sweps_role_art")
+			net.WriteString(win.art)
+			net.SendToServer()
+		end
+		--win:UpdateArtList(win.art)
 	end
-)
+end)

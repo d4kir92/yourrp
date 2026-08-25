@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local _mat1 = {}
 _mat1.author = "D4KiR"
 _mat1.name = "Material Design 1"
@@ -112,18 +112,12 @@ function _mat1.YRPDrawButton(btn, pw, ph, text, color, px, py, ax, ah, forcelang
 		_color_bar.a = 255
 	end
 
-	if btn:IsHovered() then
-		_color_bar = YRPGetColor("1")
-	end
-
+	if btn:IsHovered() then _color_bar = YRPGetColor("1") end
 	local _color = color or _color_bar
 	draw.RoundedBox(0, 0, 0, pw, ph, _color)
 	--[[ text ]]
 	--
-	if forcelang then
-		_text = YRP:trans(_text)
-	end
-
+	if forcelang then _text = YRP:trans(_text) end
 	surfaceText(_text, _mat1.textFont, px or pw / 2, py or ph / 2, Color(255, 255, 255, 255), ax or 1, ay or 1, 1)
 end
 

@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local PANEL = {}
 function PANEL:Init()
 	self.color_sel = Color(0, 0, 255, 255)
@@ -27,10 +27,7 @@ function PANEL:Init()
 		surface.SetFont("Y_24_500")
 		local _tw, _th = surface.GetTextSize(str)
 		local _w = self:GetTall()
-		if _tw > _w then
-			_w = _tw
-		end
-
+		if _tw > _w then _w = _tw end
 		_w = _w * 1.4
 		local _tmp = YRPCreateD("DButton", self, _w, self:GetTall(), _x, ctrb(0))
 		_tmp.tbl = tbl
@@ -39,10 +36,7 @@ function PANEL:Init()
 		_tmp.selected = false
 		_tmp.base = self
 		function _tmp:Paint(pw, ph)
-			if self:IsHovered() then
-				draw.RoundedBoxEx(0, 0, 0, pw, ph, Color(255, 255, 255, 254), true, true)
-			end
-
+			if self:IsHovered() then draw.RoundedBoxEx(0, 0, 0, pw, ph, Color(255, 255, 255, 254), true, true) end
 			draw.RoundedBoxEx(0, 0, 0, pw, ph, YRPInterfaceValue("YFrame", "HB"), true, true)
 			local _color = Color(255, 255, 255, 255)
 			local font = "Y_24_500"
@@ -66,7 +60,6 @@ function PANEL:Init()
 
 		table.insert(self.tabs, _tmp)
 		self.slider:AddPanel(_tmp)
-
 		return _tmp
 	end
 end

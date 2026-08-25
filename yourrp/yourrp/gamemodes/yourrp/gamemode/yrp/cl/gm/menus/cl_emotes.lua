@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local _em = {}
 function YRPToggleEmotesMenu()
 	if YRPIsNoMenuOpen() then
@@ -25,7 +25,6 @@ function circleBorder(x, y, radius, seg, a_start, a_ang)
 		_coord.y = y + math.cos(a) * radius
 		table.insert(cir, _coord)
 	end
-
 	return cir
 end
 
@@ -35,7 +34,6 @@ function circleCoords(x, y, radius_outside, radius_inside, seg, a_start, a_ang)
 	for i, cord in pairs(table.Reverse(cir2)) do
 		table.insert(cir, cord)
 	end
-
 	return cir
 end
 
@@ -106,10 +104,7 @@ function OpenEmotesMenu()
 				table.insert(_quad, _test[e][#_test[e] - i])
 				table.insert(_quad, _test[e][#_test[e] - (i - 1)])
 				local _color = Color(40, 40, 40, 120)
-				if e == _em.emotes.select then
-					_color = Color(255, 255, 255, 120)
-				end
-
+				if e == _em.emotes.select then _color = Color(255, 255, 255, 120) end
 				surface.SetDrawColor(_color.r, _color.g, _color.b, _color.a)
 				draw.NoTexture()
 				surface.DrawPoly(_quad)
@@ -137,13 +132,8 @@ function OpenEmotesMenu()
 	end
 end
 
-net.Receive(
-	"nws_yrp_do_act",
-	function(len)
-		local pl = net.ReadEntity()
-		local act = net.ReadString()
-		if IsValid(pl) then
-			pl:AnimRestartGesture(GESTURE_SLOT_CUSTOM, act, true)
-		end
-	end
-)
+net.Receive("nws_yrp_do_act", function(len)
+	local pl = net.ReadEntity()
+	local act = net.ReadString()
+	if IsValid(pl) then pl:AnimRestartGesture(GESTURE_SLOT_CUSTOM, act, true) end
+end)

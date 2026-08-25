@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 AddCSLuaFile()
 DEFINE_BASECLASS("yrp_money")
 ENT.Type = "anim"
@@ -18,6 +18,5 @@ ENT.money = 0
 function ENT:GetMoney()
 	self.money = tonumber(self:GetYRPString("money", "-1"))
 	self.PrintName = "YourRP - " .. self.money .. " Money"
-
 	return self.money
 end

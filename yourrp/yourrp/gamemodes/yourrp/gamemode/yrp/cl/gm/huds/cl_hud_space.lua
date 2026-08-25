@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local SPACE = {}
 local ELES = {}
 local t = {}
@@ -87,10 +87,7 @@ function YRPHUDSpace()
 				for ele, etab in pairs(ELES) do
 					local DB = lply:HudElement(ele)
 					local icon_size = 0
-					if etab[3] ~= nil then
-						icon_size = DB.SIZE_H
-					end
-
+					if etab[3] ~= nil then icon_size = DB.SIZE_H end
 					local BR = YRP:ctr(10)
 					SPACE[ele] = SPACE[ele] or {}
 					SPACE[ele].Visible = DB.VISI or false
@@ -190,19 +187,10 @@ function YRPHUDSpace()
 							local Alpha = lply:HudElementAlpha(ele, 160)
 							local text = etab[4] or c
 							SPACE[ele].newc = 1
-							if etab[4] == nil and m ~= nil then
-								text = text .. "/" .. m
-							end
-
-							if m ~= nil then
-								SPACE[ele].newc = c / m
-							end
-
+							if etab[4] == nil and m ~= nil then text = text .. "/" .. m end
+							if m ~= nil then SPACE[ele].newc = c / m end
 							SPACE[ele].oldc = SPACE[ele].oldc or 0
-							if SPACE[ele].newc == 0 then
-								SPACE[ele].oldc = 0
-							end
-
+							if SPACE[ele].newc == 0 then SPACE[ele].oldc = 0 end
 							SPACE[ele].oldc = Lerp(10 * FrameTime(), SPACE[ele].oldc, SPACE[ele].newc)
 							local w = SPACE[ele].w
 							local h = SPACE[ele].h

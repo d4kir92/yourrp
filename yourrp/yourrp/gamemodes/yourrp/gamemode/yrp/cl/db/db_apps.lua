@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local _type = type
 --[[ APP ]]
 --
@@ -19,23 +19,11 @@ function appSize()
 end
 
 function addApp(app)
-	if app == nil then
-		YRP:msg("note", "[addApp] -> app is missing!")
-	end
-
+	if app == nil then YRP:msg("note", "[addApp] -> app is missing!") end
 	if _type(app) == "table" then
-		if app.PrintName == nil then
-			YRP:msg("note", "[addApp] -> app.PrintName is missing!")
-		end
-
-		if app.ClassName == nil then
-			YRP:msg("note", "[addApp] -> app.ClassName is missing!")
-		end
-
-		if app.OpenApp == nil then
-			YRP:msg("note", "[addApp] -> function app:OpenApp is missing!")
-		end
-
+		if app.PrintName == nil then YRP:msg("note", "[addApp] -> app.PrintName is missing!") end
+		if app.ClassName == nil then YRP:msg("note", "[addApp] -> app.ClassName is missing!") end
+		if app.OpenApp == nil then YRP:msg("note", "[addApp] -> function app:OpenApp is missing!") end
 		YRP:msg("db", "[addApp] Add App: " .. tostring(app.PrintName) .. " [" .. tostring(app.ClassName) .. "]")
 		list.Add("yrp_apps", app)
 	else
@@ -66,16 +54,12 @@ function createApp(app, parent, x, y)
 			self:olddoclick()
 		else
 			parent:ClearDisplay()
-			if app.Fullscreen then
-				parent:OpenFullscreen()
-			end
-
+			if app.Fullscreen then parent:OpenFullscreen() end
 			app:OpenApp(parent, 0, ctrb(40), parent:GetWide(), parent:GetTall() - ctrb(40 + 40))
 		end
 	end
 
 	_tmp:Droppable("APP")
-
 	return _tmp
 end
 
@@ -126,7 +110,6 @@ function YRPGetAppAtPosition(pos)
 	for i, v in pairs(yrp_apps) do
 		if pos == v.Position then return v end
 	end
-
 	return nil
 end
 
@@ -162,7 +145,6 @@ function getAllDBApps()
 
 		table.insert(apps, app.Position, _app)
 	end
-
 	return apps
 end
 

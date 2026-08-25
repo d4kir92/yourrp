@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 include("shared.lua")
@@ -9,17 +9,12 @@ function ENT:Initialize()
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
 	local phys = self:GetPhysicsObject()
-	if phys:IsValid() then
-		phys:Wake()
-	end
+	if phys:IsValid() then phys:Wake() end
 end
 
 function ENT:Use(activator, caller)
 	local tmpTable = YRP_SQL_SELECT("yrp_jail", "*", nil)
-	if not IsNotNilAndNotFalse(tmpTable) then
-		tmpTable = {}
-	end
-
+	if not IsNotNilAndNotFalse(tmpTable) then tmpTable = {} end
 	for i, v in pairs(tmpTable) do
 		local cells = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = 'jailpoint' and uniqueID = '" .. v.cell .. "'")
 		if IsNotNilAndNotFalse(cells) then
@@ -39,29 +34,23 @@ function ENT:Think()
 end
 
 YRP:AddNetworkString("nws_yrp_jail")
-net.Receive(
-	"nws_yrp_jail",
-	function(len, ply)
-		if not ply:GetYRPBool("bool_canusewarnsystem", false) then return end
-		local target = net.ReadEntity()
-		if not IsValid(target) or not target:IsPlayer() then return end
-		local jail = YRP_SQL_SELECT("yrp_jail", "*", "SteamID = '" .. target:YRPSteamID() .. "'")
-		if IsNotNilAndNotFalse(jail) then
-			jail = jail[1]
-			local tim = jail.time or 2 * 60
-			teleportToJailpoint(target, tim, ply)
-		end
+net.Receive("nws_yrp_jail", function(len, ply)
+	if not ply:GetYRPBool("bool_canusewarnsystem", false) then return end
+	local target = net.ReadEntity()
+	if not IsValid(target) or not target:IsPlayer() then return end
+	local jail = YRP_SQL_SELECT("yrp_jail", "*", "SteamID = '" .. target:YRPSteamID() .. "'")
+	if IsNotNilAndNotFalse(jail) then
+		jail = jail[1]
+		local tim = jail.time or 2 * 60
+		teleportToJailpoint(target, tim, ply)
 	end
-)
+end)
 
 YRP:AddNetworkString("nws_yrp_unjail")
-net.Receive(
-	"nws_yrp_unjail",
-	function(len, ply)
-		if not ply:GetYRPBool("bool_canusewarnsystem", false) then return end
-		local target = net.ReadEntity()
-		if not IsValid(target) or not target:IsPlayer() then return end
-		YRP_SQL_DELETE_FROM("yrp_jail", "SteamID = '" .. target:YRPSteamID() .. "'")
-		teleportToReleasepoint(target)
-	end
-)
+net.Receive("nws_yrp_unjail", function(len, ply)
+	if not ply:GetYRPBool("bool_canusewarnsystem", false) then return end
+	local target = net.ReadEntity()
+	if not IsValid(target) or not target:IsPlayer() then return end
+	YRP_SQL_DELETE_FROM("yrp_jail", "SteamID = '" .. target:YRPSteamID() .. "'")
+	teleportToReleasepoint(target)
+end)

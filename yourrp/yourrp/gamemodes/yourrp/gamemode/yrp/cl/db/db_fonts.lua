@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local font = font or "Ubuntu"
 local fontscale = fontscale or 1
 local fonts = fonts or {}
@@ -67,21 +67,15 @@ function YRP:SetFont(fontname)
 	end
 end
 
-net.Receive(
-	"nws_yrp_set_font",
-	function(len)
-		local fname = net.ReadString()
-		YRP:SetFont(fname)
-	end
-)
+net.Receive("nws_yrp_set_font", function(len)
+	local fname = net.ReadString()
+	YRP:SetFont(fname)
+end)
 
-timer.Simple(
-	10,
-	function()
-		net.Start("nws_yrp_set_font")
-		net.SendToServer()
-	end
-)
+timer.Simple(10, function()
+	net.Start("nws_yrp_set_font")
+	net.SendToServer()
+end)
 
 function GetFontSizeTable()
 	local tab = {}
@@ -99,33 +93,29 @@ function GetFontSizeTable()
 	table.insert(tab, 60)
 	table.insert(tab, 72)
 	table.insert(tab, 96)
-
 	return tab
 end
 
 function yrp_create_font(_name, _font, _size, _weight, _outline, _shadow)
 	if IsNotNilAndNotFalse(_name) and IsNotNilAndNotFalse(_font) and IsNotNilAndNotFalse(_size) and not table.HasValue(savedfonts, _name) then
 		table.insert(savedfonts, _name)
-		surface.CreateFont(
-			_name,
-			{
-				font = _font, -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
-				extended = true,
-				size = YRP:ctr(_size * fontscale * 2),
-				weight = _weight or 500,
-				blursize = 0,
-				scanlines = 0,
-				antialias = true,
-				underline = false,
-				italic = false,
-				strikeout = false,
-				symbol = false,
-				rotary = false,
-				shadow = _shadow or false,
-				additive = false,
-				outline = _outline or false
-			}
-		)
+		surface.CreateFont(_name, {
+			font = _font, -- Use the font-name which is shown to you by your operating system Font Viewer, not the file name
+			extended = true,
+			size = YRP:ctr(_size * fontscale * 2),
+			weight = _weight or 500,
+			blursize = 0,
+			scanlines = 0,
+			antialias = true,
+			underline = false,
+			italic = false,
+			strikeout = false,
+			symbol = false,
+			rotary = false,
+			shadow = _shadow or false,
+			additive = false,
+			outline = _outline or false
+		})
 	end
 end
 

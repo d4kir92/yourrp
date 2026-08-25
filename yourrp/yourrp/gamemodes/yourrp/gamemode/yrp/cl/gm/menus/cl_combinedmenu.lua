@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local cm = {}
 cm.open = false
 cm.currentsite = 0
@@ -14,9 +14,7 @@ end
 
 function YRPCloseCombinedMenu()
 	cm.open = false
-	if cm and YRPPanelAlive(cm.win) and cm.win and cm.win.Hide then
-		cm.win:Hide()
-	end
+	if cm and YRPPanelAlive(cm.win) and cm.win and cm.win.Hide then cm.win:Hide() end
 end
 
 function YRPCreateWebsiteContent(PARENT)
@@ -39,10 +37,7 @@ function YRPCreateRulesContent(PARENT)
 
 	page.serverrules = YRPCreateD("RichText", page, page:GetWide(), page:GetTall() - YRP:ctr(70), 0, YRP:ctr(70))
 	function page.serverrules:PerformLayout()
-		if self.SetUnderlineFont ~= nil then
-			self:SetUnderlineFont("Y_18_500")
-		end
-
+		if self.SetUnderlineFont ~= nil then self:SetUnderlineFont("Y_18_500") end
 		self:SetFontInternal("Y_18_500")
 	end
 
@@ -64,10 +59,7 @@ function YRPCreateDiscordContent(PARENT)
 	openLink:SetText("")
 	function openLink:Paint(pw, ph)
 		hook.Run("YButtonPaint", self, pw, ph)
-		if YRP:GetDesignIcon("launch") ~= nil then
-			YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
-		end
-
+		if YRP:GetDesignIcon("launch") ~= nil then YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6")) end
 		draw.SimpleText("Connect", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), 1, 1)
 	end
 
@@ -113,9 +105,7 @@ function YRPCreateCollectionContent(PARENT)
 		openLink:SetText("")
 		function openLink:Paint(pw, ph)
 			hook.Run("YButtonPaint", self, pw, ph)
-			if YRP:GetDesignIcon("launch") ~= nil then
-				YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
-			end
+			if YRP:GetDesignIcon("launch") ~= nil then YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6")) end
 		end
 
 		function openLink:DoClick()
@@ -136,9 +126,7 @@ function YRPCreateTwitchContent(PARENT)
 	openLink:SetText("")
 	function openLink:Paint(pw, ph)
 		hook.Run("YButtonPaint", self, pw, ph)
-		if YRP:GetDesignIcon("launch") ~= nil then
-			YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
-		end
+		if YRP:GetDesignIcon("launch") ~= nil then YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6")) end
 	end
 
 	function openLink:DoClick()
@@ -178,9 +166,7 @@ function YRPCreateTwitterContent(PARENT)
 	openLink:SetText("")
 	function openLink:Paint(pw, ph)
 		hook.Run("YButtonPaint", self, pw, ph)
-		if YRP:GetDesignIcon("launch") ~= nil then
-			YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
-		end
+		if YRP:GetDesignIcon("launch") ~= nil then YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6")) end
 	end
 
 	function openLink:DoClick()
@@ -200,9 +186,7 @@ function YRPCreateSteamGroupContent(PARENT)
 	openLink:SetText("")
 	function openLink:Paint(pw, ph)
 		hook.Run("YButtonPaint", self, pw, ph)
-		if YRP:GetDesignIcon("launch") ~= nil then
-			YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
-		end
+		if YRP:GetDesignIcon("launch") ~= nil then YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6")) end
 	end
 
 	function openLink:DoClick()
@@ -222,9 +206,7 @@ function YRPCreateFacebookContent(PARENT)
 	openLink:SetText("")
 	function openLink:Paint(pw, ph)
 		hook.Run("YButtonPaint", self, pw, ph)
-		if YRP:GetDesignIcon("launch") ~= nil then
-			YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
-		end
+		if YRP:GetDesignIcon("launch") ~= nil then YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6")) end
 	end
 
 	function openLink:DoClick()
@@ -244,9 +226,7 @@ function YRPCreateInstagramContent(PARENT)
 	openLink:SetText("")
 	function openLink:Paint(pw, ph)
 		hook.Run("YButtonPaint", self, pw, ph)
-		if YRP:GetDesignIcon("launch") ~= nil then
-			YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6"))
-		end
+		if YRP:GetDesignIcon("launch") ~= nil then YRP:DrawIcon(YRP:GetDesignIcon("launch"), ph, ph, 0, 0, YRPGetColor("6")) end
 	end
 
 	function openLink:DoClick()
@@ -443,17 +423,11 @@ function YRPOpenCombinedMenu()
 		--cm.win:SetHeaderHeight(YRP:ctr(100) )
 		cm.win:SetBorder(0)
 		function cm.win:Paint(pw, ph)
-			if GetGlobalYRPString("text_server_name", "") ~= self:GetTitle() then
-				self:SetTitle(GetGlobalYRPString("text_server_name", ""))
-			end
-
+			if GetGlobalYRPString("text_server_name", "") ~= self:GetTitle() then self:SetTitle(GetGlobalYRPString("text_server_name", "")) end
 			hook.Run("YFramePaint", self, pw, ph)
 		end
 
-		if LocalPlayer().combinedmaximised == nil then
-			LocalPlayer().combinedmaximised = false
-		end
-
+		if LocalPlayer().combinedmaximised == nil then LocalPlayer().combinedmaximised = false end
 		cm.win:SetSizable(true)
 		cm.win:SetMinWidth(1200)
 		cm.win:SetMinHeight(800)
@@ -514,13 +488,9 @@ function YRPOpenCombinedMenu()
 		function cm.menu.expander:Paint(pw, ph)
 			draw.RoundedBoxEx(YRP:ctr(10), 0, 0, pw, ph, YRPInterfaceValue("YFrame", "HB"), false, false, true, false)
 			if cm.win:IsExpanded() then
-				if YRP:GetDesignIcon("64_angle-left") ~= nil then
-					surface.SetMaterial(YRP:GetDesignIcon("64_angle-left"))
-				end
+				if YRP:GetDesignIcon("64_angle-left") ~= nil then surface.SetMaterial(YRP:GetDesignIcon("64_angle-left")) end
 			else
-				if YRP:GetDesignIcon("64_angle-right") ~= nil then
-					surface.SetMaterial(YRP:GetDesignIcon("64_angle-right"))
-				end
+				if YRP:GetDesignIcon("64_angle-right") ~= nil then surface.SetMaterial(YRP:GetDesignIcon("64_angle-right")) end
 			end
 
 			surface.SetDrawColor(Color(255, 255, 255, 255))
@@ -555,10 +525,7 @@ function YRPOpenCombinedMenu()
 		for i, v in pairs(sites) do
 			if v.name ~= "hr" then
 				local tw, _ = surface.GetTextSize(YRP:trans(v.name))
-				if tw > cm.menu.pw then
-					cm.menu.pw = tw
-				end
-
+				if tw > cm.menu.pw then cm.menu.pw = tw end
 				cm.sites[v.name] = YRPCreateD("YButton", cm.menu, cm.menu.pw, cm.menu.ph, 0, 0)
 				local site = cm.sites[v.name]
 				site:SetText("")
@@ -586,10 +553,7 @@ function YRPOpenCombinedMenu()
 
 					surface.SetFont(font)
 					local tw2, _ = surface.GetTextSize(YRP:trans(v.name))
-					if tw2 > cm.menu.pw then
-						cm.menu.pw = tw2
-					end
-
+					if tw2 > cm.menu.pw then cm.menu.pw = tw2 end
 					draw.SimpleText(YRP:trans(v.name), font, ph, ph / 2, YRPInterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 				end
 
@@ -602,10 +566,7 @@ function YRPOpenCombinedMenu()
 					end
 				end
 
-				if cm.currentsite == site.id then
-					site:DoClick()
-				end
-
+				if cm.currentsite == site.id then site:DoClick() end
 				cm.menu:AddItem(site)
 			else
 				cm.sites[v.name] = YRPCreateD("DPanel", cm.menu, cm.menu.pw, YRP:ctr(20), 0, 0)
@@ -635,9 +596,7 @@ function YRPOpenCombinedMenu()
 	elseif YRPPanelAlive(cm.win) and cm.win and cm.win.Show then
 		cm.win:Show()
 		for i, site in pairs(cm.sites) do
-			if cm.currentsite == site.id then
-				site:DoClick()
-			end
+			if cm.currentsite == site.id then site:DoClick() end
 		end
 	end
 end

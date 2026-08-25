@@ -1,10 +1,9 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 function YRP:RemoveUnallowedSymbols(input)
 	local output = input
 	output = string.Replace(output, "\"", "")
 	output = string.Replace(output, "\'", "")
 	output = string.Replace(output, "=", "")
-
 	return output
 end
 

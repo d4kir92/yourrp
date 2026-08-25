@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local Player = FindMetaTable("Player")
 function Player:abortHit(message)
 	--Description: Abort a hit
@@ -17,21 +17,14 @@ end
 --YRPDarkrpNotFound("addPocketItem(ent)")
 function Player:applyPlayerClassVars(applyHealth)
 	--Description: Applies all variables in a player's associated GMod player class to the player.
-	if applyHealth then
-		self:SetHealth(self:GetMaxHealth())
-	end
+	if applyHealth then self:SetHealth(self:GetMaxHealth()) end
 end
 
 function Player:arrest(time, Arrester)
 	--Description: Arrest a player.
 	--YRPDarkrpNotFound( "arrest( " .. tostring(time) .. ", " .. Arrester:Nick() .. " )" )
 	self:SetYRPInt("jailtime", time)
-	timer.Simple(
-		0.02,
-		function()
-			self:SetYRPBool("injail", true)
-		end
-	)
+	timer.Simple(0.02, function() self:SetYRPBool("injail", true) end)
 end
 
 function Player:changeAllowed(team)
@@ -42,18 +35,11 @@ end
 function Player:changeTeam(team, force, suppressNotification)
 	--Description: Change the team of a player.
 	if canGetRole(self, team) then
-		if GetGlobalYRPBool("bool_players_die_on_role_switch", false) then
-			self:KillSilent()
-		end
-
+		if GetGlobalYRPBool("bool_players_die_on_role_switch", false) then self:KillSilent() end
 		YRPSetRole("changeTeam", self, team, false, nil)
-		if GetGlobalYRPBool("bool_players_die_on_role_switch", false) then
-			self:Spawn()
-		end
-
+		if GetGlobalYRPBool("bool_players_die_on_role_switch", false) then self:Spawn() end
 		return true
 	end
-
 	return false
 end
 
@@ -80,21 +66,18 @@ end
 function Player:getHitCustomer()
 	--Description: Get the customer for the current hit
 	YRPDarkrpNotFound("getHitCustomer()")
-
 	return NULL
 end
 
 function Player:getHitmanTeams()
 	--Description: Get all the hitman teams.
 	YRPDarkrpNotFound("getHitmanTeams()")
-
 	return {}
 end
 
 function Player:getPreferredModel(teamNr)
 	--Description: Get the preferred model of a player for a job.
 	YRPDarkrpNotFound("getPreferredModel( " .. teamNr .. " )")
-
 	return ""
 end
 
@@ -141,7 +124,6 @@ end
 function Player:requestHit(customer, target, price)
 	--Description: Request a hit to a hitman.
 	YRPDarkrpNotFound("requestHit( customer, target, price)")
-
 	return false
 end
 
@@ -256,9 +238,7 @@ end
 
 function Player:unArrest(Unarrester)
 	--Description: Unarrest a player.
-	if IsValid(Unarrester) then
-		self:SetYRPBool("injail", false)
-	end
+	if IsValid(Unarrester) then self:SetYRPBool("injail", false) end
 end
 
 function Player:unWanted(actor)

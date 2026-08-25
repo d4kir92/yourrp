@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 --[[ Here are the public functions (FOR DEVELOPERS) ]]
 AddCSLuaFile("player/hud.lua")
 AddCSLuaFile("player/interface.lua")
@@ -15,17 +15,12 @@ function Player:YRPRevive(pos)
 	if not IsValid(self) then return end
 	self.ignorespawnpoint = true
 	self:Spawn()
-	if pos and isvector(pos) then
-		self:SetPos(pos)
-	end
+	if pos and isvector(pos) then self:SetPos(pos) end
 end
 
 function Player:Battery()
 	local battery = system.BatteryPower()
-	if battery > 100 then
-		battery = 100
-	end
-
+	if battery > 100 then battery = 100 end
 	return battery
 end
 
@@ -47,13 +42,11 @@ end
 
 function Player:HasOS()
 	if self:IsBot() then return true end
-
 	return self:GetYRPString("yrp_os", "") ~= ""
 end
 
 function Player:OS()
 	if self:IsBot() then return "windows" end
-
 	return self:GetYRPString("yrp_os", "")
 end
 
@@ -215,77 +208,49 @@ end
 function Player:Condition()
 	local _sttext = ""
 	if self:IsBleeding() then
-		if _sttext ~= "" then
-			_sttext = _sttext .. ", "
-		end
-
+		if _sttext ~= "" then _sttext = _sttext .. ", " end
 		_sttext = _sttext .. YRP:trans("LID_youarebleeding")
 	end
 
 	if self:GetYRPBool("cuffed") then
-		if _sttext ~= "" then
-			_sttext = _sttext .. ", "
-		end
-
+		if _sttext ~= "" then _sttext = _sttext .. ", " end
 		_sttext = _sttext .. YRP:trans("LID_cuffed")
 	end
 
 	if self:GetYRPFloat("hunger", 100) < 20 then
-		if _sttext ~= "" then
-			_sttext = _sttext .. ", "
-		end
-
+		if _sttext ~= "" then _sttext = _sttext .. ", " end
 		_sttext = _sttext .. YRP:trans("LID_hungry")
 	end
 
 	if self:GetYRPFloat("thirst", 100) < 20.0 then
-		if _sttext ~= "" then
-			_sttext = _sttext .. ", "
-		end
-
+		if _sttext ~= "" then _sttext = _sttext .. ", " end
 		_sttext = _sttext .. YRP:trans("LID_thirsty")
 	end
 
 	if self:GetYRPBool("broken_leg_right", false) then
-		if _sttext ~= "" then
-			_sttext = _sttext .. ", "
-		end
-
+		if _sttext ~= "" then _sttext = _sttext .. ", " end
 		_sttext = _sttext .. YRP:trans("LID_yourrightlegisbroken")
 	end
 
 	if self:GetYRPBool("broken_leg_left", false) then
-		if _sttext ~= "" then
-			_sttext = _sttext .. ", "
-		end
-
+		if _sttext ~= "" then _sttext = _sttext .. ", " end
 		_sttext = _sttext .. YRP:trans("LID_yourleftlegisbroken")
 	end
 
 	if self:GetYRPBool("broken_arm_right", false) then
-		if _sttext ~= "" then
-			_sttext = _sttext .. ", "
-		end
-
+		if _sttext ~= "" then _sttext = _sttext .. ", " end
 		_sttext = _sttext .. YRP:trans("LID_yourrightarmisbroken")
 	end
 
 	if self:GetYRPBool("broken_arm_left", false) then
-		if _sttext ~= "" then
-			_sttext = _sttext .. ", "
-		end
-
+		if _sttext ~= "" then _sttext = _sttext .. ", " end
 		_sttext = _sttext .. YRP:trans("LID_yourleftarmisbroken")
 	end
 
 	if self:GetYRPBool("injail", false) then
-		if _sttext ~= "" then
-			_sttext = _sttext .. ", "
-		end
-
+		if _sttext ~= "" then _sttext = _sttext .. ", " end
 		_sttext = _sttext .. YRP:trans("LID_jail") .. ": " .. self:GetYRPInt("jailtime", 0)
 	end
-
 	return _sttext
 end
 
@@ -353,14 +318,12 @@ function string.point(num)
 		num, k = string.gsub(num, "^(-?%d+)(%d%d%d)", "%1.%2")
 		if k == 0 then break end
 	end
-
 	return num
 end
 
 if CLIENT then
 	function MoneyFormat(money)
 		money = tonumber(money)
-
 		return GetGlobalYRPString("text_money_pre", "") .. string.point(money) .. GetGlobalYRPString("text_money_pos", "")
 	end
 
@@ -373,7 +336,6 @@ if CLIENT then
 		end
 
 		money = tonumber(money)
-
 		return GetGlobalYRPString("text_money_pre", "") .. roundMoney(money, round) .. GetGlobalYRPString("text_money_pos", "")
 	end
 end
@@ -397,7 +359,6 @@ function Player:FormattedMoneyRounded(round)
 	elseif round < 0 then
 		round = 0
 	end
-
 	return GetGlobalYRPString("text_money_pre", "") .. roundMoney(self:Money(), round) .. GetGlobalYRPString("text_money_pos", "")
 end
 
@@ -408,7 +369,6 @@ function Player:FormattedMoneyBankRounded(round)
 	elseif round < 0 then
 		round = 0
 	end
-
 	return GetGlobalYRPString("text_money_pre", "") .. roundMoney(self:MoneyBank(), round) .. GetGlobalYRPString("text_money_pos", "")
 end
 
@@ -419,7 +379,6 @@ function Player:FormattedSalaryRounded(round)
 	elseif round < 0 then
 		round = 0
 	end
-
 	return GetGlobalYRPString("text_money_pre", "") .. roundMoney(self:Salary(), round) .. GetGlobalYRPString("text_money_pos", "")
 end
 
@@ -458,7 +417,6 @@ end
 function Player:CalculateMaxXP(lvl)
 	local exp = math.pow(lvl, self:XPMultiplier())
 	local res = math.Round(exp + self:XPForLevelUp(), 1)
-
 	return tonumber(res)
 end
 
@@ -497,32 +455,22 @@ function Player:GetRoleName()
 		if IsValid(self) then
 			local prefix = self:GetYRPString("spec_prefix", "")
 			local suffix = self:GetYRPString("spec_suffix", "")
-			if not strEmpty(prefix) then
-				RoleName = prefix .. " " .. RoleName
-			end
-
-			if not strEmpty(suffix) then
-				RoleName = RoleName .. " " .. suffix
-			end
+			if not strEmpty(prefix) then RoleName = prefix .. " " .. RoleName end
+			if not strEmpty(suffix) then RoleName = RoleName .. " " .. suffix end
 			-- return string
-
 			return RoleName
 		else
 			return self:Nick()
 		end
 		-- return string
-
 		return RoleName
 	end
-
 	return "BROKEN"
 end
 
 function YRPAddToTable(tTab, sTab)
 	for i, v in pairs(sTab) do
-		if v and not strEmpty(v) then
-			tTab[tonumber(v)] = tonumber(v)
-		end
+		if v and not strEmpty(v) then tTab[tonumber(v)] = tonumber(v) end
 	end
 end
 
@@ -537,7 +485,6 @@ function Player:GetLicenseIDs()
 		YRPAddToTable(self.LIDs, string.Explode(",", LIDs2))
 		YRPAddToTable(self.LIDs, string.Explode(",", LIDs3))
 	end
-
 	return self.LIDs
 end
 
@@ -563,7 +510,6 @@ end
 function Player:GetFactionName()
 	local FactionName = self:YRPGetFactionName()
 	-- return string
-
 	return FactionName
 end
 
@@ -585,7 +531,6 @@ end
 function Player:GetGroupName()
 	local GroupName = self:YRPGetGroupName()
 	-- return string
-
 	return GroupName
 end
 
@@ -602,7 +547,6 @@ function Player:RPName()
 	if IsValid(self) then
 		local name = self:YRPRPName()
 		-- return string
-
 		return name
 	else
 		return self:Nick()

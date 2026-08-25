@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 --cl_hud_map.lua
 local map = {}
 local _map = _map or {}
@@ -63,13 +63,11 @@ function openMap()
 				draw.RoundedBox(0, win.x, win.y, win.w, win.h, Color(0, 0, 0, 255))
 				local _mapName = GetNiceMapName()
 				local _testHeight = 4000
-				local tr = util.TraceLine(
-					{
-						start = lply:GetPos() + Vector(0, 0, 16),
-						endpos = lply:GetPos() + Vector(0, 0, _testHeight),
-						filter = lply
-					}
-				)
+				local tr = util.TraceLine({
+					start = lply:GetPos() + Vector(0, 0, 16),
+					endpos = lply:GetPos() + Vector(0, 0, _testHeight),
+					filter = lply
+				})
 
 				local _height = 0
 				if tr.Hit then
@@ -95,13 +93,9 @@ function openMap()
 					_map.rtw = rtw
 					_map.rth = rth
 					_map.rt = GetRenderTarget(rtname, rtw, rth, true)
-					_map.rt_mat = CreateMaterial(
-						rtname,
-						"UnlitGeneric",
-						{
-							["$basetexture"] = rtname
-						}
-					)
+					_map.rt_mat = CreateMaterial(rtname, "UnlitGeneric", {
+						["$basetexture"] = rtname
+					})
 				end
 
 				local old_RT = render.GetRenderTarget()
@@ -110,10 +104,7 @@ function openMap()
 				render.SetViewPort(win.x, win.y, win.w, win.h)
 				render.Clear(0, 0, 0, 0)
 				cam.Start2D()
-				if CamDataMap then
-					render.RenderView(CamDataMap)
-				end
-
+				if CamDataMap then render.RenderView(CamDataMap) end
 				cam.End2D()
 				render.SetViewPort(0, 0, old_w, old_h)
 				render.SetRenderTarget(old_RT)
@@ -163,19 +154,13 @@ function openMap()
 				local c = 0
 				for y = nulPos.y, win.h, YRP:ctr(200) do
 					local color = gridcolor
-					if y == nulPos.y then
-						color = Color(150, 50, 50)
-					end
-
+					if y == nulPos.y then color = Color(150, 50, 50) end
 					draw.RoundedBox(0, win.x, y, win.w, YRP:ctr(2), color)
 				end
 
 				for y = nulPos.y, 0, -YRP:ctr(200) do
 					local color = gridcolor
-					if y == nulPos.y then
-						color = Color(150, 50, 50)
-					end
-
+					if y == nulPos.y then color = Color(150, 50, 50) end
 					draw.RoundedBox(0, win.x, y, win.w, YRP:ctr(2), color)
 				end
 
@@ -198,19 +183,13 @@ function openMap()
 				local let = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}
 				for x = nulPos.x, win.x + win.w, YRP:ctr(200) do
 					local color = gridcolor
-					if x == nulPos.x then
-						color = Color(150, 50, 50)
-					end
-
+					if x == nulPos.x then color = Color(150, 50, 50) end
 					draw.RoundedBox(0, x, win.y, YRP:ctr(2), win.h, color)
 				end
 
 				for x = nulPos.x, win.x, -YRP:ctr(200) do
 					local color = gridcolor
-					if x == nulPos.x then
-						color = Color(150, 50, 50)
-					end
-
+					if x == nulPos.x then color = Color(150, 50, 50) end
 					draw.RoundedBox(0, x, win.y, YRP:ctr(2), win.h, color)
 				end
 
@@ -294,14 +273,11 @@ function openMap()
 	end
 end
 
-net.Receive(
-	"nws_yrp_sendCoords",
-	function()
-		if net.ReadBool() then
-			map = net.ReadTable()
-			openMap()
-		else
-			YRP:msg("note", "wait for server coords")
-		end
+net.Receive("nws_yrp_sendCoords", function()
+	if net.ReadBool() then
+		map = net.ReadTable()
+		openMap()
+	else
+		YRP:msg("note", "wait for server coords")
 	end
-)
+end)

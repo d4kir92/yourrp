@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local Entity = FindMetaTable("Entity")
 function Entity:addKeysAllowedToOwn(ply)
 end
@@ -24,14 +24,11 @@ end
 function Entity:isLocked()
 	--Description: Whether this door/vehicle is locked.
 	local locked = self:GetSaveTable().m_bLocked
-
 	return locked
 end
 
 function Entity:keysLock()
-	if YRPEntityAlive(self) then
-		self:Fire("Lock")
-	end
+	if YRPEntityAlive(self) then self:Fire("Lock") end
 end
 
 function Entity:keysOwn(ply)
@@ -40,9 +37,7 @@ end
 --Description: Make the player the master owner of the door
 --YRPDarkrpNotFound( "keysOwn(ply)" )
 function Entity:keysUnLock()
-	if YRPEntityAlive(self) then
-		self:Fire("Unlock")
-	end
+	if YRPEntityAlive(self) then self:Fire("Unlock") end
 end
 
 function Entity:keysUnOwn(ply)

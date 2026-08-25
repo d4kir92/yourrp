@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local function safeText(text)
 	return text
 end
@@ -25,6 +25,5 @@ function chat.AddNonParsedText(...)
 	for i = 2, #tbl, 2 do
 		tbl[i] = safeText(tbl[i])
 	end
-
 	return chat.AddText(unpack(tbl))
 end

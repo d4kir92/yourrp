@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local PANEL = {}
 function PANEL:Init()
 	self.header = YRPCreateD("DButton", self, 100, 50, 0, 0)
@@ -17,26 +17,18 @@ function PANEL:Init()
 	function self:PaintHeader(pw, ph)
 		local br = YRP:ctr(20)
 		local _hl = 0
-		if self.header:IsHovered() then
-			_hl = 70
-		end
-
+		if self.header:IsHovered() then _hl = 70 end
 		draw.RoundedBoxEx(0, 0, 0, pw, ph, Color(self.color.r + _hl, self.color.g + _hl, self.color.b + _hl, self.color.a), true, true, not self:IsOpen(), not self:IsOpen())
 		draw.SimpleText(self.headertext, "Y_24_500", ph / 2, ph / 2, Color(255, 255, 255, 255), 0, 1)
 		local icon = YRP:GetDesignIcon("64_angle-down")
-		if self:IsOpen() then
-			icon = YRP:GetDesignIcon("64_angle-up")
-		end
-
+		if self:IsOpen() then icon = YRP:GetDesignIcon("64_angle-up") end
 		if IsNotNilAndNotFalse(icon) then
 			surface.SetMaterial(icon)
 			surface.SetDrawColor(Color(255, 255, 255, 255))
 			surface.DrawTexturedRect(pw - ph, br, ph - 2 * br, ph - 2 * br)
 		end
 
-		if tobool(self.locked) then
-			YRP:DrawIcon(YRP:GetDesignIcon("lock"), ph - YRP:ctr(8), ph - YRP:ctr(8), pw - 2 * ph, YRP:ctr(4), Color(0, 255, 0))
-		end
+		if tobool(self.locked) then YRP:DrawIcon(YRP:GetDesignIcon("lock"), ph - YRP:ctr(8), ph - YRP:ctr(8), pw - 2 * ph, YRP:ctr(4), Color(0, 255, 0)) end
 	end
 
 	function self.header:Paint(w, h)
@@ -141,21 +133,10 @@ function PANEL:Add(panel)
 end
 
 function PANEL:Think()
-	if self:GetWide() ~= self.content:GetWide() then
-		self.content:SetWide(self:GetWide())
-	end
-
-	if self:GetWide() ~= self.header:GetWide() then
-		self.header:SetWide(self:GetWide())
-	end
-
-	if self:GetTall() - self:GetHeaderHeight() ~= self.content:GetTall() or self.content:GetTall() < 0 then
-		self.content:SetTall(self:GetTall() - self:GetHeaderHeight())
-	end
-
-	if self:GetHeaderHeight() ~= self.header:GetTall() then
-		self.header:SetTall(self:GetHeaderHeight())
-	end
+	if self:GetWide() ~= self.content:GetWide() then self.content:SetWide(self:GetWide()) end
+	if self:GetWide() ~= self.header:GetWide() then self.header:SetWide(self:GetWide()) end
+	if self:GetTall() - self:GetHeaderHeight() ~= self.content:GetTall() or self.content:GetTall() < 0 then self.content:SetTall(self:GetTall() - self:GetHeaderHeight()) end
+	if self:GetHeaderHeight() ~= self.header:GetTall() then self.header:SetTall(self:GetHeaderHeight()) end
 end
 
 function PANEL:Paint(w, h)

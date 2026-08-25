@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 function YRPGetInterfaceDesign()
 	return GetGlobalYRPString("string_interface_design", "Material")
 end
@@ -16,14 +16,10 @@ function YRPInterfaceValue(element, art)
 	elseif table.HasValue(icolors, art) then
 		local icolor = GetGlobalYRPString("color_IF_" .. YRPGetInterfaceDesign() .. "_" .. element .. "_" .. art, "0, 0, 0, 100")
 		if icolor and type(icolor) == "string" then
-			if tabifcolors[icolor] == nil then
-				tabifcolors[icolor] = StringToColor(icolor)
-			end
-
+			if tabifcolors[icolor] == nil then tabifcolors[icolor] = StringToColor(icolor) end
 			local col = tabifcolors[icolor]
 			if col and col.r and col.g and col.b then
 				col.a = col.a or 255
-
 				return Color(col.r, col.g, col.b, col.a)
 			else
 				return Color(255, 0, 0, 255)
@@ -37,7 +33,6 @@ function YRPInterfaceValue(element, art)
 
 	local text = "Element: " .. element .. " ART: " .. art .. " not found."
 	YRP:msg("error", text)
-
 	return text
 end
 
@@ -62,6 +57,5 @@ function YRPInterfaceElement(element)
 	for i, v in pairs(iints) do
 		ele[v] = YRPInterfaceValue(element, v)
 	end
-
 	return ele
 end

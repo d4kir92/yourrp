@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_sql"
@@ -23,7 +23,6 @@ local function SQLITE_INIT_DATABASE(db_table)
 		_q = _q .. " )"
 		_q = _q .. ";"
 		local _result = YRP_SQL_QUERY(_q)
-
 		return _result
 	end
 end
@@ -44,22 +43,16 @@ local function SQLITE_ADD_COLUMN(table_name, column_name, datatype)
 	if not _result then
 		local _q = "ALTER TABLE " .. table_name .. " ADD " .. column_name .. " " .. datatype .. ""
 		local _r = sql.Query(_q)
-		if _r ~= nil then
-			YRP:msg("error", "SQLITE_ADD_COLUMN failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. YRP_SQL_Show_Last_Error())
-		end
-
+		if _r ~= nil then YRP:msg("error", "SQLITE_ADD_COLUMN failed! query: " .. tostring(_q) .. " result: " .. tostring(_result) .. YRP_SQL_Show_Last_Error()) end
 		return _r
 	end
 end
 
 function UpdateValue(tab, sqlite)
 	tab.uniqueID = tab.uniqueID or 1
-	YRP_SQL_UPDATE(
-		tab.db,
-		{
-			[tab.id] = tab.value
-		}, "uniqueID = '" .. tab.uniqueID .. "'", sqlite
-	)
+	YRP_SQL_UPDATE(tab.db, {
+		[tab.id] = tab.value
+	}, "uniqueID = '" .. tab.uniqueID .. "'", sqlite)
 end
 
 function UpdateString(tab)
@@ -83,16 +76,10 @@ function UpdateBool(tab)
 end
 
 function DBUpdateValue(db_name, str, l_db, value, sqlite)
-	if l_db ~= nil then
-		l_db[str] = value
-	end
-
-	YRP_SQL_UPDATE(
-		db_name,
-		{
-			[str] = value
-		}, "uniqueID = '1'", sqlite
-	)
+	if l_db ~= nil then l_db[str] = value end
+	YRP_SQL_UPDATE(db_name, {
+		[str] = value
+	}, "uniqueID = '1'", sqlite)
 end
 
 function DBUpdateFloat(db_name, ply, netstr, str, l_db, value, sqlite)
@@ -129,41 +116,29 @@ if sql.Query("SELECT * FROM yrp_sql") == nil then
 end
 
 local _init_yrp_sql = sql.Query("SELECT * FROM " .. DATABASE_NAME)
-if IsNotNilAndNotFalse(_init_yrp_sql) then
-	yrp_sql = _init_yrp_sql[1]
-end
-
+if IsNotNilAndNotFalse(_init_yrp_sql) then yrp_sql = _init_yrp_sql[1] end
 for str, val in pairs(yrp_sql) do
 	if string.find(str, "int_", 1, true) then
 		YRP:AddNetworkString("nws_yrp_update_" .. str)
-		net.Receive(
-			"nws_yrp_update_" .. str,
-			function(len, ply)
-				if not ply:GetYRPBool("bool_ac_database", false) then return end
-				local i = net.ReadInt(32)
-				DBUpdateInt(DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_sql, i, true)
-			end
-		)
+		net.Receive("nws_yrp_update_" .. str, function(len, ply)
+			if not ply:GetYRPBool("bool_ac_database", false) then return end
+			local i = net.ReadInt(32)
+			DBUpdateInt(DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_sql, i, true)
+		end)
 	elseif string.find(str, "float_", 1, true) then
 		YRP:AddNetworkString("nws_yrp_update_" .. str)
-		net.Receive(
-			"nws_yrp_update_" .. str,
-			function(len, ply)
-				if not ply:GetYRPBool("bool_ac_database", false) then return end
-				local f = net.ReadFloat()
-				DBUpdateFloat(DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_sql, f, true)
-			end
-		)
+		net.Receive("nws_yrp_update_" .. str, function(len, ply)
+			if not ply:GetYRPBool("bool_ac_database", false) then return end
+			local f = net.ReadFloat()
+			DBUpdateFloat(DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_sql, f, true)
+		end)
 	elseif string.find(str, "string_", 1, true) then
 		YRP:AddNetworkString("nws_yrp_update_" .. str)
-		net.Receive(
-			"nws_yrp_update_" .. str,
-			function(len, ply)
-				if not ply:GetYRPBool("bool_ac_database", false) then return end
-				local s = net.ReadString()
-				DBUpdateString(DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_sql, s, true)
-			end
-		)
+		net.Receive("nws_yrp_update_" .. str, function(len, ply)
+			if not ply:GetYRPBool("bool_ac_database", false) then return end
+			local s = net.ReadString()
+			DBUpdateString(DATABASE_NAME, ply, "nws_yrp_update_" .. str, str, yrp_sql, s, true)
+		end)
 	end
 end
 
@@ -214,38 +189,26 @@ function BroadcastBool(tab)
 	end
 end
 
-net.Receive(
-	"nws_yrp_get_sql_info",
-	function(len, ply)
-		local _sql_info = sql.Query("SELECT * FROM " .. DATABASE_NAME)
-		if _sql_info ~= nil and _sql_info ~= false then
-			_sql_info = _sql_info[1]
-			net.Start("nws_yrp_get_sql_info")
-			net.WriteTable(_sql_info)
-			net.Send(ply)
-		end
+net.Receive("nws_yrp_get_sql_info", function(len, ply)
+	local _sql_info = sql.Query("SELECT * FROM " .. DATABASE_NAME)
+	if _sql_info ~= nil and _sql_info ~= false then
+		_sql_info = _sql_info[1]
+		net.Start("nws_yrp_get_sql_info")
+		net.WriteTable(_sql_info)
+		net.Send(ply)
 	end
-)
+end)
 
 YRP:AddNetworkString("nws_yrp_change_to_sql_mode")
-net.Receive(
-	"nws_yrp_change_to_sql_mode",
-	function(len, ply)
-		local _mode = net.ReadInt(32)
-		if not ply:HasAccess("change_to_sql_mode") then
-			YRP:msg("note", ply:YRPName() .. " tried to use change_to_sql_mode")
-
-			return
-		end
-
-		DBUpdateInt(DATABASE_NAME, ply, "nws_yrp_update_" .. "int_mode", "int_mode", yrp_sql, _mode, true)
-		SetSQLMode(_mode)
-		YRP:msg("note", ply:YRPName() .. " changed sqlmode to " .. GetSQLModeName())
-		timer.Simple(
-			3,
-			function()
-				game.ConsoleCommand("changelevel " .. GetMapName() .. "\n")
-			end
-		)
+net.Receive("nws_yrp_change_to_sql_mode", function(len, ply)
+	local _mode = net.ReadInt(32)
+	if not ply:HasAccess("change_to_sql_mode") then
+		YRP:msg("note", ply:YRPName() .. " tried to use change_to_sql_mode")
+		return
 	end
-)
+
+	DBUpdateInt(DATABASE_NAME, ply, "nws_yrp_update_" .. "int_mode", "int_mode", yrp_sql, _mode, true)
+	SetSQLMode(_mode)
+	YRP:msg("note", ply:YRPName() .. " changed sqlmode to " .. GetSQLModeName())
+	timer.Simple(3, function() game.ConsoleCommand("changelevel " .. GetMapName() .. "\n") end)
+end)

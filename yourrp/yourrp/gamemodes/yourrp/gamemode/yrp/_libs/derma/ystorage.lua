@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local PANEL = {}
 function PANEL:Paint(pw, ph)
 end
@@ -9,11 +9,9 @@ function GetStoragePanel(storageID)
 	if IsNotNilAndNotFalse(storageID) then
 		storageID = tonumber(storageID)
 		if IsNotNilAndNotFalse(YRP_STORAGES[storageID]) then return YRP_STORAGES[storageID] end
-
 		return nil
 	else
 		YRP:msg("note", "[GetStoragePanel] storageID is invalid: " .. tostring(storageID))
-
 		return nil
 	end
 end
@@ -32,9 +30,7 @@ function SetStoragePanel(storageID, pnl)
 end
 
 function RemoveStoragePanel(storageID, pnl)
-	if IsNotNilAndNotFalse(YRP_STORAGES[storageID]) then
-		YRP_STORAGES[storageID] = nil
-	end
+	if IsNotNilAndNotFalse(YRP_STORAGES[storageID]) then YRP_STORAGES[storageID] = nil end
 end
 
 function PANEL:GetStorageID()
@@ -99,16 +95,13 @@ end
 
 vgui.Register("YStorage", PANEL, "DPanelList")
 -- Networking
-net.Receive(
-	"nws_yrp_storage_get_slots",
-	function(len)
-		local storageID = net.ReadString()
-		local slots = net.ReadTable()
-		storageID = tonumber(storageID)
-		local storage = GetStoragePanel(storageID)
-		BuildStorage(storage, slots)
-	end
-)
+net.Receive("nws_yrp_storage_get_slots", function(len)
+	local storageID = net.ReadString()
+	local slots = net.ReadTable()
+	storageID = tonumber(storageID)
+	local storage = GetStoragePanel(storageID)
+	BuildStorage(storage, slots)
+end)
 
 function BuildStorage(storage, slots)
 	if YRPPanelAlive(storage, "storage") then
@@ -139,13 +132,8 @@ function BuildStorage(storage, slots)
 	end
 end
 
-net.Receive(
-	"yrpclosebag",
-	function(len)
-		local storID = net.ReadString()
-		local storage = GetStoragePanel(storID)
-		if IsNotNilAndNotFalse(storage) then
-			storage:GetParent():Remove()
-		end
-	end
-)
+net.Receive("yrpclosebag", function(len)
+	local storID = net.ReadString()
+	local storage = GetStoragePanel(storID)
+	if IsNotNilAndNotFalse(storage) then storage:GetParent():Remove() end
+end)

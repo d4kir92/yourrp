@@ -1,64 +1,47 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_profiles_hud"
-hook.Add(
-	"YRP_SQLDBREADY_VISUAL_DB",
-	"yrp_profiles_hud",
-	function()
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "profile_name", "TEXT DEFAULT ''")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
-	end
-)
+hook.Add("YRP_SQLDBREADY_VISUAL_DB", "yrp_profiles_hud", function()
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME, "profile_name", "TEXT DEFAULT ''")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
+end)
 
-hook.Add(
-	"YRP_SQLDBREADY_VISUAL_UPDATE",
-	"yrp_profiles_hud",
-	function()
-		ProfilesYourRPDefault()
-		ProfilesTopBar()
-		ProfilesIdentifycard()
-	end
-)
+hook.Add("YRP_SQLDBREADY_VISUAL_UPDATE", "yrp_profiles_hud", function()
+	ProfilesYourRPDefault()
+	ProfilesTopBar()
+	ProfilesIdentifycard()
+end)
 
 function GetHudProfiles()
 	return YRP_SQL_SELECT(DATABASE_NAME, "*", "name = 'name'")
 end
 
 YRP:AddNetworkString("nws_yrp_change_to_hud_profile")
-net.Receive(
-	"nws_yrp_change_to_hud_profile",
-	function(len, ply)
-		if not ply:GetYRPBool("bool_design", false) then return end
-		local profile_name = net.ReadString()
-		YRP_SQL_UPDATE(
-			"yrp_design",
-			{
-				["string_hud_profile"] = profile_name
-			}, "uniqueID = 1"
-		)
+net.Receive("nws_yrp_change_to_hud_profile", function(len, ply)
+	if not ply:GetYRPBool("bool_design", false) then return end
+	local profile_name = net.ReadString()
+	YRP_SQL_UPDATE("yrp_design", {
+		["string_hud_profile"] = profile_name
+	}, "uniqueID = 1")
 
-		SetGlobalYRPString("string_hud_profile", profile_name)
-		local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "profile_name = " .. YRP_SQL_STR_IN(profile_name))
-		if IsNotNilAndNotFalse(tab) then
-			for i, v in pairs(tab) do
-				local name = v.name
-				local value = v.value
-				YRP_SQL_UPDATE(
-					"yrp_hud",
-					{
-						["value"] = value
-					}, "name = '" .. name .. "'"
-				)
-			end
-
-			HudLoadoutAll()
-		else
-			YRP:msg("note", "HUD Profile: " .. profile_name .. " (not found)")
+	SetGlobalYRPString("string_hud_profile", profile_name)
+	local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", "profile_name = " .. YRP_SQL_STR_IN(profile_name))
+	if IsNotNilAndNotFalse(tab) then
+		for i, v in pairs(tab) do
+			local name = v.name
+			local value = v.value
+			YRP_SQL_UPDATE("yrp_hud", {
+				["value"] = value
+			}, "name = '" .. name .. "'")
 		end
+
+		HudLoadoutAll()
+	else
+		YRP:msg("note", "HUD Profile: " .. profile_name .. " (not found)")
 	end
-)
+end)
 
 function HudToCode(name)
 	MsgC(Color(255, 255, 255, 255), "local " .. string.Replace(name, " ", "_") .. " = {}" .. "\n")
@@ -90,12 +73,9 @@ function HudProfileToDataBase(name, tab)
 		if tab.Version ~= HUDPROFILEVERSION then
 			YRP:msg("db", "Updating Hud Profile: " .. name, nil, true)
 			for i, v in pairs(tab) do
-				YRP_SQL_UPDATE(
-					DATABASE_NAME,
-					{
-						["value"] = v
-					}, "name = '" .. i .. "' AND profile_name = '" .. name .. "'"
-				)
+				YRP_SQL_UPDATE(DATABASE_NAME, {
+					["value"] = v
+				}, "name = '" .. i .. "' AND profile_name = '" .. name .. "'")
 			end
 		end
 	end

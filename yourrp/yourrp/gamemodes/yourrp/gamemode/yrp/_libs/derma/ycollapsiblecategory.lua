@@ -1,29 +1,26 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local _type = type
 local PANEL = {}
 local w = 10
 local h = 10
-net.Receive(
-	"nws_yrp_want_role",
-	function(len, ply)
-		local result = net.ReadString()
-		if result == "worked" then
-			CreateRolePreviewContent()
-		else
-			local popup = YRPCreateD("YFrame", nil, YRP:ctr(800), YRP:ctr(120 + 20 + 60 + 20 + 20 + 100), 0, 0)
-			popup:Center()
-			popup:MakePopup()
-			popup:SetTitle(YRP:trans(result))
-			local ok = YRPCreateD("YLabel", popup:GetContent(), YRP:ctr(760), YRP:ctr(120), popup:GetContent():GetWide() / 2 - YRP:ctr(760 / 2), popup:GetContent():GetTall() - YRP:ctr(60 + 20 + 120))
-			ok:SetText(YRP:trans(result))
-			local ok2 = YRPCreateD("YButton", popup:GetContent(), YRP:ctr(400), YRP:ctr(60), popup:GetContent():GetWide() / 2 - YRP:ctr(400 / 2), popup:GetContent():GetTall() - YRP:ctr(60))
-			ok2:SetText(YRP:trans("LID_ok"))
-			function ok2:DoClick()
-				popup:Close()
-			end
+net.Receive("nws_yrp_want_role", function(len, ply)
+	local result = net.ReadString()
+	if result == "worked" then
+		CreateRolePreviewContent()
+	else
+		local popup = YRPCreateD("YFrame", nil, YRP:ctr(800), YRP:ctr(120 + 20 + 60 + 20 + 20 + 100), 0, 0)
+		popup:Center()
+		popup:MakePopup()
+		popup:SetTitle(YRP:trans(result))
+		local ok = YRPCreateD("YLabel", popup:GetContent(), YRP:ctr(760), YRP:ctr(120), popup:GetContent():GetWide() / 2 - YRP:ctr(760 / 2), popup:GetContent():GetTall() - YRP:ctr(60 + 20 + 120))
+		ok:SetText(YRP:trans(result))
+		local ok2 = YRPCreateD("YButton", popup:GetContent(), YRP:ctr(400), YRP:ctr(60), popup:GetContent():GetWide() / 2 - YRP:ctr(400 / 2), popup:GetContent():GetTall() - YRP:ctr(60))
+		ok2:SetText(YRP:trans("LID_ok"))
+		function ok2:DoClick()
+			popup:Close()
 		end
 	end
-)
+end)
 
 function PANEL:SetHeader(txt)
 	self._htext = txt
@@ -122,53 +119,44 @@ function PANEL:Init()
 		draw.SimpleText(base._htext, "Y_" .. math.Clamp(math.Round(ph - 2 * YRP:ctr(20), 0), 4, 100) .. "_500", x, ph / 2, YRPTextColor(YRPInterfaceValue("YFrame", "PC")), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
-	net.Receive(
-		"nws_yrp_get_next_ranks",
-		function(len)
-			local rols = net.ReadTable()
-			local nex = NEXTS[tonumber(rols[1].int_prerole)]
-			local rlis = nex.rlis
-			if not YRPPanelAlive(rlis, "rlis") then
-				YRP:msg("note", "rlis invalid")
-
-				return
-			end
-
-			local lis = YRPCreateD("DPanelList", nil, YRP:ctr(w + 80 + 30), YRP:ctr(h), 0, 0)
-			lis:EnableVerticalScrollbar()
-			rlis:AddPanel(lis)
-			local sBar = lis.VBar
-			function sBar:Paint(sw, sh)
-				draw.RoundedBox(0, 0, 0, sw, sh, YRPInterfaceValue("YFrame", "NC"))
-			end
-
-			function sBar.btnUp:Paint(sw, sh)
-				draw.RoundedBox(0, 0, 0, sw, sh, Color(60, 60, 60))
-			end
-
-			function sBar.btnDown:Paint(sw, sh)
-				draw.RoundedBox(0, 0, 0, sw, sh, Color(60, 60, 60))
-			end
-
-			function sBar.btnGrip:Paint(sw, sh)
-				draw.RoundedBox(w / 2, 0, 0, sw, sh, YRPInterfaceValue("YFrame", "HI"))
-			end
-
-			for i, r in pairs(rols) do
-				r.bool_eventrole = tobool(r.bool_eventrole)
-				if r.bool_eventrole == GetGlobalYRPBool("create_eventchar", false) then
-					AddRole(rlis, r, w, h, lis)
-				end
-			end
+	net.Receive("nws_yrp_get_next_ranks", function(len)
+		local rols = net.ReadTable()
+		local nex = NEXTS[tonumber(rols[1].int_prerole)]
+		local rlis = nex.rlis
+		if not YRPPanelAlive(rlis, "rlis") then
+			YRP:msg("note", "rlis invalid")
+			return
 		end
-	)
+
+		local lis = YRPCreateD("DPanelList", nil, YRP:ctr(w + 80 + 30), YRP:ctr(h), 0, 0)
+		lis:EnableVerticalScrollbar()
+		rlis:AddPanel(lis)
+		local sBar = lis.VBar
+		function sBar:Paint(sw, sh)
+			draw.RoundedBox(0, 0, 0, sw, sh, YRPInterfaceValue("YFrame", "NC"))
+		end
+
+		function sBar.btnUp:Paint(sw, sh)
+			draw.RoundedBox(0, 0, 0, sw, sh, Color(60, 60, 60))
+		end
+
+		function sBar.btnDown:Paint(sw, sh)
+			draw.RoundedBox(0, 0, 0, sw, sh, Color(60, 60, 60))
+		end
+
+		function sBar.btnGrip:Paint(sw, sh)
+			draw.RoundedBox(w / 2, 0, 0, sw, sh, YRPInterfaceValue("YFrame", "HI"))
+		end
+
+		for i, r in pairs(rols) do
+			r.bool_eventrole = tobool(r.bool_eventrole)
+			if r.bool_eventrole == GetGlobalYRPBool("create_eventchar", false) then AddRole(rlis, r, w, h, lis) end
+		end
+	end)
 
 	function AddRole(rlis, rol, sw, sh, lis)
 		rol.uniqueID = tonumber(rol.uniqueID)
-		if _type(rol.string_usergroups) ~= "table" then
-			rol.string_usergroups = string.Explode(",", rol.string_usergroups)
-		end
-
+		if _type(rol.string_usergroups) ~= "table" then rol.string_usergroups = string.Explode(",", rol.string_usergroups) end
 		rol.bool_visible_cc = tobool(rol.bool_visible_cc)
 		rol.bool_visible_rm = tobool(rol.bool_visible_rm)
 		rol.bool_locked = tobool(rol.bool_locked)
@@ -189,10 +177,7 @@ function PANEL:Init()
 			draw.RoundedBox(diameter / 2, YRP:ctr(18), YRP:ctr(8), diameter + YRP:ctr(4), diameter + YRP:ctr(4), StringToColor(rol.string_color))
 			draw.RoundedBox(diameter / 2, YRP:ctr(20), YRP:ctr(10), diameter, diameter, YRPInterfaceValue("YFrame", "PC"))
 			draw.SimpleText(rol.string_name, "Y_26_500", ph + YRP:ctr(20), ph / 3, YRPTextColor(YRPInterfaceValue("YFrame", "PC")), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			if IsMoneyEnabled() and tonumber(rol.int_salary) > 0 then
-				draw.SimpleText(MoneyFormat(rol.int_salary), "Y_20_500", ph + YRP:ctr(20), ph / 3 * 2, YRPTextColor(YRPInterfaceValue("YFrame", "PC")), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			end
-
+			if IsMoneyEnabled() and tonumber(rol.int_salary) > 0 then draw.SimpleText(MoneyFormat(rol.int_salary), "Y_20_500", ph + YRP:ctr(20), ph / 3 * 2, YRPTextColor(YRPInterfaceValue("YFrame", "PC")), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER) end
 			if rol.int_maxamount > 0 then
 				local radius = ph / 2 - 1 * YRP:ctr(10)
 				local x = pw - ph / 2
@@ -201,40 +186,28 @@ function PANEL:Init()
 				if self.circ == nil then
 					local ang = rol.int_uses / rol.int_maxamount * 360
 					self.circbg = circleBorder(x, y, radius, 32, 0, 360)
-					table.insert(
-						self.circbg,
-						{
-							x = x,
-							y = y
-						}
-					)
+					table.insert(self.circbg, {
+						x = x,
+						y = y
+					})
 
 					self.circ2bg = circleBorder(x, y, radius - YRP:ctr(10), 32, 0, 360)
-					table.insert(
-						self.circ2bg,
-						{
-							x = x,
-							y = y
-						}
-					)
+					table.insert(self.circ2bg, {
+						x = x,
+						y = y
+					})
 
 					self.circ = circleBorder(x, y, radius, 32, 0, ang)
-					table.insert(
-						self.circ,
-						{
-							x = x,
-							y = y
-						}
-					)
+					table.insert(self.circ, {
+						x = x,
+						y = y
+					})
 
 					self.circ2 = circleBorder(x, y, radius - YRP:ctr(10), 32, 0, ang)
-					table.insert(
-						self.circ2,
-						{
-							x = x,
-							y = y
-						}
-					)
+					table.insert(self.circ2, {
+						x = x,
+						y = y
+					})
 				else
 					-- Background
 					render.ClearStencil()
@@ -275,10 +248,7 @@ function PANEL:Init()
 		end
 
 		local diameter = YRP:ctr(h) - 2 * YRP:ctr(10)
-		if _type(rol.pms) ~= "table" and _type(rol.pms) == "string" then
-			rol.pms = string.Explode(",", rol.pms)
-		end
-
+		if _type(rol.pms) ~= "table" and _type(rol.pms) == "string" then rol.pms = string.Explode(",", rol.pms) end
 		if _type(rol.pms) == "table" and not strEmpty(rol.pms[1]) then
 			local pm = YRPCreateD("YModelPanel", bg, diameter, diameter, YRP:ctr(20), YRP:ctr(10))
 			pm:SetModel(rol.pms[1])
@@ -286,7 +256,6 @@ function PANEL:Init()
 				function pm.panel:LayoutEntity(ent)
 					ent:SetSequence(ent:LookupSequence("menu_gman"))
 					pm.panel:RunAnimation()
-
 					return
 				end
 
@@ -305,15 +274,10 @@ function PANEL:Init()
 		local btn = YRPCreateD("DButton", bg, bg:GetWide(), bg:GetTall(), 0, 0)
 		btn:SetText("")
 		function btn:Paint(pw, ph)
-			if rol.int_prerole == 0 and (not rol.bool_locked or LocalPlayer():HasAccess("CollapseCategory1")) and rol.int_requireslevel <= LocalPlayer():Level() and self:IsHovered() then
-				draw.RoundedBox(YRP:ctr(10), 0, 0, pw, ph, Color(255, 255, 255, 10))
-			end
-
+			if rol.int_prerole == 0 and (not rol.bool_locked or LocalPlayer():HasAccess("CollapseCategory1")) and rol.int_requireslevel <= LocalPlayer():Level() and self:IsHovered() then draw.RoundedBox(YRP:ctr(10), 0, 0, pw, ph, Color(255, 255, 255, 10)) end
 			if rol.bool_locked or rol.int_requireslevel > LocalPlayer():Level() then
 				YRP:DrawIcon(YRP:GetDesignIcon("lock"), ph - 2 * YRP:ctr(40), ph - 2 * YRP:ctr(40), YRP:ctr(50), YRP:ctr(40), Color(255, 100, 100))
-				if rol.int_requireslevel > LocalPlayer():Level() then
-					draw.SimpleText(string.sub(YRP:trans("LID_level"), 1, 3) .. ". " .. rol.int_requireslevel, "Y_24_500", ph / 2 + YRP:ctr(10), ph / 2, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-				end
+				if rol.int_requireslevel > LocalPlayer():Level() then draw.SimpleText(string.sub(YRP:trans("LID_level"), 1, 3) .. ". " .. rol.int_requireslevel, "Y_24_500", ph / 2 + YRP:ctr(10), ph / 2, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER) end
 			end
 		end
 
@@ -321,24 +285,18 @@ function PANEL:Init()
 			rol.int_prerole = tonumber(rol.int_prerole)
 			if (not rol.bool_locked or LocalPlayer():HasAccess("CollapseCategory2")) and rol.int_requireslevel <= LocalPlayer():Level() then
 				LocalPlayer().charcreate_ruid = rol.uniqueID
-				timer.Simple(
-					0.2,
-					function()
-						net.Start("nws_yrp_want_role")
-						net.WriteString(rol.uniqueID)
-						net.SendToServer()
-					end
-				)
+				timer.Simple(0.2, function()
+					net.Start("nws_yrp_want_role")
+					net.WriteString(rol.uniqueID)
+					net.SendToServer()
+				end)
 			end
 		end
 
 		local nex = YRPCreateD("DButton", r, YRP:ctr(80), YRP:ctr(h), r:GetWide() - YRP:ctr(80), 0)
 		nex:SetText("")
 		function nex:Paint(pw, ph)
-			if self:IsHovered() then
-				draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 20))
-			end
-
+			if self:IsHovered() then draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 20)) end
 			local br = YRP:ctr(10)
 			if YRP:GetDesignIcon("64_angle-right") ~= nil then
 				surface.SetMaterial(YRP:GetDesignIcon("64_angle-right"))
@@ -382,22 +340,19 @@ function PANEL:Init()
 			end
 		end
 
-		net.Receive(
-			"nws_yrp_hasnext_ranks",
-			function(len)
-				local ruid = net.ReadString()
-				local b = net.ReadBool()
-				ruid = tonumber(ruid)
-				local nextP = NEXTS[ruid]
-				if YRPPanelAlive(nextP, "nextP") then
-					if not b then
-						nextP:Remove()
-					else
-						nextP:Show()
-					end
+		net.Receive("nws_yrp_hasnext_ranks", function(len)
+			local ruid = net.ReadString()
+			local b = net.ReadBool()
+			ruid = tonumber(ruid)
+			local nextP = NEXTS[ruid]
+			if YRPPanelAlive(nextP, "nextP") then
+				if not b then
+					nextP:Remove()
+				else
+					nextP:Show()
 				end
 			end
-		)
+		end)
 
 		net.Start("nws_yrp_hasnext_ranks")
 		net.WriteString(rol.uniqueID)
@@ -487,10 +442,7 @@ function PANEL:Init()
 			if base.con:GetCanvas():GetTall() < sh then
 				sh = base.con:GetCanvas():GetTall()
 				sh = math.Clamp(sh, YRP:ctr(999), YRP:ctr(1999))
-				if base._fh then
-					sh = base._fh
-				end
-
+				if base._fh then sh = base._fh end
 				sh = YRP:ctr(sh)
 				base:SetTall(sh + YRP:ctr(100 + 2 * 20))
 				base.btn:SetTall(YRP:ctr(100))
@@ -500,10 +452,7 @@ function PANEL:Init()
 				base._lis:Rebuild()
 			else
 				sh = rh * 3.5
-				if base._fh then
-					sh = base._fh
-				end
-
+				if base._fh then sh = base._fh end
 				sh = YRP:ctr(sh)
 				base:SetTall(sh)
 				base.btn:SetTall(YRP:ctr(100))
@@ -520,27 +469,21 @@ function PANEL:Init()
 		this.roltab = {}
 		this.grptab = {}
 		if base._open then
-			net.Receive(
-				"nws_yrp_roleselection_getcontent_role",
-				function(len)
-					local rol = net.ReadTable()
-					if rol and this.roltab then
-						table.insert(this.roltab, rol)
-						this:RebuildContent()
-					end
+			net.Receive("nws_yrp_roleselection_getcontent_role", function(len)
+				local rol = net.ReadTable()
+				if rol and this.roltab then
+					table.insert(this.roltab, rol)
+					this:RebuildContent()
 				end
-			)
+			end)
 
-			net.Receive(
-				"nws_yrp_roleselection_getcontent_group",
-				function(len)
-					local grp = net.ReadTable()
-					if grp and this.grptab then
-						table.insert(this.grptab, grp)
-						this.RebuildContent()
-					end
+			net.Receive("nws_yrp_roleselection_getcontent_group", function(len)
+				local grp = net.ReadTable()
+				if grp and this.grptab then
+					table.insert(this.grptab, grp)
+					this.RebuildContent()
 				end
-			)
+			end)
 
 			if base._guid then
 				net.Start("nws_yrp_roleselection_getcontent")

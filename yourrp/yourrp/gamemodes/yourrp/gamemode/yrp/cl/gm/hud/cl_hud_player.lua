@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local hud = {}
 hud["hp"] = 100
 hud["ar"] = 100
@@ -54,121 +54,88 @@ local tabs = {
 	["spawnmenu.category.saves"] = "bool_saves"
 }
 
-hook.Add(
-	"SpawnMenuOpen",
-	"yrp_spawn_menu_open",
-	function()
-		YRPOpenMenu()
-		local lply = LocalPlayer()
-		if not IsValid(lply) then return false end
-		-- Fix tabsorting
-		if once then
-			once = false
-			timer.Simple(
-				0.2,
-				function()
-					if YRPPanelAlive(g_SpawnMenu, "g_SpawnMenu 1") then
-						g_SpawnMenu:Close(true) -- close it after short time
-						timer.Simple(
-							0.1,
-							function()
-								if YRPPanelAlive(g_SpawnMenu, "g_SpawnMenu 2") and g_SpawnMenu.Open then
-									g_SpawnMenu:Open() -- reopen with handling the tabs
-									hook.Run("SpawnMenuOpen") -- reload the hook
-								end
-							end
-						)
+hook.Add("SpawnMenuOpen", "yrp_spawn_menu_open", function()
+	YRPOpenMenu()
+	local lply = LocalPlayer()
+	if not IsValid(lply) then return false end
+	-- Fix tabsorting
+	if once then
+		once = false
+		timer.Simple(0.2, function()
+			if YRPPanelAlive(g_SpawnMenu, "g_SpawnMenu 1") then
+				g_SpawnMenu:Close(true) -- close it after short time
+				timer.Simple(0.1, function()
+					if YRPPanelAlive(g_SpawnMenu, "g_SpawnMenu 2") and g_SpawnMenu.Open then
+						g_SpawnMenu:Open() -- reopen with handling the tabs
+						hook.Run("SpawnMenuOpen") -- reload the hook
 					end
-				end
-			)
-		else -- Handling Tabs
-			local allhidden = true -- for when all disabllowed
-			local firsttab = nil
-			-- Loop through all tabs of spawnmenu
-			if YRPPanelAlive(g_SpawnMenu, "g_SpawnMenu 3") then
-				for i, v in pairs(g_SpawnMenu.CreateMenu.Items) do
-					local tab = v.Tab -- tab
-					local text = tab:GetText() -- tab name
-					for lstr, bstr in pairs(tabs) do
-						-- if tabtext == tabletabtext
-						if text == language.GetPhrase(lstr) then
-							tab:SetVisible(LocalPlayer():GetYRPBool(bstr, false)) -- set visible if allowed to
-							-- if allowed
-							if LocalPlayer():GetYRPBool(bstr) then
-								allhidden = false -- then disable hiding the whole element
-								-- if not firsttab found
-								if firsttab == nil then
-									firsttab = lstr -- set it
-								end
+				end)
+			end
+		end)
+	else -- Handling Tabs
+		local allhidden = true -- for when all disabllowed
+		local firsttab = nil
+		-- Loop through all tabs of spawnmenu
+		if YRPPanelAlive(g_SpawnMenu, "g_SpawnMenu 3") then
+			for i, v in pairs(g_SpawnMenu.CreateMenu.Items) do
+				local tab = v.Tab -- tab
+				local text = tab:GetText() -- tab name
+				for lstr, bstr in pairs(tabs) do
+					-- if tabtext == tabletabtext
+					if text == language.GetPhrase(lstr) then
+						tab:SetVisible(LocalPlayer():GetYRPBool(bstr, false)) -- set visible if allowed to
+						-- if allowed
+						if LocalPlayer():GetYRPBool(bstr) then
+							allhidden = false -- then disable hiding the whole element
+							-- if not firsttab found
+							if firsttab == nil then
+								firsttab = lstr -- set it
 							end
 						end
 					end
 				end
+			end
 
-				-- Switch to allowed tab if on an unallowed one
-				local text = g_SpawnMenu.CreateMenu:GetActiveTab():GetText() -- active tab of spawnmenu
-				local changefirstpage = false
-				for lstr, bstr in pairs(tabs) do
-					-- if active tab text == table tab text
-					if text and lstr and bstr and language.GetPhrase(text) == language.GetPhrase(lstr) and not lply:GetYRPBool(bstr) then
-						changefirstpage = true -- then change tab
-					end
-				end
-
-				-- change first tab page, because currently on unallowed
-				if changefirstpage and firsttab then
-					g_SpawnMenu:OpenCreationMenuTab("#" .. firsttab) -- changes to new tab page
-				end
-
-				-- Hide the whole element when all disallowed
-				if allhidden then
-					g_SpawnMenu.CreateMenu:SetVisible(false)
-				else
-					g_SpawnMenu.CreateMenu:SetVisible(true)
+			-- Switch to allowed tab if on an unallowed one
+			local text = g_SpawnMenu.CreateMenu:GetActiveTab():GetText() -- active tab of spawnmenu
+			local changefirstpage = false
+			for lstr, bstr in pairs(tabs) do
+				-- if active tab text == table tab text
+				if text and lstr and bstr and language.GetPhrase(text) == language.GetPhrase(lstr) and not lply:GetYRPBool(bstr) then
+					changefirstpage = true -- then change tab
 				end
 			end
+
+			-- change first tab page, because currently on unallowed
+			if changefirstpage and firsttab then
+				g_SpawnMenu:OpenCreationMenuTab("#" .. firsttab) -- changes to new tab page
+			end
+
+			-- Hide the whole element when all disallowed
+			if allhidden then
+				g_SpawnMenu.CreateMenu:SetVisible(false)
+			else
+				g_SpawnMenu.CreateMenu:SetVisible(true)
+			end
 		end
+	end
+	return LocalPlayer():GetYRPBool("bool_canusespawnmenu", false)
+end, hook.MONITOR_HIGH)
 
-		return LocalPlayer():GetYRPBool("bool_canusespawnmenu", false)
-	end, hook.MONITOR_HIGH
-)
-
-hook.Add(
-	"SpawnMenuClose",
-	"yrp_spawn_menu_close",
-	function()
-		YRPCloseMenu()
-	end, hook.MONITOR_HIGH
-)
-
+hook.Add("SpawnMenuClose", "yrp_spawn_menu_close", function() YRPCloseMenu() end, hook.MONITOR_HIGH)
 local contextMenuOpen = false
-hook.Add(
-	"ContextMenuOpen",
-	"YRPOnContextMenuOpen",
-	function()
-		contextMenuOpen = true
+hook.Add("ContextMenuOpen", "YRPOnContextMenuOpen", function()
+	contextMenuOpen = true
+	return LocalPlayer():GetYRPBool("bool_canusecontextmenu", false)
+end, hook.MONITOR_HIGH)
 
-		return LocalPlayer():GetYRPBool("bool_canusecontextmenu", false)
-	end, hook.MONITOR_HIGH
-)
-
-hook.Add(
-	"ContextMenuClose",
-	"YRPOnContextMenuClose",
-	function()
-		contextMenuOpen = false
-	end, hook.MONITOR_HIGH
-)
-
+hook.Add("ContextMenuClose", "YRPOnContextMenuClose", function() contextMenuOpen = false end, hook.MONITOR_HIGH)
 function sText(text, font, x, y, color, ax, ay)
 	surface.SetFont(font)
 	local _, h = surface.GetTextSize(text)
 	local _ax = 0
 	local _ay = 0
-	if ay == 1 then
-		_ay = h / 2
-	end
-
+	if ay == 1 then _ay = h / 2 end
 	surface.SetTextColor(color or Color(255, 255, 255, 255))
 	surface.SetTextPos(x - _ax, y - _ay)
 	surface.DrawText(text)
@@ -211,10 +178,7 @@ function drawHUDElement(dbV, cur, max, text, icon, color)
 	if tobool(HudV(dbV .. "to")) then
 		local _r = 0
 		if color ~= nil and cur ~= nil and max ~= nil then
-			if tonumber(cur) > tonumber(max) then
-				cur = max
-			end
-
+			if tonumber(cur) > tonumber(max) then cur = max end
 			if HUD[dbV] == nil or HUD.refresh then
 				HUD.count = HUD.count + 1
 				HUD[dbV] = {}
@@ -233,10 +197,7 @@ function drawHUDElement(dbV, cur, max, text, icon, color)
 				HUD[dbV].barw = cur / max * HUD[dbV].w
 			end
 
-			if tobool(HudV(dbV .. "tr")) then
-				_r = YRP:ctr(HudV(dbV .. "sh")) / 2
-			end
-
+			if tobool(HudV(dbV .. "tr")) then _r = YRP:ctr(HudV(dbV .. "sh")) / 2 end
 			draw.RoundedBox(_r, HUD[dbV].x, HUD[dbV].y, HUD[dbV].w, HUD[dbV].h, Color(HudV("colbgr"), HudV("colbgg"), HudV("colbgb"), HudV("colbga")))
 			if tonumber(max) >= 0 then
 				if not tobool(HudV(dbV .. "tr")) then
@@ -272,9 +233,7 @@ function drawHUDElement(dbV, cur, max, text, icon, color)
 				draw.SimpleText(text, dbV .. "sf", _st.x, _st.y, Color(255, 255, 255, 255), HudV(dbV .. "tx"), HudV(dbV .. "ty"), 1, Color(0, 0, 0, 255))
 			end
 
-			if icon ~= nil and HudV(dbV .. "it") == 1 then
-				showIcon(dbV, icon)
-			end
+			if icon ~= nil and HudV(dbV .. "it") == 1 then showIcon(dbV, icon) end
 		end
 	end
 end
@@ -305,17 +264,9 @@ function YRPHudThirdperson(ply, color)
 		draw.SimpleText(_3PText .. " ( " .. math.Round(ply.yrp_view_range, -1) .. " )", "Y_24_500", ScrW() / 2, YRP:ctr(2160 / 2 + 550), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 	end
 
-	if YRPGetKeybind("view_up") and YRPGetKeybind("view_down") and (input.IsKeyDown(YRPGetKeybind("view_up")) or input.IsKeyDown(YRPGetKeybind("view_down"))) then
-		draw.SimpleText(YRP:trans("LID_viewingheight") .. " ( " .. math.Round(ply.yrp_view_z, 0) .. " )", "Y_24_500", ScrW() / 2, YRP:ctr(2160 / 2 + 600), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-	end
-
-	if YRPGetKeybind("view_right") and YRPGetKeybind("view_left") and (input.IsKeyDown(YRPGetKeybind("view_right")) or input.IsKeyDown(YRPGetKeybind("view_left"))) then
-		draw.SimpleText(YRP:trans("LID_viewingposition") .. " ( " .. math.Round(ply.yrp_view_x, 0) .. " )", "Y_24_500", ScrW() / 2, YRP:ctr(2160 / 2 + 650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-	end
-
-	if YRPGetKeybind("view_spin_right") and YRPGetKeybind("view_spin_left") and (input.IsKeyDown(YRPGetKeybind("view_spin_right")) or input.IsKeyDown(YRPGetKeybind("view_spin_left"))) then
-		draw.SimpleText(YRP:trans("LID_viewingangle") .. " ( " .. math.Round(ply.yrp_view_s, 0) .. "° )", "Y_24_500", ScrW() / 2, YRP:ctr(2160 / 2 + 700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-	end
+	if YRPGetKeybind("view_up") and YRPGetKeybind("view_down") and (input.IsKeyDown(YRPGetKeybind("view_up")) or input.IsKeyDown(YRPGetKeybind("view_down"))) then draw.SimpleText(YRP:trans("LID_viewingheight") .. " ( " .. math.Round(ply.yrp_view_z, 0) .. " )", "Y_24_500", ScrW() / 2, YRP:ctr(2160 / 2 + 600), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255)) end
+	if YRPGetKeybind("view_right") and YRPGetKeybind("view_left") and (input.IsKeyDown(YRPGetKeybind("view_right")) or input.IsKeyDown(YRPGetKeybind("view_left"))) then draw.SimpleText(YRP:trans("LID_viewingposition") .. " ( " .. math.Round(ply.yrp_view_x, 0) .. " )", "Y_24_500", ScrW() / 2, YRP:ctr(2160 / 2 + 650), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255)) end
+	if YRPGetKeybind("view_spin_right") and YRPGetKeybind("view_spin_left") and (input.IsKeyDown(YRPGetKeybind("view_spin_right")) or input.IsKeyDown(YRPGetKeybind("view_spin_left"))) then draw.SimpleText(YRP:trans("LID_viewingangle") .. " ( " .. math.Round(ply.yrp_view_s, 0) .. "° )", "Y_24_500", ScrW() / 2, YRP:ctr(2160 / 2 + 700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255)) end
 end
 
 function client_toggled()
@@ -329,9 +280,7 @@ end
 function YRPHudPlayer(ply)
 	if ply:GetHudDesignName() ~= "notloaded" then
 		drawMenuInfo()
-		if ply:Alive() and not contextMenuOpen then
-			YRPHudThirdperson(ply)
-		end
+		if ply:Alive() and not contextMenuOpen then YRPHudThirdperson(ply) end
 	else
 		draw.RoundedBox(0, 0, 0, ScrW(), ScrH(), Color(0, 0, 0, 100))
 		draw.SimpleText(YRP:trans("LID_loading") .. ": HUD", "DermaDefault", ScrW2(), ScrH2(), Color(255, 255, 0, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, YRP:ctr(1), Color(0, 0, 0, 255))

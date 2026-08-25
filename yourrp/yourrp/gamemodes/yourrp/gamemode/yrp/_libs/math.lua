@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 -- Screen
 local HA = {}
 HA.w = 0
@@ -9,11 +9,9 @@ end
 function BiggerThen16_9()
 	if ScrW() > ScrH() / 9 * 16 then
 		HA.w = ScrH() / 9 * 16
-
 		return true
 	else
 		HA.w = ScrW()
-
 		return false
 	end
 end
@@ -107,19 +105,16 @@ function ggT(_num1, _num2)
 		_num2 = _ggt
 		_ggt = _num1 % _num2
 	end
-
 	return _num2
 end
 
 function getResolutionRatio()
 	local _ggt = ggT(ScrW(), ScrH())
-
 	return ScrW() / _ggt, ScrH() / _ggt
 end
 
 function getPictureRatio(w, h)
 	local _ggt = ggT(w, h)
-
 	return w / _ggt, h / _ggt
 end
 
@@ -137,13 +132,11 @@ function lowerToScreen(w, h)
 		tmpW = tmpW / per
 		tmpH = tmpH / per
 	end
-
 	return tmpW, tmpH
 end
 
 function ctrF(tmpNumber)
 	tmpNumber = 2160 / tmpNumber
-
 	return math.Round(tmpNumber, 8)
 end
 

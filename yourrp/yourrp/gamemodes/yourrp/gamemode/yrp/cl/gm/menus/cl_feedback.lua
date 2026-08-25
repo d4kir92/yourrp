@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 -- #TICKET
 TICKET = TICKET or {}
 TICKET.open = false
@@ -17,9 +17,7 @@ function closeTicketMenu()
 		TICKET.window:Remove()
 		TICKET.window = nil
 	elseif YRPPanelAlive(TICKET.content) and YRPPanelAlive(TICKET.content:GetParent()) then
-		if TICKET.content:GetParent().Close ~= nil then
-			TICKET.content:GetParent():Close()
-		end
+		if TICKET.content:GetParent().Close ~= nil then TICKET.content:GetParent():Close() end
 	end
 
 	YRPCloseCombinedMenu()

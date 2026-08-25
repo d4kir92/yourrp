@@ -1,93 +1,55 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_hud"
-hook.Add(
-	"YRP_SQLDBREADY_VISUAL_DB",
-	"yrp_hud",
-	function()
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
-		if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
-			YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'Version', '1'")
-		end
+hook.Add("YRP_SQLDBREADY_VISUAL_DB", "yrp_hud", function()
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
+	if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'Version', '1'") end
+	DefaultHUDSettings()
+end)
 
-		DefaultHUDSettings()
-	end
-)
-
-hook.Add(
-	"YRP_SQLDBREADY_VISUAL",
-	"yrp_hud",
-	function()
-		HudLoadoutAll()
-	end
-)
-
+hook.Add("YRP_SQLDBREADY_VISUAL", "yrp_hud", function() HudLoadoutAll() end)
 --YRP_SQL_DROP_TABLE(DATABASE_NAME)
 function AddHUDElement(tab, reset)
 	for name, value in pairs(tab.floats) do
 		local _name = "float_HUD_" .. tab.element .. "_" .. name
-		if YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then
-			YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'")
-		end
-
+		if YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'") end
 		if reset then
-			YRP_SQL_UPDATE(
-				DATABASE_NAME,
-				{
-					["value"] = value
-				}, "name = '" .. _name .. "'"
-			)
+			YRP_SQL_UPDATE(DATABASE_NAME, {
+				["value"] = value
+			}, "name = '" .. _name .. "'")
 		end
 	end
 
 	for name, value in pairs(tab.bools) do
 		local _name = "bool_HUD_" .. tab.element .. "_" .. name
-		if YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then
-			YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'")
-		end
-
+		if YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'") end
 		if reset then
-			YRP_SQL_UPDATE(
-				DATABASE_NAME,
-				{
-					["value"] = value
-				}, "name = '" .. _name .. "'"
-			)
+			YRP_SQL_UPDATE(DATABASE_NAME, {
+				["value"] = value
+			}, "name = '" .. _name .. "'")
 		end
 	end
 
 	for name, value in pairs(tab.colors) do
 		local _name = "color_HUD_" .. tab.element .. "_" .. name
-		if YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then
-			YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'")
-		end
-
+		if YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'") end
 		if reset then
-			YRP_SQL_UPDATE(
-				DATABASE_NAME,
-				{
-					["value"] = value
-				}, "name = '" .. _name .. "'"
-			)
+			YRP_SQL_UPDATE(DATABASE_NAME, {
+				["value"] = value
+			}, "name = '" .. _name .. "'")
 		end
 	end
 
 	if tab.ints ~= nil then
 		for name, value in pairs(tab.ints) do
 			local _name = "int_HUD_" .. tab.element .. "_" .. name
-			if YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then
-				YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'")
-			end
-
+			if YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'") end
 			if reset then
-				YRP_SQL_UPDATE(
-					DATABASE_NAME,
-					{
-						["value"] = value
-					}, "name = '" .. _name .. "'"
-				)
+				YRP_SQL_UPDATE(DATABASE_NAME, {
+					["value"] = value
+				}, "name = '" .. _name .. "'")
 			end
 		end
 	end
@@ -95,17 +57,11 @@ function AddHUDElement(tab, reset)
 	if tab.strings ~= nil then
 		for name, value in pairs(tab.strings) do
 			local _name = "text_HUD_" .. tab.element .. "_" .. name
-			if YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then
-				YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'")
-			end
-
+			if YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. _name .. "'") == nil then YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'" .. _name .. "', '" .. value .. "'") end
 			if reset then
-				YRP_SQL_UPDATE(
-					DATABASE_NAME,
-					{
-						["value"] = value
-					}, "name = '" .. _name .. "'"
-				)
+				YRP_SQL_UPDATE(DATABASE_NAME, {
+					["value"] = value
+				}, "name = '" .. _name .. "'")
 			end
 		end
 	end
@@ -1066,213 +1022,150 @@ function HudLoadoutAll()
 end
 
 YRP:AddNetworkString("nws_yrp_update_hud_x")
-net.Receive(
-	"nws_yrp_update_hud_x",
-	function(len, ply)
-		if not ply:GetYRPBool("bool_design", false) then return end
-		local element = YRP_SQL_KEY(net.ReadString())
-		local x = net.ReadFloat()
-		YRP_SQL_UPDATE(
-			DATABASE_NAME,
-			{
-				["value"] = x
-			}, "name = 'float_HUD_" .. element .. "_POSI_X'"
-		)
+net.Receive("nws_yrp_update_hud_x", function(len, ply)
+	if not ply:GetYRPBool("bool_design", false) then return end
+	local element = YRP_SQL_KEY(net.ReadString())
+	local x = net.ReadFloat()
+	YRP_SQL_UPDATE(DATABASE_NAME, {
+		["value"] = x
+	}, "name = 'float_HUD_" .. element .. "_POSI_X'")
 
-		HudLoadoutAll()
-	end
-)
+	HudLoadoutAll()
+end)
 
 YRP:AddNetworkString("nws_yrp_update_hud_y")
-net.Receive(
-	"nws_yrp_update_hud_y",
-	function(len, ply)
-		if not ply:GetYRPBool("bool_design", false) then return end
-		local element = YRP_SQL_KEY(net.ReadString())
-		local y = net.ReadFloat()
-		YRP_SQL_UPDATE(
-			DATABASE_NAME,
-			{
-				["value"] = y
-			}, "name = 'float_HUD_" .. element .. "_POSI_Y'"
-		)
+net.Receive("nws_yrp_update_hud_y", function(len, ply)
+	if not ply:GetYRPBool("bool_design", false) then return end
+	local element = YRP_SQL_KEY(net.ReadString())
+	local y = net.ReadFloat()
+	YRP_SQL_UPDATE(DATABASE_NAME, {
+		["value"] = y
+	}, "name = 'float_HUD_" .. element .. "_POSI_Y'")
 
-		HudLoadoutAll()
-	end
-)
+	HudLoadoutAll()
+end)
 
 YRP:AddNetworkString("nws_yrp_update_hud_w")
-net.Receive(
-	"nws_yrp_update_hud_w",
-	function(len, ply)
-		if not ply:GetYRPBool("bool_design", false) then return end
-		local element = YRP_SQL_KEY(net.ReadString())
-		local w = net.ReadFloat()
-		if w > 0.0 then
-			YRP_SQL_UPDATE(
-				DATABASE_NAME,
-				{
-					["value"] = w
-				}, "name = 'float_HUD_" .. element .. "_SIZE_W'"
-			)
+net.Receive("nws_yrp_update_hud_w", function(len, ply)
+	if not ply:GetYRPBool("bool_design", false) then return end
+	local element = YRP_SQL_KEY(net.ReadString())
+	local w = net.ReadFloat()
+	if w > 0.0 then
+		YRP_SQL_UPDATE(DATABASE_NAME, {
+			["value"] = w
+		}, "name = 'float_HUD_" .. element .. "_SIZE_W'")
 
-			HudLoadoutAll()
-		end
+		HudLoadoutAll()
 	end
-)
+end)
 
 YRP:AddNetworkString("nws_yrp_update_hud_h")
-net.Receive(
-	"nws_yrp_update_hud_h",
-	function(len, ply)
-		if not ply:GetYRPBool("bool_design", false) then return end
-		local element = YRP_SQL_KEY(net.ReadString())
-		local h = net.ReadFloat()
-		if h > 0.0 then
-			YRP_SQL_UPDATE(
-				DATABASE_NAME,
-				{
-					["value"] = h
-				}, "name = 'float_HUD_" .. element .. "_SIZE_H'"
-			)
+net.Receive("nws_yrp_update_hud_h", function(len, ply)
+	if not ply:GetYRPBool("bool_design", false) then return end
+	local element = YRP_SQL_KEY(net.ReadString())
+	local h = net.ReadFloat()
+	if h > 0.0 then
+		YRP_SQL_UPDATE(DATABASE_NAME, {
+			["value"] = h
+		}, "name = 'float_HUD_" .. element .. "_SIZE_H'")
 
-			HudLoadoutAll()
-		end
+		HudLoadoutAll()
 	end
-)
+end)
 
 YRP:AddNetworkString("nws_yrp_get_hud_element_settings")
-net.Receive(
-	"nws_yrp_get_hud_element_settings",
-	function(len, ply)
-		--local element = net.ReadString()
-		local ele = YRP_SQL_SELECT(DATABASE_NAME, "*", nil) --"name LIKE '" .. "bool_HUD_" .. element .. "_%'" )
-		local nettab = {}
-		for i, e in pairs(ele) do
-			nettab[e.name] = e.value
-		end
-
-		net.Start("nws_yrp_get_hud_element_settings")
-		net.WriteTable(nettab)
-		net.Send(ply)
+net.Receive("nws_yrp_get_hud_element_settings", function(len, ply)
+	--local element = net.ReadString()
+	local ele = YRP_SQL_SELECT(DATABASE_NAME, "*", nil) --"name LIKE '" .. "bool_HUD_" .. element .. "_%'" )
+	local nettab = {}
+	for i, e in pairs(ele) do
+		nettab[e.name] = e.value
 	end
-)
+
+	net.Start("nws_yrp_get_hud_element_settings")
+	net.WriteTable(nettab)
+	net.Send(ply)
+end)
 
 YRP:AddNetworkString("nws_yrp_update_hud_bool")
-net.Receive(
-	"nws_yrp_update_hud_bool",
-	function(len, ply)
-		if not ply:GetYRPBool("bool_design", false) then return end
-		local element = YRP_SQL_KEY(net.ReadString())
-		local art = YRP_SQL_KEY(net.ReadString())
-		local b = net.ReadBool()
-		YRP_SQL_UPDATE(
-			DATABASE_NAME,
-			{
-				["value"] = tonum(b)
-			}, "name = 'bool_HUD_" .. element .. "_" .. art .. "'"
-		)
+net.Receive("nws_yrp_update_hud_bool", function(len, ply)
+	if not ply:GetYRPBool("bool_design", false) then return end
+	local element = YRP_SQL_KEY(net.ReadString())
+	local art = YRP_SQL_KEY(net.ReadString())
+	local b = net.ReadBool()
+	YRP_SQL_UPDATE(DATABASE_NAME, {
+		["value"] = tonum(b)
+	}, "name = 'bool_HUD_" .. element .. "_" .. art .. "'")
 
-		HudLoadoutAll()
-	end
-)
+	HudLoadoutAll()
+end)
 
 YRP:AddNetworkString("nws_yrp_update_hud_text")
-net.Receive(
-	"nws_yrp_update_hud_text",
-	function(len, ply)
-		if not ply:GetYRPBool("bool_design", false) then return end
-		local element = YRP_SQL_KEY(net.ReadString())
-		local text = net.ReadString()
-		YRP_SQL_UPDATE(
-			DATABASE_NAME,
-			{
-				["value"] = text
-			}, "name = 'text_HUD_" .. element .. "_" .. "CTEX'"
-		)
+net.Receive("nws_yrp_update_hud_text", function(len, ply)
+	if not ply:GetYRPBool("bool_design", false) then return end
+	local element = YRP_SQL_KEY(net.ReadString())
+	local text = net.ReadString()
+	YRP_SQL_UPDATE(DATABASE_NAME, {
+		["value"] = text
+	}, "name = 'text_HUD_" .. element .. "_" .. "CTEX'")
 
-		HudLoadoutAll()
-	end
-)
+	HudLoadoutAll()
+end)
 
 YRP:AddNetworkString("nws_yrp_update_hud_text_position")
-net.Receive(
-	"nws_yrp_update_hud_text_position",
-	function(len, ply)
-		if not ply:GetYRPBool("bool_design", false) then return end
-		local element = YRP_SQL_KEY(net.ReadString())
-		local ax = tonumber(net.ReadInt(4))
-		local ay = tonumber(net.ReadInt(4))
-		if ay == 0 then
-			ay = 3
-		elseif ay == 2 then
-			ay = 4
-		end
-
-		YRP_SQL_UPDATE(
-			DATABASE_NAME,
-			{
-				["value"] = ax
-			}, "name = 'int_HUD_" .. element .. "_" .. "AX'"
-		)
-
-		YRP_SQL_UPDATE(
-			DATABASE_NAME,
-			{
-				["value"] = ay
-			}, "name = 'int_HUD_" .. element .. "_" .. "AY'"
-		)
-
-		HudLoadoutAll()
+net.Receive("nws_yrp_update_hud_text_position", function(len, ply)
+	if not ply:GetYRPBool("bool_design", false) then return end
+	local element = YRP_SQL_KEY(net.ReadString())
+	local ax = tonumber(net.ReadInt(4))
+	local ay = tonumber(net.ReadInt(4))
+	if ay == 0 then
+		ay = 3
+	elseif ay == 2 then
+		ay = 4
 	end
-)
+
+	YRP_SQL_UPDATE(DATABASE_NAME, {
+		["value"] = ax
+	}, "name = 'int_HUD_" .. element .. "_" .. "AX'")
+
+	YRP_SQL_UPDATE(DATABASE_NAME, {
+		["value"] = ay
+	}, "name = 'int_HUD_" .. element .. "_" .. "AY'")
+
+	HudLoadoutAll()
+end)
 
 YRP:AddNetworkString("nws_yrp_update_hud_ts")
-net.Receive(
-	"nws_yrp_update_hud_ts",
-	function(len, ply)
-		if not ply:GetYRPBool("bool_design", false) then return end
-		local element = YRP_SQL_KEY(net.ReadString())
-		local ts = net.ReadInt(8)
-		if ts > 0 then
-			YRP_SQL_UPDATE(
-				DATABASE_NAME,
-				{
-					["value"] = ts
-				}, "name = 'int_HUD_" .. element .. "_TS'"
-			)
-
-			HudLoadoutAll()
-		end
-	end
-)
-
-YRP:AddNetworkString("nws_yrp_update_hud_color")
-net.Receive(
-	"nws_yrp_update_hud_color",
-	function(len, ply)
-		if not ply:GetYRPBool("bool_design", false) then return end
-		local element = YRP_SQL_KEY(net.ReadString())
-		local art = YRP_SQL_KEY(net.ReadString())
-		local color = net.ReadString()
-		YRP_SQL_UPDATE(
-			DATABASE_NAME,
-			{
-				["value"] = color
-			}, "name = 'color_HUD_" .. element .. "_" .. art .. "'"
-		)
+net.Receive("nws_yrp_update_hud_ts", function(len, ply)
+	if not ply:GetYRPBool("bool_design", false) then return end
+	local element = YRP_SQL_KEY(net.ReadString())
+	local ts = net.ReadInt(8)
+	if ts > 0 then
+		YRP_SQL_UPDATE(DATABASE_NAME, {
+			["value"] = ts
+		}, "name = 'int_HUD_" .. element .. "_TS'")
 
 		HudLoadoutAll()
 	end
-)
+end)
+
+YRP:AddNetworkString("nws_yrp_update_hud_color")
+net.Receive("nws_yrp_update_hud_color", function(len, ply)
+	if not ply:GetYRPBool("bool_design", false) then return end
+	local element = YRP_SQL_KEY(net.ReadString())
+	local art = YRP_SQL_KEY(net.ReadString())
+	local color = net.ReadString()
+	YRP_SQL_UPDATE(DATABASE_NAME, {
+		["value"] = color
+	}, "name = 'color_HUD_" .. element .. "_" .. art .. "'")
+
+	HudLoadoutAll()
+end)
 
 YRP:AddNetworkString("nws_yrp_reset_hud_settings")
-net.Receive(
-	"nws_yrp_reset_hud_settings",
-	function(len, ply)
-		if not ply:GetYRPBool("bool_design", false) then return end
-		YRP:msg("db", "Reset Hud Settings by " .. ply:YRPName())
-		DefaultHUDSettings(true)
-		YRPDesignLoadout("reset_hud_settings")
-	end
-)
+net.Receive("nws_yrp_reset_hud_settings", function(len, ply)
+	if not ply:GetYRPBool("bool_design", false) then return end
+	YRP:msg("db", "Reset Hud Settings by " .. ply:YRPName())
+	DefaultHUDSettings(true)
+	YRPDesignLoadout("reset_hud_settings")
+end)

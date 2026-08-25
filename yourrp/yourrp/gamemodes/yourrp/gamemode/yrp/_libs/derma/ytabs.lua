@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local PANEL = {}
 function PANEL:UPDATESIZE()
 	self.hs:SetSize(self:GetWide(), YRP:ctr(self.height))
@@ -36,9 +36,7 @@ function PANEL:AddOption(name, func, height)
 	tab:SetText("")
 	tab.tabs = self
 	function tab:DoClick()
-		if IsNotNilAndNotFalse(name) then
-			self.tabs:GoToSite(name)
-		end
+		if IsNotNilAndNotFalse(name) then self.tabs:GoToSite(name) end
 	end
 
 	function tab:Paint(pw, ph)

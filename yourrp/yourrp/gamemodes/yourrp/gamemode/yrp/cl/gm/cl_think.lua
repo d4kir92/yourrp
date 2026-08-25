@@ -1,14 +1,8 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 --cl_think.lua
 local _cmdpre = "[COMMAND] "
 local _cmdsv = "This command is adminonly/serversided!"
-concommand.Add(
-	"yrp_usergroup",
-	function(ply, cmd, args)
-		YRP:msg("note", _cmdpre .. _cmdsv)
-	end
-)
-
+concommand.Add("yrp_usergroup", function(ply, cmd, args) YRP:msg("note", _cmdpre .. _cmdsv) end)
 local chatisopen = false
 _thirdperson = 0
 local _thirdpersonC = 0
@@ -27,50 +21,31 @@ function YRPIsMainMenuOpen()
 end
 
 local wasgroup = false
-hook.Add(
-	"StartChat",
-	"yrp_startchat",
-	function(isTeamChat)
-		chatisopen = true
-		net.Start("nws_yrp_startchat")
-		net.SendToServer()
-		if isTeamChat then
-			wasgroup = true
-			SetChatMode("GROUP")
-		elseif wasgroup then
-			wasgroup = false
-			SetChatMode("SAY")
-		end
+hook.Add("StartChat", "yrp_startchat", function(isTeamChat)
+	chatisopen = true
+	net.Start("nws_yrp_startchat")
+	net.SendToServer()
+	if isTeamChat then
+		wasgroup = true
+		SetChatMode("GROUP")
+	elseif wasgroup then
+		wasgroup = false
+		SetChatMode("SAY")
 	end
-)
+end)
 
-hook.Add(
-	"FinishChat",
-	"yrp_finishchat",
-	function()
-		chatisopen = false
-		net.Start("nws_yrp_finishchat")
-		net.SendToServer()
-	end
-)
+hook.Add("FinishChat", "yrp_finishchat", function()
+	chatisopen = false
+	net.Start("nws_yrp_finishchat")
+	net.SendToServer()
+end)
 
 local keys = {}
 keys["_hold"] = 0
-hook.Add(
-	"HUDWeaponPickedUp",
-	"yrp_translate_weaponname",
-	function(wep)
-		if wep.LanguageString ~= nil then
-			wep.PrintName = YRP:trans(wep.LanguageString)
-		end
-	end
-)
-
+hook.Add("HUDWeaponPickedUp", "yrp_translate_weaponname", function(wep) if wep.LanguageString ~= nil then wep.PrintName = YRP:trans(wep.LanguageString) end end)
 function GM:PlayerSwitchWeapon(ply, oldWeapon, newWeapon)
 	-- Change language
-	if newWeapon.LanguageString ~= nil then
-		newWeapon.PrintName = YRP:trans(newWeapon.LanguageString)
-	end
+	if newWeapon.LanguageString ~= nil then newWeapon.PrintName = YRP:trans(newWeapon.LanguageString) end
 end
 
 function YRPCloseAllMenues()
@@ -89,19 +64,14 @@ function YRPCloseAllMenues()
 	closeMap()
 	closeInteractMenu()
 	closeSP()
-	if yrpChat and yrpChat.closeChatbox then
-		yrpChat.closeChatbox("CLOSE ALL")
-	end
+	if yrpChat and yrpChat.closeChatbox then yrpChat.closeChatbox("CLOSE ALL") end
 end
 
 function YRPUseFunction(str)
 	if str == nil then return end
 	local lply = LocalPlayer()
 	local eyeTrace = lply:GetEyeTrace()
-	if str == "close_all" then
-		YRPCloseAllMenues()
-	end
-
+	if str == "close_all" then YRPCloseAllMenues() end
 	if not YRPIsChatOpen() and not YRPIsConsoleOpen() and not YRPIsMainMenuOpen() then
 		--Menues
 		if str == "openSP" then
@@ -170,17 +140,14 @@ function YRPUseFunction(str)
 				local cannotbedropped = YRP:trans("LID_cannotbedropped", tab)
 				local hasbeendropped = YRP:trans("LID_hasbeendropped", tab)
 				if _weapon.notdropable == nil then
-					net.Receive(
-						"nws_yrp_dropswep",
-						function(len)
-							local _b = net.ReadBool()
-							if _b then
-								notification.AddLegacy(hasbeendropped, 0, 3)
-							else
-								notification.AddLegacy(cannotbedropped, 0, 3)
-							end
+					net.Receive("nws_yrp_dropswep", function(len)
+						local _b = net.ReadBool()
+						if _b then
+							notification.AddLegacy(hasbeendropped, 0, 3)
+						else
+							notification.AddLegacy(cannotbedropped, 0, 3)
 						end
-					)
+					end)
 
 					net.Start("nws_yrp_dropswep")
 					net.SendToServer()
@@ -220,9 +187,7 @@ function YRPUseFunction(str)
 				id = 6
 			end
 
-			if id > 0 then
-				YRPToggleCombinedMenu(id)
-			end
+			if id > 0 then YRPToggleCombinedMenu(id) end
 		elseif not GetGlobalYRPBool("bool_yrp_combined_menu", false) then
 			if str == "OpenHelpMenu" and GetGlobalYRPBool("bool_yrp_help_menu", false) then
 				done_tutorial("tut_welcome")
@@ -243,9 +208,7 @@ function YRPUseFunction(str)
 				YRPToggleKeybindsMenu()
 			end
 
-			if str == "OpenRoleMenu" and not GetGlobalYRPBool("bool_yrp_role_menu", false) then
-				DarkRP.toggleF4Menu()
-			end
+			if str == "OpenRoleMenu" and not GetGlobalYRPBool("bool_yrp_role_menu", false) then DarkRP.toggleF4Menu() end
 		end
 	end
 end
@@ -254,27 +217,15 @@ function YRPKeyDown(key, str, distance)
 	local lply = LocalPlayer()
 	local plyTrace = lply:GetEyeTrace()
 	local _return = false
-	if distance ~= nil and plyTrace.Entity:GetPos():Distance(ply:GetPos()) > distance then
-		_return = true
-	end
-
+	if distance ~= nil and plyTrace.Entity:GetPos():Distance(ply:GetPos()) > distance then _return = true end
 	if not _return then
-		if keys[tostring(key)] == nil then
-			keys[tostring(key)] = false
-		end
-
+		if keys[tostring(key)] == nil then keys[tostring(key)] = false end
 		if lply:KeyDown(key) and not keys[tostring(key)] then
 			keys[tostring(key)] = true
-			timer.Simple(
-				0.2,
-				function()
-					if str ~= nil then
-						YRPUseFunction(str)
-					end
-
-					keys[tostring(key)] = false
-				end
-			)
+			timer.Simple(0.2, function()
+				if str ~= nil then YRPUseFunction(str) end
+				keys[tostring(key)] = false
+			end)
 		end
 	end
 end
@@ -287,31 +238,20 @@ function YRPKeyPressed(key, str, distance)
 			local _return = false
 			if distance then
 				local plyTrace = lply:GetEyeTrace()
-				if plyTrace and YRPEntityAlive(plyTrace.Entity) and plyTrace.Entity:GetPos():Distance(lply:GetPos()) > distance then
-					_return = true
-				end
+				if plyTrace and YRPEntityAlive(plyTrace.Entity) and plyTrace.Entity:GetPos():Distance(lply:GetPos()) > distance then _return = true end
 			end
 
 			if not _return then
 				key = tonumber(key)
 				if key then
 					local kid = tostring(key)
-					if keys[kid] == nil then
-						keys[kid] = false
-					end
-
+					if keys[kid] == nil then keys[kid] = false end
 					if input.IsKeyDown(key) and not keys[kid] then
 						keys[kid] = true
-						timer.Simple(
-							0.14,
-							function()
-								if str ~= nil then
-									YRPUseFunction(str)
-								end
-
-								keys[kid] = false
-							end
-						)
+						timer.Simple(0.14, function()
+							if str ~= nil then YRPUseFunction(str) end
+							keys[kid] = false
+						end)
 					end
 				end
 			end
@@ -359,13 +299,7 @@ function YRPKeyPress()
 				-- When toggle view
 				if _view_delay then
 					_view_delay = false
-					timer.Simple(
-						0.16,
-						function()
-							_view_delay = true
-						end
-					)
-
+					timer.Simple(0.16, function() _view_delay = true end)
 					if tonumber(lply.yrp_view_range_view) > 0 then
 						lply.yrp_view_range_view = 0
 					else
@@ -387,18 +321,12 @@ function YRPKeyPress()
 					if YRPGetKeybind("view_zoom_out") and input.IsKeyDown(YRPGetKeybind("view_zoom_out")) then
 						done_tutorial("tut_vo", 5)
 						lply.yrp_view_range_view = lply.yrp_view_range_view + 1
-						if tonumber(lply.yrp_view_range_view) > tonumber(GetGlobalYRPString("text_view_distance", "200")) then
-							lply.yrp_view_range_view = tonumber(GetGlobalYRPString("text_view_distance", "200"))
-						end
-
+						if tonumber(lply.yrp_view_range_view) > tonumber(GetGlobalYRPString("text_view_distance", "200")) then lply.yrp_view_range_view = tonumber(GetGlobalYRPString("text_view_distance", "200")) end
 						lply.yrp_view_range_old = lply.yrp_view_range_view
 					elseif YRPGetKeybind("view_zoom_in") and input.IsKeyDown(YRPGetKeybind("view_zoom_in")) then
 						done_tutorial("tut_vi", 5)
 						lply.yrp_view_range_view = lply.yrp_view_range_view - 1
-						if tonumber(lply.yrp_view_range_view) < -200 then
-							lply.yrp_view_range_view = -200
-						end
-
+						if tonumber(lply.yrp_view_range_view) < -200 then lply.yrp_view_range_view = -200 end
 						lply.yrp_view_range_old = lply.yrp_view_range_view
 					end
 
@@ -451,10 +379,7 @@ function YRPKeyPress()
 				lply.yrp_view_s_c = lply.yrp_view_s_c - 0.4
 			end
 
-			if tonumber(lply.yrp_view_s_c) > 360 or tonumber(lply.yrp_view_s_c) < -360 then
-				lply.yrp_view_s_c = 0
-			end
-
+			if tonumber(lply.yrp_view_s_c) > 360 or tonumber(lply.yrp_view_s_c) < -360 then lply.yrp_view_s_c = 0 end
 			if tonumber(lply.yrp_view_s_c) < 6 and tonumber(lply.yrp_view_s_c) > -6 then
 				lply.yrp_view_s = 0
 			else
@@ -492,16 +417,11 @@ function YRPKeyPress()
 	YRPKeyPressed(YRPGetKeybind("voice_menu"), "voice_menu")
 	YRPKeyPressed(YRPGetKeybind("chat_menu"), "chat_menu")
 	YRPKeyPressed(YRPGetKeybind("menu_group"), "menu_group")
-	if GetGlobalYRPBool("bool_yrp_macro_menu", false) then
-		YRPKeyPressed(YRPGetKeybind("macro_menu"), "macro_menu")
-	end
-
+	if GetGlobalYRPBool("bool_yrp_macro_menu", false) then YRPKeyPressed(YRPGetKeybind("macro_menu"), "macro_menu") end
 	for i = 1, #MACRO_KEYBINDS do
 		local macro = MACRO_KEYBINDS[i]
 		local key = YRPGetKeybind(macro)
-		if key ~= 0 then
-			YRPKeyPressed(key, macro)
-		end
+		if key ~= 0 then YRPKeyPressed(key, macro) end
 	end
 end
 
@@ -514,7 +434,6 @@ function TauntCamera()
 	CAM.ShouldDrawLocalPlayer = function(self, pl, on) return true end
 	CAM.CalcView = function(self, view, pl, on) return true end
 	CAM.CreateMove = function(self, cmd, pl, on) return true end
-
 	return CAM
 end
 
@@ -537,16 +456,11 @@ function YRP_CalcView(lply, pos, angles, fov)
 			local weapon = lply:GetActiveWeapon()
 			if weapon ~= NULL and weapon:GetClass() ~= nil then
 				local _weaponName = string.lower(tostring(lply:GetActiveWeapon():GetClass()))
-				if _weaponName ~= "yrp_lightsaber_base" and string.find(_weaponName, "lightsaber", 1, true) then
-					disablethirdperson = true
-				end
+				if _weaponName ~= "yrp_lightsaber_base" and string.find(_weaponName, "lightsaber", 1, true) then disablethirdperson = true end
 			end
 
 			local _view_range = lply.yrp_view_range or 0
-			if _view_range < 0 then
-				_view_range = 0
-			end
-
+			if _view_range < 0 then _view_range = 0 end
 			if lply:IsPlayingTaunt() then
 				disablethirdperson = false
 				_view_range = 200
@@ -554,10 +468,7 @@ function YRP_CalcView(lply, pos, angles, fov)
 
 			local dist = _view_range * lply:GetModelScale()
 			if lply:GetModel() ~= "models/player.mdl" and not lply:InVehicle() and not disablethirdperson and GetGlobalYRPBool("bool_thirdperson", false) then
-				if lply:LookupBone("ValveBiped.Bip01_Head1") ~= nil then
-					pos2 = lply:GetBonePosition(lply:LookupBone("ValveBiped.Bip01_Head1")) + (angles:Forward() * 12 * lply:GetModelScale())
-				end
-
+				if lply:LookupBone("ValveBiped.Bip01_Head1") ~= nil then pos2 = lply:GetBonePosition(lply:LookupBone("ValveBiped.Bip01_Head1")) + (angles:Forward() * 12 * lply:GetModelScale()) end
 				if lply:GetMoveType() == MOVETYPE_NOCLIP and lply:GetModel() == "models/crow.mdl" then
 					local _tmpThick = 4
 					local _minDistFor = 8
@@ -571,7 +482,6 @@ function YRP_CalcView(lply, pos, angles, fov)
 					view.origin = pos - (angles:Forward() * dist) - Vector(0, 0, 58)
 					view.angles = angles
 					view.fov = fov
-
 					return view
 				else
 					--if _thirdperson == 2 then
@@ -588,26 +498,23 @@ function YRP_CalcView(lply, pos, angles, fov)
 						local _minDistBac = 40
 						angles = angles + Angle(0, lply.yrp_view_s, 0)
 						local _pos_change = angles:Up() * lply.yrp_view_z + angles:Right() * lply.yrp_view_x
-						local tr = util.TraceHull(
-							{
-								start = pos - angles:Forward() * _minDistFor,
-								endpos = pos - (angles:Forward() * dist) + _pos_change,
-								filter = function(ent)
-									if ent:GetCollisionGroup() == 20 then
-										return false
-									elseif ent == LocalPlayer() then
-										return false
-									elseif ent == weapon then
-										return false
-									end
-
-									return true
-								end,
-								mins = Vector(-_tmpThick, -_tmpThick, -_tmpThick),
-								maxs = Vector(_tmpThick, _tmpThick, _tmpThick),
-								mask = MASK_SHOT_HULL
-							}
-						)
+						local tr = util.TraceHull({
+							start = pos - angles:Forward() * _minDistFor,
+							endpos = pos - (angles:Forward() * dist) + _pos_change,
+							filter = function(ent)
+								if ent:GetCollisionGroup() == 20 then
+									return false
+								elseif ent == LocalPlayer() then
+									return false
+								elseif ent == weapon then
+									return false
+								end
+								return true
+							end,
+							mins = Vector(-_tmpThick, -_tmpThick, -_tmpThick),
+							maxs = Vector(_tmpThick, _tmpThick, _tmpThick),
+							mask = MASK_SHOT_HULL
+						})
 
 						if tr.HitPos:Distance(pos) < dist and not tr.HitNonWorld then
 							dist = tr.HitPos:Distance(pos) -- _tmpThick
@@ -619,37 +526,32 @@ function YRP_CalcView(lply, pos, angles, fov)
 							view.angles = angles
 							view.fov = fov
 							view.drawviewer = true
-
 							return view
 						elseif tr.Hit and tr.HitPos:Distance(pos) <= _minDistBac then
 							view.origin = pos
 							view.angles = angles
 							view.fov = fov
 							view.drawviewer = false
-
 							return view
 						else
 							view.origin = pos - (angles:Forward() * dist) + _pos_change
 							view.angles = angles
 							view.fov = fov
 							view.drawviewer = true
-
 							return view
 						end
 					elseif tonumber(lply.yrp_view_range) <= -200 then
 						local _tmpThick = 16
 						local _head = lply:LookupBone("ValveBiped.Bip01_Head1")
 						if YRPWORKED(_head, "_head failed @cl_think.lua") then
-							local tr = util.TraceHull(
-								{
-									start = lply:GetBonePosition(_head) + angles:Forward() * 4,
-									endpos = lply:GetBonePosition(_head) - angles:Forward() * 4,
-									filter = {LocalPlayer(), weapon},
-									mins = Vector(-_tmpThick, -_tmpThick, -_tmpThick),
-									maxs = Vector(_tmpThick, _tmpThick, _tmpThick),
-									mask = MASK_SHOT_HULL
-								}
-							)
+							local tr = util.TraceHull({
+								start = lply:GetBonePosition(_head) + angles:Forward() * 4,
+								endpos = lply:GetBonePosition(_head) - angles:Forward() * 4,
+								filter = {LocalPlayer(), weapon},
+								mins = Vector(-_tmpThick, -_tmpThick, -_tmpThick),
+								maxs = Vector(_tmpThick, _tmpThick, _tmpThick),
+								mask = MASK_SHOT_HULL
+							})
 
 							if not tr.Hit then
 								pos2 = lply:GetBonePosition(_head) + (angles:Forward() * 5 * lply:GetModelScale()) - Vector(0, 0, 1.4) * lply:GetModelScale() + (angles:Up() * 6 * lply:GetModelScale())
@@ -658,14 +560,12 @@ function YRP_CalcView(lply, pos, angles, fov)
 								view.angles = angles
 								view.fov = fov
 								view.drawviewer = true
-
 								return view
 							else
 								view.origin = pos
 								view.angles = angles
 								view.fov = fov
 								view.drawviewer = false
-
 								return view
 							end
 						else
@@ -673,7 +573,6 @@ function YRP_CalcView(lply, pos, angles, fov)
 							view.angles = angles
 							view.fov = fov
 							view.drawviewer = false
-
 							return view
 						end
 					end
@@ -683,16 +582,12 @@ function YRP_CalcView(lply, pos, angles, fov)
 			local entindex = lply:GetYRPInt("ent_ragdollindex")
 			if entindex then
 				local ent = Entity(entindex)
-				if IsValid(ent) then
-					pos = ent:GetPos() + Vector(0, 0, 64) - angles:Forward() * 100
-				end
-
+				if IsValid(ent) then pos = ent:GetPos() + Vector(0, 0, 64) - angles:Forward() * 100 end
 				local view = {}
 				view.origin = pos
 				view.angles = angles
 				view.fov = fov
 				view.drawviewer = true
-
 				return view
 			end
 		end
@@ -703,65 +598,53 @@ if hook.GetTable()["CalcView"] and hook.GetTable()["CalcView"]["AV7View"] then
 	hook.Remove("CalcView", "AV7View") -- breaks thirdperson, must be removed!
 end
 
-if hook.GetTable()["CalcView"] == nil or (hook.GetTable()["CalcView"] and hook.GetTable()["CalcView"]["YOURRP_ThirdPerson_CalcView"] == nil) then
-	hook.Add("CalcView", "YOURRdP_ThirdPerson_CalcView", YRP_CalcView)
-end
-
+if hook.GetTable()["CalcView"] == nil or (hook.GetTable()["CalcView"] and hook.GetTable()["CalcView"]["YOURRP_ThirdPerson_CalcView"] == nil) then hook.Add("CalcView", "YOURRdP_ThirdPerson_CalcView", YRP_CalcView) end
 function GM:ShouldDrawLocalPlayer(pl)
 end
 
 -- NOTHING
 jobByCmd = jobByCmd or {}
 -- FOR CLIENTS
-net.Receive(
-	"nws_yrp_send_jobs",
-	function(len)
-		local tab = net.ReadTable()
-		for id, name in pairs(tab) do
-			_G[string.upper(name)] = tonumber(id)
-		end
+net.Receive("nws_yrp_send_jobs", function(len)
+	local tab = net.ReadTable()
+	for id, name in pairs(tab) do
+		_G[string.upper(name)] = tonumber(id)
 	end
-)
+end)
 
 -- FOR CLIENTS
 -- full jobs data
-net.Receive(
-	"nws_yrp_Send_DarkRP_Jobs",
-	function(len)
-		local teamTab = {}
-		teamTab.admin = net.ReadUInt(2)
-		teamTab.candemote = net.ReadBool()
-		teamTab.category = net.ReadString()
-		teamTab.color = net.ReadColor()
-		teamTab.command = net.ReadString()
-		teamTab.description = net.ReadString()
-		teamTab.fake = net.ReadBool()
-		teamTab.hasLicense = net.ReadBool()
-		teamTab.int_groupID = net.ReadUInt(16)
-		teamTab.max = net.ReadUInt(8)
-		teamTab.model = net.ReadTable()
-		teamTab.name = net.ReadString()
-		teamTab.salary = net.ReadUInt(16)
-		teamTab.team = net.ReadUInt(16)
-		teamTab.uniqueID = net.ReadUInt(16)
-		teamTab.vote = net.ReadBool()
-		teamTab.weapons = net.ReadTable()
-		local teamcolor = teamTab.color
-		local teamuid = tonumber(teamTab.uniqueID)
-		local teamname = teamTab.name
-		if not strEmpty(teamTab.identifier) then
-			teamname = teamTab.identifier
-		end
-
-		_G[teamTab.command] = teamuid
-		if teamuid and teamname then
-			RPExtraTeams[teamuid] = teamTab
-			jobByCmd[teamTab.command] = teamuid
-			--table.insert(RPExtraTeams, teamTab) -- old
-			team.SetUp(teamuid, teamname, teamcolor)
-		end
+net.Receive("nws_yrp_Send_DarkRP_Jobs", function(len)
+	local teamTab = {}
+	teamTab.admin = net.ReadUInt(2)
+	teamTab.candemote = net.ReadBool()
+	teamTab.category = net.ReadString()
+	teamTab.color = net.ReadColor()
+	teamTab.command = net.ReadString()
+	teamTab.description = net.ReadString()
+	teamTab.fake = net.ReadBool()
+	teamTab.hasLicense = net.ReadBool()
+	teamTab.int_groupID = net.ReadUInt(16)
+	teamTab.max = net.ReadUInt(8)
+	teamTab.model = net.ReadTable()
+	teamTab.name = net.ReadString()
+	teamTab.salary = net.ReadUInt(16)
+	teamTab.team = net.ReadUInt(16)
+	teamTab.uniqueID = net.ReadUInt(16)
+	teamTab.vote = net.ReadBool()
+	teamTab.weapons = net.ReadTable()
+	local teamcolor = teamTab.color
+	local teamuid = tonumber(teamTab.uniqueID)
+	local teamname = teamTab.name
+	if not strEmpty(teamTab.identifier) then teamname = teamTab.identifier end
+	_G[teamTab.command] = teamuid
+	if teamuid and teamname then
+		RPExtraTeams[teamuid] = teamTab
+		jobByCmd[teamTab.command] = teamuid
+		--table.insert(RPExtraTeams, teamTab) -- old
+		team.SetUp(teamuid, teamname, teamcolor)
 	end
-)
+end)
 
 CATEGORIES = CATEGORIES or {}
 CATEGORIES.jobs = CATEGORIES.jobs or {}
@@ -770,46 +653,34 @@ CATEGORIES.shipments = CATEGORIES.shipments or {}
 CATEGORIES.weapons = CATEGORIES.weapons or {}
 CATEGORIES.ammo = CATEGORIES.ammo or {}
 CATEGORIES.vehicles = CATEGORIES.vehicles or {}
-net.Receive(
-	"nws_yrp_Send_DarkRP_Categories",
-	function(len)
-		local catTab = {}
-		catTab.uniqueID = net.ReadUInt(16)
-		catTab.name = net.ReadString()
-		catTab.categorises = net.ReadString()
-		catTab.startExpanded = net.ReadBool()
-		catTab.color = net.ReadColor()
-		catTab.sortOrder = net.ReadUInt(7)
-		catTab = YRPConvertToDarkRPCategory(catTab, "jobs")
-		--CATEGORIES.jobs[catname] = catTab -- ipairs not working with that
-		table.insert(CATEGORIES.jobs, catTab)
+net.Receive("nws_yrp_Send_DarkRP_Categories", function(len)
+	local catTab = {}
+	catTab.uniqueID = net.ReadUInt(16)
+	catTab.name = net.ReadString()
+	catTab.categorises = net.ReadString()
+	catTab.startExpanded = net.ReadBool()
+	catTab.color = net.ReadColor()
+	catTab.sortOrder = net.ReadUInt(7)
+	catTab = YRPConvertToDarkRPCategory(catTab, "jobs")
+	--CATEGORIES.jobs[catname] = catTab -- ipairs not working with that
+	table.insert(CATEGORIES.jobs, catTab)
+end)
+
+net.Receive("nws_yrp_Combine_DarkRPTables", function(len)
+	local TEMPRPExtraTeams = {}
+	for i, v in pairs(RPExtraTeams) do
+		if v.fake == false then TEMPRPExtraTeams[tonumber(i)] = v end
 	end
-)
 
-net.Receive(
-	"nws_yrp_Combine_DarkRPTables",
-	function(len)
-		local TEMPRPExtraTeams = {}
-		for i, v in pairs(RPExtraTeams) do
-			if v.fake == false then
-				TEMPRPExtraTeams[tonumber(i)] = v
-			end
-		end
-
-		RPExtraTeams = TEMPRPExtraTeams
-		for i, cat in pairs(CATEGORIES.jobs) do
-			cat.members = {}
-			for id, role in pairs(RPExtraTeams) do
-				if role and cat and role.int_groupID == cat.uniqueID then
-					table.insert(cat.members, role)
-				end
-			end
-		end
-
-		hook.Run("bKeypads.ConfigUpdated")
-		hook.Run("PostGamemodeLoaded")
-		if GAMEMODE.DarkRPFinishedLoading then
-			GAMEMODE:DarkRPFinishedLoading()
+	RPExtraTeams = TEMPRPExtraTeams
+	for i, cat in pairs(CATEGORIES.jobs) do
+		cat.members = {}
+		for id, role in pairs(RPExtraTeams) do
+			if role and cat and role.int_groupID == cat.uniqueID then table.insert(cat.members, role) end
 		end
 	end
-)
+
+	hook.Run("bKeypads.ConfigUpdated")
+	hook.Run("PostGamemodeLoaded")
+	if GAMEMODE.DarkRPFinishedLoading then GAMEMODE:DarkRPFinishedLoading() end
+end)

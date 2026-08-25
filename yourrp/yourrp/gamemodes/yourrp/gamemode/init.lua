@@ -1,5 +1,5 @@
 --[[
-Copyright (C) 2017-2025 D4KiR
+Copyright (C) 2017-2026 D4KiR
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -111,12 +111,7 @@ function YRPLoadServerInfo(tries)
 		SetGlobalYRPInt("serverversion", VERSION)
 		SetGlobalYRPString("serverversionstr", VERSIONSTR)
 	elseif tries < 300 then
-		timer.Simple(
-			0.1,
-			function()
-				YRPLoadServerInfo(tries)
-			end
-		)
+		timer.Simple(0.1, function() YRPLoadServerInfo(tries) end)
 	else
 		YRP:msg("note", "[YRPLoadServerInfo] Gave up waiting for a valid dedicated server IP after " .. tries .. " tries")
 	end

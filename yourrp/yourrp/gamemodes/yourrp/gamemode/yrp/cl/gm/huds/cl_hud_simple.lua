@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 function fake_true()
 	return true
 end
@@ -22,10 +22,7 @@ function HUDSimpleBG(tab)
 				Simple[tab.element]["background"].fx = x
 				Simple[tab.element]["background"].fy = y
 				Simple[tab.element]["background"].r = 0
-				if lply:HudValue(tab.element, "ROUN") then
-					Simple[tab.element]["background"].r = tab.r or YRP:ctr(15)
-				end
-
+				if lply:HudValue(tab.element, "ROUN") then Simple[tab.element]["background"].r = tab.r or YRP:ctr(15) end
 				Simple[tab.element]["background"].color = lply:HudValue(tab.element, "BG")
 			else
 				if tab.a ~= nil then
@@ -63,10 +60,7 @@ function HUDSimpleBAR(tab)
 			Simple[tab.element]["bar"].x = x
 			Simple[tab.element]["bar"].y = y
 			Simple[tab.element]["bar"].r = 0
-			if lply:HudValue(tab.element, "ROUN") then
-				Simple[tab.element]["bar"].r = tab.r or YRP:ctr(15)
-			end
-
+			if lply:HudValue(tab.element, "ROUN") then Simple[tab.element]["bar"].r = tab.r or YRP:ctr(15) end
 			Simple[tab.element]["bar"].color = lply:HudValue(tab.element, "BA")
 			Simple[tab.element]["text"].ax = lply:HudValue(tab.element, "AX")
 			Simple[tab.element]["text"].ay = lply:HudValue(tab.element, "AY")
@@ -82,10 +76,7 @@ function HUDSimpleBAR(tab)
 
 			Simple[tab.element]["text"].text = tab.element
 			local fontsize = lply:HudValue(tab.element, "TS")
-			if fontsize <= 0 then
-				fontsize = 14
-			end
-
+			if fontsize <= 0 then fontsize = 14 end
 			Simple[tab.element]["text"].font = "Y_" .. fontsize .. "_500"
 			Simple[tab.element]["text"].color = lply:HudValue(tab.element, "TE")
 			Simple[tab.element]["text"].brcolor = lply:HudValue(tab.element, "TB")
@@ -131,22 +122,10 @@ function HUDSimpleBAR(tab)
 			end
 
 			Simple[tab.element]["text"].text = ""
-			if tab.text ~= nil and lply:HudValue(tab.element, "TEXT") then
-				Simple[tab.element]["text"].text = tab.text
-			end
-
-			if tab.percentage ~= nil and lply:HudValue(tab.element, "PERC") then
-				Simple[tab.element]["text"].text = Simple[tab.element]["text"].text .. " " .. tab.percentage
-			end
-
-			if tab.tcolor ~= nil then
-				Simple[tab.element]["text"].color = tab.tcolor
-			end
-
-			if tab.tfont ~= nil then
-				Simple[tab.element]["text"].font = tab.tfont
-			end
-
+			if tab.text ~= nil and lply:HudValue(tab.element, "TEXT") then Simple[tab.element]["text"].text = tab.text end
+			if tab.percentage ~= nil and lply:HudValue(tab.element, "PERC") then Simple[tab.element]["text"].text = Simple[tab.element]["text"].text .. " " .. tab.percentage end
+			if tab.tcolor ~= nil then Simple[tab.element]["text"].color = tab.tcolor end
+			if tab.tfont ~= nil then Simple[tab.element]["text"].font = tab.tfont end
 			YRPHudText(Simple[tab.element]["text"])
 		end
 	end
@@ -176,10 +155,7 @@ function HUDSimpleBR(tab)
 				Simple[tab.element]["border"].fx = x
 				Simple[tab.element]["border"].fy = y
 				Simple[tab.element]["border"].r = 0
-				if lply:HudValue(tab.element, "ROUN") then
-					Simple[tab.element]["border"].r = tab.r or YRP:ctr(15)
-				end
-
+				if lply:HudValue(tab.element, "ROUN") then Simple[tab.element]["border"].r = tab.r or YRP:ctr(15) end
 				Simple[tab.element]["border"].color = lply:HudValue(tab.element, "BR")
 				Simple[tab.element]["border"].br = YRP:ctr(6)
 			elseif lply:HudValue(tab.element, "ROUN") then
@@ -207,7 +183,6 @@ function GetFadeAlpha(ox, cx, ow)
 	else
 		alpha = 1
 	end
-
 	return alpha
 end
 
@@ -251,16 +226,11 @@ function HUDSimpleCompass()
 			Simple["COM"]["needle"].fy = y
 			Simple["COM"]["needle"].color = Color(255, 255, 255, 255)
 			local fontsize = lply:HudValue("COM", "TS")
-			if fontsize <= 0 then
-				fontsize = 8
-			end
-
+			if fontsize <= 0 then fontsize = 8 end
 			local fontsizes = GetFontSizeTable()
 			local fsid = 0
 			for i, size in pairs(fontsizes) do
-				if fontsize == size then
-					fsid = i + 1
-				end
+				if fontsize == size then fsid = i + 1 end
 			end
 
 			local nextfontsize = fontsize
@@ -578,37 +548,16 @@ function HUDSimple()
 		HUDSimpleBG(CC)
 		HUDSimpleBG(HP)
 		HUDSimpleBG(AR)
-		if IsLevelSystemEnabled() then
-			HUDSimpleBG(XP)
-		end
-
+		if IsLevelSystemEnabled() then HUDSimpleBG(XP) end
 		HUDSimpleBG(MO)
 		HUDSimpleBG(SA)
 		HUDSimpleBG(RO)
-		if GetGlobalYRPBool("bool_stamina", false) then
-			HUDSimpleBG(ST)
-		end
-
-		if GetGlobalYRPBool("bool_radiation", false) then
-			HUDSimpleBG(RA)
-		end
-
-		if lply:HudElementVisible("HU") then
-			HUDSimpleBG(HU)
-		end
-
-		if GetGlobalYRPBool("bool_thirst", false) then
-			HUDSimpleBG(TH)
-		end
-
-		if GetGlobalYRPBool("bool_permille", false) then
-			HUDSimpleBG(AL)
-		end
-
-		if lply:GetYRPBool("iscasting", false) then
-			HUDSimpleBG(CA)
-		end
-
+		if GetGlobalYRPBool("bool_stamina", false) then HUDSimpleBG(ST) end
+		if GetGlobalYRPBool("bool_radiation", false) then HUDSimpleBG(RA) end
+		if lply:HudElementVisible("HU") then HUDSimpleBG(HU) end
+		if GetGlobalYRPBool("bool_thirst", false) then HUDSimpleBG(TH) end
+		if GetGlobalYRPBool("bool_permille", false) then HUDSimpleBG(AL) end
+		if lply:GetYRPBool("iscasting", false) then HUDSimpleBG(CA) end
 		HUDSimpleBG(AB)
 		WP.visible = false
 		WS.visible = false
@@ -625,15 +574,9 @@ function HUDSimple()
 				WP.cur = clip1
 				WP.max = clip1max
 				WP.text = ""
-				if clip1 > 0 then
-					WP.text = clip1 .. " / " .. clip1max
-				end
-
+				if clip1 > 0 then WP.text = clip1 .. " / " .. clip1max end
 				if ammo1 > 0 then
-					if WP.text ~= "" then
-						WP.text = WP.text .. " | "
-					end
-
+					if WP.text ~= "" then WP.text = WP.text .. " | " end
 					WP.text = WP.text .. ammo1
 				end
 			end
@@ -643,15 +586,9 @@ function HUDSimple()
 				WS.cur = clip2
 				WS.max = clip2max
 				WS.text = ""
-				if clip2 and clip2 > 0 then
-					WS.text = clip2 .. " / " .. clip2max
-				end
-
+				if clip2 and clip2 > 0 then WS.text = clip2 .. " / " .. clip2max end
 				if ammo2 and ammo2 > 0 then
-					if WS.text ~= "" then
-						WS.text = WS.text .. " | "
-					end
-
+					if WS.text ~= "" then WS.text = WS.text .. " | " end
 					WS.text = WS.text .. ammo2
 				end
 			end
@@ -661,23 +598,11 @@ function HUDSimple()
 			WN.text = lply:GetActiveWeapon():GetPrintName()
 		end
 
-		if WP.visible then
-			HUDSimpleBG(WP)
-		end
-
-		if WS.visible then
-			HUDSimpleBG(WS)
-		end
-
+		if WP.visible then HUDSimpleBG(WP) end
+		if WS.visible then HUDSimpleBG(WS) end
 		HUDSimpleBG(WN)
-		if batterypower <= 100 then
-			HUDSimpleBG(BA)
-		end
-
-		if not strEmpty(lply:Condition()) then
-			HUDSimpleBG(CON)
-		end
-
+		if batterypower <= 100 then HUDSimpleBG(BA) end
+		if not strEmpty(lply:Condition()) then HUDSimpleBG(CON) end
 		HUDSimpleBG(PE)
 		HUDSimpleBG(NE)
 		HUDSimpleBG(COM)
@@ -818,20 +743,11 @@ function HUDSimple()
 		AB.percentage = math.Round(lply:Ability() / lply:GetMaxAbility() * 100, 1) .. "%"
 		AB.icon = icons["AB"]
 		HUDSimpleBAR(AB)
-		if WP.visible then
-			HUDSimpleBAR(WP)
-		end
-
-		if WS.visible then
-			HUDSimpleBAR(WS)
-		end
-
+		if WP.visible then HUDSimpleBAR(WP) end
+		if WS.visible then HUDSimpleBAR(WS) end
 		HUDSimpleBAR(WN)
 		if batterypower <= 100 then
-			if batterypower > 100 then
-				batterypower = 100
-			end
-
+			if batterypower > 100 then batterypower = 100 end
 			BA.cur = batterypower
 			BA.max = 100
 			BA.text = batterypower .. "%"
@@ -877,10 +793,7 @@ function HUDSimple()
 		end
 
 		PE.text = YRP:trans("LID_fps") .. ": " .. fps
-		if lply:HudValue("PE", "EXTR") then
-			PE.text = PE.text .. " (▼" .. fpsmin .. " Ø" .. fpsavg .. " ▲" .. fpsmax .. " )"
-		end
-
+		if lply:HudValue("PE", "EXTR") then PE.text = PE.text .. " (▼" .. fpsmin .. " Ø" .. fpsavg .. " ▲" .. fpsmax .. " )" end
 		PE.tcolor = fpscolor
 		HUDSimpleBAR(PE)
 		if CurTime() > ping_delay then
@@ -914,10 +827,7 @@ function HUDSimple()
 		NE.cur = 0
 		NE.max = 1
 		NE.text = YRP:trans("LID_ping") .. ": " .. ping
-		if lply:HudValue("NE", "EXTR") then
-			NE.text = NE.text .. " (▼" .. pingmin .. " Ø" .. pingavg .. " ▲" .. pingmax .. " )"
-		end
-
+		if lply:HudValue("NE", "EXTR") then NE.text = NE.text .. " (▼" .. pingmin .. " Ø" .. pingavg .. " ▲" .. pingmax .. " )" end
 		NE.tcolor = pingcolor
 		HUDSimpleBAR(NE)
 		HUDSimpleCompass()
@@ -939,58 +849,25 @@ function HUDSimple()
 
 		HUDSimpleBR(HP)
 		HUDSimpleBR(AR)
-		if IsLevelSystemEnabled() then
-			HUDSimpleBR(XP)
-		end
-
+		if IsLevelSystemEnabled() then HUDSimpleBR(XP) end
 		HUDSimpleBR(MO)
 		HUDSimpleBR(SA)
 		HUDSimpleBR(RO)
-		if GetGlobalYRPBool("bool_stamina", false) then
-			HUDSimpleBR(ST)
-		end
-
-		if GetGlobalYRPBool("bool_radiation", false) then
-			HUDSimpleBR(RA)
-		end
-
-		if GetGlobalYRPBool("bool_hunger", false) then
-			HUDSimpleBR(HU)
-		end
-
-		if GetGlobalYRPBool("bool_thirst", false) then
-			HUDSimpleBR(TH)
-		end
-
-		if GetGlobalYRPBool("bool_permille", false) then
-			HUDSimpleBR(AL)
-		end
-
-		if lply:GetYRPBool("iscasting", false) then
-			HUDSimpleBR(CA)
-		end
-
+		if GetGlobalYRPBool("bool_stamina", false) then HUDSimpleBR(ST) end
+		if GetGlobalYRPBool("bool_radiation", false) then HUDSimpleBR(RA) end
+		if GetGlobalYRPBool("bool_hunger", false) then HUDSimpleBR(HU) end
+		if GetGlobalYRPBool("bool_thirst", false) then HUDSimpleBR(TH) end
+		if GetGlobalYRPBool("bool_permille", false) then HUDSimpleBR(AL) end
+		if lply:GetYRPBool("iscasting", false) then HUDSimpleBR(CA) end
 		HUDSimpleBR(AB)
 		WP.element = "WP"
-		if WP.visible then
-			HUDSimpleBR(WP)
-		end
-
+		if WP.visible then HUDSimpleBR(WP) end
 		WS.element = "WS"
-		if WS.visible then
-			HUDSimpleBR(WS)
-		end
-
+		if WS.visible then HUDSimpleBR(WS) end
 		WN.element = "WN"
 		HUDSimpleBR(WN)
-		if batterypower <= 100 then
-			HUDSimpleBR(BA)
-		end
-
-		if not strEmpty(lply:Condition()) then
-			HUDSimpleBR(CON)
-		end
-
+		if batterypower <= 100 then HUDSimpleBR(BA) end
+		if not strEmpty(lply:Condition()) then HUDSimpleBR(CON) end
 		HUDSimpleBR(PE)
 		HUDSimpleBR(NE)
 		HUDSimpleBR(COM)
@@ -1001,9 +878,4 @@ function HUDSimple()
 	end
 end
 
-timer.Simple(
-	1,
-	function()
-		hook.Add("HUDPaint", "yrp_hud_design_Simple", HUDSimple)
-	end
-)
+timer.Simple(1, function() hook.Add("HUDPaint", "yrp_hud_design_Simple", HUDSimple) end)

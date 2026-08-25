@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local Player = FindMetaTable("Player")
 function Player:drawHitInfo()
 end
@@ -18,7 +18,6 @@ end
 function Player:getPreferredJobModel(teamNr)
 	--Description: Draw the wanted info above a player's head. Override this to disable or change the drawing of wanted info above players' heads.
 	YRPDarkrpNotFound("getPreferredJobModel( " .. tostring(teamNr) .. " )")
-
 	return ""
 end
 
@@ -28,7 +27,6 @@ function Player:isInRoom()
 	tracedata.start = LocalPlayer():GetShootPos()
 	tracedata.endpos = self:GetShootPos()
 	local trace = util.TraceLine(tracedata)
-
 	return not trace.HitWorld
 end
 
@@ -45,6 +43,5 @@ function input.KeyNameToNumber(str)
 			keyNames[input.GetKeyName(i)] = i
 		end
 	end
-
 	return keyNames[str]
 end

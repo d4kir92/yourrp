@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 include("shared.lua")
@@ -14,9 +14,7 @@ function ENT:Initialize()
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
 	local phys = self:GetPhysicsObject()
-	if phys:IsValid() then
-		phys:Wake()
-	end
+	if phys:IsValid() then phys:Wake() end
 end
 
 function ENT:Getamount()
@@ -27,7 +25,6 @@ function ENT:Setamount(money)
 	money = tonumber(money)
 	if money == nil then
 		YRP:msg("note", "[spawned_money] Setamount got a non-number")
-
 		return
 	end
 
@@ -37,10 +34,7 @@ end
 function ENT:Use(activator, caller)
 	if not IsValid(activator) or not activator:IsPlayer() then return end
 	local amount = self:Getamount()
-	if amount > 0 then
-		activator:addMoney(amount)
-	end
-
+	if amount > 0 then activator:addMoney(amount) end
 	self:Remove()
 end
 

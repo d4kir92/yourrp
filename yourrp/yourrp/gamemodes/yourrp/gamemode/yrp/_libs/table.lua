@@ -1,10 +1,7 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 function pTab(table, name)
 	name = name or ""
-	if name ~= "" then
-		name = name .. " "
-	end
-
+	if name ~= "" then name = name .. " " end
 	name = name .. "( " .. tostring(table) .. " )"
 	YRP:msg("ptab", name)
 	if istable(table) then
@@ -32,11 +29,9 @@ function combineTables(tab1, tab2)
 			table.RemoveByValue(tab1, "")
 			table.RemoveByValue(tab1, " ")
 		end
-
 		return tab1
 	else
 		YRP:msg("note", tostring(tab1) .. " and " .. tostring(tab2) .. " are not tables")
-
 		return {}
 	end
 end
@@ -45,13 +40,11 @@ function combineStringTables(str1, str2)
 	if str1 ~= nil and str2 ~= nil then
 		local _tab1 = string.Explode(",", str1)
 		local _tab2 = string.Explode(",", str2)
-
 		return combineTables(_tab1, _tab2)
 	else
 		local _tab1 = string.Explode(",", tostring(str1))
 		local _tab2 = string.Explode(",", tostring(str2))
 		YRP:msg("note", "combineStringTables ERROR str1: " .. tostring(str1) .. " str2: " .. tostring(str2))
-
 		return ""
 	end
 end
@@ -72,12 +65,9 @@ function SENTSTable(str)
 	for i, senttbl in pairs(se) do
 		if senttbl ~= "" then
 			senttbl = string.Explode(",", senttbl)
-			if senttbl[1] ~= nil and senttbl[2] ~= nil then
-				tbl[senttbl[2]] = senttbl[1]
-			end
+			if senttbl[1] ~= nil and senttbl[2] ~= nil then tbl[senttbl[2]] = senttbl[1] end
 		end
 	end
-
 	return tbl
 end
 
@@ -93,6 +83,5 @@ function SENTSString(tbl)
 
 		count = count + 1
 	end
-
 	return str
 end

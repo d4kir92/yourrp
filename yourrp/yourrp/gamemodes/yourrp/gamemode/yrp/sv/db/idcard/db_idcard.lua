@@ -1,54 +1,30 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_idcard"
-hook.Add(
-	"YRP_SQLDBREADY_GENERAL_DB",
-	"yrp_idcard",
-	function()
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
-		if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
-			YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'Version', '1'")
-		end
+hook.Add("YRP_SQLDBREADY_GENERAL_DB", "yrp_idcard", function()
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
+	if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'Version', '1'") end
+	LoadIDCardSettingDB(nil, "INIT")
+end)
 
-		LoadIDCardSettingDB(nil, "INIT")
+hook.Add("YRP_SQLDBREADY_GENERAL_UPDATE", "yrp_idcard", function()
+	if YRP_SQL_SELECT(DATABASE_NAME, "*", "name = 'int_background_x'") ~= nil then
+		YRP_SQL_UPDATE(DATABASE_NAME, {
+			["value"] = 0
+		}, "name = 'int_background_x'")
+
+		YRP_SQL_UPDATE(DATABASE_NAME, {
+			["value"] = 0
+		}, "name = 'int_background_y'")
+	else
+		YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'int_background_x', '0'")
+		YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'int_background_y', '0'")
 	end
-)
+end)
 
-hook.Add(
-	"YRP_SQLDBREADY_GENERAL_UPDATE",
-	"yrp_idcard",
-	function()
-		if YRP_SQL_SELECT(DATABASE_NAME, "*", "name = 'int_background_x'") ~= nil then
-			YRP_SQL_UPDATE(
-				DATABASE_NAME,
-				{
-					["value"] = 0
-				}, "name = 'int_background_x'"
-			)
-
-			YRP_SQL_UPDATE(
-				DATABASE_NAME,
-				{
-					["value"] = 0
-				}, "name = 'int_background_y'"
-			)
-		else
-			YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'int_background_x', '0'")
-			YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'int_background_y', '0'")
-		end
-	end
-)
-
-hook.Add(
-	"YRP_SQLDBREADY_GENERAL",
-	"yrp_idcard",
-	function()
-		LoadIDCardSetting(nil, "INIT")
-	end
-)
-
+hook.Add("YRP_SQLDBREADY_GENERAL", "yrp_idcard", function() LoadIDCardSetting(nil, "INIT") end)
 local elements = {"background", "box1", "box2", "box3", "box4", "box5", "serverlogo", "box6", "box7", "box8", "hostname", "role", "group", "idcardid", "faction", "rpname", "securitylevel", "birthday", "bodyheight", "weight"}
 local names = {"bool_ELEMENT_visible", "int_ELEMENT_x", "int_ELEMENT_y", "int_ELEMENT_w", "int_ELEMENT_h", "int_ELEMENT_r", "int_ELEMENT_g", "int_ELEMENT_b", "int_ELEMENT_a", "int_ELEMENT_ax", "int_ELEMENT_ay", "int_ELEMENT_colortype", "bool_ELEMENT_title"}
 local maxtries = 3
@@ -141,36 +117,30 @@ function LoadIDCardSetting(force, from)
 			if register[name] == nil then
 				local netstr = "nws_yrp_update_idcard_" .. name
 				YRP:AddNetworkString(netstr)
-				net.Receive(
-					netstr,
-					function(len, ply)
-						if not ply:HasAccess(netstr, true) then return end
-						local n = net.ReadString()
-						local v = net.ReadString()
-						if v == "true" then
-							v = 1
-						elseif v == "false" then
-							v = 0
-						end
-
-						if string.StartWith(n, "bool_") and GetGlobalYRPBool(n, tobool(v)) ~= tobool(v) then
-							SetGlobalYRPBool(n, tobool(v))
-						elseif string.StartWith(n, "int_") and GetGlobalYRPInt(n, v) ~= v then
-							SetGlobalYRPInt(n, v)
-						else
-							YRP:msg("note", "Missing Type - n: " .. tostring(n) .. " v: " .. tostring(v))
-						end
-
-						YRP_SQL_UPDATE(
-							DATABASE_NAME,
-							{
-								["value"] = v
-							}, "name = '" .. n .. "'"
-						)
-
-						LoadIDCardSetting(true, "UPDATED VARIABLE")
+				net.Receive(netstr, function(len, ply)
+					if not ply:HasAccess(netstr, true) then return end
+					local n = net.ReadString()
+					local v = net.ReadString()
+					if v == "true" then
+						v = 1
+					elseif v == "false" then
+						v = 0
 					end
-				)
+
+					if string.StartWith(n, "bool_") and GetGlobalYRPBool(n, tobool(v)) ~= tobool(v) then
+						SetGlobalYRPBool(n, tobool(v))
+					elseif string.StartWith(n, "int_") and GetGlobalYRPInt(n, v) ~= v then
+						SetGlobalYRPInt(n, v)
+					else
+						YRP:msg("note", "Missing Type - n: " .. tostring(n) .. " v: " .. tostring(v))
+					end
+
+					YRP_SQL_UPDATE(DATABASE_NAME, {
+						["value"] = v
+					}, "name = '" .. n .. "'")
+
+					LoadIDCardSetting(true, "UPDATED VARIABLE")
+				end)
 			end
 		end
 	end
@@ -180,12 +150,9 @@ function LoadIDCardSetting(force, from)
 		for i, v in pairs(tab) do
 			v.value = tonumber(v.value)
 			if v.value > 2 then
-				YRP_SQL_UPDATE(
-					DATABASE_NAME,
-					{
-						["value"] = 1
-					}, "name = '" .. v.name .. "'"
-				)
+				YRP_SQL_UPDATE(DATABASE_NAME, {
+					["value"] = 1
+				}, "name = '" .. v.name .. "'")
 			end
 		end
 	end
@@ -195,12 +162,9 @@ function LoadIDCardSetting(force, from)
 		for i, v in pairs(tab2) do
 			v.value = tonumber(v.value)
 			if v.value > 2 then
-				YRP_SQL_UPDATE(
-					DATABASE_NAME,
-					{
-						["value"] = 1
-					}, "name = '" .. v.name .. "'"
-				)
+				YRP_SQL_UPDATE(DATABASE_NAME, {
+					["value"] = 1
+				}, "name = '" .. v.name .. "'")
 			end
 		end
 	end
@@ -211,12 +175,9 @@ function LoadIDCardSetting(force, from)
 			v.value = tonumber(v.value)
 			-- 1 CustomColor, 2 FactionColor, 3 GroupColor, 4 RoleColor, 5 UserGroupColor
 			if v.value > 5 then
-				YRP_SQL_UPDATE(
-					DATABASE_NAME,
-					{
-						["value"] = 1
-					}, "name = '" .. v.name .. "'"
-				)
+				YRP_SQL_UPDATE(DATABASE_NAME, {
+					["value"] = 1
+				}, "name = '" .. v.name .. "'")
 			end
 		end
 	end

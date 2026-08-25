@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 -- #SENDISREADY #READY #PLAYERISREADY #ISREADY
 yrpstartedsending = yrpstartedsending or false
 yrpreceivedstartdata = yrpreceivedstartdata or false
@@ -26,17 +26,13 @@ local function YRPGetClientInfo()
 	info.country = system.GetCountry()
 	info.branch = GetBranch()
 	info.beta = BRANCH or "unknown"
-
 	return info
 end
 
-net.Receive(
-	"nws_yrp_receivedstartdata",
-	function(len)
-		MsgC(Color(0, 255, 0), "[LOADING] SERVER -> CLIENT: Server Received Start Data", "\n")
-		yrpreceivedstartdata = true
-	end
-)
+net.Receive("nws_yrp_receivedstartdata", function(len)
+	MsgC(Color(0, 255, 0), "[LOADING] SERVER -> CLIENT: Server Received Start Data", "\n")
+	yrpreceivedstartdata = true
+end)
 
 local function YRPSendAskData(from)
 	local info = YRPGetClientInfo()
@@ -47,15 +43,12 @@ local function YRPSendAskData(from)
 	net.WriteString(info.beta)
 	net.SendToServer()
 	MsgC(Color(255, 255, 255, 255), "[LOADING] Sended StartData", "\n")
-	timer.Simple(
-		8,
-		function()
-			if not yrpreceivedstartdata then
-				MsgC(Color(255, 255, 0), "[LOADING] Retry Send StartData", "\n")
-				YRPSendAskData("RETRY")
-			end
+	timer.Simple(8, function()
+		if not yrpreceivedstartdata then
+			MsgC(Color(255, 255, 0), "[LOADING] Retry Send StartData", "\n")
+			YRPSendAskData("RETRY")
 		end
-	)
+	end)
 end
 
 local function YRPStartSendingStartData(from)
@@ -66,27 +59,9 @@ local function YRPStartSendingStartData(from)
 	end
 end
 
-hook.Add(
-	"InitPostEntity",
-	"YRP_INITPOSTENTITY",
-	function()
-		timer.Simple(
-			1,
-			function()
-				YRPStartSendingStartData("HOOK InitPostEntity")
-			end
-		)
-	end
-)
-
+hook.Add("InitPostEntity", "YRP_INITPOSTENTITY", function() timer.Simple(1, function() YRPStartSendingStartData("HOOK InitPostEntity") end) end)
 function GM:InitPostEntity()
-	timer.Simple(
-		1,
-		function()
-			YRPStartSendingStartData("GM InitPostEntity")
-		end
-	)
-
+	timer.Simple(1, function() YRPStartSendingStartData("GM InitPostEntity") end)
 	local ply = LocalPlayer()
 	ply.DarkRPVars = {}
 	ply.DarkRPVars.money = 0
@@ -95,16 +70,13 @@ function GM:InitPostEntity()
 	ply.DarkRPVars.Energy = 0
 end
 
-net.Receive(
-	"nws_yrp_sendserverdata",
-	function(len)
-		if not yrpreceivedserverdata then
-			yrpreceivedserverdata = true
-			net.Start("nws_yrp_receivedserverdata")
-			net.SendToServer()
-		end
+net.Receive("nws_yrp_sendserverdata", function(len)
+	if not yrpreceivedserverdata then
+		yrpreceivedserverdata = true
+		net.Start("nws_yrp_receivedserverdata")
+		net.SendToServer()
 	end
-)
+end)
 
 local characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
 local function GenerateRandomString(length)
@@ -114,24 +86,13 @@ local function GenerateRandomString(length)
 		local random_char = string.sub(characters, random_index, random_index)
 		random_string = random_string .. random_char
 	end
-
 	return random_string
 end
 
-timer.Create(
-	GenerateRandomString(32),
-	0.11,
-	0,
-	function()
-		if ConVar and ConVar("sv_allowcslua") and ConVar("sv_allowcslua"):GetBool() then
-			net.Start("yrp_exploiter_detected")
-			net.SendToServer()
-			timer.Simple(
-				0.01,
-				function()
-					RunConsoleCommand("disconnect")
-				end
-			)
-		end
+timer.Create(GenerateRandomString(32), 0.11, 0, function()
+	if ConVar and ConVar("sv_allowcslua") and ConVar("sv_allowcslua"):GetBool() then
+		net.Start("yrp_exploiter_detected")
+		net.SendToServer()
+		timer.Simple(0.01, function() RunConsoleCommand("disconnect") end)
 	end
-)
+end)

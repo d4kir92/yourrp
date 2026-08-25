@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local Entity = FindMetaTable("Entity")
 AddCSLuaFile("client.lua")
 if CLIENT then
@@ -17,12 +17,9 @@ function Entity:getDoorData()
 		self.DoorData.owner = self:GetRPOwner():UserID()
 	elseif charid and charid > 0 then
 		for i, v in pairs(player.GetAll()) do
-			if v:CharID() == charid then
-				self.DoorData.owner = v:UserID()
-			end
+			if v:CharID() == charid then self.DoorData.owner = v:UserID() end
 		end
 	end
-
 	return self.DoorData
 end
 
@@ -34,14 +31,12 @@ end
 function Entity:getKeysAllowedToOwn()
 	--Description: The list of people of which the master door owner has added as allowed to own.
 	YRPDarkrpNotFound("getKeysAllowedToOwn()")
-
 	return {}
 end
 
 function Entity:getKeysCoOwners()
 	--Description: The list of people who co-own the door.
 	YRPDarkrpNotFound("getKeysCoOwners()")
-
 	return {}
 end
 
@@ -82,7 +77,6 @@ end
 function Entity:isKeysAllowedToOwn(ply)
 	--Description: Whether this player is allowed to co-own a door, as decided by the master door owner.
 	YRPDarkrpNotFound("isKeysAllowedToOwn(ply)")
-
 	return false
 end
 
@@ -104,7 +98,6 @@ end
 
 function Entity:isMoneyBag()
 	YRPDarkrpNotFound("isMoneyBag()")
-
 	return false
 end
 

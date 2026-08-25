@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local _type = type
 function DHr(tab)
 	tab = tab or {}
@@ -20,10 +20,7 @@ function DHr(tab)
 		draw.RoundedBox(0, 0, ph / 4, pw, ph / 2, tab.color)
 	end
 
-	if tab.parent ~= nil and tab.parent.AddItem ~= nil then
-		tab.parent:AddItem(pnl.line)
-	end
-
+	if tab.parent ~= nil and tab.parent.AddItem ~= nil then tab.parent:AddItem(pnl.line) end
 	return pnl
 end
 
@@ -92,14 +89,9 @@ function YRPDCheckBoxes(tab)
 			function window:sendtoserver()
 				local str = {}
 				for i, choice in pairs(tab.choices) do
-					if choice.checked then
-						table.insert(str, i)
-					end
-
+					if choice.checked then table.insert(str, i) end
 					for j, cho in pairs(choice.choices) do
-						if cho.checked then
-							table.insert(str, j)
-						end
+						if cho.checked then table.insert(str, j) end
 					end
 				end
 
@@ -170,24 +162,18 @@ function YRPDCheckBoxes(tab)
 			end
 		end
 
-		net.Receive(
-			tab.netstr,
-			function(len)
-				local _uid = tonumber(net.ReadString())
-				local _str = net.ReadString()
-				if YRPPanelAlive(pnl.DButton, "pnl.DButton") then
-					pnl.DButton.serverside = true
-					tab.value = _str
-					pnl.DButton.serverside = false
-				end
+		net.Receive(tab.netstr, function(len)
+			local _uid = tonumber(net.ReadString())
+			local _str = net.ReadString()
+			if YRPPanelAlive(pnl.DButton, "pnl.DButton") then
+				pnl.DButton.serverside = true
+				tab.value = _str
+				pnl.DButton.serverside = false
 			end
-		)
+		end)
 	end
 
-	if tab.parent ~= nil and tab.parent.AddItem ~= nil then
-		tab.parent:AddItem(pnl.line)
-	end
-
+	if tab.parent ~= nil and tab.parent.AddItem ~= nil then tab.parent:AddItem(pnl.line) end
 	return pnl
 end
 
@@ -237,34 +223,25 @@ function YRPDCheckBox(tab)
 	if tab.netstr ~= nil and tab.uniqueID ~= nil then
 		function pnl.DCheckBox:OnChange(bo)
 			local int = 0
-			if bo then
-				int = 1
-			end
-
+			if bo then int = 1 end
 			net.Start(tab.netstr)
 			net.WriteString(tab.uniqueID)
 			net.WriteString(int)
 			net.SendToServer()
 		end
 
-		net.Receive(
-			tab.netstr,
-			function(len)
-				local _uid = tonumber(net.ReadString())
-				local _int = tonumber(net.ReadString())
-				if YRPPanelAlive(pnl.DButton, "pnl.DButton") then
-					pnl.DButton.serverside = true
-					tab.value = _int
-					pnl.DButton.serverside = false
-				end
+		net.Receive(tab.netstr, function(len)
+			local _uid = tonumber(net.ReadString())
+			local _int = tonumber(net.ReadString())
+			if YRPPanelAlive(pnl.DButton, "pnl.DButton") then
+				pnl.DButton.serverside = true
+				tab.value = _int
+				pnl.DButton.serverside = false
 			end
-		)
+		end)
 	end
 
-	if tab.parent ~= nil and tab.parent.AddItem ~= nil then
-		tab.parent:AddItem(pnl.line)
-	end
-
+	if tab.parent ~= nil and tab.parent.AddItem ~= nil then tab.parent:AddItem(pnl.line) end
 	return pnl
 end
 
@@ -323,24 +300,18 @@ function YRPDComboBox(tab)
 			net.SendToServer()
 		end
 
-		net.Receive(
-			tab.netstr,
-			function(len)
-				local _uid = tonumber(net.ReadString())
-				local _str = net.ReadString()
-				if YRPPanelAlive(pnl.DComboBox, "pnl.DComboBox") then
-					pnl.DComboBox.serverside = true
-					pnl.DComboBox:SetText(_str)
-					pnl.DComboBox.serverside = false
-				end
+		net.Receive(tab.netstr, function(len)
+			local _uid = tonumber(net.ReadString())
+			local _str = net.ReadString()
+			if YRPPanelAlive(pnl.DComboBox, "pnl.DComboBox") then
+				pnl.DComboBox.serverside = true
+				pnl.DComboBox:SetText(_str)
+				pnl.DComboBox.serverside = false
 			end
-		)
+		end)
 	end
 
-	if tab.parent ~= nil and tab.parent.AddItem ~= nil then
-		tab.parent:AddItem(pnl.line)
-	end
-
+	if tab.parent ~= nil and tab.parent.AddItem ~= nil then tab.parent:AddItem(pnl.line) end
 	return pnl
 end
 
@@ -399,24 +370,18 @@ function YRPDComboBoxHUD(tab)
 			net.SendToServer()
 		end
 
-		net.Receive(
-			tab.netstr,
-			function(len)
-				local _uid = tonumber(net.ReadString())
-				local _str = net.ReadString()
-				if YRPPanelAlive(pnl.DComboBox, "pnl.DComboBox 2") then
-					pnl.DComboBox.serverside = true
-					pnl.DComboBox:SetText(_str)
-					pnl.DComboBox.serverside = false
-				end
+		net.Receive(tab.netstr, function(len)
+			local _uid = tonumber(net.ReadString())
+			local _str = net.ReadString()
+			if YRPPanelAlive(pnl.DComboBox, "pnl.DComboBox 2") then
+				pnl.DComboBox.serverside = true
+				pnl.DComboBox:SetText(_str)
+				pnl.DComboBox.serverside = false
 			end
-		)
+		end)
 	end
 
-	if tab.parent ~= nil and tab.parent.AddItem ~= nil then
-		tab.parent:AddItem(pnl.line)
-	end
-
+	if tab.parent ~= nil and tab.parent.AddItem ~= nil then tab.parent:AddItem(pnl.line) end
 	return pnl
 end
 
@@ -496,24 +461,18 @@ function DColor(tab)
 			end
 		end
 
-		net.Receive(
-			tab.netstr,
-			function(len)
-				local _uid = tonumber(net.ReadString())
-				local _str = net.ReadString()
-				if YRPPanelAlive(pnl.DButton, "pnl.DButton") then
-					pnl.DButton.serverside = true
-					pnl.DButton.color = stc(_str)
-					pnl.DButton.serverside = false
-				end
+		net.Receive(tab.netstr, function(len)
+			local _uid = tonumber(net.ReadString())
+			local _str = net.ReadString()
+			if YRPPanelAlive(pnl.DButton, "pnl.DButton") then
+				pnl.DButton.serverside = true
+				pnl.DButton.color = stc(_str)
+				pnl.DButton.serverside = false
 			end
-		)
+		end)
 	end
 
-	if tab.parent ~= nil and tab.parent.AddItem ~= nil then
-		tab.parent:AddItem(pnl.line)
-	end
-
+	if tab.parent ~= nil and tab.parent.AddItem ~= nil then tab.parent:AddItem(pnl.line) end
 	return pnl
 end
 
@@ -577,24 +536,18 @@ function DIntBox(tab)
 			end
 		end
 
-		net.Receive(
-			tab.netstr,
-			function(len)
-				local _uid = tonumber(net.ReadString())
-				local _val = tonumber(net.ReadString())
-				if YRPPanelAlive(pnl.DNumberWang, "pnl.DNumberWang") then
-					pnl.DNumberWang.serverside = true
-					pnl.DNumberWang:SetValue(_val)
-					pnl.DNumberWang.serverside = false
-				end
+		net.Receive(tab.netstr, function(len)
+			local _uid = tonumber(net.ReadString())
+			local _val = tonumber(net.ReadString())
+			if YRPPanelAlive(pnl.DNumberWang, "pnl.DNumberWang") then
+				pnl.DNumberWang.serverside = true
+				pnl.DNumberWang:SetValue(_val)
+				pnl.DNumberWang.serverside = false
 			end
-		)
+		end)
 	end
 
-	if tab.parent ~= nil and tab.parent.AddItem ~= nil then
-		tab.parent:AddItem(pnl.line)
-	end
-
+	if tab.parent ~= nil and tab.parent.AddItem ~= nil then tab.parent:AddItem(pnl.line) end
 	return pnl
 end
 
@@ -666,34 +619,23 @@ function DTextBox(tab)
 			net.WriteString(tab.uniqueID)
 			net.WriteString(self:GetText())
 			net.SendToServer()
-			if pnl.OnChange then
-				pnl:OnChange()
-			end
-
-			if tab.testCode then
-				tab:testCode()
-			end
+			if pnl.OnChange then pnl:OnChange() end
+			if tab.testCode then tab:testCode() end
 		end
 
-		net.Receive(
-			tab.netstr,
-			function(len)
-				local _uid = tonumber(net.ReadString())
-				local _str = net.ReadString()
-				if YRPPanelAlive(pnl.DTextEntry, "pnl.DTextEntry") then
-					pnl.DTextEntry.serverside = true
-					pnl.DTextEntry:SetText(_str)
-					pnl.DTextEntry.serverside = false
-				end
+		net.Receive(tab.netstr, function(len)
+			local _uid = tonumber(net.ReadString())
+			local _str = net.ReadString()
+			if YRPPanelAlive(pnl.DTextEntry, "pnl.DTextEntry") then
+				pnl.DTextEntry.serverside = true
+				pnl.DTextEntry:SetText(_str)
+				pnl.DTextEntry.serverside = false
 			end
-		)
+		end)
 	end
 
 	pnl.DTextEntry:SetPlaceholderText(tab.placeholder)
-	if tab.parent ~= nil and tab.parent.AddItem ~= nil then
-		tab.parent:AddItem(pnl.line)
-	end
-
+	if tab.parent ~= nil and tab.parent.AddItem ~= nil then tab.parent:AddItem(pnl.line) end
 	return pnl
 end
 
@@ -725,20 +667,16 @@ function YRPDNumberWang(tab)
 			end
 		end
 
-		net.Receive(
-			tab.netstr,
-			function(len)
-				local _uid = tonumber(net.ReadString())
-				local _val = tonumber(net.ReadString())
-				if YRPPanelAlive(dnw, "dnw") then
-					dnw.serverside = true
-					dnw:SetValue(_val)
-					dnw.serverside = false
-				end
+		net.Receive(tab.netstr, function(len)
+			local _uid = tonumber(net.ReadString())
+			local _val = tonumber(net.ReadString())
+			if YRPPanelAlive(dnw, "dnw") then
+				dnw.serverside = true
+				dnw:SetValue(_val)
+				dnw.serverside = false
 			end
-		)
+		end)
 	end
-
 	return dnw
 end
 
@@ -784,9 +722,7 @@ function DAttributeBar(tab)
 					if pnl.val3 > tab.dnw[2].value then
 						pnl.val3 = 0
 					elseif pnl.val3 < 0 then
-						if tab.dnw[4] ~= nil then
-							pnl.val3 = tab.dnw[4].value
-						end
+						if tab.dnw[4] ~= nil then pnl.val3 = tab.dnw[4].value end
 					end
 				end
 
@@ -806,9 +742,7 @@ function DAttributeBar(tab)
 			draw.RoundedBox(0, 0, 0, pw * tab.dnw[1].value / tab.dnw[2].value, ph, tab.color)
 			if tab.dnw[3] ~= nil then
 				draw.RoundedBox(0, 0, ph / 4 * 3, pw * pnl.val3 / tab.dnw[2].value, ph / 4, tab.color2)
-				if tab.dnw[4] ~= nil then
-					draw.RoundedBox(0, 0, ph / 4 * 2, pw * pnl.val4 / tab.dnw[2].value, ph / 4, tab.color3)
-				end
+				if tab.dnw[4] ~= nil then draw.RoundedBox(0, 0, ph / 4 * 2, pw * pnl.val4 / tab.dnw[2].value, ph / 4, tab.color3) end
 			end
 
 			local text = {}
@@ -816,9 +750,7 @@ function DAttributeBar(tab)
 				text.text = YRP:trans(tab.header) .. ": " .. tab.dnw[1].value .. "/" .. tab.dnw[2].value
 				if tab.dnw[3] ~= nil then
 					text.text = text.text .. " ( " .. tab.dnw[3].value
-					if tab.dnw[4] ~= nil then
-						text.text = text.text .. " | " .. tab.dnw[4].value
-					end
+					if tab.dnw[4] ~= nil then text.text = text.text .. " | " .. tab.dnw[4].value end
 				end
 
 				text.text = text.text .. " )"
@@ -871,10 +803,7 @@ function DAttributeBar(tab)
 		pnl.dn = YRPDNumberWang(tab.dnw[4])
 	end
 
-	if tab.par ~= nil and tab.par.AddItem ~= nil then
-		tab.par:AddItem(pnl.line)
-	end
-
+	if tab.par ~= nil and tab.par.AddItem ~= nil then tab.par:AddItem(pnl.line) end
 	return pnl
 end
 
@@ -913,10 +842,7 @@ function DStringListBox(tab)
 	pnl.add:SetText("")
 	function pnl.add:Paint(pw, ph)
 		self.color = Color(80, 255, 80)
-		if self:IsHovered() then
-			self.color = Color(100, 255, 100)
-		end
-
+		if self:IsHovered() then self.color = Color(100, 255, 100) end
 		draw.RoundedBox(0, 0, 0, pw, ph, self.color)
 		draw.SimpleText("+", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
@@ -941,58 +867,30 @@ function DStringListBox(tab)
 				local line = YRPCreateD("DButton", nil, pnl.dpl:GetWide(), v.h, 0, 0)
 				line:SetText("")
 				line.uniqueID = v.uniqueID
-				if v.string_models and type(v.string_models) == "string" then
-					line.models = string.Explode(",", v.string_models or "")
-				end
-
+				if v.string_models and type(v.string_models) == "string" then line.models = string.Explode(",", v.string_models or "") end
 				line.pmid = 1
-				if line.models and (table.Count(line.models) > 1 or not strEmpty(line.models[1])) then
-					line.mod = YRPCreateD("DModelPanel", line, v.h - 2 * v.br, v.h - 2 * v.br, YRP:ctr(40) + v.br, v.br)
-				end
-
+				if line.models and (table.Count(line.models) > 1 or not strEmpty(line.models[1])) then line.mod = YRPCreateD("DModelPanel", line, v.h - 2 * v.br, v.h - 2 * v.br, YRP:ctr(40) + v.br, v.br) end
 				local text = ""
 				if v.slots then
 					local test = {}
-					if tobool(v.slots.slot_primary) then
-						table.insert(test, YRP:trans("LID_primary"))
-					end
-
-					if tobool(v.slots.slot_secondary) then
-						table.insert(test, YRP:trans("LID_secondary"))
-					end
-
-					if tobool(v.slots.slot_sidearm) then
-						table.insert(test, YRP:trans("LID_sidearm"))
-					end
-
-					if tobool(v.slots.slot_gadget) then
-						table.insert(test, YRP:trans("LID_gadget"))
-					end
-
-					if tobool(v.slots.slot_no) then
-						table.insert(test, YRP:trans("LID_noslot"))
-					end
-
+					if tobool(v.slots.slot_primary) then table.insert(test, YRP:trans("LID_primary")) end
+					if tobool(v.slots.slot_secondary) then table.insert(test, YRP:trans("LID_secondary")) end
+					if tobool(v.slots.slot_sidearm) then table.insert(test, YRP:trans("LID_sidearm")) end
+					if tobool(v.slots.slot_gadget) then table.insert(test, YRP:trans("LID_gadget")) end
+					if tobool(v.slots.slot_no) then table.insert(test, YRP:trans("LID_noslot")) end
 					text = table.concat(test, ", ")
-					if strEmpty(text) then
-						text = "WEAPON NEED CONFIGURATION!"
-					end
+					if strEmpty(text) then text = "WEAPON NEED CONFIGURATION!" end
 				end
 
 				function line:Paint(pw, ph)
 					draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 255))
 					if self.mod ~= nil and self.oldpmid ~= self.pmid then
 						self.oldpmid = self.pmid
-						if line.models then
-							line.mod:SetModel(line.models[line.pmid])
-						end
+						if line.models then line.mod:SetModel(line.models[line.pmid]) end
 					end
 
 					local name = v.string_name
-					if line.models and table.Count(self.models) > 1 then
-						name = name .. " ( " .. self.pmid .. "/" .. table.Count(self.models) .. " )"
-					end
-
+					if line.models and table.Count(self.models) > 1 then name = name .. " ( " .. self.pmid .. "/" .. table.Count(self.models) .. " )" end
 					draw.SimpleText(name, "DermaDefault", YRP:ctr(40) + v.h + YRP:ctr(40) + YRP:ctr(20), ph / 2 - YRP:ctr(25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 					if v.slots then
 						draw.SimpleText(text, "DermaDefault", YRP:ctr(40) + v.h + YRP:ctr(40) + YRP:ctr(20), ph / 2 + YRP:ctr(25), Color(0, 0, 0, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
@@ -1022,9 +920,7 @@ function DStringListBox(tab)
 				end
 
 				function line.next:DoClick()
-					if line.models and line.pmid < table.Count(line.models) then
-						line.pmid = line.pmid + 1
-					end
+					if line.models and line.pmid < table.Count(line.models) then line.pmid = line.pmid + 1 end
 				end
 
 				line.prev = YRPCreateD("DButton", line, YRP:ctr(40), v.h - 2 * v.br, 0, v.br)
@@ -1037,9 +933,7 @@ function DStringListBox(tab)
 				end
 
 				function line.prev:DoClick()
-					if line.pmid > 1 then
-						line.pmid = line.pmid - 1
-					end
+					if line.pmid > 1 then line.pmid = line.pmid - 1 end
 				end
 
 				self:AddItem(line)
@@ -1048,9 +942,6 @@ function DStringListBox(tab)
 	end
 
 	tab.par = tab.parent
-	if tab.par ~= nil and tab.par.AddItem ~= nil then
-		tab.par:AddItem(pnl.bg)
-	end
-
+	if tab.par ~= nil and tab.par.AddItem ~= nil then tab.par:AddItem(pnl.bg) end
 	return pnl
 end

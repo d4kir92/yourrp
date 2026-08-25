@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 -- #VEHICLEOPTIONS
 local yrp_vehicle = {}
 function YRPToggleVehicleOptions(vehicle, vehicleID)
@@ -17,16 +17,13 @@ function closeVehicleOptions()
 	end
 end
 
-net.Receive(
-	"nws_yrp_getVehicleInfo",
-	function(len)
-		if net.ReadBool() then
-			local vehicle = net.ReadEntity()
-			local _tmpVehicle = net.ReadTable()
-			optionVehicleWindow(vehicle, _tmpVehicle)
-		end
+net.Receive("nws_yrp_getVehicleInfo", function(len)
+	if net.ReadBool() then
+		local vehicle = net.ReadEntity()
+		local _tmpVehicle = net.ReadTable()
+		optionVehicleWindow(vehicle, _tmpVehicle)
 	end
-)
+end)
 
 function optionVehicleWindow(vehicle, vehicleTab)
 	YRPOpenMenu()
@@ -50,9 +47,7 @@ function optionVehicleWindow(vehicle, vehicleTab)
 	ownercharid = tonumber(ownercharid)
 	local owner = ""
 	for i, v in pairs(player.GetAll()) do
-		if v:CharID() == ownercharid then
-			owner = v:RPName()
-		end
+		if v:CharID() == ownercharid then owner = v:RPName() end
 	end
 
 	yrp_vehicle.window:SetTitle(YRP:trans("LID_owner") .. ": " .. owner)
@@ -68,9 +63,7 @@ function optionVehicleWindow(vehicle, vehicleTab)
 			net.Start("nws_yrp_removeVehicleOwner")
 			net.WriteString(vehicleTab[1].uniqueID)
 			net.SendToServer()
-			if YRPPanelAlive(yrp_vehicle.window) then
-				yrp_vehicle.window:Close()
-			end
+			if YRPPanelAlive(yrp_vehicle.window) then yrp_vehicle.window:Close() end
 		end
 
 		_buttonRemoveOwner.tab = {

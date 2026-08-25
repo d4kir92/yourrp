@@ -1,10 +1,8 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local yrp_charframe = {}
 yrp_charframe.open = false
 function YRPToggleCharMenu()
-	if not yrp_charframe.open and YRPIsNoMenuOpen() then
-		openCharMenu()
-	end
+	if not yrp_charframe.open and YRPIsNoMenuOpen() then openCharMenu() end
 end
 
 function closeCharMenu()
@@ -57,9 +55,7 @@ function CreateCharContent(parent)
 		cl_rpName = YRPCreateD("DTextEntry", parent, YRP:ctr(800), YRP:ctr(50), YRP:ctr(20), YRP:ctr(70))
 		cl_rpName:SetText(LocalPlayer():RPName())
 		function cl_rpName:OnChange()
-			if #self:GetText() > 32 then
-				self:SetText(string.sub(self:GetText(), 0, 32))
-			end
+			if #self:GetText() > 32 then self:SetText(string.sub(self:GetText(), 0, 32)) end
 		end
 
 		Y = Y + 70

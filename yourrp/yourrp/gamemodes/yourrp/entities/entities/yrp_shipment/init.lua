@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 include("shared.lua")
@@ -8,10 +8,7 @@ function ENT:Initialize()
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
 	local phys = self:GetPhysicsObject()
-	if phys:IsValid() then
-		phys:Wake()
-	end
-
+	if phys:IsValid() then phys:Wake() end
 	self.delay = 0
 end
 
@@ -46,23 +43,17 @@ function ENT:SetAmount(amount)
 end
 
 function ENT:OnRemove()
-	if YRPEntityAlive(self.viewmodel) then
-		self.viewmodel:Remove()
-	end
+	if YRPEntityAlive(self.viewmodel) then self.viewmodel:Remove() end
 end
 
 function ENT:AddOne(ent)
 	self:SetYRPInt("amount", self:GetYRPInt("amount", 1) + 1)
-	if YRPEntityAlive(ent) then
-		ent:Remove()
-	end
+	if YRPEntityAlive(ent) then ent:Remove() end
 end
 
 function ENT:RemoveOne()
 	self:SetYRPInt("amount", self:GetYRPInt("amount", 1) - 1)
-	if self:GetYRPInt("amount", 1) == 0 then
-		self:Remove()
-	end
+	if self:GetYRPInt("amount", 1) == 0 then self:Remove() end
 end
 
 function ENT:Use(activator, caller)

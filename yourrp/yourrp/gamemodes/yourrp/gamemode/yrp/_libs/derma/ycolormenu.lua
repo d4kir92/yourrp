@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local PANEL = {}
 function PANEL:ValueChanged(col)
 	self._col = col
@@ -7,10 +7,7 @@ end
 function PANEL:Init()
 	self:SetTitle("LID_color")
 	local ctrl = YRPCreateD("DColorMixer", self, self:GetWide() - YRP:ctr(40), self:GetTall() - YRP:ctr(40), YRP:ctr(20), YRP:ctr(20))
-	ctrl.ValueChanged = function(ctr, color)
-		self:ValueChanged(color)
-	end
-
+	ctrl.ValueChanged = function(ctr, color) self:ValueChanged(color) end
 	self:ShowCloseButton(false)
 	self._cm = ctrl
 end

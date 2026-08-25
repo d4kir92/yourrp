@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 KEYBINDS = KEYBINDS or {}
 KEYBINDS.open = false
 function YRPCreateDKeybinder(parent, w, h, x, y, keybind)
@@ -14,14 +14,11 @@ function YRPCreateDKeybinder(parent, w, h, x, y, keybind)
 	function _tmp:Paint(pw, ph)
 		paintButton(self, pw, ph, "")
 	end
-
 	return _tmp
 end
 
 function YRPToggleKeybindsMenu()
-	if not KEYBINDS.open and YRPIsNoMenuOpen() then
-		openKeybindsMenu()
-	end
+	if not KEYBINDS.open and YRPIsNoMenuOpen() then openKeybindsMenu() end
 end
 
 function closeKeybindsMenu()

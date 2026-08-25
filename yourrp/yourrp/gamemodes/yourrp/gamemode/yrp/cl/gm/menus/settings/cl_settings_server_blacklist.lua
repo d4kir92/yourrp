@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 -- #BLACKLISTSETTINGS
 function BuildBlacklis(parent, tabBL, tab)
 	parent:Clear()
@@ -18,9 +18,7 @@ function BuildBlacklis(parent, tabBL, tab)
 	end
 
 	for k, bla in pairs(tabBL) do
-		if tab == "LID_all" or tab == "LID_inventory" and bla.name == "inventory" or tab == "LID_chat" and bla.name == "chat" or tab == "LID_entities" and bla.name == "entities" or tab == "LID_props" and bla.name == "props" then
-			lis:AddLine(bla.uniqueID, bla.name, bla.value)
-		end
+		if tab == "LID_all" or tab == "LID_inventory" and bla.name == "inventory" or tab == "LID_chat" and bla.name == "chat" or tab == "LID_entities" and bla.name == "entities" or tab == "LID_props" and bla.name == "props" then lis:AddLine(bla.uniqueID, bla.name, bla.value) end
 	end
 
 	local btnAdd = YRPCreateD("YButton", parent, YRP:ctr(500), YRP:ctr(50), parent:GetWide() - YRP:ctr(20 + 500), YRP:ctr(20))
@@ -95,9 +93,7 @@ function BuildBlacklis(parent, tabBL, tab)
 			nr = tonumber(nr)
 			for i, v in pairs(tabBL) do
 				v.uniqueID = tonumber(v.uniqueID)
-				if v.uniqueID == nr then
-					table.RemoveByValue(tabBL, v)
-				end
+				if v.uniqueID == nr then table.RemoveByValue(tabBL, v) end
 			end
 
 			lis:RemoveLine(lis:GetSelectedLine())
@@ -105,9 +101,7 @@ function BuildBlacklis(parent, tabBL, tab)
 	end
 
 	function btnRem:Paint(pw, ph)
-		if lis:GetSelectedLine() ~= nil then
-			hook.Run("YButtonRPaint", self, pw, ph)
-		end
+		if lis:GetSelectedLine() ~= nil then hook.Run("YButtonRPaint", self, pw, ph) end
 	end
 
 	function btnRem:Think()
@@ -122,69 +116,31 @@ function BuildBlacklis(parent, tabBL, tab)
 	end
 
 	function lis:OnRemove()
-		if YRPPanelAlive(btnAdd) then
-			btnAdd:Remove()
-		end
-
-		if YRPPanelAlive(btnRem) then
-			btnRem:Remove()
-		end
+		if YRPPanelAlive(btnAdd) then btnAdd:Remove() end
+		if YRPPanelAlive(btnRem) then btnRem:Remove() end
 	end
 end
 
-net.Receive(
-	"nws_yrp_blacklist_get",
-	function(len)
-		local site = GetSettingsSite()
-		if YRPPanelAlive(site) then
-			site:Clear()
-			local tabBL = net.ReadTable()
-			local tab = net.ReadString()
-			-- TABS
-			local tabs = YRPCreateD("YTabs", site, site:GetWide(), site:GetTall(), 0, 0)
-			function tabs:Think()
-				self:SetSize(site:GetWide(), site:GetTall())
-			end
-
-			tabs:AddOption(
-				"LID_all",
-				function(parent)
-					BuildBlacklis(parent, tabBL, "LID_all")
-				end
-			)
-
-			tabs:AddOption(
-				"LID_inventory",
-				function(parent)
-					BuildBlacklis(parent, tabBL, "LID_inventory")
-				end
-			)
-
-			tabs:AddOption(
-				"LID_chat",
-				function(parent)
-					BuildBlacklis(parent, tabBL, "LID_chat")
-				end
-			)
-
-			tabs:AddOption(
-				"LID_entities",
-				function(parent)
-					BuildBlacklis(parent, tabBL, "LID_entities")
-				end
-			)
-
-			tabs:AddOption(
-				"LID_props",
-				function(parent)
-					BuildBlacklis(parent, tabBL, "LID_props")
-				end
-			)
-
-			tabs:GoToSite(tab)
+net.Receive("nws_yrp_blacklist_get", function(len)
+	local site = GetSettingsSite()
+	if YRPPanelAlive(site) then
+		site:Clear()
+		local tabBL = net.ReadTable()
+		local tab = net.ReadString()
+		-- TABS
+		local tabs = YRPCreateD("YTabs", site, site:GetWide(), site:GetTall(), 0, 0)
+		function tabs:Think()
+			self:SetSize(site:GetWide(), site:GetTall())
 		end
+
+		tabs:AddOption("LID_all", function(parent) BuildBlacklis(parent, tabBL, "LID_all") end)
+		tabs:AddOption("LID_inventory", function(parent) BuildBlacklis(parent, tabBL, "LID_inventory") end)
+		tabs:AddOption("LID_chat", function(parent) BuildBlacklis(parent, tabBL, "LID_chat") end)
+		tabs:AddOption("LID_entities", function(parent) BuildBlacklis(parent, tabBL, "LID_entities") end)
+		tabs:AddOption("LID_props", function(parent) BuildBlacklis(parent, tabBL, "LID_props") end)
+		tabs:GoToSite(tab)
 	end
-)
+end)
 
 function OpenSettingsBlacklist()
 	net.Start("nws_yrp_blacklist_get")

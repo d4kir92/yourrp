@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 -- #WHITELISTESETTINGS
 local tabW = {}
 local tabR = {}
@@ -7,10 +7,7 @@ local loadedR = false
 local loadedG = false
 local loadedW = false
 function BuildWhitelis(parent, tab)
-	if not YRPPanelAlive(parent) then
-		YRP:msg("note", "[BuildWhitelis] failed! parent: " .. tostring(parent))
-	end
-
+	if not YRPPanelAlive(parent) then YRP:msg("note", "[BuildWhitelis] failed! parent: " .. tostring(parent)) end
 	if loadedR and loadedG and loadedW and YRPPanelAlive(parent) then
 		local lis = YRPCreateD("DListView", parent, parent:GetWide() - YRP:ctr(60 + 500), parent:GetTall() - YRP:ctr(140), YRP:ctr(20), YRP:ctr(20))
 		lis:AddColumn("uniqueID"):SetFixedWidth(60)
@@ -93,9 +90,7 @@ function BuildWhitelis(parent, tab)
 
 					if whi.groupID > 0 then
 						for m, grp in pairs(tabG) do
-							if grp.uniqueID == whi.groupID then
-								grpname = grp.string_name
-							end
+							if grp.uniqueID == whi.groupID then grpname = grp.string_name end
 						end
 					end
 
@@ -295,9 +290,7 @@ function BuildWhitelis(parent, tab)
 					net.WriteInt(uid, 16)
 					net.SendToServer()
 					for i, v in pairs(tabW) do
-						if v.uniqueID == uid then
-							tabW[i] = nil
-						end
+						if v.uniqueID == uid then tabW[i] = nil end
 					end
 
 					lis:RemoveLine(lis:GetSelectedLine())
@@ -306,9 +299,7 @@ function BuildWhitelis(parent, tab)
 		end
 
 		function btnRem:Paint(pw, ph)
-			if lis:GetSelectedLine() ~= nil then
-				hook.Run("YButtonPaint", self, pw, ph)
-			end
+			if lis:GetSelectedLine() ~= nil then hook.Run("YButtonPaint", self, pw, ph) end
 		end
 
 		function btnRem:Think()
@@ -327,113 +318,60 @@ function BuildWhitelis(parent, tab)
 			btnRem:Remove()
 		end
 	else
-		timer.Simple(
-			0.1,
-			function()
-				BuildWhitelis(parent, tab)
-			end
-		)
+		timer.Simple(0.1, function() BuildWhitelis(parent, tab) end)
 	end
 end
 
-net.Receive(
-	"nws_yrp_getGroupsWhitelist",
-	function(len)
-		tabG = net.ReadTable()
-		loadedG = true
-	end
-)
+net.Receive("nws_yrp_getGroupsWhitelist", function(len)
+	tabG = net.ReadTable()
+	loadedG = true
+end)
 
-net.Receive(
-	"nws_yrp_getRolesWhitelist",
-	function(len)
-		tabR = net.ReadTable()
-		loadedR = true
-	end
-)
+net.Receive("nws_yrp_getRolesWhitelist", function(len)
+	tabR = net.ReadTable()
+	loadedR = true
+end)
 
-net.Receive(
-	"nws_yrp_getRoleWhitelist_line",
-	function(len)
-		local PARENT = GetSettingsSite()
-		if YRPPanelAlive(PARENT) then
-			local site = PARENT
-			local id = net.ReadString() or "0"
-			id = tonumber(id)
-			tabW[id] = net.ReadTable()
-			if net.ReadBool() then
-				loadedW = true
-				-- TABS
-				local tabs = YRPCreateD("YTabs", site, site:GetWide(), site:GetTall(), 0, 0)
-				function tabs:Think()
-					self:SetSize(site:GetWide(), site:GetTall())
-				end
-
-				tabs:AddOption(
-					"LID_all",
-					function(parent)
-						BuildWhitelis(parent, "LID_all")
-					end
-				)
-
-				tabs:AddOption(
-					"LID_roles",
-					function(parent)
-						BuildWhitelis(parent, "LID_roles")
-					end
-				)
-
-				tabs:AddOption(
-					"LID_groups",
-					function(parent)
-						BuildWhitelis(parent, "LID_groups")
-					end
-				)
-
-				tabs:AddOption(
-					"LID_manually",
-					function(parent)
-						BuildWhitelis(parent, "LID_manually")
-					end
-				)
-
-				tabs:AddOption(
-					"LID_promote",
-					function(parent)
-						BuildWhitelis(parent, "LID_promote")
-					end
-				)
-
-				tabs:GoToSite("LID_all")
+net.Receive("nws_yrp_getRoleWhitelist_line", function(len)
+	local PARENT = GetSettingsSite()
+	if YRPPanelAlive(PARENT) then
+		local site = PARENT
+		local id = net.ReadString() or "0"
+		id = tonumber(id)
+		tabW[id] = net.ReadTable()
+		if net.ReadBool() then
+			loadedW = true
+			-- TABS
+			local tabs = YRPCreateD("YTabs", site, site:GetWide(), site:GetTall(), 0, 0)
+			function tabs:Think()
+				self:SetSize(site:GetWide(), site:GetTall())
 			end
+
+			tabs:AddOption("LID_all", function(parent) BuildWhitelis(parent, "LID_all") end)
+			tabs:AddOption("LID_roles", function(parent) BuildWhitelis(parent, "LID_roles") end)
+			tabs:AddOption("LID_groups", function(parent) BuildWhitelis(parent, "LID_groups") end)
+			tabs:AddOption("LID_manually", function(parent) BuildWhitelis(parent, "LID_manually") end)
+			tabs:AddOption("LID_promote", function(parent) BuildWhitelis(parent, "LID_promote") end)
+			tabs:GoToSite("LID_all")
 		end
 	end
-)
+end)
 
 function OpenSettingsWhitelist()
 	loadedR = false
 	loadedG = false
-	timer.Simple(
-		0.1,
-		function()
-			net.Start("nws_yrp_getGroupsWhitelist")
-			net.SendToServer()
-		end
-	)
+	timer.Simple(0.1, function()
+		net.Start("nws_yrp_getGroupsWhitelist")
+		net.SendToServer()
+	end)
 
-	timer.Simple(
-		0.2,
-		function()
-			net.Start("nws_yrp_getRolesWhitelist")
-			net.SendToServer()
-		end
-	)
+	timer.Simple(0.2, function()
+		net.Start("nws_yrp_getRolesWhitelist")
+		net.SendToServer()
+	end)
 
-	timer.Simple(
-		0.3,
-		function()
-			net.Start("nws_yrp_getRoleWhitelist")
-			net.SendToServer()
-		end
-	)
+	timer.Simple(0.3, function()
+		net.Start("nws_yrp_getRoleWhitelist")
+		net.SendToServer()
+	end)
 end

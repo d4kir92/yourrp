@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 YRP = YRP or {}
 local yrp_cur_lang = "auto"
 local yrp_current_lang = {}
@@ -37,7 +37,6 @@ function YRP:GetLanguageAutoInfo()
 	auto.language = "Automatic"
 	auto.author = "D4KiR"
 	auto.short = "auto"
-
 	return auto
 end
 
@@ -47,16 +46,13 @@ function YRP:set_lang_string(var, str)
 	var = tostring(var)
 	str = tostring(str)
 	yrp_current_lang[string.lower(var)] = str
-	if next(transcache) ~= nil then
-		transcache = {}
-	end
+	if next(transcache) ~= nil then transcache = {} end
 end
 
 function YRP:get_language_name(ls)
 	for k, lang in pairs(yrp_button_info) do
 		if lang.short == ls then return lang["inenglish"] end
 	end
-
 	return "FAILED"
 end
 
@@ -68,7 +64,6 @@ function YRP:replace_string(in_str, tab)
 	for i, str in pairs(tab) do
 		in_str = string.Replace(in_str, "[" .. tostring(i) .. "]", tab[i])
 	end
-
 	return in_str
 end
 
@@ -76,10 +71,7 @@ local hascontent = false
 local hasfakecontent = false
 local searchedforcontent = false
 function YRPTestContentAddons()
-	if engine.GetAddons() and table.Count(engine.GetAddons()) <= 0 then
-		YRP:msg("note", "CAN'T GET ADDON LIST")
-	end
-
+	if engine.GetAddons() and table.Count(engine.GetAddons()) <= 0 then YRP:msg("note", "CAN'T GET ADDON LIST") end
 	if (not searchedforcontent or hascontent == false) and SERVER and engine.GetAddons() and table.Count(engine.GetAddons()) > 0 then
 		searchedforcontent = true
 		for i, addon in pairs(engine.GetAddons()) do
@@ -88,9 +80,7 @@ function YRPTestContentAddons()
 				if addon.wsid == "1189643820" then
 					hascontent = true
 					SetGlobalYRPBool("yrp_hascontent", true)
-					if not addon.mounted or not addon.downloaded then
-						YRP:msg("note", "YOURRP CONTENT IS NOT MOUNTED/DOWNLOADED!")
-					end
+					if not addon.mounted or not addon.downloaded then YRP:msg("note", "YOURRP CONTENT IS NOT MOUNTED/DOWNLOADED!") end
 				elseif addon.wsid == "1964961396" and addon.mounted and addon.downloaded then
 					hasfakecontent = true
 					SetGlobalYRPBool("hasfakecontent", true)
@@ -110,14 +100,10 @@ function YRPTestDarkrpmodification()
 	end
 end
 
-hook.Add(
-	"PostGamemodeLoaded",
-	"Check_YourRP_Content",
-	function()
-		YRPTestContentAddons()
-		YRPTestDarkrpmodification()
-	end
-)
+hook.Add("PostGamemodeLoaded", "Check_YourRP_Content", function()
+	YRPTestContentAddons()
+	YRPTestDarkrpmodification()
+end)
 
 function HasYRPContent()
 	return GetGlobalYRPBool("yrp_hascontent", false) or hascontent
@@ -132,9 +118,7 @@ function HasDarkrpmodification()
 end
 
 function PrintLIDError(var)
-	if not string.find(var, " ", 1, true) and not string.find(var, ":", 1, true) and not string.find(var, "-", 1, true) and HasYRPContent() and not HasYRPFakeContent() then
-		YRP:msg("error", "Translation string [" .. tostring(var) .. "] not found, sent to Dev. Wait for next update!")
-	end
+	if not string.find(var, " ", 1, true) and not string.find(var, ":", 1, true) and not string.find(var, "-", 1, true) and HasYRPContent() and not HasYRPFakeContent() then YRP:msg("error", "Translation string [" .. tostring(var) .. "] not found, sent to Dev. Wait for next update!") end
 end
 
 local nf = {}
@@ -156,7 +140,6 @@ function YRP:trans(var, vals)
 					PrintLIDError(var)
 				end
 			end
-
 			return var
 		end
 
@@ -170,7 +153,6 @@ function YRP:trans(var, vals)
 		end
 	end
 	-- RETURN TRANSLATION
-
 	return translation
 end
 
@@ -194,7 +176,6 @@ function YRP:IsValidLanguageShort(short)
 	for k, v in pairs(yrp_shorts) do
 		if v == short then return true end
 	end
-
 	return false
 end
 
@@ -202,7 +183,6 @@ function YRP:check_languagepack()
 	for k, v in pairs(yrp_shorts) do
 		if yrp_current_lang.get_language == v then return true end
 	end
-
 	return false
 end
 
@@ -219,16 +199,10 @@ end
 function YRP:read_language(short, init)
 	short = tostring(short)
 	local default = false
-	if short == "en" then
-		default = true
-	end
-
+	if short == "en" then default = true end
 	if not init then
 		YRP:read_lang("resource/localization/yrp/init/lang_" .. short .. ".properties")
-		if not default then
-			YRP:msg("lang", "Get Language-Pack [" .. YRP:trans("LID_initshort") .. "] " .. YRP:trans("LID_initlanguage") .. "/" .. YRP:trans("LID_initinenglish"))
-		end
-
+		if not default then YRP:msg("lang", "Get Language-Pack [" .. YRP:trans("LID_initshort") .. "] " .. YRP:trans("LID_initlanguage") .. "/" .. YRP:trans("LID_initinenglish")) end
 		YRP:read_lang("resource/localization/yrp/general/lang_" .. short .. ".properties")
 		YRP:read_lang("resource/localization/yrp/hud/lang_" .. short .. ".properties")
 		YRP:read_lang("resource/localization/yrp/menuappearance/lang_" .. short .. ".properties")
@@ -261,7 +235,6 @@ end
 function YRP:LoadLanguage(short, init)
 	if short == nil then
 		YRP:msg("note", "LoadLanguage ERROR!")
-
 		return false
 	end
 
@@ -277,15 +250,11 @@ function YRP:LoadLanguage(short, init)
 				YRP:msg("lang", "Found Language: " .. "[" .. short .. "]")
 				if not YRP:check_languagepack() then
 					short = "en"
-					if CLIENT then
-						YRP:msg("lang", "Can't find Language-Pack, using Default-Language-Pack.")
-					end
+					if CLIENT then YRP:msg("lang", "Can't find Language-Pack, using Default-Language-Pack.") end
 				end
 			else
 				short = "en"
-				if CLIENT then
-					YRP:msg("lang", "Can't find Language from Game, using Default-Language-Pack.")
-				end
+				if CLIENT then YRP:msg("lang", "Can't find Language from Game, using Default-Language-Pack.") end
 			end
 		else
 			yrp_current_lang.get_language = short
@@ -304,16 +273,12 @@ function YRP:LoadLanguage(short, init)
 		YRP:send_lang(short) -- Send To Server
 		hook.Run("yrp_current_language_changed") -- Update Chat
 	end
-
 	return true
 end
 
 function YRP:add_language(short)
 	short = tostring(short)
-	if yrp_button_info[short] == nil then
-		yrp_button_info[short] = {}
-	end
-
+	if yrp_button_info[short] == nil then yrp_button_info[short] = {} end
 	if short == "auto" then
 		yrp_button_info[short]["inenglish"] = "Automatic"
 		yrp_button_info[short]["language"] = "Automatic"
@@ -338,9 +303,7 @@ if CLIENT then
 	--[[ FLAGS ]]
 	--
 	for i, short in pairs(yrp_shorts) do
-		if short ~= nil and YRP.AddDesignIcon then
-			YRP:AddDesignIcon("lang_" .. short, "vgui/iso_639/" .. short .. ".png")
-		end
+		if short ~= nil and YRP.AddDesignIcon then YRP:AddDesignIcon("lang_" .. short, "vgui/iso_639/" .. short .. ".png") end
 	end
 end
 
@@ -349,9 +312,4 @@ function YRP:initLang()
 	YRP:LoadLanguage("auto", false)
 end
 
-timer.Simple(
-	0.1,
-	function()
-		YRP:initLang()
-	end
-)
+timer.Simple(0.1, function() YRP:initLang() end)

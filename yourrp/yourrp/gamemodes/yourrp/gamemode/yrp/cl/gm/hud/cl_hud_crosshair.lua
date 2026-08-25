@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local _hl2Weapons = {}
 table.insert(_hl2Weapons, "weapon_357")
 table.insert(_hl2Weapons, "weapon_alyxgun")
@@ -21,7 +21,6 @@ table.insert(_hl2Weapons, "weapon_slam")
 function isHl2Weapon(weapon)
 	if weapon == NULL then return false end
 	if table.HasValue(_hl2Weapons, weapon:GetClass()) then return true end
-
 	return false
 end
 
@@ -47,31 +46,18 @@ function YRPHudCrosshair()
 			if lply:KeyDown(IN_RELOAD) and aimdownsights == 0 then
 				alphaFade = 0
 				aimdownsights = 1
-				timer.Simple(
-					weapon:GetNextPrimaryFire() - CurTime(),
-					function()
-						aimdownsights = 0
-					end
-				)
+				timer.Simple(weapon:GetNextPrimaryFire() - CurTime(), function() aimdownsights = 0 end)
 			end
 
 			if lply:KeyDown(IN_ATTACK2) and reloading == 0 then
 				alphaFade = 0
 				reloading = 1
-				timer.Simple(
-					weapon:GetNextPrimaryFire() - CurTime(),
-					function()
-						reloading = 0
-					end
-				)
+				timer.Simple(weapon:GetNextPrimaryFire() - CurTime(), function() reloading = 0 end)
 			end
 
 			if lply:KeyDown(IN_SPEED) and lply:KeyDown(IN_FORWARD) and reloading == 0 then
 				alphaFade = alphaFade - 0.05
-				if alphaFade < 0.5 then
-					alphaFade = 0.5
-				end
-
+				if alphaFade < 0.5 then alphaFade = 0.5 end
 				ch_attack1 = ch_attack1 + 2
 				if ch_attack1 < 0 then
 					ch_attack1 = 0
@@ -80,9 +66,7 @@ function YRPHudCrosshair()
 				end
 			elseif reloading == 0 then
 				alphaFade = alphaFade + 0.1
-				if alphaFade > 1 then
-					alphaFade = 1
-				end
+				if alphaFade > 1 then alphaFade = 1 end
 			end
 
 			if math.Clamp then
@@ -95,7 +79,6 @@ function YRPHudCrosshair()
 			if lply:GetHudDesignName() ~= "notloaded" and lply:Alive() then
 				if weapon:GetNWBool("Ironsights") then
 					alphaFade = 0
-
 					return
 				end
 
@@ -105,10 +88,7 @@ function YRPHudCrosshair()
 				oldx = Lerp(8 * FrameTime(), oldx, cx)
 				oldy = Lerp(8 * FrameTime(), oldy, cy)
 				local gap = 8 / 2
-				if ch_attack1_old >= 1 then
-					gap = gap * ch_attack1_old
-				end
-
+				if ch_attack1_old >= 1 then gap = gap * ch_attack1_old end
 				local sw = 10
 				local sh = 1
 				surface.SetDrawColor(0, 0, 0, 255 * alphaFade)

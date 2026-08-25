@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local HP = Material("vgui/material/icon_favorite.png")
 local AR = Material("vgui/material/icon_security.png")
 local ST = Material("vgui/material/icon_flash.png")
@@ -18,10 +18,7 @@ function HUDIconsDrawText(ele, text)
 		local x = lply:HudValue(ele, "POSI_X")
 		local y = lply:HudValue(ele, "POSI_Y")
 		local fontsize = lply:HudValue(ele, "TS")
-		if fontsize <= 0 then
-			fontsize = 14
-		end
-
+		if fontsize <= 0 then fontsize = 14 end
 		local ax = lply:HudValue(ele, "AX")
 		local ay = lply:HudValue(ele, "AY")
 		if ay == 3 then
@@ -73,10 +70,7 @@ function HUDIconsDrawIcon(ele, icon, perc, text)
 
 		render.SetStencilEnable(false)
 		local fontsize = lply:HudValue(ele, "TS")
-		if fontsize <= 0 then
-			fontsize = 14
-		end
-
+		if fontsize <= 0 then fontsize = 14 end
 		local font = "Y_" .. fontsize .. "_500"
 		draw.SimpleText(text or perc * 100 .. "%", font, x + size / 2, y + size / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 	end
@@ -108,10 +102,7 @@ function HUDIcons()
 			HUDIconsDrawIcon("SA", SA, lply:CurrentSalaryTime() / lply:SalaryTime(), lply:FormattedSalary())
 		end
 
-		if lply:GetYRPBool("iscasting", false) then
-			HUDIconsDrawIcon("CA", CA, lply:CastTimeCurrent() / lply:CastTimeMax(), lply:GetCastName())
-		end
-
+		if lply:GetYRPBool("iscasting", false) then HUDIconsDrawIcon("CA", CA, lply:CastTimeCurrent() / lply:CastTimeMax(), lply:GetCastName()) end
 		local battery = system.BatteryPower()
 		HUDIconsDrawIcon("BA", BA, battery / 255)
 		HUDIconsDrawText("CR", os.date("%H:%M", os.time()))
@@ -139,23 +130,12 @@ function HUDIcons()
 			local clip2 = weapon:Clip2()
 			local clip2max = weapon:GetMaxClip2()
 			local ammo2 = lply:GetAmmoCount(weapon:GetSecondaryAmmoType())
-			if wpname then
-				HUDIconsDrawText("WN", wpname)
-			end
-
-			if clip1 and clip1max and ammo1 then
-				HUDIconsDrawText("WP", clip1 .. "/" .. clip1max .. " | " .. ammo1)
-			end
-
-			if clip2 and clip2max and ammo2 then
-				HUDIconsDrawText("WS", clip2 .. "/" .. clip2max .. " | " .. ammo2)
-			end
+			if wpname then HUDIconsDrawText("WN", wpname) end
+			if clip1 and clip1max and ammo1 then HUDIconsDrawText("WP", clip1 .. "/" .. clip1max .. " | " .. ammo1) end
+			if clip2 and clip2max and ammo2 then HUDIconsDrawText("WS", clip2 .. "/" .. clip2max .. " | " .. ammo2) end
 		end
 
-		if lply:Lockdown() then
-			HUDIconsDrawText("LO", "[" .. GTS("lockdown") .. "] " .. lply:LockdownText())
-		end
-
+		if lply:Lockdown() then HUDIconsDrawText("LO", "[" .. GTS("lockdown") .. "] " .. lply:LockdownText()) end
 		HUDSimpleBG(COM)
 		COM.text = lply:CoordAngle() - lply:CoordAngle() % 5 .. "°"
 		HUDSimpleCompass(COM)
@@ -163,9 +143,4 @@ function HUDIcons()
 	end
 end
 
-timer.Simple(
-	1,
-	function()
-		hook.Add("HUDPaint", "yrp_hud_design_Icons", HUDIcons)
-	end
-)
+timer.Simple(1, function() hook.Add("HUDPaint", "yrp_hud_design_Icons", HUDIcons) end)

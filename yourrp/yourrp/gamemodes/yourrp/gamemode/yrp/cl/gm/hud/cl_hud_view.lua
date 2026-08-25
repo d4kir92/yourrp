@@ -1,22 +1,17 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local _coowner = {}
 local function GetCoownerNames(ent, coownerIDs)
 	if _coowner.ent == ent and _coowner.ids == coownerIDs and (_coowner.time or 0) > CurTime() then return _coowner.names end
 	local ids = {}
 	for i, v in pairs(string.Explode(",", coownerIDs)) do
 		local id = tonumber(v)
-		if id ~= nil then
-			ids[id] = true
-		end
+		if id ~= nil then ids[id] = true end
 	end
 
 	local names = ""
 	for x, p in pairs(player.GetAll()) do
 		if ids[p:CharID()] then
-			if not strEmpty(names) then
-				names = names .. ", "
-			end
-
+			if not strEmpty(names) then names = names .. ", " end
 			names = names .. p:RPName()
 		end
 	end
@@ -25,7 +20,6 @@ local function GetCoownerNames(ent, coownerIDs)
 	_coowner.ids = coownerIDs
 	_coowner.names = names
 	_coowner.time = CurTime() + 0.5
-
 	return names
 end
 
@@ -40,10 +34,7 @@ function showOwner(eyeTrace)
 				draw.SimpleText(YRP:trans("LID_owner") .. ": " .. eyeTrace.Entity:GetRPOwner():RPName(), "Y_16_500", ScrW() / 2, ScrH2() + YRP:ctr(750), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 			elseif not strEmpty(eyeTrace.Entity:GetYRPString("ownerRPName", "")) or not strEmpty(eyeTrace.Entity:GetYRPString("ownerGroup", "")) then
 				local groupname = eyeTrace.Entity:GetYRPString("ownerGroup", "")
-				if string.lower(groupname) == "public" then
-					groupname = YRP:trans("LID_public")
-				end
-
+				if string.lower(groupname) == "public" then groupname = YRP:trans("LID_public") end
 				draw.SimpleText(YRP:trans("LID_owner") .. ": " .. eyeTrace.Entity:GetYRPString("ownerRPName", "") .. groupname, "Y_16_500", ScrW() / 2, ScrH2() + YRP:ctr(750), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 				local coownerIDs = eyeTrace.Entity:GetYRPString("coownerCharIDs", "")
 				if not strEmpty(coownerIDs) then
@@ -56,9 +47,7 @@ function showOwner(eyeTrace)
 end
 
 function showSecurityLevel(door)
-	if door:SecurityLevel() > 0 and GetGlobalYRPBool("bool_building_system", false) and GetGlobalYRPBool("bool_securitylevel_system", false) and GetGlobalYRPBool("bool_show_securitylevel", true) then
-		draw.SimpleText(YRP:trans("LID_securitylevel") .. ": " .. door:SecurityLevel(), "Y_16_500", ScrW() / 2, ScrH2() + YRP:ctr(800), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-	end
+	if door:SecurityLevel() > 0 and GetGlobalYRPBool("bool_building_system", false) and GetGlobalYRPBool("bool_securitylevel_system", false) and GetGlobalYRPBool("bool_show_securitylevel", true) then draw.SimpleText(YRP:trans("LID_securitylevel") .. ": " .. door:SecurityLevel(), "Y_16_500", ScrW() / 2, ScrH2() + YRP:ctr(800), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255)) end
 end
 
 function YRPHudView()
@@ -69,10 +58,7 @@ function YRPHudView()
 		if YRPEntityAlive(ent) then
 			local plypos = lply:GetPos()
 			local entpos = ent:WorldSpaceCenter()
-			if entpos == Vector(0, 0, 0) then
-				entpos = ent:GetPos()
-			end
-
+			if entpos == Vector(0, 0, 0) then entpos = ent:GetPos() end
 			if entpos:Distance(plypos) > GetGlobalYRPInt("int_door_distance", 200) then return end
 			if GetGlobalYRPBool("bool_building_system", false) and ent:YRPIsDoor() and plypos:Distance(entpos) < GetGlobalYRPInt("int_door_distance", 200) and GetGlobalYRPBool("bool_canbeowned", true) then
 				local canbeowned = ent:GetYRPBool("bool_canbeowned", false)
@@ -119,16 +105,11 @@ function YRPHudView()
 				draw.SimpleText(YRP:trans("LID_presstoopenname", key), "Y_16_500", ScrW() / 2, ScrH2() + YRP:ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 			elseif ent:GetYRPBool("yrp_has_use", false) then
 				local text = "PRESS [" .. string.upper(YRPGetKeybindName("in_use")) .. "]"
-				if ent:GetYRPString("yrp_use_message", "") ~= "" then
-					text = text .. ": " .. ent:GetYRPString("yrp_use_message", "")
-				end
-
+				if ent:GetYRPString("yrp_use_message", "") ~= "" then text = text .. ": " .. ent:GetYRPString("yrp_use_message", "") end
 				draw.SimpleText(text, "Y_16_500", ScrW() / 2, ScrH2() + YRP:ctr(700), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
 			end
 
-			if not ent:IsPlayer() then
-				showOwner(_eyeTrace)
-			end
+			if not ent:IsPlayer() then showOwner(_eyeTrace) end
 		end
 	end
 end

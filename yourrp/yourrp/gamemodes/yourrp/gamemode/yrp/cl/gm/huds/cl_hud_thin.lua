@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local icons = {}
 icons["RA"] = "64_radiation"
 icons["HP"] = "64_heart"
@@ -129,10 +129,7 @@ local function DrawThinCompass(px, py, sw, sh)
 					direction = ""
 				end
 
-				if ang ~= 0 then
-					surface.SetDrawColor(white)
-				end
-
+				if ang ~= 0 then surface.SetDrawColor(white) end
 				surface.DrawRect(px + sw / 2 - 25 - pos, py + 38, 50, 3)
 				draw.DrawText(text, font, px + sw / 2 - pos, py + 53, Color(255, 255, 255, 250), TEXT_ALIGN_CENTER)
 				draw.DrawText(direction, dfont, px + sw / 2 - pos, py + 10, Color(255, 255, 255, 250), TEXT_ALIGN_CENTER)
@@ -153,10 +150,7 @@ function YRPDrawThin(tab)
 		tab.cur = 0
 	end
 
-	if HUD_THIN[name].oldcur and tab.max and HUD_THIN[name].oldcur > tab.max then
-		HUD_THIN[name].oldcur = tab.max
-	end
-
+	if HUD_THIN[name].oldcur and tab.max and HUD_THIN[name].oldcur > tab.max then HUD_THIN[name].oldcur = tab.max end
 	if GetGlobalYRPInt("YRPHUDVersion", -1) ~= HUD_THIN[name]["hud_version"] then
 		HUD_THIN[name]["hud_version"] = GetGlobalYRPInt("YRPHUDVersion", -1)
 		HUD_THIN[name].x = tab.x or lply:HudValue(name, "POSI_X")
@@ -226,10 +220,7 @@ function YRPDrawThin(tab)
 		end
 
 		-- Background
-		if HUD_THIN[name].sback then
-			draw.RoundedBox(0, HUDMOTIONX(HUD_THIN[name].x), HUDMOTIONY(HUD_THIN[name].y), HUD_THIN[name].w, HUD_THIN[name].h, HUD_THIN[name].colorbg)
-		end
-
+		if HUD_THIN[name].sback then draw.RoundedBox(0, HUDMOTIONX(HUD_THIN[name].x), HUDMOTIONY(HUD_THIN[name].y), HUD_THIN[name].w, HUD_THIN[name].h, HUD_THIN[name].colorbg) end
 		-- Icon
 		if HUD_THIN[name].iconmat and HUD_THIN[name].sicon then
 			local iconmat = YRP:GetDesignIcon(HUD_THIN[name].iconmat)
@@ -273,10 +264,7 @@ end
 function YRPHUDThin()
 	local lply = LocalPlayer()
 	if YRP and YRP.GetDesignIcon and lply:LoadedGamemode() and YRPIsScoreboardVisible and not YRPIsScoreboardVisible() and GetGlobalYRPBool("bool_yrp_hud", false) and lply:GetHudDesignName() == "Thin" then
-		if lply:HudElementVisible("COM") then
-			DrawThinCompass(lply:HudValue("COM", "POSI_X"), lply:HudValue("COM", "POSI_Y"), lply:HudValue("COM", "SIZE_W"), lply:HudValue("COM", "SIZE_H"))
-		end
-
+		if lply:HudElementVisible("COM") then DrawThinCompass(lply:HudValue("COM", "POSI_X"), lply:HudValue("COM", "POSI_Y"), lply:HudValue("COM", "SIZE_W"), lply:HudValue("COM", "SIZE_H")) end
 		for i = 1, 10 do
 			BOX["BOX" .. i].valuetext = lply:HudValue(BOX["BOX" .. i].name, "CTEX")
 			YRPDrawThin(BOX["BOX" .. i])
@@ -339,10 +327,7 @@ function YRPHUDThin()
 			local clip2max = weapon:GetMaxClip2()
 			local ammo2 = lply:GetAmmoCount(weapon:GetSecondaryAmmoType())
 			local wpammo = ""
-			if clip1 >= 0 and clip1max >= 0 then
-				wpammo = wpammo .. clip1 .. "/" .. clip1max
-			end
-
+			if clip1 >= 0 and clip1max >= 0 then wpammo = wpammo .. clip1 .. "/" .. clip1max end
 			if ammo1 and ammo1 >= 0 then
 				if not strEmpty(wpammo) then
 					wpammo = wpammo .. " | " .. ammo1
@@ -357,10 +342,7 @@ function YRPHUDThin()
 			WP.valuetext = wpammo
 			YRPDrawThin(WP)
 			local wsammo = ""
-			if clip2 >= 0 and clip2max >= 0 then
-				wsammo = wsammo .. clip2 .. "/" .. clip2max
-			end
-
+			if clip2 >= 0 and clip2max >= 0 then wsammo = wsammo .. clip2 .. "/" .. clip2max end
 			if ammo2 and ammo2 >= 0 then
 				if not strEmpty(wsammo) then
 					wsammo = wsammo .. " | " .. ammo2

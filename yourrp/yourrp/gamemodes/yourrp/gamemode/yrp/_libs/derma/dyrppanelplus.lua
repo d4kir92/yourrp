@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local PANEL = {}
 function PANEL:Init()
 	self.header = YRPCreateD("DPanel", self, self:GetWide(), YRP:ctr(50), 0, 0)
@@ -23,24 +23,16 @@ function PANEL:INITPanel(derma)
 end
 
 function PANEL:Think()
-	if self.header:GetWide() ~= self:GetWide() then
-		self.header:SetWide(self:GetWide())
-	end
-
+	if self.header:GetWide() ~= self:GetWide() then self.header:SetWide(self:GetWide()) end
 	if self.plus.getclass ~= "DCheckBox" then
 		self.plus:SetWide(self:GetWide())
 	else
 		self.plus:SetWide(self:GetTall() / 2)
 	end
 
-	if self.plus:GetTall() ~= self:GetTall() - self.header:GetTall() then
-		self.plus:SetTall(self:GetTall() - self.header:GetTall())
-	end
-
+	if self.plus:GetTall() ~= self:GetTall() - self.header:GetTall() then self.plus:SetTall(self:GetTall() - self.header:GetTall()) end
 	local _px, _py = self.plus:GetPos()
-	if _py ~= self.header:GetTall() then
-		self.plus:SetPos(0, self.header:GetTall())
-	end
+	if _py ~= self.header:GetTall() then self.plus:SetPos(0, self.header:GetTall()) end
 end
 
 function PANEL:Paint(w, h)

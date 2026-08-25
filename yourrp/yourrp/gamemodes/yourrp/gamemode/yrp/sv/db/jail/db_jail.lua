@@ -1,67 +1,47 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DBNotes = "yrp_jail_notes"
-hook.Add(
-	"YRP_SQLDBREADY_GENERAL_DB",
-	"yrp_jail_notes",
-	function()
-		YRP_SQL_ADD_COLUMN(DBNotes, "SteamID", "TEXT DEFAULT ''")
-		YRP_SQL_ADD_COLUMN(DBNotes, "note", "TEXT DEFAULT ''")
-	end
-)
+hook.Add("YRP_SQLDBREADY_GENERAL_DB", "yrp_jail_notes", function()
+	YRP_SQL_ADD_COLUMN(DBNotes, "SteamID", "TEXT DEFAULT ''")
+	YRP_SQL_ADD_COLUMN(DBNotes, "note", "TEXT DEFAULT ''")
+end)
 
 YRP:AddNetworkString("nws_yrp_getPlayerNotes")
-net.Receive(
-	"nws_yrp_getPlayerNotes",
-	function(len, ply)
-		local p = net.ReadEntity()
-		if YRPEntityAlive(p) then
-			local notes = YRP_SQL_SELECT(DBNotes, "*", "SteamID = '" .. p:YRPSteamID() .. "'")
-			if not IsNotNilAndNotFalse(notes) then
-				notes = {}
-			end
-
-			net.Start("nws_yrp_getPlayerNotes")
-			net.WriteTable(notes)
-			net.Send(ply)
-		end
+net.Receive("nws_yrp_getPlayerNotes", function(len, ply)
+	local p = net.ReadEntity()
+	if YRPEntityAlive(p) then
+		local notes = YRP_SQL_SELECT(DBNotes, "*", "SteamID = '" .. p:YRPSteamID() .. "'")
+		if not IsNotNilAndNotFalse(notes) then notes = {} end
+		net.Start("nws_yrp_getPlayerNotes")
+		net.WriteTable(notes)
+		net.Send(ply)
 	end
-)
+end)
 
 YRP:AddNetworkString("nws_yrp_addJailNote")
-net.Receive(
-	"nws_yrp_addJailNote",
-	function(len, ply)
-		if not ply:HasAccess("nws_yrp_addJailNote", true) then return end
-		local steamid = net.ReadString()
-		local note = net.ReadString()
-		YRP_SQL_INSERT_INTO(DBNotes, "note, SteamID", YRP_SQL_STR_IN(note) .. ", " .. YRP_SQL_STR_IN(steamid))
-	end
-)
+net.Receive("nws_yrp_addJailNote", function(len, ply)
+	if not ply:HasAccess("nws_yrp_addJailNote", true) then return end
+	local steamid = net.ReadString()
+	local note = net.ReadString()
+	YRP_SQL_INSERT_INTO(DBNotes, "note, SteamID", YRP_SQL_STR_IN(note) .. ", " .. YRP_SQL_STR_IN(steamid))
+end)
 
 YRP:AddNetworkString("nws_yrp_removeJailNote")
-net.Receive(
-	"nws_yrp_removeJailNote",
-	function(len, ply)
-		if not ply:HasAccess("nws_yrp_removeJailNote", true) then return end
-		local uid = net.ReadString()
-		YRP_SQL_DELETE_FROM(DBNotes, "uniqueID = " .. YRP_SQL_STR_IN(uid))
-	end
-)
+net.Receive("nws_yrp_removeJailNote", function(len, ply)
+	if not ply:HasAccess("nws_yrp_removeJailNote", true) then return end
+	local uid = net.ReadString()
+	YRP_SQL_DELETE_FROM(DBNotes, "uniqueID = " .. YRP_SQL_STR_IN(uid))
+end)
 
 local DATABASE_NAME = "yrp_jail"
-hook.Add(
-	"YRP_SQLDBREADY_GENERAL_DB",
-	"yrp_jail",
-	function()
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "SteamID", "TEXT DEFAULT ''")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "nick", "TEXT DEFAULT ''")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "reason", "TEXT DEFAULT '-'")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "time", "INT DEFAULT 1")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "cell", "INT DEFAULT 1")
-	end
-)
+hook.Add("YRP_SQLDBREADY_GENERAL_DB", "yrp_jail", function()
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME, "SteamID", "TEXT DEFAULT ''")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME, "nick", "TEXT DEFAULT ''")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME, "reason", "TEXT DEFAULT '-'")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME, "time", "INT DEFAULT 1")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME, "cell", "INT DEFAULT 1")
+end)
 
 function teleportToReleasepoint(ply)
 	ply:SetYRPBool("injail", false)
@@ -86,20 +66,11 @@ end
 function teleportToJailpoint(ply, tim, police)
 	if tim ~= nil then
 		ply:SetYRPInt("jailtime", tim)
-		timer.Simple(
-			0.2,
-			function()
-				ply:SetYRPBool("injail", true)
-			end
-		)
-
+		timer.Simple(0.2, function() ply:SetYRPBool("injail", true) end)
 		-- CELL
 		local _tmpTable = YRP_SQL_SELECT("yrp_jail", "*", "SteamID = '" .. ply:YRPSteamID() .. "'")
 		local uid = 0
-		if IsNotNilAndNotFalse(_tmpTable) then
-			uid = _tmpTable[1].cell
-		end
-
+		if IsNotNilAndNotFalse(_tmpTable) then uid = _tmpTable[1].cell end
 		local _tmpCell = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "uniqueID = '" .. uid .. "'")
 		-- "CELL DELETED"
 		local _tmpTele = YRP_SQL_SELECT("yrp_" .. GetMapNameDB(), "*", "type = '" .. "jailpoint" .. "'")
@@ -119,25 +90,17 @@ function teleportToJailpoint(ply, tim, police)
 				local oplys = ents.FindInSphere(vec, 80)
 				local empty = true
 				for j, p in pairs(oplys) do
-					if p:IsPlayer() then
-						empty = false
-					end
+					if p:IsPlayer() then empty = false end
 				end
 
 				if empty then
 					-- DONE
 					ply:SetYRPInt("int_arrests", ply:GetYRPInt("int_arrests", 0) + 1)
-					YRP_SQL_UPDATE(
-						"yrp_characters",
-						{
-							["int_arrests"] = ply:GetYRPInt("int_arrests", 0)
-						}, "uniqueID = '" .. ply:CharID() .. "'"
-					)
+					YRP_SQL_UPDATE("yrp_characters", {
+						["int_arrests"] = ply:GetYRPInt("int_arrests", 0)
+					}, "uniqueID = '" .. ply:CharID() .. "'")
 
-					if police and police:IsPlayer() then
-						YRP_SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_target_steamid, string_source_steamid", "'" .. os.time() .. "', 'LID_arrests', '" .. ply:SteamID() .. "', '" .. police:SteamID() .. "'")
-					end
-
+					if police and police:IsPlayer() then YRP_SQL_INSERT_INTO("yrp_logs", "string_timestamp, string_typ, string_target_steamid, string_source_steamid", "'" .. os.time() .. "', 'LID_arrests', '" .. ply:SteamID() .. "', '" .. police:SteamID() .. "'") end
 					tp_to(ply, vec)
 					_tmp = string.Explode(",", v.angle)
 					ply:SetEyeAngles(Angle(_tmp[1], _tmp[2], _tmp[3]))
@@ -160,79 +123,60 @@ end
 
 function clean_up_jail(ply)
 	local _tmpTable = YRP_SQL_SELECT("yrp_jail", "*", "SteamID = '" .. ply:YRPSteamID() .. "'")
-	if IsNotNilAndNotFalse(_tmpTable) then
-		YRP_SQL_DELETE_FROM("yrp_jail", "SteamID = '" .. ply:YRPSteamID() .. "'")
-	end
-
+	if IsNotNilAndNotFalse(_tmpTable) then YRP_SQL_DELETE_FROM("yrp_jail", "SteamID = '" .. ply:YRPSteamID() .. "'") end
 	teleportToReleasepoint(ply)
 end
 
 YRP:AddNetworkString("nws_yrp_dbAddJail")
-net.Receive(
-	"nws_yrp_dbAddJail",
-	function(len, ply)
-		if not ply:HasAccess("nws_yrp_dbAddJail", true) then return end
-		local _tmpDBTable = net.ReadString()
-		local _tmpDBCol = net.ReadString()
-		local _tmpDBVal = net.ReadString()
-		local _SteamID = net.ReadString()
-		if _tmpDBTable ~= "yrp_jail" then return end
-		for i, p in pairs(player.GetAll()) do
-			if _SteamID == p:YRPSteamID() then
-				if sql.TableExists(_tmpDBTable) then
-					YRP_SQL_INSERT_INTO(_tmpDBTable, _tmpDBCol, _tmpDBVal)
-					local _tmpTable = YRP_SQL_SELECT("yrp_jail", "*", "SteamID = '" .. _SteamID .. "'")
-					YRP:msg("note", p:Nick() .. " added to jail")
-					p:SetYRPInt("jailtime", _tmpTable[1].time)
-					timer.Simple(
-						0.02,
-						function()
-							p:SetYRPBool("injail", true)
-						end
-					)
-				else
-					YRP:msg("error", "dbInsertInto: " .. _tmpDBTable .. " is not existing")
-				end
-
-				break
+net.Receive("nws_yrp_dbAddJail", function(len, ply)
+	if not ply:HasAccess("nws_yrp_dbAddJail", true) then return end
+	local _tmpDBTable = net.ReadString()
+	local _tmpDBCol = net.ReadString()
+	local _tmpDBVal = net.ReadString()
+	local _SteamID = net.ReadString()
+	if _tmpDBTable ~= "yrp_jail" then return end
+	for i, p in pairs(player.GetAll()) do
+		if _SteamID == p:YRPSteamID() then
+			if sql.TableExists(_tmpDBTable) then
+				YRP_SQL_INSERT_INTO(_tmpDBTable, _tmpDBCol, _tmpDBVal)
+				local _tmpTable = YRP_SQL_SELECT("yrp_jail", "*", "SteamID = '" .. _SteamID .. "'")
+				YRP:msg("note", p:Nick() .. " added to jail")
+				p:SetYRPInt("jailtime", _tmpTable[1].time)
+				timer.Simple(0.02, function() p:SetYRPBool("injail", true) end)
+			else
+				YRP:msg("error", "dbInsertInto: " .. _tmpDBTable .. " is not existing")
 			end
+
+			break
 		end
 	end
-)
+end)
 
 YRP:AddNetworkString("nws_yrp_dbRemJail")
-net.Receive(
-	"nws_yrp_dbRemJail",
-	function(len, ply)
-		if not ply:HasAccess("nws_yrp_dbRemJail", true) then return end
-		local _uid = tonumber(net.ReadString())
-		if not _uid then return end
-		local _SteamID = YRP_SQL_SELECT("yrp_jail", "*", "uniqueID = '" .. _uid .. "'")
-		local _res = YRP_SQL_DELETE_FROM("yrp_jail", "uniqueID = " .. _uid)
-		if IsNotNilAndNotFalse(_SteamID) then
-			_SteamID = _SteamID[1].SteamID
-			local _tmpTable = YRP_SQL_SELECT("yrp_jail", "*", "SteamID = '" .. _SteamID .. "'")
-			local _in_jailboard = YRP_SQL_SELECT("yrp_jail", "*", "SteamID = '" .. _SteamID .. "'")
-			if _in_jailboard ~= nil then
-				for k, v in pairs(player.GetAll()) do
-					if v:YRPSteamID() == _SteamID then
-						v:SetYRPInt("jailtime", _in_jailboard[1].time)
-						timer.Simple(
-							0.02,
-							function()
-								v:SetYRPBool("injail", true)
-							end
-						)
-					end
+net.Receive("nws_yrp_dbRemJail", function(len, ply)
+	if not ply:HasAccess("nws_yrp_dbRemJail", true) then return end
+	local _uid = tonumber(net.ReadString())
+	if not _uid then return end
+	local _SteamID = YRP_SQL_SELECT("yrp_jail", "*", "uniqueID = '" .. _uid .. "'")
+	local _res = YRP_SQL_DELETE_FROM("yrp_jail", "uniqueID = " .. _uid)
+	if IsNotNilAndNotFalse(_SteamID) then
+		_SteamID = _SteamID[1].SteamID
+		local _tmpTable = YRP_SQL_SELECT("yrp_jail", "*", "SteamID = '" .. _SteamID .. "'")
+		local _in_jailboard = YRP_SQL_SELECT("yrp_jail", "*", "SteamID = '" .. _SteamID .. "'")
+		if _in_jailboard ~= nil then
+			for k, v in pairs(player.GetAll()) do
+				if v:YRPSteamID() == _SteamID then
+					v:SetYRPInt("jailtime", _in_jailboard[1].time)
+					timer.Simple(0.02, function() v:SetYRPBool("injail", true) end)
 				end
-			else
-				for k, v in pairs(player.GetAll()) do
-					if v:YRPSteamID() == _SteamID then
-						v:SetYRPBool("injail", false)
-						v:SetYRPInt("jailtime", 0)
-					end
+			end
+		else
+			for k, v in pairs(player.GetAll()) do
+				if v:YRPSteamID() == _SteamID then
+					v:SetYRPBool("injail", false)
+					v:SetYRPInt("jailtime", 0)
 				end
 			end
 		end
 	end
-)
+end)

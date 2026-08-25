@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local APP = APP or {}
 APP.PrintName = "Dark Web"
 APP.LangName = "darkweb"
@@ -54,9 +54,7 @@ function testApp(display, x, y, w, h)
 		_target_accept.hit = nil
 		_target_accept:SetText("LID_accepthit")
 		function _target_accept:Paint(pw, ph)
-			if self.hit ~= nil then
-				hook.Run("YButtonPaint", self, pw, ph)
-			end
+			if self.hit ~= nil then hook.Run("YButtonPaint", self, pw, ph) end
 		end
 
 		function _target_accept:DoClick()
@@ -71,20 +69,17 @@ function testApp(display, x, y, w, h)
 		_target_list:AddColumn(YRP:trans("LID_target"))
 		_target_list:AddColumn(YRP:trans("LID_reward"))
 		_target_list:AddColumn(YRP:trans("LID_description"))
-		net.Receive(
-			"nws_yrp_gethits",
-			function(len)
-				local _hits = net.ReadTable()
-				for i, hit in pairs(_hits) do
-					for j, ply in pairs(player.GetAll()) do
-						if ply:YRPSteamID() == hit.target then
-							_target_list:AddLine(ply:RPName(), hit.target, hit.reward, hit.description, hit.uniqueID)
-							break
-						end
+		net.Receive("nws_yrp_gethits", function(len)
+			local _hits = net.ReadTable()
+			for i, hit in pairs(_hits) do
+				for j, ply in pairs(player.GetAll()) do
+					if ply:YRPSteamID() == hit.target then
+						_target_list:AddLine(ply:RPName(), hit.target, hit.reward, hit.description, hit.uniqueID)
+						break
 					end
 				end
 			end
-		)
+		end)
 
 		net.Start("nws_yrp_gethits")
 		net.SendToServer()
@@ -123,10 +118,7 @@ function testApp(display, x, y, w, h)
 			end
 
 			function _pb:OnSelect(index, value, data)
-				if self._hi ~= nil then
-					self._hi:Remove()
-				end
-
+				if self._hi ~= nil then self._hi:Remove() end
 				self._hi = YRPCreateD("DPanel", _newhit:GetContent(), ctrb(600), ctrb(1000), ctrb(500), ctrb(20))
 				self._hi.target = value
 				function self._hi:Paint(pw, ph)
@@ -160,20 +152,17 @@ function testApp(display, x, y, w, h)
 		_target_list:AddColumn(YRP:trans("LID_target"))
 		_target_list:AddColumn(YRP:trans("LID_reward"))
 		_target_list:AddColumn(YRP:trans("LID_description"))
-		net.Receive(
-			"nws_yrp_get_contracts",
-			function(len)
-				local _hits = net.ReadTable()
-				for i, hit in pairs(_hits) do
-					for j, ply in pairs(player.GetAll()) do
-						if ply:YRPSteamID() == hit.target then
-							_target_list:AddLine(ply:RPName(), hit.target, hit.reward, hit.description)
-							break
-						end
+		net.Receive("nws_yrp_get_contracts", function(len)
+			local _hits = net.ReadTable()
+			for i, hit in pairs(_hits) do
+				for j, ply in pairs(player.GetAll()) do
+					if ply:YRPSteamID() == hit.target then
+						_target_list:AddLine(ply:RPName(), hit.target, hit.reward, hit.description)
+						break
 					end
 				end
 			end
-		)
+		end)
 
 		net.Start("nws_yrp_get_contracts")
 		net.SendToServer()

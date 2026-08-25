@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local _type = type
 local _tostring = tostring
 local vm = {}
@@ -64,9 +64,7 @@ function YRPChatChannel(edit, uid)
 		local selected = false
 		if edit and GetGlobalYRPTable("yrp_chat_channels")[uid] then
 			mode = tonumber(GetGlobalYRPTable("yrp_chat_channels")[uid].int_mode)
-			if isnumber(mode) and v[2] == mode then
-				selected = true
-			end
+			if isnumber(mode) and v[2] == mode then selected = true end
 		end
 
 		win.mode:AddChoice(YRP:trans(v[1]), v[2], selected)
@@ -78,16 +76,12 @@ function YRPChatChannel(edit, uid)
 	win.structure = YRPCreateD("DTextEntry", CON, YRP:ctr(1600), YRP:ctr(50), YRP:ctr(0), YRP:ctr(200))
 	function win.structure:OnChange()
 		structure = win.structure:GetText()
-		if YRPPanelAlive(win.previewrich) then
-			win.previewrich:UpdatePreview("structure")
-		end
+		if YRPPanelAlive(win.previewrich) then win.previewrich:UpdatePreview("structure") end
 	end
 
 	if edit and GetGlobalYRPTable("yrp_chat_channels")[uid] then
 		structure = GetGlobalYRPTable("yrp_chat_channels")[uid].string_structure
-		if isstring(structure) then
-			win.structure:SetText(structure)
-		end
+		if isstring(structure) then win.structure:SetText(structure) end
 	end
 
 	-- RPName
@@ -184,16 +178,12 @@ function YRPChatChannel(edit, uid)
 	win.structure2 = YRPCreateD("DTextEntry", CON, YRP:ctr(1600), YRP:ctr(50), YRP:ctr(0), YRP:ctr(500))
 	function win.structure2:OnChange()
 		structure2 = win.structure2:GetText()
-		if YRPPanelAlive(win.previewrich) then
-			win.previewrich:UpdatePreview("structure2")
-		end
+		if YRPPanelAlive(win.previewrich) then win.previewrich:UpdatePreview("structure2") end
 	end
 
 	if edit and GetGlobalYRPTable("yrp_chat_channels")[uid] then
 		structure2 = GetGlobalYRPTable("yrp_chat_channels")[uid].string_structure2
-		if isstring(structure2) then
-			win.structure2:SetText(structure2)
-		end
+		if isstring(structure2) then win.structure2:SetText(structure2) end
 	end
 
 	if mode == 6 then
@@ -228,9 +218,7 @@ function YRPChatChannel(edit, uid)
 	win.previewtext:SetText("")
 	win.previewtext:SetPlaceholderText("Example Text")
 	function win.previewtext:OnChange()
-		if YRPPanelAlive(win.previewrich) then
-			win.previewrich:UpdatePreview("previewtext")
-		end
+		if YRPPanelAlive(win.previewrich) then win.previewrich:UpdatePreview("previewtext") end
 	end
 
 	win.previewrich = YRPCreateD("RichText", CON, YRP:ctr(1600), YRP:ctr(200), YRP:ctr(0), YRP:ctr(800))
@@ -274,16 +262,7 @@ function YRPChatChannel(edit, uid)
 			end
 		end
 
-		if from == "INIT" then
-			timer.Simple(
-				0.5,
-				function()
-					if win and win.previewrich then
-						win.previewrich:UpdatePreview(from)
-					end
-				end
-			)
-		end
+		if from == "INIT" then timer.Simple(0.5, function() if win and win.previewrich then win.previewrich:UpdatePreview(from) end end) end
 	end
 
 	win.previewrich:UpdatePreview("INIT")
@@ -310,12 +289,7 @@ function YRPChatChannel(edit, uid)
 			net.WriteString(uid)
 			net.SendToServer()
 			win:Remove()
-			timer.Simple(
-				0.4,
-				function()
-					OpenChatMenu()
-				end
-			)
+			timer.Simple(0.4, function() OpenChatMenu() end)
 		end
 
 		if GetGlobalYRPTable("yrp_chat_channels")[uid] and GetGlobalYRPTable("yrp_chat_channels")[uid]["bool_removeable"] then
@@ -330,12 +304,7 @@ function YRPChatChannel(edit, uid)
 				net.WriteString(uid)
 				net.SendToServer()
 				win:Remove()
-				timer.Simple(
-					0.4,
-					function()
-						OpenChatMenu()
-					end
-				)
+				timer.Simple(0.4, function() OpenChatMenu() end)
 			end
 		end
 	else
@@ -360,12 +329,7 @@ function YRPChatChannel(edit, uid)
 			net.WriteTable(prols)
 			net.SendToServer()
 			win:Remove()
-			timer.Simple(
-				0.4,
-				function()
-					OpenChatMenu()
-				end
-			)
+			timer.Simple(0.4, function() OpenChatMenu() end)
 		end
 	end
 end
@@ -396,10 +360,7 @@ function OpenChatMenu()
 			local status = YRPCreateD("DPanel", bg, h, h, 0, 0)
 			function status:Paint(pw, ph)
 				local color = Color(255, 0, 0, 255)
-				if channel.bool_enabled == 1 then
-					color = Color(0, 255, 0, 255)
-				end
-
+				if channel.bool_enabled == 1 then color = Color(0, 255, 0, 255) end
 				draw.RoundedBox(ph / 2, 0, 0, pw, ph, color)
 			end
 

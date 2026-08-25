@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local PANEL = {}
 function PANEL:Init()
 	self.content = {}
@@ -8,21 +8,10 @@ end
 function PANEL:Think()
 	local _mx, _my = gui.MousePos()
 	local _px, _py = self:GetPos()
-	if _mx < _px then
-		self:Remove()
-	end
-
-	if _my < _py then
-		self:Remove()
-	end
-
-	if _mx > _px + self:GetWide() then
-		self:Remove()
-	end
-
-	if _my > _py + self:GetTall() then
-		self:Remove()
-	end
+	if _mx < _px then self:Remove() end
+	if _my < _py then self:Remove() end
+	if _mx > _px + self:GetWide() then self:Remove() end
+	if _my > _py + self:GetTall() then self:Remove() end
 end
 
 function PANEL:UpdateMenu()
@@ -33,9 +22,7 @@ function PANEL:UpdateMenu()
 
 	self:SetTall(YRP:ctr(Height))
 	local _x, _y = self:GetPos()
-	if _y + self:GetTall() > ScrH() then
-		self:SetPos(_x, ScrH() - self:GetTall())
-	end
+	if _y + self:GetTall() > ScrH() then self:SetPos(_x, ScrH() - self:GetTall()) end
 end
 
 function PANEL:AddSpacer()
@@ -55,10 +42,7 @@ function PANEL:AddOption(name, icon)
 	local Entry = {}
 	Entry.name = name
 	Entry.iconpng = icon or ""
-	if Entry.iconpng ~= "" then
-		Entry.iconmat = Material(Entry.iconpng)
-	end
-
+	if Entry.iconpng ~= "" then Entry.iconmat = Material(Entry.iconpng) end
 	Entry.size = 50
 	Entry.icon = YRPCreateD("YPanel", self, YRP:ctr(Entry.size), YRP:ctr(Entry.size), 0, YRP:ctr(self.lastheight))
 	function Entry.icon:Paint(pw, ph)
@@ -78,7 +62,6 @@ function PANEL:AddOption(name, icon)
 	self.lastheight = self.lastheight + Entry.size
 	table.insert(self.content, Entry)
 	self:UpdateMenu()
-
 	return Entry.button
 end
 

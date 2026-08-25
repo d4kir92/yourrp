@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 --[[ GLOBAL ]]
 --
 ITEM_MAXH = 3
@@ -13,10 +13,7 @@ function PrintStorage(tab)
 		local _row = ""
 		for x = 1, INV_MAXW do
 			local _item = tab[y][x].value
-			if tostring(_item) == "" then
-				_item = "[EMPTY]"
-			end
-
+			if tostring(_item) == "" then _item = "[EMPTY]" end
 			_row = _row .. tostring(_item) .. "\t"
 		end
 
@@ -37,12 +34,9 @@ function AddItemToTable(tab, item)
 	local h = item.sizeh
 	for _y = y, y + h - 1 do
 		for _x = x, x + w - 1 do
-			if tab[_y] ~= nil and tab[_y][_x] ~= nil then
-				tab[_y][_x].value = item.uniqueID
-			end
+			if tab[_y] ~= nil and tab[_y][_x] ~= nil then tab[_y][_x].value = item.uniqueID end
 		end
 	end
-
 	return tab
 end
 
@@ -67,40 +61,25 @@ function GetEntityItemSize(ent)
 			local _scale = 6
 			_result.sizew = _axis[1].value / _scale - _axis[1].value / _scale % 1
 			_result.sizeh = _axis[2].value / _scale - _axis[2].value / _scale % 1
-			if _result.sizew < 1 then
-				_result.sizew = 1
-			end
-
-			if _result.sizeh < 1 then
-				_result.sizeh = 1
-			end
-
-			if _result.sizew > INV_MAXW then
-				_result.sizew = INV_MAXW
-			end
-
-			if _result.sizeh > ITEM_MAXH then
-				_result.sizeh = ITEM_MAXH
-			end
-
+			if _result.sizew < 1 then _result.sizew = 1 end
+			if _result.sizeh < 1 then _result.sizeh = 1 end
+			if _result.sizew > INV_MAXW then _result.sizew = INV_MAXW end
+			if _result.sizeh > ITEM_MAXH then _result.sizeh = ITEM_MAXH end
 			return _result
 		else
 			local _result = {}
 			_result.sizew = ent:ItemSizeW()
 			_result.sizeh = ent:ItemSizeH()
-
 			return _result
 		end
 	else
 		YRP:msg("error", "GetEntityItemSize failed => ent not alive")
 	end
-
 	return false
 end
 
 function IsViewModel(ent)
 	if string.find(ent:GetClass(), "viewmodel", 1, true) or string.find(ent:GetModel(), "/c_", 1, true) or ent:GetYRPBool("isviewmodel", false) or string.find(string.lower(ent:GetClass()), "c_baseflex", 1, true) then return true end
-
 	return false
 end
 
@@ -108,11 +87,8 @@ function GetSurroundingEntities(ply)
 	local _ents = ents.FindInSphere(ply:GetPos(), 60)
 	local _tab = {}
 	for i, ent in pairs(_ents) do
-		if ent:GetModel() ~= nil and ent:GetModel() ~= "" and not ent:IsPlayer() and not ent:IsNPC() and not ent:IsRagdoll() and not ent:IsVehicle() and not ent:IsWorld() and not ent:GetPersistent() and ent:GetParent() ~= ply and not ent:GetParent():IsVehicle() and not string.find(ent:GetClass(), "wheel", 1, true) and not ent:IsWorldStorage() and not IsViewModel(ent) then
-			table.insert(_tab, ent)
-		end
+		if ent:GetModel() ~= nil and ent:GetModel() ~= "" and not ent:IsPlayer() and not ent:IsNPC() and not ent:IsRagdoll() and not ent:IsVehicle() and not ent:IsWorld() and not ent:GetPersistent() and ent:GetParent() ~= ply and not ent:GetParent():IsVehicle() and not string.find(ent:GetClass(), "wheel", 1, true) and not ent:IsWorldStorage() and not IsViewModel(ent) then table.insert(_tab, ent) end
 	end
-
 	return _tab
 end
 
@@ -134,7 +110,6 @@ function FormatEntityToItem(ent)
 	_item.posx = 0
 	_item.posy = 0
 	_item.uniqueID = ent:EntIndex()
-
 	return _item
 end
 
@@ -142,20 +117,14 @@ function GetSurroundingItems(ply)
 	local _ents = GetSurroundingEntities(ply)
 	local _items = {}
 	for i, ent in pairs(_ents) do
-		if ent:GetClass() ~= "prop_dynamic" then
-			table.insert(_items, FormatEntityToItem(ent))
-		end
+		if ent:GetClass() ~= "prop_dynamic" then table.insert(_items, FormatEntityToItem(ent)) end
 	end
-
 	return _items
 end
 
 function InventoryTypeChanger(typ)
 	local _type = typ
-	if _type == "eqwpp1" or _type == "eqwpp2" or _type == "eqwps1" or _type == "eqwps2" or _type == "eqwpg" then
-		_type = "weapon"
-	end
-
+	if _type == "eqwpp1" or _type == "eqwpp2" or _type == "eqwps1" or _type == "eqwps2" or _type == "eqwpg" then _type = "weapon" end
 	return _type
 end
 
@@ -183,7 +152,6 @@ function IsEnoughSpace(stor, w, h, x, y, uid)
 			end
 		end
 	end
-
 	return true
 end
 
@@ -193,7 +161,6 @@ function FindPlace(stor, w, h)
 			if stor[y][x].value == "" and IsEnoughSpace(stor, w, h, x, y, "") then return true, x, y end
 		end
 	end
-
 	return false
 end
 
@@ -212,12 +179,10 @@ function AddToStorage(stor, item)
 						stor[_y][_x].value = item.uniqueID
 					end
 				end
-
 				return stor
 			end
 		end
 	end
-
 	return stor
 end
 
@@ -241,12 +206,9 @@ function GetSurroundingStorageSize(tab)
 	local _h = 1
 	for y = 1, #_arr do
 		for x = 1, INV_MAXW do
-			if _arr[y][x].value ~= "" then
-				_size.sizeh = y
-			end
+			if _arr[y][x].value ~= "" then _size.sizeh = y end
 		end
 	end
-
 	return _size
 end
 
@@ -264,7 +226,6 @@ function GetSurroundingStorage(ply)
 	local _size = GetSurroundingStorageSize(_items)
 	_sur.sizew = _size.sizew
 	_sur.sizeh = _size.sizeh + ITEM_MAXH
-
 	return _sur
 end
 
@@ -285,9 +246,7 @@ if CLIENT then
 					if YRPPanelAlive(_item, "_item") then
 						_item:Remove()
 						local _parent = _item:GetParent()
-						if YRPPanelAlive(_parent, "_parent") then
-							_parent:Remove()
-						end
+						if YRPPanelAlive(_parent, "_parent") then _parent:Remove() end
 					end
 				end
 			end
@@ -312,39 +271,33 @@ if CLIENT then
 						_edit_slot.posy = y
 						_edit_slot.posx = x
 						_edit_slot.type = typ
-						_edit_slot:Receiver(
-							"slot",
-							function(receiver, tableOfDroppedPanels, isDropped, menuIndex, mouseX, mouseY)
-								if isDropped then
-									local _item = tableOfDroppedPanels[1].item
-									local _slot1 = {}
-									_slot1.storageID = _item.storageID
-									_slot1.posy = _item.posy
-									_slot1.posx = _item.posx
-									local _slot2 = {}
-									_slot2.storageID = receiver.storageID
-									_slot2.posy = receiver.posy
-									_slot2.posx = receiver.posx
-									_slot2.type = receiver.type or "world"
-									net.Start("nws_yrp_moveitem")
-									net.WriteTable(_slot1)
-									net.WriteTable(_slot2)
-									net.WriteTable(_item)
+						_edit_slot:Receiver("slot", function(receiver, tableOfDroppedPanels, isDropped, menuIndex, mouseX, mouseY)
+							if isDropped then
+								local _item = tableOfDroppedPanels[1].item
+								local _slot1 = {}
+								_slot1.storageID = _item.storageID
+								_slot1.posy = _item.posy
+								_slot1.posx = _item.posx
+								local _slot2 = {}
+								_slot2.storageID = receiver.storageID
+								_slot2.posy = receiver.posy
+								_slot2.posx = receiver.posx
+								_slot2.type = receiver.type or "world"
+								net.Start("nws_yrp_moveitem")
+								net.WriteTable(_slot1)
+								net.WriteTable(_slot2)
+								net.WriteTable(_item)
+								net.SendToServer()
+								if tostring(_item.intern_storageID) ~= "" then
+									net.Start("nws_yrp_update_backpack")
 									net.SendToServer()
-									if tostring(_item.intern_storageID) ~= "" then
-										net.Start("nws_yrp_update_backpack")
-										net.SendToServer()
-									end
 								end
-							end, {}
-						)
+							end
+						end, {})
 
 						function _edit_slot:Paint(pw, ph)
 							self.color = Color(255, 255, 255, 0)
-							if self:IsHovered() then
-								self.color = Color(255, 255, 255, 10)
-							end
-
+							if self:IsHovered() then self.color = Color(255, 255, 255, 10) end
 							draw.RoundedBox(0, 0, 0, pw, ph, self.color)
 							drawRBBR(0, 0, 0, pw, ph, Color(0, 0, 0, 255), YRP:ctr(4))
 						end
@@ -360,7 +313,6 @@ if CLIENT then
 
 	function GetItemHandlerStoragePnl(storageID)
 		if item_handler ~= nil and item_handler[tonumber(storageID)] ~= nil then return item_handler[tonumber(storageID)].pnl end
-
 		return NULL
 	end
 
@@ -375,10 +327,7 @@ if CLIENT then
 	end
 
 	function AddItemToStorage(tab)
-		if tab.entity ~= nil then
-			tab.intern_storageID = tab.entity:GetYRPString("storage_uid", "")
-		end
-
+		if tab.entity ~= nil then tab.intern_storageID = tab.entity:GetYRPString("storage_uid", "") end
 		local _storage = item_handler[tonumber(tab.storageID)].pnl
 		if YRPPanelAlive(_storage, "AddItemToStorage") then
 			local _parent = item_handler[tonumber(tab.storageID)].pnl:GetParent()
@@ -425,57 +374,47 @@ if CLIENT then
 
 				_i:Droppable("slot")
 				_i:SetTooltip("PrintName: " .. _i.item.PrintName .. "\n" .. "ClassName: " .. _i.item.ClassName .. "\n" .. "WorldModel: " .. _i.item.WorldModel .. "\nW: " .. _i.item.sizew .. "\nH: " .. _i.item.sizeh)
-
 				return _item
 			end
 		end
 	end
 
-	net.Receive(
-		"nws_yrp_additemtostorage",
-		function(len)
-			local _item = net.ReadTable()
-			AddItemToStorage(_item)
-		end
-	)
+	net.Receive("nws_yrp_additemtostorage", function(len)
+		local _item = net.ReadTable()
+		AddItemToStorage(_item)
+	end)
 
-	net.Receive(
-		"nws_yrp_moveitem_slot1",
-		function(len)
-			if IsInventoryOpen() then
-				local _s1 = net.ReadTable()
-				--[[ ITEM ]]
-				--
-				local _i = item_handler[tonumber(_s1.storageID)][tonumber(_s1.posy)][tonumber(_s1.posx)]
-				if _i.item ~= nil then
-					_i.item:GetParent():Remove()
-					_i.item:Remove()
-					_i.item = nil
-					_i.value = ""
-				end
+	net.Receive("nws_yrp_moveitem_slot1", function(len)
+		if IsInventoryOpen() then
+			local _s1 = net.ReadTable()
+			--[[ ITEM ]]
+			--
+			local _i = item_handler[tonumber(_s1.storageID)][tonumber(_s1.posy)][tonumber(_s1.posx)]
+			if _i.item ~= nil then
+				_i.item:GetParent():Remove()
+				_i.item:Remove()
+				_i.item = nil
+				_i.value = ""
 			end
 		end
-	)
+	end)
 
-	net.Receive(
-		"nws_yrp_moveitem_slot2",
-		function(len)
-			if IsInventoryOpen() then
-				local _s2 = net.ReadTable()
-				local _i = net.ReadTable()
-				_i.storageID = tonumber(_s2.storageID)
-				_i.posy = tonumber(_s2.posy)
-				_i.posx = tonumber(_s2.posx)
-				_i.ClassName = tostring(_i.ClassName)
-				_i.PrintName = tostring(_i.PrintName)
-				_i.WorldModel = tostring(_i.WorldModel)
-				_i.sizeh = tonumber(_i.sizeh)
-				_i.sizew = tonumber(_i.sizew)
-				_i.uniqueID = tonumber(_i.uniqueID)
-				--[[ Target ]]
-				--
-				local _item = AddItemToStorage(_i)
-			end
+	net.Receive("nws_yrp_moveitem_slot2", function(len)
+		if IsInventoryOpen() then
+			local _s2 = net.ReadTable()
+			local _i = net.ReadTable()
+			_i.storageID = tonumber(_s2.storageID)
+			_i.posy = tonumber(_s2.posy)
+			_i.posx = tonumber(_s2.posx)
+			_i.ClassName = tostring(_i.ClassName)
+			_i.PrintName = tostring(_i.PrintName)
+			_i.WorldModel = tostring(_i.WorldModel)
+			_i.sizeh = tonumber(_i.sizeh)
+			_i.sizew = tonumber(_i.sizew)
+			_i.uniqueID = tonumber(_i.uniqueID)
+			--[[ Target ]]
+			--
+			local _item = AddItemToStorage(_i)
 		end
-	)
+	end)
 end

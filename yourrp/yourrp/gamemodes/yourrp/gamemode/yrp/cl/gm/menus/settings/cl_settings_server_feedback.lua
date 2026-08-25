@@ -1,22 +1,16 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 -- #FEEDBACKSETTINGS
 local _avatars = {}
 function GetAvatarUrl(steamid)
-	http.Fetch(
-		"http://steamcommunity.com/profiles/" .. steamid,
-		function(body, len, headers, code)
-			_avatars[steamid] = "TEST"
-			local str_start = string.find(body, "<div class=\"playerAvatarAutoSizeInner\"><img src=", 1, true)
-			if str_start ~= nil then
-				local str_end = string.find(body, ".jpg\">", str_start, true)
-				body = string.sub(body, str_start + 49, str_end + 3)
-				_avatars[steamid] = YRPGetHTMLImage(body, YRP:ctr(200), YRP:ctr(200))
-			end
-		end,
-		function(error)
-			YRP:msg("gm", "GetAvatarUrl ERROR: " .. error)
+	http.Fetch("http://steamcommunity.com/profiles/" .. steamid, function(body, len, headers, code)
+		_avatars[steamid] = "TEST"
+		local str_start = string.find(body, "<div class=\"playerAvatarAutoSizeInner\"><img src=", 1, true)
+		if str_start ~= nil then
+			local str_end = string.find(body, ".jpg\">", str_start, true)
+			body = string.sub(body, str_start + 49, str_end + 3)
+			_avatars[steamid] = YRPGetHTMLImage(body, YRP:ctr(200), YRP:ctr(200))
 		end
-	)
+	end, function(error) YRP:msg("gm", "GetAvatarUrl ERROR: " .. error) end)
 end
 
 function BuildFeedbackLine(parent, tab)
@@ -141,7 +135,6 @@ function BuildFeedbackLine(parent, tab)
 			_fb:Remove()
 		end
 	end
-
 	return _fb
 end
 
@@ -157,39 +150,18 @@ function BuildFeedback(parent, tab, status)
 	end
 end
 
-net.Receive(
-	"nws_yrp_get_ticket",
-	function()
-		local _fbt = net.ReadTable()
-		local PARENT = GetSettingsSite()
-		if YRPPanelAlive(PARENT) then
-			local site = PARENT
-			local tabs = YRPCreateD("YTabs", site, ScW(), ScH() - YRP:ctr(100), 0, 0)
-			tabs:AddOption(
-				"LID_opentickets",
-				function(parent)
-					BuildFeedback(parent, _fbt, "open")
-				end
-			)
-
-			tabs:AddOption(
-				"LID_ticketsinprocess",
-				function(parent)
-					BuildFeedback(parent, _fbt, "wip")
-				end
-			)
-
-			tabs:AddOption(
-				"LID_closedtickets",
-				function(parent)
-					BuildFeedback(parent, _fbt, "closed")
-				end
-			)
-
-			tabs:GoToSite("LID_opentickets")
-		end
+net.Receive("nws_yrp_get_ticket", function()
+	local _fbt = net.ReadTable()
+	local PARENT = GetSettingsSite()
+	if YRPPanelAlive(PARENT) then
+		local site = PARENT
+		local tabs = YRPCreateD("YTabs", site, ScW(), ScH() - YRP:ctr(100), 0, 0)
+		tabs:AddOption("LID_opentickets", function(parent) BuildFeedback(parent, _fbt, "open") end)
+		tabs:AddOption("LID_ticketsinprocess", function(parent) BuildFeedback(parent, _fbt, "wip") end)
+		tabs:AddOption("LID_closedtickets", function(parent) BuildFeedback(parent, _fbt, "closed") end)
+		tabs:GoToSite("LID_opentickets")
 	end
-)
+end)
 
 function OpenSettingsFeedback()
 	net.Start("nws_yrp_get_ticket")

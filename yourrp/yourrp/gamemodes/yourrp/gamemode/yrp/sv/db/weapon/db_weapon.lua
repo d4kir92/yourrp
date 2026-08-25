@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_weapon_options"
@@ -13,71 +13,42 @@ function YRPSetWeaponSettings()
 	end
 end
 
-hook.Add(
-	"YRP_SQLDBREADY_GAMEPLAY_DB",
-	"yrp_weapon_options",
-	function()
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slots_primary", "INT DEFAULT 1")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slots_secondary", "INT DEFAULT 1")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slots_sidearm", "INT DEFAULT 1")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slots_gadget", "INT DEFAULT 2")
-		timer.Simple(
-			0,
-			function()
-				if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'") == nil then
-					YRP:msg("db", "Set Default Weapon Settings")
-					YRP_SQL_INSERT_INTO_DEFAULTVALUES(DATABASE_NAME)
-				end
-			end
-		)
-	end
-)
-
-hook.Add(
-	"YRP_SQLDBREADY_GAMEPLAY",
-	"yrp_weapon_options",
-	function()
-		timer.Simple(
-			0,
-			function()
-				YRPSetWeaponSettings()
-			end
-		)
-	end
-)
-
-YRP:AddNetworkString("nws_yrp_set_slot_amount")
-net.Receive(
-	"nws_yrp_set_slot_amount",
-	function(len, ply)
-		if ply:CanAccess("bool_weapons") then
-			local ar = net.ReadString()
-			local va = net.ReadString()
-			YRP_SQL_UPDATE(
-				DATABASE_NAME,
-				{
-					[ar] = va
-				}, "uniqueID = '1'"
-			)
-
-			YRPSetWeaponSettings()
+hook.Add("YRP_SQLDBREADY_GAMEPLAY_DB", "yrp_weapon_options", function()
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slots_primary", "INT DEFAULT 1")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slots_secondary", "INT DEFAULT 1")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slots_sidearm", "INT DEFAULT 1")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME, "slots_gadget", "INT DEFAULT 2")
+	timer.Simple(0, function()
+		if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '1'") == nil then
+			YRP:msg("db", "Set Default Weapon Settings")
+			YRP_SQL_INSERT_INTO_DEFAULTVALUES(DATABASE_NAME)
 		end
+	end)
+end)
+
+hook.Add("YRP_SQLDBREADY_GAMEPLAY", "yrp_weapon_options", function() timer.Simple(0, function() YRPSetWeaponSettings() end) end)
+YRP:AddNetworkString("nws_yrp_set_slot_amount")
+net.Receive("nws_yrp_set_slot_amount", function(len, ply)
+	if ply:CanAccess("bool_weapons") then
+		local ar = net.ReadString()
+		local va = net.ReadString()
+		YRP_SQL_UPDATE(DATABASE_NAME, {
+			[ar] = va
+		}, "uniqueID = '1'")
+
+		YRPSetWeaponSettings()
 	end
-)
+end)
 
 local DATABASE_NAME2 = "yrp_weapon_slots"
-hook.Add(
-	"YRP_SQLDBREADY_GAMEPLAY_DB",
-	"yrp_weapon_slots",
-	function()
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME2, "classname", "TEXT DEFAULT ''")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME2, "slot_primary", "INT DEFAULT 0")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME2, "slot_secondary", "INT DEFAULT 0")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME2, "slot_sidearm", "INT DEFAULT 0")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME2, "slot_gadget", "INT DEFAULT 0")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME2, "slot_no", "INT DEFAULT 0")
-	end
-)
+hook.Add("YRP_SQLDBREADY_GAMEPLAY_DB", "yrp_weapon_slots", function()
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME2, "classname", "TEXT DEFAULT ''")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME2, "slot_primary", "INT DEFAULT 0")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME2, "slot_secondary", "INT DEFAULT 0")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME2, "slot_sidearm", "INT DEFAULT 0")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME2, "slot_gadget", "INT DEFAULT 0")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME2, "slot_no", "INT DEFAULT 0")
+end)
 
 function YRPGetSlotsOfSWEP(cn)
 	local tab = YRP_SQL_SELECT(DATABASE_NAME2, "*", "classname = '" .. cn .. "'")
@@ -90,45 +61,40 @@ function YRPGetSlotsOfSWEP(cn)
 		tab.slot_no = tobool(tab.slot_no)
 	else
 		YRP_SQL_INSERT_INTO(DATABASE_NAME2, "classname", "" .. YRP_SQL_STR_IN(cn) .. "")
-
 		return YRPGetSlotsOfSWEP(cn)
 	end
-
 	return tab
 end
 
 YRP:AddNetworkString("nws_yrp_weapon_menu")
 YRP:AddNetworkString("nws_yrp_weapon_menu_weapon")
-net.Receive(
-	"nws_yrp_weapon_menu",
-	function(len, ply)
-		if ply:CanAccess("bool_weapons") then
-			local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
-			if IsNotNilAndNotFalse(tab) then
-				tab = tab[1]
-			else
-				tab = {}
-			end
+net.Receive("nws_yrp_weapon_menu", function(len, ply)
+	if ply:CanAccess("bool_weapons") then
+		local tab = YRP_SQL_SELECT(DATABASE_NAME, "*", nil)
+		if IsNotNilAndNotFalse(tab) then
+			tab = tab[1]
+		else
+			tab = {}
+		end
 
-			local tab2 = YRP_SQL_SELECT(DATABASE_NAME2, "*", nil)
-			local tab2s = {}
-			if IsNotNilAndNotFalse(tab2) then
-				for i, v in pairs(tab2) do
-					tab2s[v.classname] = v
-				end
-			end
-
-			net.Start("nws_yrp_weapon_menu")
-			net.WriteTable(tab)
-			net.Send(ply)
-			for i, v in pairs(tab2s) do
-				net.Start("nws_yrp_weapon_menu_weapon")
-				net.WriteTable(v)
-				net.Send(ply)
+		local tab2 = YRP_SQL_SELECT(DATABASE_NAME2, "*", nil)
+		local tab2s = {}
+		if IsNotNilAndNotFalse(tab2) then
+			for i, v in pairs(tab2) do
+				tab2s[v.classname] = v
 			end
 		end
+
+		net.Start("nws_yrp_weapon_menu")
+		net.WriteTable(tab)
+		net.Send(ply)
+		for i, v in pairs(tab2s) do
+			net.Start("nws_yrp_weapon_menu_weapon")
+			net.WriteTable(v)
+			net.Send(ply)
+		end
 	end
-)
+end)
 
 YRP:AddNetworkString("nws_yrp_set_slot_weapon")
 local SLOT_COLUMNS = {}
@@ -137,42 +103,33 @@ SLOT_COLUMNS["slot_secondary"] = true
 SLOT_COLUMNS["slot_sidearm"] = true
 SLOT_COLUMNS["slot_gadget"] = true
 SLOT_COLUMNS["slot_no"] = true
-net.Receive(
-	"nws_yrp_set_slot_weapon",
-	function(len, ply)
-		if ply:CanAccess("bool_weapons") then
-			local cn = net.ReadString()
-			local ar = net.ReadString()
-			local bo = net.ReadBool()
-			if not SLOT_COLUMNS[ar] then
-				YRP:msg("error", "[set_slot_weapon] invalid slot column: " .. tostring(ar))
+net.Receive("nws_yrp_set_slot_weapon", function(len, ply)
+	if ply:CanAccess("bool_weapons") then
+		local cn = net.ReadString()
+		local ar = net.ReadString()
+		local bo = net.ReadBool()
+		if not SLOT_COLUMNS[ar] then
+			YRP:msg("error", "[set_slot_weapon] invalid slot column: " .. tostring(ar))
+			return
+		end
 
+		local tab = YRP_SQL_SELECT(DATABASE_NAME2, "*", "classname = " .. YRP_SQL_STR_IN(cn))
+		if IsNotNilAndNotFalse(tab) then
+			YRP_SQL_UPDATE(DATABASE_NAME2, {
+				[ar] = tonum(bo)
+			}, "classname = " .. YRP_SQL_STR_IN(cn) .. "")
+		else
+			if ar == nil then
+				YRP:msg("db", "Missing ART in nws_yrp_set_slot_weapon")
 				return
 			end
 
-			local tab = YRP_SQL_SELECT(DATABASE_NAME2, "*", "classname = " .. YRP_SQL_STR_IN(cn))
-			if IsNotNilAndNotFalse(tab) then
-				YRP_SQL_UPDATE(
-					DATABASE_NAME2,
-					{
-						[ar] = tonum(bo)
-					}, "classname = " .. YRP_SQL_STR_IN(cn) .. ""
-				)
-			else
-				if ar == nil then
-					YRP:msg("db", "Missing ART in nws_yrp_set_slot_weapon")
-
-					return
-				end
-
-				if cn == nil then
-					YRP:msg("db", "Missing ClassName in nws_yrp_set_slot_weapon")
-
-					return
-				end
-
-				YRP_SQL_INSERT_INTO(DATABASE_NAME2, "classname, " .. ar .. "", "" .. YRP_SQL_STR_IN(cn) .. ", '" .. tonum(bo) .. "'")
+			if cn == nil then
+				YRP:msg("db", "Missing ClassName in nws_yrp_set_slot_weapon")
+				return
 			end
+
+			YRP_SQL_INSERT_INTO(DATABASE_NAME2, "classname, " .. ar .. "", "" .. YRP_SQL_STR_IN(cn) .. ", '" .. tonum(bo) .. "'")
 		end
 	end
-)
+end)

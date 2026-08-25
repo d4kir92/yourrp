@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 FAdmin = FAdmin or {}
 FAdmin.PlayerActions = FAdmin.PlayerActions or {}
 FAdmin.StartHooks = FAdmin.StartHooks or {}
@@ -32,7 +32,6 @@ function FAdmin.ScoreBoard.Player.Show(ply)
 	FAdmin.ScoreBoard.Player.Player = ply
 	if not IsValid(ply) or not IsValid(FAdmin.ScoreBoard.Player.Player) then
 		FAdmin.ScoreBoard.ChangeView("Main")
-
 		return
 	end
 
@@ -50,10 +49,7 @@ function FAdmin.ScoreBoard.Player.Show(ply)
 		end
 	end
 
-	if IsValid(FAdmin.ScoreBoard.Player.Controls.InfoPanel1) then
-		FAdmin.ScoreBoard.Player.Controls.InfoPanel1:Remove()
-	end
-
+	if IsValid(FAdmin.ScoreBoard.Player.Controls.InfoPanel1) then FAdmin.ScoreBoard.Player.Controls.InfoPanel1:Remove() end
 	FAdmin.ScoreBoard.Player.Controls.InfoPanel1 = vgui.Create("DListLayout")
 	FAdmin.ScoreBoard.Player.Controls.InfoPanel1:SetPos(FAdmin.ScoreBoard.X + 20, FAdmin.ScoreBoard.Y + 100 + 184 + 5) --[[ + Avatar size]]
 	FAdmin.ScoreBoard.Player.Controls.InfoPanel1:SetSize(184, ScreenHeight * 0.1 + 2)
@@ -68,7 +64,6 @@ function FAdmin.ScoreBoard.Player.Show(ply)
 		local pan = FAdmin.ScoreBoard.Player.Controls.InfoPanel2:Add("DListLayout")
 		pan:SetSize(1, FAdmin.ScoreBoard.Player.Controls.InfoPanel2:GetTall())
 		table.insert(FAdmin.ScoreBoard.Player.InfoPanels, pan)
-
 		return pan
 	end
 
@@ -93,28 +88,17 @@ function FAdmin.ScoreBoard.Player.Show(ply)
 				self:SetTooltip("Click to copy " .. v.name .. " to clipboard")
 			end
 
-			timer.Create(
-				"FAdmin_Scoreboard_text_update_" .. v.name,
-				1,
-				0,
-				function()
-					if not IsValid(ply) or not IsValid(FAdmin.ScoreBoard.Player.Player) or not IsValid(Text) then
-						timer.Remove("FAdmin_Scoreboard_text_update_" .. v.name)
-						if FAdmin.ScoreBoard.Visible and (not IsValid(ply) or not IsValid(FAdmin.ScoreBoard.Player.Player)) then
-							FAdmin.ScoreBoard.ChangeView("Main")
-						end
-
-						return
-					end
-
-					Value = v.func(FAdmin.ScoreBoard.Player.Player)
-					if not Value or Value == "" then
-						Value = "N/A"
-					end
-
-					Text:SetText(v.name .. ": " .. Value)
+			timer.Create("FAdmin_Scoreboard_text_update_" .. v.name, 1, 0, function()
+				if not IsValid(ply) or not IsValid(FAdmin.ScoreBoard.Player.Player) or not IsValid(Text) then
+					timer.Remove("FAdmin_Scoreboard_text_update_" .. v.name)
+					if FAdmin.ScoreBoard.Visible and (not IsValid(ply) or not IsValid(FAdmin.ScoreBoard.Player.Player)) then FAdmin.ScoreBoard.ChangeView("Main") end
+					return
 				end
-			)
+
+				Value = v.func(FAdmin.ScoreBoard.Player.Player)
+				if not Value or Value == "" then Value = "N/A" end
+				Text:SetText(v.name .. ": " .. Value)
+			end)
 
 			if (#FAdmin.ScoreBoard.Player.Controls.InfoPanel1:GetChildren() * 17 + 17) <= FAdmin.ScoreBoard.Player.Controls.InfoPanel1:GetTall() and not v.NewPanel then
 				FAdmin.ScoreBoard.Player.Controls.InfoPanel1:Add(Text)
@@ -124,9 +108,7 @@ function FAdmin.ScoreBoard.Player.Show(ply)
 				end
 
 				SelectedPanel:Add(Text)
-				if Text:GetWide() > SelectedPanel:GetWide() then
-					SelectedPanel:SetWide(Text:GetWide() + 40)
-				end
+				if Text:GetWide() > SelectedPanel:GetWide() then SelectedPanel:SetWide(Text:GetWide() + 40) end
 			end
 		end
 	end
@@ -140,9 +122,7 @@ function FAdmin.ScoreBoard.Player.Show(ply)
 			CatColor = Color(30, 200, 50, 255)
 		end
 
-		if ply:GetFriendStatus() == "friend" then
-			CatColor = Color(236, 181, 113, 255)
-		end
+		if ply:GetFriendStatus() == "friend" then CatColor = Color(236, 181, 113, 255) end
 	end
 
 	FAdmin.ScoreBoard.Player.Controls.ButtonCat = FAdmin.ScoreBoard.Player.Controls.ButtonCat or vgui.Create("FAdminPlayerCatagory")
@@ -170,36 +150,26 @@ function FAdmin.ScoreBoard.Player.Show(ply)
 				ActionButton:SetImage(v.Image or "icon16/exclamation")
 			elseif type(v.Image) == "table" then
 				ActionButton:SetImage(v.Image[1])
-				if v.Image[2] then
-					ActionButton:SetImage2(v.Image[2])
-				end
+				if v.Image[2] then ActionButton:SetImage2(v.Image[2]) end
 			elseif type(v.Image) == "function" then
 				local img1, img2 = v.Image(ply)
 				ActionButton:SetImage(img1)
-				if img2 then
-					ActionButton:SetImage2(img2)
-				end
+				if img2 then ActionButton:SetImage2(img2) end
 			else
 				ActionButton:SetImage("icon16/exclamation")
 			end
 
 			local name = v.Name
-			if type(name) == "function" then
-				name = name(FAdmin.ScoreBoard.Player.Player)
-			end
-
+			if type(name) == "function" then name = name(FAdmin.ScoreBoard.Player.Player) end
 			ActionButton:SetText(DarkRP.deLocalise(name))
 			ActionButton:SetBorderColor(v.color)
 			function ActionButton:DoClick()
 				if not IsValid(FAdmin.ScoreBoard.Player.Player) then return end
-
 				return v.Action(FAdmin.ScoreBoard.Player.Player, self)
 			end
 
 			FAdmin.ScoreBoard.Player.Controls.ButtonPanel:AddItem(ActionButton)
-			if v.OnButtonCreated then
-				v.OnButtonCreated(FAdmin.ScoreBoard.Player.Player, ActionButton)
-			end
+			if v.OnButtonCreated then v.OnButtonCreated(FAdmin.ScoreBoard.Player.Player, ActionButton) end
 		end
 	end
 
@@ -208,28 +178,22 @@ end
 
 -- ForeNewPanel is to start a new column
 function FAdmin.ScoreBoard.Player:AddInformation(name, func, ForceNewPanel)
-	table.insert(
-		FAdmin.ScoreBoard.Player.Information,
-		{
-			name = name,
-			func = func,
-			NewPanel = ForceNewPanel
-		}
-	)
+	table.insert(FAdmin.ScoreBoard.Player.Information, {
+		name = name,
+		func = func,
+		NewPanel = ForceNewPanel
+	})
 end
 
 function FAdmin.ScoreBoard.Player:AddActionButton(Name, Image, color, Visible, Action, OnButtonCreated)
-	table.insert(
-		FAdmin.ScoreBoard.Player.ActionButtons,
-		{
-			Name = Name,
-			Image = Image,
-			color = color,
-			Visible = Visible,
-			Action = Action,
-			OnButtonCreated = OnButtonCreated
-		}
-	)
+	table.insert(FAdmin.ScoreBoard.Player.ActionButtons, {
+		Name = Name,
+		Image = Image,
+		color = color,
+		Visible = Visible,
+		Action = Action,
+		OnButtonCreated = OnButtonCreated
+	})
 end
 
 FAdmin.ScoreBoard.Player:AddInformation("Name", function(ply) return ply:Nick() end)
@@ -300,24 +264,17 @@ local function MakeServerOptions()
 			ActionButton:SetImage(v.Image or "icon16/exclamation")
 		elseif type(v.Image) == "table" then
 			ActionButton:SetImage(v.Image[1])
-			if v.Image[2] then
-				ActionButton:SetImage2(v.Image[2])
-			end
+			if v.Image[2] then ActionButton:SetImage2(v.Image[2]) end
 		elseif type(v.Image) == "function" then
 			local img1, img2 = v.Image()
 			ActionButton:SetImage(img1)
-			if img2 then
-				ActionButton:SetImage2(img2)
-			end
+			if img2 then ActionButton:SetImage2(img2) end
 		else
 			ActionButton:SetImage("icon16/exclamation")
 		end
 
 		local name = v.Name
-		if type(name) == "function" then
-			name = name()
-		end
-
+		if type(name) == "function" then name = name() end
 		ActionButton:SetText(DarkRP.deLocalise(name))
 		ActionButton:SetBorderColor(visible and v.color or Color(120, 120, 120))
 		ActionButton:SetDisabled(not visible)
@@ -327,55 +284,44 @@ local function MakeServerOptions()
 		end
 
 		FAdmin.ScoreBoard.Server.Controls[v.TYPE]:Add(ActionButton)
-		if v.OnButtonCreated then
-			v.OnButtonCreated(ActionButton)
-		end
+		if v.OnButtonCreated then v.OnButtonCreated(ActionButton) end
 	end
 end
 
 function FAdmin.ScoreBoard.Server:AddServerAction(Name, Image, color, Visible, Action, OnButtonCreated)
-	table.insert(
-		FAdmin.ScoreBoard.Server.ActionButtons,
-		{
-			TYPE = "ServerActions",
-			Name = Name,
-			Image = Image,
-			color = color,
-			Visible = Visible,
-			Action = Action,
-			OnButtonCreated = OnButtonCreated
-		}
-	)
+	table.insert(FAdmin.ScoreBoard.Server.ActionButtons, {
+		TYPE = "ServerActions",
+		Name = Name,
+		Image = Image,
+		color = color,
+		Visible = Visible,
+		Action = Action,
+		OnButtonCreated = OnButtonCreated
+	})
 end
 
 function FAdmin.ScoreBoard.Server:AddPlayerAction(Name, Image, color, Visible, Action, OnButtonCreated)
-	table.insert(
-		FAdmin.ScoreBoard.Server.ActionButtons,
-		{
-			TYPE = "PlayerActions",
-			Name = Name,
-			Image = Image,
-			color = color,
-			Visible = Visible,
-			Action = Action,
-			OnButtonCreated = OnButtonCreated
-		}
-	)
+	table.insert(FAdmin.ScoreBoard.Server.ActionButtons, {
+		TYPE = "PlayerActions",
+		Name = Name,
+		Image = Image,
+		color = color,
+		Visible = Visible,
+		Action = Action,
+		OnButtonCreated = OnButtonCreated
+	})
 end
 
 function FAdmin.ScoreBoard.Server:AddServerSetting(Name, Image, color, Visible, Action, OnButtonCreated)
-	table.insert(
-		FAdmin.ScoreBoard.Server.ActionButtons,
-		{
-			TYPE = "ServerSettings",
-			Name = Name,
-			Image = Image,
-			color = color,
-			Visible = Visible,
-			Action = Action,
-			OnButtonCreated = OnButtonCreated
-		}
-	)
+	table.insert(FAdmin.ScoreBoard.Server.ActionButtons, {
+		TYPE = "ServerSettings",
+		Name = Name,
+		Image = Image,
+		color = color,
+		Visible = Visible,
+		Action = Action,
+		OnButtonCreated = OnButtonCreated
+	})
 end
 
 function FAdmin.ScoreBoard.Server.Show(ply)
@@ -387,10 +333,7 @@ function FAdmin.ScoreBoard.Server.Show(ply)
 		end
 	end
 
-	if IsValid(FAdmin.ScoreBoard.Server.Controls.InfoPanel) then
-		FAdmin.ScoreBoard.Server.Controls.InfoPanel:Remove()
-	end
-
+	if IsValid(FAdmin.ScoreBoard.Server.Controls.InfoPanel) then FAdmin.ScoreBoard.Server.Controls.InfoPanel:Remove() end
 	FAdmin.ScoreBoard.Server.Controls.InfoPanel = vgui.Create("FAdminPanelList")
 	FAdmin.ScoreBoard.Server.Controls.InfoPanel:SetPos(FAdmin.ScoreBoard.X + 20, FAdmin.ScoreBoard.Y + 120)
 	FAdmin.ScoreBoard.Server.Controls.InfoPanel:SetSize(FAdmin.ScoreBoard.Width - 40, FAdmin.ScoreBoard.Height / 5)
@@ -402,7 +345,6 @@ function FAdmin.ScoreBoard.Server.Show(ply)
 		pan:Dock(LEFT)
 		FAdmin.ScoreBoard.Server.Controls.InfoPanel:Add(pan)
 		table.insert(FAdmin.ScoreBoard.Server.InfoPanels, pan)
-
 		return pan
 	end
 
@@ -416,10 +358,7 @@ function FAdmin.ScoreBoard.Server.Show(ply)
 		local EndText
 		local function RefreshText()
 			local Value = v.func()
-			if not Value or Value == "" then
-				Value = "N/A"
-			end
-
+			if not Value or Value == "" then Value = "N/A" end
 			EndText = v.name .. ":	" .. Value
 			local strLen = string.len(EndText)
 			if strLen > 40 then
@@ -458,31 +397,20 @@ function FAdmin.ScoreBoard.Server.Show(ply)
 			self:SetTooltip("Click to copy " .. v.name .. " to clipboard")
 		end
 
-		timer.Create(
-			"FAdmin_Scoreboard_text_update_" .. v.name,
-			1,
-			0,
-			function()
-				if not IsValid(Text) then
-					timer.Remove("FAdmin_Scoreboard_text_update_" .. v.name)
-					FAdmin.ScoreBoard.ChangeView("Main")
-
-					return
-				end
-
-				RefreshText()
+		timer.Create("FAdmin_Scoreboard_text_update_" .. v.name, 1, 0, function()
+			if not IsValid(Text) then
+				timer.Remove("FAdmin_Scoreboard_text_update_" .. v.name)
+				FAdmin.ScoreBoard.ChangeView("Main")
+				return
 			end
-		)
 
-		if #SelectedPanel:GetChildren() * 17 + 17 >= SelectedPanel:GetTall() or v.NewPanel then
-			SelectedPanel = AddInfoPanel()
-		end
+			RefreshText()
+		end)
 
+		if #SelectedPanel:GetChildren() * 17 + 17 >= SelectedPanel:GetTall() or v.NewPanel then SelectedPanel = AddInfoPanel() end
 		-- Add new panel if the last one is full
 		SelectedPanel:Add(Text)
-		if Text:GetWide() > SelectedPanel:GetWide() then
-			SelectedPanel:SetWide(Text:GetWide() + 40)
-		end
+		if Text:GetWide() > SelectedPanel:GetWide() then SelectedPanel:SetWide(Text:GetWide() + 40) end
 	end
 
 	MakeServerOptions()
@@ -490,14 +418,11 @@ end
 
 -- ForeNewPanel is to start a new column
 function FAdmin.ScoreBoard.Server:AddInformation(name, func, ForceNewPanel)
-	table.insert(
-		FAdmin.ScoreBoard.Server.Information,
-		{
-			name = name,
-			func = func,
-			NewPanel = ForceNewPanel
-		}
-	)
+	table.insert(FAdmin.ScoreBoard.Server.Information, {
+		name = name,
+		func = func,
+		NewPanel = ForceNewPanel
+	})
 end
 
 FAdmin.ScoreBoard.Server:AddInformation("Hostname", GetHostName)

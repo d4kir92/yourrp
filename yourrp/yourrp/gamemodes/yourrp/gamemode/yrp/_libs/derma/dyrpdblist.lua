@@ -1,11 +1,8 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local PANEL = {}
 function paintDBButton(self, pw, ph, color, text)
 	local _color = color
-	if self:IsHovered() then
-		_color = Color(255, 255, 0)
-	end
-
+	if self:IsHovered() then _color = Color(255, 255, 0) end
 	draw.RoundedBox(0, 0, 0, pw, ph, _color)
 	surfaceText(text, "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255, 255), 1, 1)
 end
@@ -33,9 +30,7 @@ function PANEL:Init()
 	self.header.rem = YRPCreateD("DButton", self.header, self:GetWide() / 5, self:GetTall(), 4 * (self:GetWide() / 5), 0)
 	self.header.rem:SetText("")
 	function self.header.rem:Paint(pw, ph)
-		if _pnl.uid ~= nil then
-			paintDBButton(self, pw, ph, Color(0, 255, 0), "-")
-		end
+		if _pnl.uid ~= nil then paintDBButton(self, pw, ph, Color(0, 255, 0), "-") end
 	end
 
 	function self.header.rem:DoClick()
@@ -48,25 +43,11 @@ function PANEL:Init()
 	function self.header:Think()
 		local _w = self:GetWide()
 		local _x = self.rem:GetPos()
-		if _x ~= 3 * (_w / 5) then
-			self.rem:SetPos(4 * (_w / 5), 0)
-		end
-
-		if self.add:GetWide() ~= _w / 5 then
-			self.add:SetWide(_w / 5)
-		end
-
-		if self.rem:GetWide() ~= _w / 5 then
-			self.rem:SetWide(_w / 5)
-		end
-
-		if self.add:GetTall() ~= self:GetTall() then
-			self.add:SetTall(self:GetTall())
-		end
-
-		if self.rem:GetTall() ~= self:GetTall() then
-			self.rem:SetTall(self:GetTall())
-		end
+		if _x ~= 3 * (_w / 5) then self.rem:SetPos(4 * (_w / 5), 0) end
+		if self.add:GetWide() ~= _w / 5 then self.add:SetWide(_w / 5) end
+		if self.rem:GetWide() ~= _w / 5 then self.rem:SetWide(_w / 5) end
+		if self.add:GetTall() ~= self:GetTall() then self.add:SetTall(self:GetTall()) end
+		if self.rem:GetTall() ~= self:GetTall() then self.rem:SetTall(self:GetTall()) end
 	end
 
 	--[[ List Header ]]
@@ -94,13 +75,8 @@ function PANEL:Init()
 	--
 	function self:SetListHeader(text, pre, pos)
 		self.listheader.text = text
-		if pre ~= nil then
-			self.listheader.textpre = pre
-		end
-
-		if pos ~= nil then
-			self.listheader.textpos = pos
-		end
+		if pre ~= nil then self.listheader.textpre = pre end
+		if pos ~= nil then self.listheader.textpos = pos end
 	end
 
 	function self:GetList()
@@ -119,10 +95,7 @@ function PANEL:Init()
 		_new.tbl = tbl
 		function _new:Paint(pw, ph)
 			local _color = Color(255, 255, 255, 255)
-			if self:IsHovered() or _pnl.uid == self.tbl.uniqueID then
-				_color = Color(255, 255, 0)
-			end
-
+			if self:IsHovered() or _pnl.uid == self.tbl.uniqueID then _color = Color(255, 255, 0) end
 			draw.RoundedBox(0, 0, 0, pw, ph, _color)
 			surfaceText(self.tbl.name, "Y_24_500", pw / 2, ph / 2, YRPTextColor(_color), 1, 1)
 		end
@@ -155,30 +128,13 @@ end
 
 function PANEL:Think()
 	local _x = self.listheader:GetPos()
-	if YRP:ctr(60) ~= _x then
-		self.listheader:SetPos(0, YRP:ctr(60))
-	end
-
+	if YRP:ctr(60) ~= _x then self.listheader:SetPos(0, YRP:ctr(60)) end
 	_x = self.list:GetPos()
-	if YRP:ctr(110) ~= _x then
-		self.list:SetPos(0, YRP:ctr(110))
-	end
-
-	if self:GetWide() ~= self.header:GetWide() then
-		self.header:SetWide(self:GetWide())
-	end
-
-	if self:GetWide() ~= self.listheader:GetWide() then
-		self.listheader:SetWide(self:GetWide())
-	end
-
-	if self:GetWide() ~= self.list:GetWide() then
-		self.list:SetWide(self:GetWide())
-	end
-
-	if self.list:GetTall() ~= self:GetTall() - YRP:ctr(120) then
-		self.list:SetTall(self:GetTall() - YRP:ctr(120))
-	end
+	if YRP:ctr(110) ~= _x then self.list:SetPos(0, YRP:ctr(110)) end
+	if self:GetWide() ~= self.header:GetWide() then self.header:SetWide(self:GetWide()) end
+	if self:GetWide() ~= self.listheader:GetWide() then self.listheader:SetWide(self:GetWide()) end
+	if self:GetWide() ~= self.list:GetWide() then self.list:SetWide(self:GetWide()) end
+	if self.list:GetTall() ~= self:GetTall() - YRP:ctr(120) then self.list:SetTall(self:GetTall() - YRP:ctr(120)) end
 end
 
 function PANEL:Paint(w, h)

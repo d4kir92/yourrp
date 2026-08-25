@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 --here you can change this, but it's dumb, because you can change it ingame
 GM.Name = "DarkRP" -- Is for other addons detecting that the gamemode is "DarkRP" compatible
 GM.BaseName = "YourRP" -- DO NOT CHANGE THIS, thanks
@@ -801,7 +801,6 @@ function YRPCleanUpName(name)
 	name = string.Replace(name, "'", "")
 	name = string.gsub(name, "%c", "")
 	name = string.Trim(name)
-
 	return string.sub(name, 1, RPNAME_MAX_LENGTH)
 end
 

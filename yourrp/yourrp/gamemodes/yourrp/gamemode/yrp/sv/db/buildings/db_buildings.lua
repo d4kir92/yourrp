@@ -1,44 +1,29 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME_DOORS = "yrp_" .. GetMapNameDB() .. "_doors"
 local COOWNER_MAX = 32
-hook.Add(
-	"YRP_SQLDBREADY_GAMEPLAY",
-	"yrp_MAPNAME_doors_DB",
-	function()
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME_DOORS, "buildingID", "TEXT DEFAULT '-1'")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME_DOORS, "level", "INTEGER DEFAULT 1")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME_DOORS, "keynr", "INTEGER DEFAULT -1")
-	end
-)
+hook.Add("YRP_SQLDBREADY_GAMEPLAY", "yrp_MAPNAME_doors_DB", function()
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME_DOORS, "buildingID", "TEXT DEFAULT '-1'")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME_DOORS, "level", "INTEGER DEFAULT 1")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME_DOORS, "keynr", "INTEGER DEFAULT -1")
+end)
 
 local DATABASE_NAME_BUILDINGS = "yrp_" .. GetMapNameDB() .. "_buildings"
-hook.Add(
-	"YRP_SQLDBREADY_GAMEPLAY",
-	"yrp_MAPNAME_buildings_DB",
-	function()
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "groupID", "INTEGER DEFAULT 0")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "buildingprice", "TEXT DEFAULT 100")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "ownerCharID", "TEXT DEFAULT ''")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "coownerCharIDs", "TEXT DEFAULT ''")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "name", "TEXT DEFAULT 'Building'")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "text_header", "TEXT DEFAULT ''")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "text_description", "TEXT DEFAULT ''")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "bool_canbeowned", "INT DEFAULT 1")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "int_securitylevel", "TEXT DEFAULT 0")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "bool_lockdown", "INT DEFAULT 1")
-	end
-)
+hook.Add("YRP_SQLDBREADY_GAMEPLAY", "yrp_MAPNAME_buildings_DB", function()
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "groupID", "INTEGER DEFAULT 0")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "buildingprice", "TEXT DEFAULT 100")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "ownerCharID", "TEXT DEFAULT ''")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "coownerCharIDs", "TEXT DEFAULT ''")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "name", "TEXT DEFAULT 'Building'")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "text_header", "TEXT DEFAULT ''")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "text_description", "TEXT DEFAULT ''")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "bool_canbeowned", "INT DEFAULT 1")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "int_securitylevel", "TEXT DEFAULT 0")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME_BUILDINGS, "bool_lockdown", "INT DEFAULT 1")
+end)
 
-hook.Add(
-	"YRP_SQLDBREADY_GAMEPLAY",
-	"yrp_MAPNAME_buildings",
-	function()
-		YRPLookForEmptyBuildings()
-	end
-)
-
+hook.Add("YRP_SQLDBREADY_GAMEPLAY", "yrp_MAPNAME_buildings", function() YRPLookForEmptyBuildings() end)
 function YRPIsUnderGroup(uid, tuid)
 	local group = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. uid .. "'")
 	group = group[1]
@@ -51,7 +36,6 @@ function YRPIsUnderGroup(uid, tuid)
 			return YRPIsUnderGroup(undergroup.uniqueID, tuid)
 		end
 	end
-
 	return false
 end
 
@@ -61,7 +45,6 @@ function YRPIsUnderGroupOf(ply, uid)
 		ply_group = ply_group[1]
 		local group = YRP_SQL_SELECT("yrp_ply_groups", "*", "uniqueID = '" .. ply_group.uniqueID .. "'")
 		group = group[1]
-
 		return YRPIsUnderGroup(group.uniqueID, uid)
 	else
 		return false
@@ -82,13 +65,10 @@ function YRPAllowedToUseDoor(id, ply, door)
 				local _tmpChaTab = YRP_SQL_SELECT("yrp_characters", "*", "uniqueID = " .. bui_cuid)
 				-- If char not available anymore => remove ownership
 				if not IsNotNilAndNotFalse(_tmpChaTab) then
-					YRP_SQL_UPDATE(
-						DATABASE_NAME_BUILDINGS,
-						{
-							["ownerCharID"] = "",
-							["coownerCharIDs"] = ""
-						}, "uniqueID = '" .. id .. "'"
-					)
+					YRP_SQL_UPDATE(DATABASE_NAME_BUILDINGS, {
+						["ownerCharID"] = "",
+						["coownerCharIDs"] = ""
+					}, "uniqueID = '" .. id .. "'")
 
 					door:SetYRPString("ownerRPName", "")
 					door:SetYRPInt("ownerGroupUID", -99)
@@ -107,16 +87,13 @@ function YRPAllowedToUseDoor(id, ply, door)
 						return true
 					else
 						YRP:msg("db", "[YRPAllowedToUseDoor] not allowed")
-
 						return false
 					end
-
 					return false
 				end
 			end
 		else
 			YRP:msg("db", "[YRPAllowedToUseDoor] not allowed 2")
-
 			return false
 		end
 	end
@@ -135,7 +112,6 @@ function YRPSearchForDoors()
 
 	local allDoorsNum = table.Count(GetAllDoors())
 	YRP:msg("db", "[Buildings] Done finding them ( " .. allDoorsNum .. " doors found)")
-
 	return allDoorsNum
 end
 
@@ -164,10 +140,7 @@ function YRPLoadDoors()
 			YRP:msg("db", "[Buildings] no doors in database!")
 		end
 
-		if problems > 0 then
-			YRP:msg("db", string.format("[Buildings] Found %s Problems!", problems))
-		end
-
+		if problems > 0 then YRP:msg("db", string.format("[Buildings] Found %s Problems!", problems)) end
 		local _tmpBuildings = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", nil)
 		if IsNotNilAndNotFalse(_tmpBuildings) then
 			for k, v in pairs(GetAllDoors()) do
@@ -201,10 +174,7 @@ function YRPLoadDoors()
 						end
 
 						w.int_securitylevel = tonumber(w.int_securitylevel)
-						if w.int_securitylevel > 0 then
-							v:SetYRPInt("int_securitylevel", w.int_securitylevel)
-						end
-
+						if w.int_securitylevel > 0 then v:SetYRPInt("int_securitylevel", w.int_securitylevel) end
 						if GetGlobalYRPBool("bool_securitylevel_system", false) then
 							if v:SecurityLevel() > 0 then
 								YRPFireLock(v)
@@ -217,14 +187,8 @@ function YRPLoadDoors()
 							YRPFireLock(v)
 						end
 
-						if not strEmpty(w.text_header) then
-							v:SetYRPString("text_header", w.text_header)
-						end
-
-						if not strEmpty(w.text_description) then
-							v:SetYRPString("text_description", w.text_description)
-						end
-
+						if not strEmpty(w.text_header) then v:SetYRPString("text_header", w.text_header) end
+						if not strEmpty(w.text_description) then v:SetYRPString("text_description", w.text_description) end
 						v:SetYRPString("name", w.name)
 						v:SetYRPString("buildingprice", w.buildingprice)
 						break
@@ -273,37 +237,25 @@ YRP:AddNetworkString("nws_yrp_buyBuilding")
 YRP:AddNetworkString("nws_yrp_removeOwner")
 YRP:AddNetworkString("nws_yrp_sellBuilding")
 YRP:AddNetworkString("nws_yrp_addnewbuilding")
-net.Receive(
-	"nws_yrp_addnewbuilding",
-	function(len, ply)
-		local door = net.ReadEntity()
-		if not ply:HasAccess("nws_yrp_addnewbuilding") then
-			YRP:msg("db", ply:Nick() .. " has no rights to change Building.")
-
-			return
-		end
-
-		YRP_SQL_INSERT_INTO_DEFAULTVALUES("yrp_" .. GetMapNameDB() .. "_buildings")
-		local last = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", nil, "ORDER BY uniqueID DESC LIMIT 1")
-		if last and last[1] then
-			last = last[1]
-			door:SetYRPString("buildingID", last.uniqueID)
-			YRP_SQL_UPDATE(
-				"yrp_" .. GetMapNameDB() .. "_doors",
-				{
-					["buildingID"] = tonumber(last.uniqueID)
-				}, "uniqueID = " .. door:GetYRPString("uniqueID")
-			)
-
-			timer.Simple(
-				0.3,
-				function()
-					getBuildingInfo(ply, door, last.uniqueID, true)
-				end
-			)
-		end
+net.Receive("nws_yrp_addnewbuilding", function(len, ply)
+	local door = net.ReadEntity()
+	if not ply:HasAccess("nws_yrp_addnewbuilding") then
+		YRP:msg("db", ply:Nick() .. " has no rights to change Building.")
+		return
 	end
-)
+
+	YRP_SQL_INSERT_INTO_DEFAULTVALUES("yrp_" .. GetMapNameDB() .. "_buildings")
+	local last = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", nil, "ORDER BY uniqueID DESC LIMIT 1")
+	if last and last[1] then
+		last = last[1]
+		door:SetYRPString("buildingID", last.uniqueID)
+		YRP_SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_doors", {
+			["buildingID"] = tonumber(last.uniqueID)
+		}, "uniqueID = " .. door:GetYRPString("uniqueID"))
+
+		timer.Simple(0.3, function() getBuildingInfo(ply, door, last.uniqueID, true) end)
+	end
+end)
 
 YRP:AddNetworkString("nws_yrp_door_anim")
 function YRPFireUnlock(ent, owner)
@@ -331,20 +283,16 @@ end
 function YRPUnlockDoor(ply, ent, nr)
 	if YRPCanLock(ply, ent) then
 		YRPFireUnlock(ent, ply)
-
 		return true
 	end
-
 	return false
 end
 
 function YRPLockDoor(ply, ent, nr)
 	if YRPCanLock(ply, ent) then
 		YRPFireLock(ent, ply)
-
 		return true
 	end
-
 	return false
 end
 
@@ -352,10 +300,7 @@ function YRPOpenDoor(ply, ent, nr)
 	if YRPCanLock(ply, ent, true) then
 		if ent:SecurityLevel() > 0 and ply:SecurityLevel() >= ent:SecurityLevel() then
 			local locked = ent:GetSaveTable().m_bLocked
-			if locked then
-				YRPFireUnlock(ent)
-			end
-
+			if locked then YRPFireUnlock(ent) end
 			local currentstate = ent:GetSaveTable().m_toggle_state
 			if currentstate == 0 then
 				ent:Fire("close")
@@ -365,9 +310,7 @@ function YRPOpenDoor(ply, ent, nr)
 				ent:Fire("open")
 			end
 
-			if locked then
-				YRPFireLock(ent)
-			end
+			if locked then YRPFireLock(ent) end
 		end
 	else
 		local filename = "doors/default_locked.wav"
@@ -391,276 +334,210 @@ function YRPBuildingRemoveOwner(SteamID)
 					v:SetYRPString("coownerCharIDs", "")
 					v:SetYRPBool("bool_hasowner", false)
 					YRPFireUnlock(v)
-					YRP_SQL_UPDATE(
-						"yrp_" .. GetMapNameDB() .. "_buildings",
-						{
-							["ownerCharID"] = "",
-							["coownerCharIDs"] = ""
-						}, "uniqueID = '" .. v:GetYRPString("uniqueID") .. "'"
-					)
+					YRP_SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", {
+						["ownerCharID"] = "",
+						["coownerCharIDs"] = ""
+					}, "uniqueID = '" .. v:GetYRPString("uniqueID") .. "'")
 				end
 			end
 		end
 	end
 end
 
-net.Receive(
-	"nws_yrp_removeOwner",
-	function(len, ply)
-		if not ply:HasAccess("nws_yrp_removeOwner") then
-			YRP:msg("db", ply:Nick() .. " has no rights to change Building.")
+net.Receive("nws_yrp_removeOwner", function(len, ply)
+	if not ply:HasAccess("nws_yrp_removeOwner") then
+		YRP:msg("db", ply:Nick() .. " has no rights to change Building.")
+		return
+	end
 
-			return
-		end
+	local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
+	local _tmpTable = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'")
+	YRP_SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", {
+		["ownerCharID"] = "",
+		["coownerCharIDs"] = "",
+		["groupID"] = 0
+	}, "uniqueID = '" .. _tmpBuildingID .. "'")
 
-		local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
-		local _tmpTable = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'")
-		YRP_SQL_UPDATE(
-			"yrp_" .. GetMapNameDB() .. "_buildings",
-			{
-				["ownerCharID"] = "",
-				["coownerCharIDs"] = "",
-				["groupID"] = 0
-			}, "uniqueID = '" .. _tmpBuildingID .. "'"
-		)
-
-		for k, v in pairs(GetAllDoors()) do
-			if tonumber(v:GetYRPString("buildingID")) == tonumber(_tmpBuildingID) then
-				v:SetYRPString("ownerRPName", "")
-				v:SetYRPInt("ownerGroupUID", -99)
-				v:SetYRPString("ownerGroup", "")
-				v:SetYRPInt("ownerCharID", 0)
-				v:SetYRPString("coownerCharIDs", "")
-				v:SetYRPBool("bool_hasowner", false)
-				YRPFireUnlock(v)
-			end
+	for k, v in pairs(GetAllDoors()) do
+		if tonumber(v:GetYRPString("buildingID")) == tonumber(_tmpBuildingID) then
+			v:SetYRPString("ownerRPName", "")
+			v:SetYRPInt("ownerGroupUID", -99)
+			v:SetYRPString("ownerGroup", "")
+			v:SetYRPInt("ownerCharID", 0)
+			v:SetYRPString("coownerCharIDs", "")
+			v:SetYRPBool("bool_hasowner", false)
+			YRPFireUnlock(v)
 		end
 	end
-)
+end)
 
-net.Receive(
-	"nws_yrp_sellBuilding",
-	function(len, ply)
-		local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
-		local _tmpTable = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'")
-		if not (_tmpTable and _tmpTable[1] and tostring(_tmpTable[1].ownerCharID) == tostring(ply:CharID())) then
-			return
-		end
+net.Receive("nws_yrp_sellBuilding", function(len, ply)
+	local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
+	local _tmpTable = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'")
+	if not (_tmpTable and _tmpTable[1] and tostring(_tmpTable[1].ownerCharID) == tostring(ply:CharID())) then return end
+	YRP_SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", {
+		["ownerCharID"] = "",
+		["groupID"] = 0
+	}, "uniqueID = '" .. _tmpBuildingID .. "'")
 
-		YRP_SQL_UPDATE(
-			"yrp_" .. GetMapNameDB() .. "_buildings",
-			{
-				["ownerCharID"] = "",
-				["groupID"] = 0
-			}, "uniqueID = '" .. _tmpBuildingID .. "'"
-		)
-
-		for k, v in pairs(GetAllDoors()) do
-			if tonumber(v:GetYRPString("buildingID")) == tonumber(_tmpBuildingID) then
-				v:SetYRPString("ownerRPName", "")
-				v:SetYRPInt("ownerGroupUID", -99)
-				v:SetYRPString("ownerGroup", "")
-				v:SetYRPInt("ownerCharID", 0)
-				v:SetYRPString("coownerCharIDs", "")
-				v:SetYRPBool("bool_hasowner", false)
-				YRPFireUnlock(v)
-				YRP_SQL_UPDATE(
-					"yrp_" .. GetMapNameDB() .. "_doors",
-					{
-						["keynr"] = -1
-					}, "buildingID = " .. tonumber(v:GetYRPString("buildingID"))
-				)
-			end
-		end
-
-		if _tmpTable and _tmpTable[1] then
-			ply:addMoney(_tmpTable[1].buildingprice / 2)
+	for k, v in pairs(GetAllDoors()) do
+		if tonumber(v:GetYRPString("buildingID")) == tonumber(_tmpBuildingID) then
+			v:SetYRPString("ownerRPName", "")
+			v:SetYRPInt("ownerGroupUID", -99)
+			v:SetYRPString("ownerGroup", "")
+			v:SetYRPInt("ownerCharID", 0)
+			v:SetYRPString("coownerCharIDs", "")
+			v:SetYRPBool("bool_hasowner", false)
+			YRPFireUnlock(v)
+			YRP_SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_doors", {
+				["keynr"] = -1
+			}, "buildingID = " .. tonumber(v:GetYRPString("buildingID")))
 		end
 	end
-)
 
-net.Receive(
-	"nws_yrp_buyBuilding",
-	function(len, ply)
-		if GetGlobalYRPBool("bool_building_system", false) then
-			local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
-			local _tmpTable = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'")
-			if _tmpTable and _tmpTable[1] and ply:canAfford(_tmpTable[1].buildingprice) then
-				if (_tmpTable[1].ownerCharID == "" or _tmpTable[1].ownerCharID == " ") and tonumber(_tmpTable[1].groupID) <= 0 then
-					ply:addMoney(-_tmpTable[1].buildingprice)
-					YRP_SQL_UPDATE(
-						"yrp_" .. GetMapNameDB() .. "_buildings",
-						{
-							["ownerCharID"] = ply:CharID(),
-							["coownerCharIDs"] = ""
-						}, "uniqueID = '" .. _tmpBuildingID .. "'"
-					)
+	if _tmpTable and _tmpTable[1] then ply:addMoney(_tmpTable[1].buildingprice / 2) end
+end)
 
-					local tabChar = YRP_SQL_SELECT("yrp_characters", "rpname", "uniqueID = " .. ply:CharID())
-					if IsNotNilAndNotFalse(tabChar) then
-						tabChar = tabChar[1]
-					end
+net.Receive("nws_yrp_buyBuilding", function(len, ply)
+	if GetGlobalYRPBool("bool_building_system", false) then
+		local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
+		local _tmpTable = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'")
+		if _tmpTable and _tmpTable[1] and ply:canAfford(_tmpTable[1].buildingprice) then
+			if (_tmpTable[1].ownerCharID == "" or _tmpTable[1].ownerCharID == " ") and tonumber(_tmpTable[1].groupID) <= 0 then
+				ply:addMoney(-_tmpTable[1].buildingprice)
+				YRP_SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", {
+					["ownerCharID"] = ply:CharID(),
+					["coownerCharIDs"] = ""
+				}, "uniqueID = '" .. _tmpBuildingID .. "'")
 
-					if tabChar then
-						for k, v in pairs(GetAllDoors()) do
-							if tonumber(v:GetYRPString("buildingID")) == tonumber(_tmpBuildingID) then
-								v:SetYRPString("ownerRPName", tabChar.rpname)
-								v:SetYRPInt("ownerCharID", tonumber(ply:CharID()))
-								v:SetYRPString("coownerCharIDs", _tmpTable[1].coownerCharIDs)
-								v:SetYRPBool("bool_hasowner", true)
-							end
-						end
-
-						YRP:msg("gm", ply:RPName() .. " has buyed a building")
-					else
-						if tabChar == nil then
-							YRP:msg("gm", ply:RPName() .. " has FAILED to buy a building, CHAR invalid")
-						else
-							YRP:msg("gm", ply:RPName() .. " has FAILED to buy a building, UNKNOWN")
+				local tabChar = YRP_SQL_SELECT("yrp_characters", "rpname", "uniqueID = " .. ply:CharID())
+				if IsNotNilAndNotFalse(tabChar) then tabChar = tabChar[1] end
+				if tabChar then
+					for k, v in pairs(GetAllDoors()) do
+						if tonumber(v:GetYRPString("buildingID")) == tonumber(_tmpBuildingID) then
+							v:SetYRPString("ownerRPName", tabChar.rpname)
+							v:SetYRPInt("ownerCharID", tonumber(ply:CharID()))
+							v:SetYRPString("coownerCharIDs", _tmpTable[1].coownerCharIDs)
+							v:SetYRPBool("bool_hasowner", true)
 						end
 					end
+
+					YRP:msg("gm", ply:RPName() .. " has buyed a building")
 				else
-					YRP:msg("gm", ply:RPName() .. " has already an owner!")
+					if tabChar == nil then
+						YRP:msg("gm", ply:RPName() .. " has FAILED to buy a building, CHAR invalid")
+					else
+						YRP:msg("gm", ply:RPName() .. " has FAILED to buy a building, UNKNOWN")
+					end
 				end
 			else
-				YRP:msg("gm", ply:RPName() .. " has not enough money to buy building")
+				YRP:msg("gm", ply:RPName() .. " has already an owner!")
 			end
 		else
-			YRP:msg("db", "buildings disabled")
+			YRP:msg("gm", ply:RPName() .. " has not enough money to buy building")
 		end
+	else
+		YRP:msg("db", "buildings disabled")
 	end
-)
+end)
 
 YRP:AddNetworkString("nws_yrp_addCoownerBuilding")
-net.Receive(
-	"nws_yrp_addCoownerBuilding",
-	function(len, ply)
-		if GetGlobalYRPBool("bool_building_system", false) then
-			local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
-			local _tmpTable = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'")
-			local newCoowner = tonumber(net.ReadString())
-			if newCoowner == nil then
-				YRP:msg("db", "[addCoownerBuilding] invalid character id")
+net.Receive("nws_yrp_addCoownerBuilding", function(len, ply)
+	if GetGlobalYRPBool("bool_building_system", false) then
+		local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
+		local _tmpTable = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'")
+		local newCoowner = tonumber(net.ReadString())
+		if newCoowner == nil then
+			YRP:msg("db", "[addCoownerBuilding] invalid character id")
+			return
+		end
 
+		if _tmpTable and _tmpTable[1] and tostring(_tmpTable[1].ownerCharID) == tostring(ply:CharID()) then
+			local coownerCharIDs = _tmpTable[1].coownerCharIDs
+			local cotab = string.Explode(",", coownerCharIDs)
+			local newCoTab = {}
+			for i, v in pairs(cotab) do
+				if not strEmpty(v) then table.insert(newCoTab, v) end
+			end
+
+			if table.HasValue(newCoTab, tostring(newCoowner)) then return end
+			if #newCoTab >= COOWNER_MAX then
+				YRP:msg("db", "[addCoownerBuilding] coowner limit reached")
 				return
 			end
 
-			if _tmpTable and _tmpTable[1] and tostring(_tmpTable[1].ownerCharID) == tostring(ply:CharID()) then
-				local coownerCharIDs = _tmpTable[1].coownerCharIDs
-				local cotab = string.Explode(",", coownerCharIDs)
-				local newCoTab = {}
-				for i, v in pairs(cotab) do
-					if not strEmpty(v) then
-						table.insert(newCoTab, v)
-					end
-				end
+			table.insert(newCoTab, newCoowner)
+			coownerCharIDs = table.concat(newCoTab, ",")
+			YRP_SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", {
+				["coownerCharIDs"] = coownerCharIDs
+			}, "uniqueID = '" .. _tmpBuildingID .. "'")
 
-				if table.HasValue(newCoTab, tostring(newCoowner)) then return end
-				if #newCoTab >= COOWNER_MAX then
-					YRP:msg("db", "[addCoownerBuilding] coowner limit reached")
-
-					return
-				end
-
-				table.insert(newCoTab, newCoowner)
-				coownerCharIDs = table.concat(newCoTab, ",")
-				YRP_SQL_UPDATE(
-					"yrp_" .. GetMapNameDB() .. "_buildings",
-					{
-						["coownerCharIDs"] = coownerCharIDs
-					}, "uniqueID = '" .. _tmpBuildingID .. "'"
-				)
-
-				for k, v in pairs(GetAllDoors()) do
-					if tonumber(v:GetYRPString("buildingID")) == tonumber(_tmpBuildingID) then
-						v:SetYRPString("coownerCharIDs", coownerCharIDs)
-					end
-				end
-			else
-				YRP:msg("db", "Building doesn't exists")
+			for k, v in pairs(GetAllDoors()) do
+				if tonumber(v:GetYRPString("buildingID")) == tonumber(_tmpBuildingID) then v:SetYRPString("coownerCharIDs", coownerCharIDs) end
 			end
 		else
-			YRP:msg("db", "buildings disabled")
+			YRP:msg("db", "Building doesn't exists")
 		end
+	else
+		YRP:msg("db", "buildings disabled")
 	end
-)
+end)
 
 YRP:AddNetworkString("nws_yrp_removeAllCoownerBuilding")
-net.Receive(
-	"nws_yrp_removeAllCoownerBuilding",
-	function(len, ply)
-		if GetGlobalYRPBool("bool_building_system", false) then
-			local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
-			local _tmpTable = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'")
-			if _tmpTable and _tmpTable[1] and tostring(_tmpTable[1].ownerCharID) == tostring(ply:CharID()) then
-				YRP_SQL_UPDATE(
-					"yrp_" .. GetMapNameDB() .. "_buildings",
-					{
-						["coownerCharIDs"] = ""
-					}, "uniqueID = '" .. _tmpBuildingID .. "'"
-				)
-			else
-				YRP:msg("db", "Building doesn't exists")
-			end
+net.Receive("nws_yrp_removeAllCoownerBuilding", function(len, ply)
+	if GetGlobalYRPBool("bool_building_system", false) then
+		local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
+		local _tmpTable = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", "uniqueID = '" .. _tmpBuildingID .. "'")
+		if _tmpTable and _tmpTable[1] and tostring(_tmpTable[1].ownerCharID) == tostring(ply:CharID()) then
+			YRP_SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", {
+				["coownerCharIDs"] = ""
+			}, "uniqueID = '" .. _tmpBuildingID .. "'")
 		else
-			YRP:msg("db", "buildings disabled")
+			YRP:msg("db", "Building doesn't exists")
 		end
+	else
+		YRP:msg("db", "buildings disabled")
 	end
-)
+end)
 
-net.Receive(
-	"nws_yrp_setBuildingOwnerGroup",
-	function(len, ply)
-		if not ply:HasAccess("nws_yrp_setBuildingOwnerGroup", true) then return end
-		local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
-		local _tmpGroupID = net.ReadInt(32)
-		YRP_SQL_UPDATE(
-			"yrp_" .. GetMapNameDB() .. "_buildings",
-			{
-				["groupID"] = _tmpGroupID
-			}, "uniqueID = " .. _tmpBuildingID
-		)
+net.Receive("nws_yrp_setBuildingOwnerGroup", function(len, ply)
+	if not ply:HasAccess("nws_yrp_setBuildingOwnerGroup", true) then return end
+	local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
+	local _tmpGroupID = net.ReadInt(32)
+	YRP_SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", {
+		["groupID"] = _tmpGroupID
+	}, "uniqueID = " .. _tmpBuildingID)
 
-		local _tmpGroupName = YRP_SQL_SELECT("yrp_ply_groups", "uniqueID, string_name", "uniqueID = " .. _tmpGroupID)
-		if IsNotNilAndNotFalse(_tmpGroupName) then
-			for k, v in pairs(GetAllDoors()) do
-				if tonumber(v:GetYRPString("buildingID")) == tonumber(_tmpBuildingID) then
-					v:SetYRPInt("ownerGroupUID", _tmpGroupName[1].uniqueID)
-					v:SetYRPString("ownerGroup", _tmpGroupName[1].string_name)
-					v:SetYRPBool("bool_hasowner", true)
-				end
+	local _tmpGroupName = YRP_SQL_SELECT("yrp_ply_groups", "uniqueID, string_name", "uniqueID = " .. _tmpGroupID)
+	if IsNotNilAndNotFalse(_tmpGroupName) then
+		for k, v in pairs(GetAllDoors()) do
+			if tonumber(v:GetYRPString("buildingID")) == tonumber(_tmpBuildingID) then
+				v:SetYRPInt("ownerGroupUID", _tmpGroupName[1].uniqueID)
+				v:SetYRPString("ownerGroup", _tmpGroupName[1].string_name)
+				v:SetYRPBool("bool_hasowner", true)
 			end
 		end
 	end
-)
+end)
 
-net.Receive(
-	"nws_yrp_getBuildingGroups",
-	function(len, ply)
-		local _tmpTable = YRP_SQL_SELECT("yrp_ply_groups", "*", nil)
-		net.Start("nws_yrp_getBuildingGroups")
-		net.WriteTable(_tmpTable)
-		net.Send(ply)
-	end
-)
+net.Receive("nws_yrp_getBuildingGroups", function(len, ply)
+	local _tmpTable = YRP_SQL_SELECT("yrp_ply_groups", "*", nil)
+	net.Start("nws_yrp_getBuildingGroups")
+	net.WriteTable(_tmpTable)
+	net.Send(ply)
+end)
 
-net.Receive(
-	"nws_yrp_changeBuildingPrice",
-	function(len, ply)
-		if not ply:HasAccess("nws_yrp_changeBuildingPrice", true) then return end
-		local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
-		local _tmpNewPrice = net.ReadString()
-		_tmpNewPrice = tonumber(_tmpNewPrice) or 99
-		local _result = YRP_SQL_UPDATE(
-			"yrp_" .. GetMapNameDB() .. "_buildings",
-			{
-				["buildingprice"] = _tmpNewPrice
-			}, "uniqueID = " .. _tmpBuildingID
-		)
+net.Receive("nws_yrp_changeBuildingPrice", function(len, ply)
+	if not ply:HasAccess("nws_yrp_changeBuildingPrice", true) then return end
+	local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
+	local _tmpNewPrice = net.ReadString()
+	_tmpNewPrice = tonumber(_tmpNewPrice) or 99
+	local _result = YRP_SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", {
+		["buildingprice"] = _tmpNewPrice
+	}, "uniqueID = " .. _tmpBuildingID)
 
-		YRPChangeBuildingString(tonumber(_tmpBuildingID), "buildingprice", _tmpNewPrice)
-	end
-)
+	YRPChangeBuildingString(tonumber(_tmpBuildingID), "buildingprice", _tmpNewPrice)
+end)
 
 function YRPSetSecurityLevel(id, sl)
 	if GetGlobalYRPBool("bool_building_system", false) then
@@ -677,45 +554,30 @@ function YRPSetSecurityLevel(id, sl)
 	end
 end
 
-net.Receive(
-	"nws_yrp_changeBuildingSL",
-	function(len, ply)
-		if not ply:HasAccess("nws_yrp_changeBuildingSL", true) then return end
-		local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
-		local _tmpNewSL = net.ReadString()
-		_tmpNewSL = tonumber(_tmpNewSL) or 0
-		if _tmpNewSL > 1000 then
-			_tmpNewSL = 1000
-		end
+net.Receive("nws_yrp_changeBuildingSL", function(len, ply)
+	if not ply:HasAccess("nws_yrp_changeBuildingSL", true) then return end
+	local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
+	local _tmpNewSL = net.ReadString()
+	_tmpNewSL = tonumber(_tmpNewSL) or 0
+	if _tmpNewSL > 1000 then _tmpNewSL = 1000 end
+	local _result = YRP_SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", {
+		["int_securitylevel"] = _tmpNewSL
+	}, "uniqueID = " .. _tmpBuildingID)
 
-		local _result = YRP_SQL_UPDATE(
-			"yrp_" .. GetMapNameDB() .. "_buildings",
-			{
-				["int_securitylevel"] = _tmpNewSL
-			}, "uniqueID = " .. _tmpBuildingID
-		)
-
-		YRPSetSecurityLevel(_tmpBuildingID, _tmpNewSL)
-	end
-)
+	YRPSetSecurityLevel(_tmpBuildingID, _tmpNewSL)
+end)
 
 YRP:AddNetworkString("nws_yrp_canBuildingBeOwned")
-net.Receive(
-	"nws_yrp_canBuildingBeOwned",
-	function(len, ply)
-		if not ply:HasAccess("nws_yrp_canBuildingBeOwned", true) then return end
-		local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
-		local _canbeowned = tonum(net.ReadBool())
-		YRP_SQL_UPDATE(
-			"yrp_" .. GetMapNameDB() .. "_buildings",
-			{
-				["bool_canbeowned"] = _canbeowned
-			}, "uniqueID = " .. _tmpBuildingID
-		)
+net.Receive("nws_yrp_canBuildingBeOwned", function(len, ply)
+	if not ply:HasAccess("nws_yrp_canBuildingBeOwned", true) then return end
+	local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
+	local _canbeowned = tonum(net.ReadBool())
+	YRP_SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", {
+		["bool_canbeowned"] = _canbeowned
+	}, "uniqueID = " .. _tmpBuildingID)
 
-		YRPChangeBuildingBool(tonumber(_tmpBuildingID), "bool_canbeowned", _canbeowned)
-	end
-)
+	YRPChangeBuildingBool(tonumber(_tmpBuildingID), "bool_canbeowned", _canbeowned)
+end)
 
 function YRPHasDoors(id)
 	local _allDoors = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_doors", "*", nil)
@@ -724,7 +586,6 @@ function YRPHasDoors(id)
 			if tonumber(v.buildingID) == tonumber(id) then return true end
 		end
 	end
-
 	return false
 end
 
@@ -732,52 +593,38 @@ function YRPLookForEmptyBuildings()
 	local _allBuildings = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "*", nil)
 	if IsNotNilAndNotFalse(_allBuildings) then
 		for k, v in pairs(_allBuildings) do
-			if not YRPHasDoors(v.uniqueID) then
-				YRP_SQL_DELETE_FROM("yrp_" .. GetMapNameDB() .. "_buildings", "uniqueID = " .. tonumber(v.uniqueID))
-			end
+			if not YRPHasDoors(v.uniqueID) then YRP_SQL_DELETE_FROM("yrp_" .. GetMapNameDB() .. "_buildings", "uniqueID = " .. tonumber(v.uniqueID)) end
 		end
 	end
 end
 
-net.Receive(
-	"nws_yrp_changeBuildingID",
-	function(len, ply)
-		if not ply:HasAccess("nws_yrp_changeBuildingID", true) then return end
-		local _tmpDoor = net.ReadEntity()
-		local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
-		_tmpDoor:SetYRPString("buildingID", _tmpBuildingID)
-		YRP_SQL_UPDATE(
-			"yrp_" .. GetMapNameDB() .. "_doors",
-			{
-				["buildingID"] = tonumber(_tmpBuildingID)
-			}, "uniqueID = " .. _tmpDoor:GetYRPString("uniqueID")
-		)
+net.Receive("nws_yrp_changeBuildingID", function(len, ply)
+	if not ply:HasAccess("nws_yrp_changeBuildingID", true) then return end
+	local _tmpDoor = net.ReadEntity()
+	local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
+	_tmpDoor:SetYRPString("buildingID", _tmpBuildingID)
+	YRP_SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_doors", {
+		["buildingID"] = tonumber(_tmpBuildingID)
+	}, "uniqueID = " .. _tmpDoor:GetYRPString("uniqueID"))
 
-		YRPLookForEmptyBuildings()
+	YRPLookForEmptyBuildings()
+end)
+
+net.Receive("nws_yrp_changeBuildingName", function(len, ply)
+	if not ply:HasAccess("nws_yrp_changeBuildingName", true) then return end
+	local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
+	local _tmpNewName = net.ReadString()
+	if IsNotNilAndNotFalse(_tmpBuildingID) then
+		YRP:msg("db", "renamed Building: " .. _tmpNewName)
+		YRP_SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", {
+			["name"] = _tmpNewName
+		}, "uniqueID = " .. _tmpBuildingID)
+
+		YRPChangeBuildingString(tonumber(_tmpBuildingID), "name", _tmpNewName)
+	else
+		YRP:msg("db", "changeBuildingName failed")
 	end
-)
-
-net.Receive(
-	"nws_yrp_changeBuildingName",
-	function(len, ply)
-		if not ply:HasAccess("nws_yrp_changeBuildingName", true) then return end
-		local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
-		local _tmpNewName = net.ReadString()
-		if IsNotNilAndNotFalse(_tmpBuildingID) then
-			YRP:msg("db", "renamed Building: " .. _tmpNewName)
-			YRP_SQL_UPDATE(
-				"yrp_" .. GetMapNameDB() .. "_buildings",
-				{
-					["name"] = _tmpNewName
-				}, "uniqueID = " .. _tmpBuildingID
-			)
-
-			YRPChangeBuildingString(tonumber(_tmpBuildingID), "name", _tmpNewName)
-		else
-			YRP:msg("db", "changeBuildingName failed")
-		end
-	end
-)
+end)
 
 function YRPChangeBuildingString(uid, net_str, new_str)
 	for i, v in pairs(GetAllDoors()) do
@@ -796,65 +643,49 @@ function YRPChangeBuildingBool(uid, net_str, new_boo)
 	end
 
 	for i, v in pairs(GetAllDoors()) do
-		if uid == tonumber(v:GetYRPString("buildingID")) then
-			v:SetYRPBool(net_str, new_boo)
-		end
+		if uid == tonumber(v:GetYRPString("buildingID")) then v:SetYRPBool(net_str, new_boo) end
 	end
 end
 
-net.Receive(
-	"nws_yrp_changeBuildingHeader",
-	function(len, ply)
-		if not ply:HasAccess("nws_yrp_changeBuildingHeader", true) then
-			YRP:msg("db", ply:Nick() .. " has no rights to change Building.")
-
-			return
-		end
-
-		local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
-		local _tmpNewName = net.ReadString()
-		if IsNotNilAndNotFalse(_tmpBuildingID) then
-			YRP:msg("db", "header Building: " .. _tmpNewName)
-			YRP_SQL_UPDATE(
-				"yrp_" .. GetMapNameDB() .. "_buildings",
-				{
-					["text_header"] = _tmpNewName
-				}, "uniqueID = " .. _tmpBuildingID
-			)
-
-			YRPChangeBuildingString(tonumber(_tmpBuildingID), "text_header", _tmpNewName)
-		else
-			YRP:msg("db", "changeBuildingName failed")
-		end
+net.Receive("nws_yrp_changeBuildingHeader", function(len, ply)
+	if not ply:HasAccess("nws_yrp_changeBuildingHeader", true) then
+		YRP:msg("db", ply:Nick() .. " has no rights to change Building.")
+		return
 	end
-)
 
-net.Receive(
-	"nws_yrp_changeBuildingDescription",
-	function(len, ply)
-		if not ply:HasAccess("nws_yrp_changeBuildingDescription", true) then
-			YRP:msg("db", ply:Nick() .. " has no rights to change Building.")
+	local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
+	local _tmpNewName = net.ReadString()
+	if IsNotNilAndNotFalse(_tmpBuildingID) then
+		YRP:msg("db", "header Building: " .. _tmpNewName)
+		YRP_SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", {
+			["text_header"] = _tmpNewName
+		}, "uniqueID = " .. _tmpBuildingID)
 
-			return
-		end
-
-		local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
-		local _tmpNewName = net.ReadString()
-		if IsNotNilAndNotFalse(_tmpBuildingID) then
-			YRP:msg("db", "description Building: " .. _tmpNewName)
-			YRP_SQL_UPDATE(
-				"yrp_" .. GetMapNameDB() .. "_buildings",
-				{
-					["text_description"] = _tmpNewName
-				}, "uniqueID = " .. _tmpBuildingID
-			)
-
-			YRPChangeBuildingString(tonumber(_tmpBuildingID), "text_description", _tmpNewName)
-		else
-			YRP:msg("db", "changeBuildingName failed")
-		end
+		YRPChangeBuildingString(tonumber(_tmpBuildingID), "text_header", _tmpNewName)
+	else
+		YRP:msg("db", "changeBuildingName failed")
 	end
-)
+end)
+
+net.Receive("nws_yrp_changeBuildingDescription", function(len, ply)
+	if not ply:HasAccess("nws_yrp_changeBuildingDescription", true) then
+		YRP:msg("db", ply:Nick() .. " has no rights to change Building.")
+		return
+	end
+
+	local _tmpBuildingID = YRP_SQL_ID(net.ReadString())
+	local _tmpNewName = net.ReadString()
+	if IsNotNilAndNotFalse(_tmpBuildingID) then
+		YRP:msg("db", "description Building: " .. _tmpNewName)
+		YRP_SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", {
+			["text_description"] = _tmpNewName
+		}, "uniqueID = " .. _tmpBuildingID)
+
+		YRPChangeBuildingString(tonumber(_tmpBuildingID), "text_description", _tmpNewName)
+	else
+		YRP:msg("db", "changeBuildingName failed")
+	end
+end)
 
 function YRPGetDoors()
 	local _tmpTable = YRP_SQL_SELECT("yrp_" .. GetMapNameDB() .. "_buildings", "name, uniqueID", "name != 'Building'")
@@ -863,23 +694,17 @@ function YRPGetDoors()
 			local _doors = 0
 			_tmpDoors = ents.FindByClass("prop_door_rotating")
 			for j, d in pairs(_tmpDoors) do
-				if tonumber(d:GetYRPString("buildingID", "-1")) == tonumber(building.uniqueID) then
-					_doors = _doors + 1
-				end
+				if tonumber(d:GetYRPString("buildingID", "-1")) == tonumber(building.uniqueID) then _doors = _doors + 1 end
 			end
 
 			_tmpFDoors = ents.FindByClass("func_door")
 			for j, d in pairs(_tmpFDoors) do
-				if tonumber(d:GetYRPString("buildingID", "-1")) == tonumber(building.uniqueID) then
-					_doors = _doors + 1
-				end
+				if tonumber(d:GetYRPString("buildingID", "-1")) == tonumber(building.uniqueID) then _doors = _doors + 1 end
 			end
 
 			_tmpFRDoors = ents.FindByClass("func_door_rotating")
 			for j, d in pairs(_tmpFRDoors) do
-				if tonumber(d:GetYRPString("buildingID", "-1")) == tonumber(building.uniqueID) then
-					_doors = _doors + 1
-				end
+				if tonumber(d:GetYRPString("buildingID", "-1")) == tonumber(building.uniqueID) then _doors = _doors + 1 end
 			end
 
 			building.name = building.name
@@ -887,22 +712,16 @@ function YRPGetDoors()
 		end
 	end
 
-	if not IsNotNilAndNotFalse(_tmpTable) then
-		_tmpTable = {}
-	end
-
+	if not IsNotNilAndNotFalse(_tmpTable) then _tmpTable = {} end
 	return _tmpTable
 end
 
-net.Receive(
-	"nws_yrp_getBuildings",
-	function(len, ply)
-		local doors = YRPGetDoors()
-		net.Start("nws_yrp_getBuildings")
-		net.WriteTable(doors)
-		net.Send(ply)
-	end
-)
+net.Receive("nws_yrp_getBuildings", function(len, ply)
+	local doors = YRPGetDoors()
+	net.Start("nws_yrp_getBuildings")
+	net.WriteTable(doors)
+	net.Send(ply)
+end)
 
 function YRPSendBuildingInfo(ply, ent, tab, force)
 	local t = tab or {}
@@ -917,14 +736,12 @@ function getBuildingInfo(ply, door, buid, force)
 	if IsNilOrFalse(buid) or buid == "" then
 		YRP:msg("db", "[getBuildingInfo] -> BuildingID (" .. tostring(buid) .. ") is not valid [Map: " .. GetMapNameDB() .. "]")
 		ply:PrintMessage(HUD_PRINTCENTER, "Building ID is INVALID")
-
 		return
 	end
 
 	if ply:GetYRPBool("bool_" .. "ishobo", false) then
 		YRP:msg("db", "[getBuildingInfo] Is Hobo, not possible to buy as hobo")
 		ply:PrintMessage(HUD_PRINTCENTER, "You are a HOBO, not possible to buy")
-
 		return
 	end
 
@@ -951,12 +768,9 @@ function getBuildingInfo(ply, door, buid, force)
 				tabGroup = tabGroup[1]
 				--owner = _tmpGroTab.string_name
 			else
-				YRP_SQL_UPDATE(
-					"yrp_" .. GetMapNameDB() .. "_buildings",
-					{
-						["groupID"] = 0
-					}, "uniqueID = '" .. buid .. "'"
-				)
+				YRP_SQL_UPDATE("yrp_" .. GetMapNameDB() .. "_buildings", {
+					["groupID"] = 0
+				}, "uniqueID = '" .. buid .. "'")
 
 				YRP:msg("db", "[getBuildingInfo] group dont exists.")
 				tabGroup = {}
@@ -968,7 +782,6 @@ function getBuildingInfo(ply, door, buid, force)
 		tab["O"] = tabOwner
 		tab["G"] = tabGroup
 		YRPSendBuildingInfo(ply, door, tab, force)
-
 		return
 	else
 		ply:PrintMessage(HUD_PRINTCENTER, "Building not found in Database")
@@ -976,27 +789,18 @@ function getBuildingInfo(ply, door, buid, force)
 	end
 end
 
-net.Receive(
-	"nws_yrp_getBuildingInfo",
-	function(len, ply)
-		local door = net.ReadEntity()
-		local buid = door:GetYRPString("buildingID", "")
-		getBuildingInfo(ply, door, buid, false)
-	end
-)
+net.Receive("nws_yrp_getBuildingInfo", function(len, ply)
+	local door = net.ReadEntity()
+	local buid = door:GetYRPString("buildingID", "")
+	getBuildingInfo(ply, door, buid, false)
+end)
 
 YRP:AddNetworkString("nws_yrp_update_lockdown_buildings")
-net.Receive(
-	"nws_yrp_update_lockdown_buildings",
-	function(len, ply)
-		if not ply:HasAccess("nws_yrp_update_lockdown_buildings", true) then return end
-		local buid = YRP_SQL_ID(net.ReadString())
-		local checked = net.ReadBool()
-		YRP_SQL_UPDATE(
-			DATABASE_NAME_BUILDINGS,
-			{
-				["bool_lockdown"] = tonum(checked)
-			}, "uniqueID = '" .. buid .. "'"
-		)
-	end
-)
+net.Receive("nws_yrp_update_lockdown_buildings", function(len, ply)
+	if not ply:HasAccess("nws_yrp_update_lockdown_buildings", true) then return end
+	local buid = YRP_SQL_ID(net.ReadString())
+	local checked = net.ReadBool()
+	YRP_SQL_UPDATE(DATABASE_NAME_BUILDINGS, {
+		["bool_lockdown"] = tonum(checked)
+	}, "uniqueID = '" .. buid .. "'")
+end)

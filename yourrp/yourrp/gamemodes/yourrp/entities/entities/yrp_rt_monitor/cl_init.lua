@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 include("shared.lua")
 local renw = 240
 local renh = 200
@@ -30,13 +30,9 @@ function ENT:Draw()
 			local camang = camera:GetAngles()
 			self.map_RT = GetRenderTarget("YRP_RT_CAM_" .. index, tarw, tarh, true)
 			if self.map_RT_mat == nil then
-				self.map_RT_mat = CreateMaterial(
-					"YRP_RT_CAM_" .. index,
-					"UnlitGeneric",
-					{
-						["$basetexture"] = "YRP_RT_CAM_" .. index
-					}
-				)
+				self.map_RT_mat = CreateMaterial("YRP_RT_CAM_" .. index, "UnlitGeneric", {
+					["$basetexture"] = "YRP_RT_CAM_" .. index
+				})
 			end
 
 			self.delay = self.delay or 0

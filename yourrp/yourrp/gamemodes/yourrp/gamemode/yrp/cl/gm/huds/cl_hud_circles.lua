@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local HP = Material("vgui/material/icon_favorite.png")
 local AR = Material("vgui/material/icon_security.png")
 local HU = Material("vgui/material/icon_restaurant.png")
@@ -16,39 +16,30 @@ function drawC(x, y, radius, seg, color)
 	surface.SetDrawColor(color)
 	draw.NoTexture()
 	local cir = {}
-	table.insert(
-		cir,
-		{
-			x = x,
-			y = y,
-			u = 0.5,
-			v = 0.5
-		}
-	)
+	table.insert(cir, {
+		x = x,
+		y = y,
+		u = 0.5,
+		v = 0.5
+	})
 
 	for i = 0, seg do
 		local a = math.rad((i / seg) * -360)
-		table.insert(
-			cir,
-			{
-				x = x + math.sin(a) * radius,
-				y = y + math.cos(a) * radius,
-				u = math.sin(a) / 2 + 0.5,
-				v = math.cos(a) / 2 + 0.5
-			}
-		)
-	end
-
-	local a = math.rad(0) -- This is needed for non absolute segment counts
-	table.insert(
-		cir,
-		{
+		table.insert(cir, {
 			x = x + math.sin(a) * radius,
 			y = y + math.cos(a) * radius,
 			u = math.sin(a) / 2 + 0.5,
 			v = math.cos(a) / 2 + 0.5
-		}
-	)
+		})
+	end
+
+	local a = math.rad(0) -- This is needed for non absolute segment counts
+	table.insert(cir, {
+		x = x + math.sin(a) * radius,
+		y = y + math.cos(a) * radius,
+		u = math.sin(a) / 2 + 0.5,
+		v = math.cos(a) / 2 + 0.5
+	})
 
 	surface.DrawPoly(cir)
 end
@@ -103,10 +94,7 @@ function HUDCirclesDrawIcon(ele, icon, perc, text)
 		end
 
 		local fontsize = lply:HudValue(ele, "TS")
-		if fontsize <= 0 then
-			fontsize = 14
-		end
-
+		if fontsize <= 0 then fontsize = 14 end
 		local font = "Y_" .. fontsize .. "_500"
 		draw.SimpleText(text or perc * 100 .. "%", font, x + size / 2, y + size / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 2, Color(0, 0, 0, 255))
 	end
@@ -120,10 +108,7 @@ function HUDCirclesDrawText(ele, text)
 		local x = lply:HudValue(ele, "POSI_X")
 		local y = lply:HudValue(ele, "POSI_Y")
 		local fontsize = lply:HudValue(ele, "TS")
-		if fontsize <= 0 then
-			fontsize = 14
-		end
-
+		if fontsize <= 0 then fontsize = 14 end
 		local font = "Y_" .. fontsize .. "_500"
 		local ax = lply:HudValue(ele, "AX")
 		local ay = lply:HudValue(ele, "AY")
@@ -148,14 +133,8 @@ function HUDCircles()
 			HUDCirclesDrawIcon("XP", XP, lply:XP() / lply:GetMaxXP(), YRP:trans("LID_levelx", tab) .. " ( " .. lply:XP() .. "%)")
 		end
 
-		if lply:Battery() < 100 then
-			HUDCirclesDrawIcon("BA", BA, lply:Battery() / lply:GetMaxBattery())
-		end
-
-		if lply:CastTimeCurrent() / lply:CastTimeMax() > 0 then
-			HUDCirclesDrawIcon("CA", CA, lply:CastTimeCurrent() / lply:CastTimeMax(), lply:GetCastName() .. " ( " .. math.Round(lply:CastTimeCurrent() / lply:CastTimeMax() * 100, 0) .. "%)")
-		end
-
+		if lply:Battery() < 100 then HUDCirclesDrawIcon("BA", BA, lply:Battery() / lply:GetMaxBattery()) end
+		if lply:CastTimeCurrent() / lply:CastTimeMax() > 0 then HUDCirclesDrawIcon("CA", CA, lply:CastTimeCurrent() / lply:CastTimeMax(), lply:GetCastName() .. " ( " .. math.Round(lply:CastTimeCurrent() / lply:CastTimeMax() * 100, 0) .. "%)") end
 		HUDCirclesDrawText("RO", lply:GetRoleName())
 		HUDCirclesDrawText("NA", lply:RPName())
 		HUDCirclesDrawText("CR", os.date("%H:%M", os.time()))
@@ -168,42 +147,24 @@ function HUDCircles()
 			local maxclip1 = wep:GetMaxClip1()
 			local ammo1 = lply:GetAmmoCount(wep:GetPrimaryAmmoType())
 			local am1t = ""
-			if clip1 and clip1 > -1 then
-				am1t = am1t .. clip1 .. "/" .. maxclip1
-			end
-
+			if clip1 and clip1 > -1 then am1t = am1t .. clip1 .. "/" .. maxclip1 end
 			if ammo1 and ammo1 > -1 then
-				if am1t ~= "" then
-					am1t = am1t .. "|"
-				end
-
+				if am1t ~= "" then am1t = am1t .. "|" end
 				am1t = am1t .. ammo1
 			end
 
-			if not strEmpty(am1t) then
-				HUDCirclesDrawIcon("WP", WP, clip1 / maxclip1, am1t)
-			end
-
+			if not strEmpty(am1t) then HUDCirclesDrawIcon("WP", WP, clip1 / maxclip1, am1t) end
 			local clip2 = wep:Clip2()
 			local maxclip2 = wep:GetMaxClip2()
 			local ammo2 = lply:GetAmmoCount(wep:GetSecondaryAmmoType())
 			local am2t = ""
-			if clip2 and clip2 > -1 then
-				am2t = am2t .. clip2 .. "/" .. maxclip2
-			end
-
+			if clip2 and clip2 > -1 then am2t = am2t .. clip2 .. "/" .. maxclip2 end
 			if ammo2 and ammo2 > -1 then
-				if am2t ~= "" then
-					am2t = am2t .. "|"
-				end
-
+				if am2t ~= "" then am2t = am2t .. "|" end
 				am2t = am2t .. ammo2
 			end
 
-			if not strEmpty(am2t) then
-				HUDCirclesDrawIcon("WS", WS, clip2 / maxclip2, am2t)
-			end
-
+			if not strEmpty(am2t) then HUDCirclesDrawIcon("WS", WS, clip2 / maxclip2, am2t) end
 			HUDCirclesDrawText("WN", wep:GetPrintName())
 		end
 
@@ -217,9 +178,4 @@ function HUDCircles()
 	end
 end
 
-timer.Simple(
-	1,
-	function()
-		hook.Add("HUDPaint", "yrp_hud_design_Circles", HUDCircles)
-	end
-)
+timer.Simple(1, function() hook.Add("HUDPaint", "yrp_hud_design_Circles", HUDCircles) end)

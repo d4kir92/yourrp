@@ -1,16 +1,9 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local _load = 0
-timer.Create(
-	"_load",
-	1,
-	0,
-	function()
-		_load = _load + 25
-		if _load > 100 then
-			_load = 0
-		end
-	end
-)
+timer.Create("_load", 1, 0, function()
+	_load = _load + 25
+	if _load > 100 then _load = 0 end
+end)
 
 function drawBattery(x)
 	local y = ctrb(6)
@@ -51,22 +44,16 @@ function appPosition(parent, x, y, nr)
 	local _tmp = YRPCreateD("DPanel", parent, ctrb(64), ctrb(64), x, y)
 	_tmp.nr = nr
 	function _tmp:Paint(pw, ph)
-		if self:IsHovered() then
-			draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 1))
-		end
+		if self:IsHovered() then draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 1)) end
 	end
 
-	_tmp:Receiver(
-		"APP",
-		function(receiver, tableOfDroppedPanels, isDropped, menuIndex, mouseX, mouseY)
-			if isDropped and receiver:IsHovered() then
-				local _x, _y = receiver:GetPos()
-				tableOfDroppedPanels[1]:SetPos(_x + YRP:ctr(1), _y + YRP:ctr(1))
-				changeAppPosition(tableOfDroppedPanels[1].tbl.ClassName, receiver.nr)
-			end
-		end, {}
-	)
-
+	_tmp:Receiver("APP", function(receiver, tableOfDroppedPanels, isDropped, menuIndex, mouseX, mouseY)
+		if isDropped and receiver:IsHovered() then
+			local _x, _y = receiver:GetPos()
+			tableOfDroppedPanels[1]:SetPos(_x + YRP:ctr(1), _y + YRP:ctr(1))
+			changeAppPosition(tableOfDroppedPanels[1].tbl.ClassName, receiver.nr)
+		end
+	end, {})
 	return _tmp
 end
 
@@ -92,10 +79,7 @@ function createSmartphone(parent, w, h, x, y)
 					_appName = _name
 				end
 
-				if #_appName > 8 then
-					_appName = string.sub(_appName, 1, 8) .. "..."
-				end
-
+				if #_appName > 8 then _appName = string.sub(_appName, 1, 8) .. "..." end
 				draw.SimpleTextOutlined(_appName, "Y_14_500", ctrb(40) + _x * ctrb(64) + _x * ctrb(40) + ctrb(64 / 2), ctrb(40) + ctrb(40) + _y * ctrb(64) + _y * ctrb(40 + 30) + ctrb(64 + 20), Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, ctrb(1), Color(0, 0, 0, 255))
 			end
 		end
@@ -236,6 +220,5 @@ function createSmartphone(parent, w, h, x, y)
 	_tmp.display:HomeScreen()
 	_tmp:MakePopup()
 	input.SetCursorPos(_tmp.tbl.x + _tmp.tbl.w / 2, _tmp.tbl.y + _tmp.tbl.h / 2)
-
 	return _tmp
 end

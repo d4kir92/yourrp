@@ -1,26 +1,7 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local DATABASE_NAME = "yrp_inventory_storages"
-hook.Add(
-	"YRP_SQLDBREADY_GENERAL_DB",
-	"yrp_inventory_storages",
-	function()
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_storage_size", "INT DEFAULT 1")
-	end
-)
-
-hook.Add(
-	"YRP_SQLDBREADY_GENERAL_UPDATE",
-	"yrp_inventory_storages",
-	function()
-		timer.Simple(
-			3,
-			function()
-				YRPCreateCharacterStorages(false)
-			end
-		)
-	end
-)
-
+hook.Add("YRP_SQLDBREADY_GENERAL_DB", "yrp_inventory_storages", function() YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_storage_size", "INT DEFAULT 1") end)
+hook.Add("YRP_SQLDBREADY_GENERAL_UPDATE", "yrp_inventory_storages", function() timer.Simple(3, function() YRPCreateCharacterStorages(false) end) end)
 --YRP_SQL_DROP_TABLE(DATABASE_NAME)
 function CreateStorage(size, inv)
 	if not IsNotNilAndNotFalse(size) then return end
@@ -33,7 +14,6 @@ function CreateStorage(size, inv)
 			for i = 1, size do
 				CreateSlot(last.uniqueID, inv)
 			end
-
 			return last
 		else
 			YRP:msg("note", "Failed to get last storage: " .. tostring(last))
@@ -50,13 +30,11 @@ function GetCharacterStorage(ply, retry)
 		local storage = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. chaTab.int_storageID .. "'")
 		if IsNotNilAndNotFalse(storage) then
 			storage = storage[1]
-
 			return storage
 		else
 			if retry == false then
 				retry = true
 				YRPCreateCharacterStorages(true)
-
 				return GetCharacterStorage(ply, retry)
 			else
 				ply:PrintMessage(HUD_PRINTCENTER, "No Storage for this Character (Inventory)")
@@ -67,15 +45,11 @@ function GetCharacterStorage(ply, retry)
 
 	ply:PrintMessage(HUD_PRINTCENTER, "Failed to Get Storage for this Character (Inventory)")
 	YRP:msg("note", "[GetCharacterStorage] (Inventory) FAILED!")
-
 	return {}
 end
 
 function YRPCreateCharacterStorages(retry)
-	if retry then
-		YRP:msg("note", "[CreateCharacterStorages] (Inventory) RETRY!")
-	end
-
+	if retry then YRP:msg("note", "[CreateCharacterStorages] (Inventory) RETRY!") end
 	local chars = YRP_SQL_SELECT("yrp_characters", "*", nil)
 	if IsNotNilAndNotFalse(chars) then
 		for _, char in pairs(chars) do
@@ -88,12 +62,9 @@ function YRPCreateCharacterStorages(retry)
 					if IsNotNilAndNotFalse(slots) and (#slots < 5 or #slots > 5) then
 						YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. char.int_storageID .. "'")
 						YRP_SQL_DELETE_FROM("yrp_inventory_slots", "int_storageID = '" .. tab.uniqueID .. "'")
-						YRP_SQL_UPDATE(
-							"yrp_characters",
-							{
-								["int_storageID"] = 0
-							}, "uniqueID = '" .. char.uniqueID .. "'"
-						)
+						YRP_SQL_UPDATE("yrp_characters", {
+							["int_storageID"] = 0
+						}, "uniqueID = '" .. char.uniqueID .. "'")
 					end
 				end
 			end
@@ -103,23 +74,17 @@ function YRPCreateCharacterStorages(retry)
 				YRP:msg("db", "YRPCreateCharacterStorages empty or 0")
 				local bagsStorage = CreateStorage(5, true)
 				if IsNotNilAndNotFalse(bagsStorage) then
-					YRP_SQL_UPDATE(
-						"yrp_characters",
-						{
-							["int_storageID"] = bagsStorage.uniqueID
-						}, "uniqueID = '" .. char.uniqueID .. "'"
-					)
+					YRP_SQL_UPDATE("yrp_characters", {
+						["int_storageID"] = bagsStorage.uniqueID
+					}, "uniqueID = '" .. char.uniqueID .. "'")
 				end
 			elseif not IsNotNilAndNotFalse(YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. char.int_storageID .. "'")) then
 				YRP:msg("db", "YRPCreateCharacterStorages WRONG")
 				local bagsStorage = CreateStorage(5, true)
 				if IsNotNilAndNotFalse(bagsStorage) then
-					YRP_SQL_UPDATE(
-						"yrp_characters",
-						{
-							["int_storageID"] = bagsStorage.uniqueID
-						}, "uniqueID = '" .. char.uniqueID .. "'"
-					)
+					YRP_SQL_UPDATE("yrp_characters", {
+						["int_storageID"] = bagsStorage.uniqueID
+					}, "uniqueID = '" .. char.uniqueID .. "'")
 				end
 			end
 		end
@@ -128,38 +93,31 @@ end
 
 -- Networking
 YRP:AddNetworkString("nws_yrp_get_inventory")
-net.Receive(
-	"nws_yrp_get_inventory",
-	function(len, ply)
-		local storage = GetCharacterStorage(ply)
-		if IsNotNilAndNotFalse(storage) and storage.uniqueID ~= nil then
-			local nettab = {}
-			local es = ents.FindInSphere(ply:GetPos(), 100)
-			for i, ent in pairs(es) do
-				if not ent:IsPlayer() and not ent:IsWorld() and not ent:IsRagdoll() and not ent:IsNPC() and not ent.PermaProps and not ent:CreatedByMap() and not ent:GetOwner():IsPlayer() and not strEmpty(ent:GetModel()) and ent:GetModel() ~= "models/error.mdl" and not ent:IsVehicle() then
-					ent.text_type = ent.text_type or "item"
-					if not InventoryBlacklisted(ent:GetClass()) and not InventoryBlacklisted(ent:GetModel()) and ent.text_type ~= "chest" then
-						table.insert(nettab, ent)
-					end
-				end
+net.Receive("nws_yrp_get_inventory", function(len, ply)
+	local storage = GetCharacterStorage(ply)
+	if IsNotNilAndNotFalse(storage) and storage.uniqueID ~= nil then
+		local nettab = {}
+		local es = ents.FindInSphere(ply:GetPos(), 100)
+		for i, ent in pairs(es) do
+			if not ent:IsPlayer() and not ent:IsWorld() and not ent:IsRagdoll() and not ent:IsNPC() and not ent.PermaProps and not ent:CreatedByMap() and not ent:GetOwner():IsPlayer() and not strEmpty(ent:GetModel()) and ent:GetModel() ~= "models/error.mdl" and not ent:IsVehicle() then
+				ent.text_type = ent.text_type or "item"
+				if not InventoryBlacklisted(ent:GetClass()) and not InventoryBlacklisted(ent:GetModel()) and ent.text_type ~= "chest" then table.insert(nettab, ent) end
 			end
-
-			net.Start("nws_yrp_get_inventory")
-			net.WriteString(storage.uniqueID)
-			net.WriteTable(nettab)
-			net.Send(ply)
-		else
-			ply:PrintMessage(HUD_PRINTCENTER, "Failed to Get Storage-Info for this Character (Inventory)")
-			YRP:msg("note", "[get_inventory] No GetCharacterStorage")
 		end
-	end
-)
 
+		net.Start("nws_yrp_get_inventory")
+		net.WriteString(storage.uniqueID)
+		net.WriteTable(nettab)
+		net.Send(ply)
+	else
+		ply:PrintMessage(HUD_PRINTCENTER, "Failed to Get Storage-Info for this Character (Inventory)")
+		YRP:msg("note", "[get_inventory] No GetCharacterStorage")
+	end
+end)
 
 function YRPStorageBelongsToOtherPlayer(ply, storageID)
 	storageID = tonumber(storageID)
 	if storageID == nil then return true end
-
 	-- Resolve bag-in-inventory: the storage is a bag → get the bag item's slot storage
 	local resolvedStorageID = storageID
 	local bagItem = YRP_SQL_SELECT("yrp_inventory_items", "int_slotID", "int_storageID = '" .. storageID .. "'")
@@ -167,19 +125,15 @@ function YRPStorageBelongsToOtherPlayer(ply, storageID)
 		local bagSlotID = tonumber(bagItem[1].int_slotID)
 		if bagSlotID == nil then return true end
 		local bagSlot = YRP_SQL_SELECT("yrp_inventory_slots", "int_storageID", "uniqueID = '" .. bagSlotID .. "'")
-		if IsNotNilAndNotFalse(bagSlot) then
-			resolvedStorageID = tonumber(bagSlot[1].int_storageID)
-		end
+		if IsNotNilAndNotFalse(bagSlot) then resolvedStorageID = tonumber(bagSlot[1].int_storageID) end
 	end
 
 	-- Check if resolvedStorageID is any player character's main storage
 	local charWithStorage = YRP_SQL_SELECT("yrp_characters", "uniqueID", "int_storageID = '" .. resolvedStorageID .. "'")
 	if not IsNotNilAndNotFalse(charWithStorage) then return false end
-
 	-- It belongs to some character — is it the requester?
 	local myChar = ply:YRPGetCharacterTable()
 	if not IsNotNilAndNotFalse(myChar) then return true end
-
 	return tostring(charWithStorage[1].uniqueID) ~= tostring(myChar.uniqueID)
 end
 
@@ -188,7 +142,6 @@ function YRPItemBelongsToOtherPlayer(ply, item)
 	if slotID == nil then return true end
 	local itemSlot = YRP_SQL_SELECT("yrp_inventory_slots", "int_storageID", "uniqueID = '" .. slotID .. "'")
 	if not IsNotNilAndNotFalse(itemSlot) then return false end
-
 	return YRPStorageBelongsToOtherPlayer(ply, itemSlot[1].int_storageID)
 end
 
@@ -207,9 +160,7 @@ function OpenStorage(ply, storageID)
 			local invslots = YRP_SQL_SELECT("yrp_inventory_slots", "*", "int_storageID = '" .. invstor.uniqueID .. "'")
 			for i, v in pairs(invslots) do
 				v.uniqueID = tonumber(v.uniqueID)
-				if item.int_slotID == v.uniqueID then
-					isinv = true
-				end
+				if item.int_slotID == v.uniqueID then isinv = true end
 			end
 		end
 

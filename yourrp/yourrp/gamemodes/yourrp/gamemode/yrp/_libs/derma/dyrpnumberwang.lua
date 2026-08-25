@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local PANEL = {}
 function PANEL:Init()
 	self.header = YRPCreateD("DPanel", self, self:GetWide(), YRP:ctr(50), 0, 0)
@@ -19,21 +19,10 @@ function PANEL:Init()
 end
 
 function PANEL:Think()
-	if self.header:GetWide() ~= self:GetWide() then
-		self.header:SetWide(self:GetWide())
-	end
-
-	if self.numberwang:GetWide() ~= self:GetWide() then
-		self.numberwang:SetWide(self:GetWide())
-	end
-
-	if self.numberwang:GetTall() ~= self:GetTall() - self.header:GetTall() then
-		self.numberwang:SetTall(self:GetTall() - self.header:GetTall())
-	end
-
-	if self.numberwang:GetPos() ~= self:GetPos() + YRP:ctr(50) then
-		self.numberwang:SetPos(0, self:GetPos() + YRP:ctr(50))
-	end
+	if self.header:GetWide() ~= self:GetWide() then self.header:SetWide(self:GetWide()) end
+	if self.numberwang:GetWide() ~= self:GetWide() then self.numberwang:SetWide(self:GetWide()) end
+	if self.numberwang:GetTall() ~= self:GetTall() - self.header:GetTall() then self.numberwang:SetTall(self:GetTall() - self.header:GetTall()) end
+	if self.numberwang:GetPos() ~= self:GetPos() + YRP:ctr(50) then self.numberwang:SetPos(0, self:GetPos() + YRP:ctr(50)) end
 end
 
 function PANEL:Paint(w, h)

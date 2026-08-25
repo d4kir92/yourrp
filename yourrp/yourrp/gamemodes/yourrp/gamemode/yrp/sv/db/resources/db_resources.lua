@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 -- #Resources #Content #Addons
@@ -67,9 +67,4 @@ function YRPWorkshopDownload()
 	end
 end
 
-timer.Simple(
-	0,
-	function()
-		YRPWorkshopDownload()
-	end
-)
+timer.Simple(0, function() YRPWorkshopDownload() end)

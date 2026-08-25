@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local _tostring = tostring
 local _type = type
 local _table = table
@@ -6,13 +6,11 @@ local _IsValid = IsValid
 -- #ERROR #BUGS
 function IsNilOrFalse(obj)
 	if obj == nil or obj == false then return true end
-
 	return false
 end
 
 function IsNotNilAndNotFalse(obj)
 	if obj ~= nil and obj ~= false then return true end
-
 	return false
 end
 
@@ -20,10 +18,7 @@ function YRPWORKED(obj, name, _silence)
 	if obj ~= nil and obj ~= false then
 		return true
 	else
-		if not _silence then
-			YRP:msg("note", "NOT WORKED: " .. _tostring(obj) .. " " .. _tostring(name))
-		end
-
+		if not _silence then YRP:msg("note", "NOT WORKED: " .. _tostring(obj) .. " " .. _tostring(name)) end
 		return false
 	end
 end
@@ -33,7 +28,6 @@ function YRPEntityAlive(obj)
 	if _type(obj) == "number" then return false end
 	if _type(obj) == "string" then return false end
 	if obj == nil or obj == NULL or _tostring(obj) == "[NULL Entity]" then return false end
-
 	return _IsValid(obj)
 end
 
@@ -49,6 +43,5 @@ function YRPPanelAlive(obj, from)
 	end
 
 	if obj == nil or obj == NULL or _tostring(obj) == "[NULL Panel]" then return false end
-
 	return _IsValid(obj)
 end

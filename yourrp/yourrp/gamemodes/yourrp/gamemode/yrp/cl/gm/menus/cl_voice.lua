@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local colr = Color(170, 0, 0)
 local colg = Color(0, 200, 0)
 local colb = Color(100, 100, 255)
@@ -68,9 +68,7 @@ function YRPVoiceChannel(edit, uid)
 
 	if edit and GetGlobalYRPTable("yrp_voice_channels")[uid] then
 		hear = GetGlobalYRPTable("yrp_voice_channels")[uid].int_hear
-		if hear then
-			line.cb:SetChecked(hear)
-		end
+		if hear then line.cb:SetChecked(hear) end
 	end
 
 	win.defaults:AddItem(line)
@@ -85,36 +83,31 @@ function YRPVoiceChannel(edit, uid)
 
 	win.augs = YRPCreateD("DPanelList", CON, YRP:ctr(760), YRP:ctr(200), YRP:ctr(0), YRP:ctr(200))
 	win.augs:EnableVerticalScrollbar()
-	net.Receive(
-		"nws_yrp_vm_get_active_usergroups",
-		function(len)
-			local taugs = net.ReadTable()
-			for i, ug in pairs(taugs) do
-				local vline = YRPCreateD("DPanel", nil, YRP:ctr(40), YRP:ctr(40), 0, 0)
-				function vline:Paint(pw, ph)
-					draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP:ctr(40 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-				end
+	net.Receive("nws_yrp_vm_get_active_usergroups", function(len)
+		local taugs = net.ReadTable()
+		for i, ug in pairs(taugs) do
+			local vline = YRPCreateD("DPanel", nil, YRP:ctr(40), YRP:ctr(40), 0, 0)
+			function vline:Paint(pw, ph)
+				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP:ctr(40 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			end
 
-				vline.cb = YRPCreateD("DCheckBox", vline, YRP:ctr(40), YRP:ctr(40), 0, 0)
-				function vline.cb:OnChange(bVal)
-					if bVal then
-						table.insert(augs, ug.string_name)
-					else
-						table.RemoveByValue(augs, ug.string_name)
-					end
-				end
-
-				if edit and GetGlobalYRPTable("yrp_voice_channels")[uid] and GetGlobalYRPTable("yrp_voice_channels")[uid]["string_active_usergroups"][ug.string_name] then
-					vline.cb:SetChecked(true)
+			vline.cb = YRPCreateD("DCheckBox", vline, YRP:ctr(40), YRP:ctr(40), 0, 0)
+			function vline.cb:OnChange(bVal)
+				if bVal then
 					table.insert(augs, ug.string_name)
-				end
-
-				if YRPPanelAlive(win) and YRPPanelAlive(win.augs) then
-					win.augs:AddItem(vline)
+				else
+					table.RemoveByValue(augs, ug.string_name)
 				end
 			end
+
+			if edit and GetGlobalYRPTable("yrp_voice_channels")[uid] and GetGlobalYRPTable("yrp_voice_channels")[uid]["string_active_usergroups"][ug.string_name] then
+				vline.cb:SetChecked(true)
+				table.insert(augs, ug.string_name)
+			end
+
+			if YRPPanelAlive(win) and YRPPanelAlive(win.augs) then win.augs:AddItem(vline) end
 		end
-	)
+	end)
 
 	net.Start("nws_yrp_vm_get_active_usergroups")
 	net.SendToServer()
@@ -128,36 +121,31 @@ function YRPVoiceChannel(edit, uid)
 
 	win.agrps = YRPCreateD("DPanelList", CON, YRP:ctr(760), YRP:ctr(200), YRP:ctr(0), YRP:ctr(500))
 	win.agrps:EnableVerticalScrollbar()
-	net.Receive(
-		"nws_yrp_vm_get_active_groups",
-		function(len)
-			local tagrps = net.ReadTable()
-			for i, ug in pairs(tagrps) do
-				local vline = YRPCreateD("DPanel", nil, YRP:ctr(40), YRP:ctr(40), 0, 0)
-				function vline:Paint(pw, ph)
-					draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP:ctr(40 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-				end
+	net.Receive("nws_yrp_vm_get_active_groups", function(len)
+		local tagrps = net.ReadTable()
+		for i, ug in pairs(tagrps) do
+			local vline = YRPCreateD("DPanel", nil, YRP:ctr(40), YRP:ctr(40), 0, 0)
+			function vline:Paint(pw, ph)
+				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP:ctr(40 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			end
 
-				vline.cb = YRPCreateD("DCheckBox", vline, YRP:ctr(40), YRP:ctr(40), 0, 0)
-				function vline.cb:OnChange(bVal)
-					if bVal then
-						table.insert(agrps, ug.uniqueID)
-					else
-						table.RemoveByValue(agrps, ug.uniqueID)
-					end
-				end
-
-				if edit and GetGlobalYRPTable("yrp_voice_channels")[uid] and GetGlobalYRPTable("yrp_voice_channels")[uid]["string_active_groups"][tonumber(ug.uniqueID)] then
-					vline.cb:SetChecked(true)
+			vline.cb = YRPCreateD("DCheckBox", vline, YRP:ctr(40), YRP:ctr(40), 0, 0)
+			function vline.cb:OnChange(bVal)
+				if bVal then
 					table.insert(agrps, ug.uniqueID)
-				end
-
-				if YRPPanelAlive(win) and YRPPanelAlive(win.agrps) then
-					win.agrps:AddItem(vline)
+				else
+					table.RemoveByValue(agrps, ug.uniqueID)
 				end
 			end
+
+			if edit and GetGlobalYRPTable("yrp_voice_channels")[uid] and GetGlobalYRPTable("yrp_voice_channels")[uid]["string_active_groups"][tonumber(ug.uniqueID)] then
+				vline.cb:SetChecked(true)
+				table.insert(agrps, ug.uniqueID)
+			end
+
+			if YRPPanelAlive(win) and YRPPanelAlive(win.agrps) then win.agrps:AddItem(vline) end
 		end
-	)
+	end)
 
 	net.Start("nws_yrp_vm_get_active_groups")
 	net.SendToServer()
@@ -171,36 +159,31 @@ function YRPVoiceChannel(edit, uid)
 
 	win.arols = YRPCreateD("DPanelList", CON, YRP:ctr(760), YRP:ctr(200), YRP:ctr(0), YRP:ctr(800))
 	win.arols:EnableVerticalScrollbar()
-	net.Receive(
-		"nws_yrp_vm_get_active_roles",
-		function(len)
-			local tarols = net.ReadTable()
-			for i, ug in pairs(tarols) do
-				local vline = YRPCreateD("DPanel", nil, YRP:ctr(40), YRP:ctr(40), 0, 0)
-				function vline:Paint(pw, ph)
-					draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP:ctr(40 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-				end
+	net.Receive("nws_yrp_vm_get_active_roles", function(len)
+		local tarols = net.ReadTable()
+		for i, ug in pairs(tarols) do
+			local vline = YRPCreateD("DPanel", nil, YRP:ctr(40), YRP:ctr(40), 0, 0)
+			function vline:Paint(pw, ph)
+				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP:ctr(40 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			end
 
-				vline.cb = YRPCreateD("DCheckBox", vline, YRP:ctr(40), YRP:ctr(40), 0, 0)
-				function vline.cb:OnChange(bVal)
-					if bVal then
-						table.insert(arols, ug.uniqueID)
-					else
-						table.RemoveByValue(arols, ug.uniqueID)
-					end
-				end
-
-				if edit and GetGlobalYRPTable("yrp_voice_channels")[uid] and GetGlobalYRPTable("yrp_voice_channels")[uid]["string_active_roles"][tonumber(ug.uniqueID)] then
-					vline.cb:SetChecked(true)
+			vline.cb = YRPCreateD("DCheckBox", vline, YRP:ctr(40), YRP:ctr(40), 0, 0)
+			function vline.cb:OnChange(bVal)
+				if bVal then
 					table.insert(arols, ug.uniqueID)
-				end
-
-				if YRPPanelAlive(win) and YRPPanelAlive(win.arols) then
-					win.arols:AddItem(vline)
+				else
+					table.RemoveByValue(arols, ug.uniqueID)
 				end
 			end
+
+			if edit and GetGlobalYRPTable("yrp_voice_channels")[uid] and GetGlobalYRPTable("yrp_voice_channels")[uid]["string_active_roles"][tonumber(ug.uniqueID)] then
+				vline.cb:SetChecked(true)
+				table.insert(arols, ug.uniqueID)
+			end
+
+			if YRPPanelAlive(win) and YRPPanelAlive(win.arols) then win.arols:AddItem(vline) end
 		end
-	)
+	end)
 
 	net.Start("nws_yrp_vm_get_active_roles")
 	net.SendToServer()
@@ -215,36 +198,31 @@ function YRPVoiceChannel(edit, uid)
 
 	win.pugs = YRPCreateD("DPanelList", CON, YRP:ctr(760), YRP:ctr(200), YRP:ctr(800), YRP:ctr(200))
 	win.pugs:EnableVerticalScrollbar()
-	net.Receive(
-		"nws_yrp_vm_get_passive_usergroups",
-		function(len)
-			local tpugs = net.ReadTable()
-			for i, ug in pairs(tpugs) do
-				local vline = YRPCreateD("DPanel", nil, YRP:ctr(40), YRP:ctr(40), 0, 0)
-				function vline:Paint(pw, ph)
-					draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP:ctr(40 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-				end
+	net.Receive("nws_yrp_vm_get_passive_usergroups", function(len)
+		local tpugs = net.ReadTable()
+		for i, ug in pairs(tpugs) do
+			local vline = YRPCreateD("DPanel", nil, YRP:ctr(40), YRP:ctr(40), 0, 0)
+			function vline:Paint(pw, ph)
+				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP:ctr(40 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			end
 
-				vline.cb = YRPCreateD("DCheckBox", vline, YRP:ctr(40), YRP:ctr(40), 0, 0)
-				function vline.cb:OnChange(bVal)
-					if bVal then
-						table.insert(pugs, ug.string_name)
-					else
-						table.RemoveByValue(pugs, ug.string_name)
-					end
-				end
-
-				if edit and GetGlobalYRPTable("yrp_voice_channels")[uid] and GetGlobalYRPTable("yrp_voice_channels")[uid]["string_passive_usergroups"][ug.string_name] then
-					vline.cb:SetChecked(true)
+			vline.cb = YRPCreateD("DCheckBox", vline, YRP:ctr(40), YRP:ctr(40), 0, 0)
+			function vline.cb:OnChange(bVal)
+				if bVal then
 					table.insert(pugs, ug.string_name)
-				end
-
-				if YRPPanelAlive(win) and YRPPanelAlive(win.pugs) then
-					win.pugs:AddItem(vline)
+				else
+					table.RemoveByValue(pugs, ug.string_name)
 				end
 			end
+
+			if edit and GetGlobalYRPTable("yrp_voice_channels")[uid] and GetGlobalYRPTable("yrp_voice_channels")[uid]["string_passive_usergroups"][ug.string_name] then
+				vline.cb:SetChecked(true)
+				table.insert(pugs, ug.string_name)
+			end
+
+			if YRPPanelAlive(win) and YRPPanelAlive(win.pugs) then win.pugs:AddItem(vline) end
 		end
-	)
+	end)
 
 	net.Start("nws_yrp_vm_get_passive_usergroups")
 	net.SendToServer()
@@ -258,36 +236,31 @@ function YRPVoiceChannel(edit, uid)
 
 	win.pgrps = YRPCreateD("DPanelList", CON, YRP:ctr(760), YRP:ctr(200), YRP:ctr(800), YRP:ctr(500))
 	win.pgrps:EnableVerticalScrollbar()
-	net.Receive(
-		"nws_yrp_vm_get_passive_groups",
-		function(len)
-			local tpgrps = net.ReadTable()
-			for i, ug in pairs(tpgrps) do
-				local vline = YRPCreateD("DPanel", nil, YRP:ctr(40), YRP:ctr(40), 0, 0)
-				function vline:Paint(pw, ph)
-					draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP:ctr(40 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-				end
+	net.Receive("nws_yrp_vm_get_passive_groups", function(len)
+		local tpgrps = net.ReadTable()
+		for i, ug in pairs(tpgrps) do
+			local vline = YRPCreateD("DPanel", nil, YRP:ctr(40), YRP:ctr(40), 0, 0)
+			function vline:Paint(pw, ph)
+				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP:ctr(40 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			end
 
-				vline.cb = YRPCreateD("DCheckBox", vline, YRP:ctr(40), YRP:ctr(40), 0, 0)
-				function vline.cb:OnChange(bVal)
-					if bVal then
-						table.insert(pgrps, ug.uniqueID)
-					else
-						table.RemoveByValue(pgrps, ug.uniqueID)
-					end
-				end
-
-				if edit and GetGlobalYRPTable("yrp_voice_channels")[uid] and GetGlobalYRPTable("yrp_voice_channels")[uid]["string_passive_groups"][tonumber(ug.uniqueID)] then
-					vline.cb:SetChecked(true)
+			vline.cb = YRPCreateD("DCheckBox", vline, YRP:ctr(40), YRP:ctr(40), 0, 0)
+			function vline.cb:OnChange(bVal)
+				if bVal then
 					table.insert(pgrps, ug.uniqueID)
-				end
-
-				if YRPPanelAlive(win) and YRPPanelAlive(win.pgrps) then
-					win.pgrps:AddItem(vline)
+				else
+					table.RemoveByValue(pgrps, ug.uniqueID)
 				end
 			end
+
+			if edit and GetGlobalYRPTable("yrp_voice_channels")[uid] and GetGlobalYRPTable("yrp_voice_channels")[uid]["string_passive_groups"][tonumber(ug.uniqueID)] then
+				vline.cb:SetChecked(true)
+				table.insert(pgrps, ug.uniqueID)
+			end
+
+			if YRPPanelAlive(win) and YRPPanelAlive(win.pgrps) then win.pgrps:AddItem(vline) end
 		end
-	)
+	end)
 
 	net.Start("nws_yrp_vm_get_passive_groups")
 	net.SendToServer()
@@ -301,36 +274,31 @@ function YRPVoiceChannel(edit, uid)
 
 	win.prols = YRPCreateD("DPanelList", CON, YRP:ctr(760), YRP:ctr(200), YRP:ctr(800), YRP:ctr(800))
 	win.prols:EnableVerticalScrollbar()
-	net.Receive(
-		"nws_yrp_vm_get_passive_roles",
-		function(len)
-			local tprols = net.ReadTable()
-			for i, ug in pairs(tprols) do
-				local vline = YRPCreateD("DPanel", nil, YRP:ctr(40), YRP:ctr(40), 0, 0)
-				function vline:Paint(pw, ph)
-					draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP:ctr(40 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-				end
+	net.Receive("nws_yrp_vm_get_passive_roles", function(len)
+		local tprols = net.ReadTable()
+		for i, ug in pairs(tprols) do
+			local vline = YRPCreateD("DPanel", nil, YRP:ctr(40), YRP:ctr(40), 0, 0)
+			function vline:Paint(pw, ph)
+				draw.SimpleText(string.upper(ug.string_name), "Y_14_500", YRP:ctr(40 + 20), ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			end
 
-				vline.cb = YRPCreateD("DCheckBox", vline, YRP:ctr(40), YRP:ctr(40), 0, 0)
-				function vline.cb:OnChange(bVal)
-					if bVal then
-						table.insert(prols, ug.uniqueID)
-					else
-						table.RemoveByValue(prols, ug.uniqueID)
-					end
-				end
-
-				if edit and GetGlobalYRPTable("yrp_voice_channels")[uid] and GetGlobalYRPTable("yrp_voice_channels")[uid]["string_passive_roles"][tonumber(ug.uniqueID)] then
-					vline.cb:SetChecked(true)
+			vline.cb = YRPCreateD("DCheckBox", vline, YRP:ctr(40), YRP:ctr(40), 0, 0)
+			function vline.cb:OnChange(bVal)
+				if bVal then
 					table.insert(prols, ug.uniqueID)
-				end
-
-				if YRPPanelAlive(win) and YRPPanelAlive(win.prols) then
-					win.prols:AddItem(vline)
+				else
+					table.RemoveByValue(prols, ug.uniqueID)
 				end
 			end
+
+			if edit and GetGlobalYRPTable("yrp_voice_channels")[uid] and GetGlobalYRPTable("yrp_voice_channels")[uid]["string_passive_roles"][tonumber(ug.uniqueID)] then
+				vline.cb:SetChecked(true)
+				table.insert(prols, ug.uniqueID)
+			end
+
+			if YRPPanelAlive(win) and YRPPanelAlive(win.prols) then win.prols:AddItem(vline) end
 		end
-	)
+	end)
 
 	net.Start("nws_yrp_vm_get_passive_roles")
 	net.SendToServer()
@@ -354,12 +322,7 @@ function YRPVoiceChannel(edit, uid)
 			net.WriteString(uid)
 			net.SendToServer()
 			win:Remove()
-			timer.Simple(
-				0.4,
-				function()
-					YRPOpenVoiceMenu()
-				end
-			)
+			timer.Simple(0.4, function() YRPOpenVoiceMenu() end)
 		end
 
 		win.rem = YRPCreateD("YButton", CON, YRP:ctr(760), YRP:ctr(50), YRP:ctr(800), YRP:ctr(1020))
@@ -373,12 +336,7 @@ function YRPVoiceChannel(edit, uid)
 			net.WriteString(uid)
 			net.SendToServer()
 			win:Remove()
-			timer.Simple(
-				0.4,
-				function()
-					YRPOpenVoiceMenu()
-				end
-			)
+			timer.Simple(0.4, function() YRPOpenVoiceMenu() end)
 		end
 	else
 		win.add = YRPCreateD("YButton", CON, YRP:ctr(760), YRP:ctr(50), 0, YRP:ctr(1020))
@@ -399,12 +357,7 @@ function YRPVoiceChannel(edit, uid)
 			net.WriteTable(prols)
 			net.SendToServer()
 			win:Remove()
-			timer.Simple(
-				0.4,
-				function()
-					YRPOpenVoiceMenu()
-				end
-			)
+			timer.Simple(0.4, function() YRPOpenVoiceMenu() end)
 		end
 	end
 end
@@ -467,10 +420,7 @@ function YRPUpdateVoiceList()
 					mutemic:SetText("")
 					function mutemic:Paint(pw, ph)
 						local color = colg
-						if lply:GetYRPBool("yrp_voice_channel_mutemic_" .. channel.uniqueID, true) then
-							color = colr
-						end
-
+						if lply:GetYRPBool("yrp_voice_channel_mutemic_" .. channel.uniqueID, true) then color = colr end
 						draw.RoundedBox(YRP:ctr(10), 0, 0, pw, ph, color)
 						local pabr = YRP:ctr(8)
 						if YRP:GetDesignIcon("mic") then
@@ -587,15 +537,9 @@ function YRPOpenVoiceMenu()
 			YRPUpdateVoiceList()
 		end
 
-		if not self.toggle then
-			draw.SimpleText(string.Replace(YRP:trans("LID_presskeytoenablevoicemenu"), "KEY", YRPGetKeybindName("voice_menu")), "Y_30_500", pw / 2, ph / 2, YRPInterfaceValue("YFrame", "HT"), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-		end
-
+		if not self.toggle then draw.SimpleText(string.Replace(YRP:trans("LID_presskeytoenablevoicemenu"), "KEY", YRPGetKeybindName("voice_menu")), "Y_30_500", pw / 2, ph / 2, YRPInterfaceValue("YFrame", "HT"), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER) end
 		local hh = 24
-		if self.GetHeaderHeight ~= nil then
-			hh = self:GetHeaderHeight()
-		end
-
+		if self.GetHeaderHeight ~= nil then hh = self:GetHeaderHeight() end
 		draw.SimpleText(YRP:trans(self:GetTitle()), "Y_18_500", hh / 2, hh / 2, YRPInterfaceValue("YFrame", "HT"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
@@ -668,10 +612,7 @@ function YRPOpenVoiceMenu()
 			YRPVoiceChannel(false)
 		end
 
-		if not vm.adminmode or not lply:HasAccess("YRPOpenVoiceMenu2") then
-			vm.win.add:Hide()
-		end
-
+		if not vm.adminmode or not lply:HasAccess("YRPOpenVoiceMenu2") then vm.win.add:Hide() end
 		vm.win.showalllabel = YRPCreateD("DLabel", CONTENT, YRP:ctr(200), size, YRP:ctr(40 + 20), CONTENT:GetTall() - YRP:ctr(50))
 		vm.win.showalllabel:SetText("")
 		function vm.win.showalllabel:Paint(pw, ph)
@@ -734,20 +675,8 @@ function YRPOpenVoiceMenu()
 	end
 end
 
-net.Receive(
-	"nws_yrp_channel_dn",
-	function(len)
-		YRPOpenVoiceMenu()
-	end
-)
-
-net.Receive(
-	"nws_yrp_channel_up",
-	function(len)
-		YRPOpenVoiceMenu()
-	end
-)
-
+net.Receive("nws_yrp_channel_dn", function(len) YRPOpenVoiceMenu() end)
+net.Receive("nws_yrp_channel_up", function(len) YRPOpenVoiceMenu() end)
 function YRPToggleVoiceMenu()
 	if GetGlobalYRPBool("bool_voice", false) then
 		if YRPPanelAlive(vm.win) then

@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 --#roles #rolesmenu #rolemenu #groups #factions
 ROLEMENU = ROLEMENU or {}
 ROLEMENU.open = false
@@ -50,7 +50,6 @@ function createRoleBox(rol, parent, mainparent)
 				function p:LayoutEntity(ent)
 					ent:SetSequence(ent:LookupSequence("menu_gman"))
 					p:RunAnimation()
-
 					return
 				end
 
@@ -99,10 +98,7 @@ function createRoleBox(rol, parent, mainparent)
 				--Maxamount
 				--draw.RoundedBox(0, YRP:ctr(_br), 0, (rol.int_uses / rol.int_maxamount) * pw, ph, Color( 255, 0, 0, 255) )
 				local color = Color(255, 255, 255, 255)
-				if tonumber(rol.int_uses) == tonumber(rol.int_maxamount) then
-					color = Color(0, 255, 0)
-				end
-
+				if tonumber(rol.int_uses) == tonumber(rol.int_maxamount) then color = Color(0, 255, 0) end
 				draw.SimpleText(self:GetParent().tbl.int_uses .. "/" .. self:GetParent().tbl.int_maxamount, "Y_20_500", pw - YRP:ctr(w / 2 + br), ph - YRP:ctr(h / 2 + br) * 1.1, color, 1, 1)
 				--BR
 				--drawRBBR(0, YRP:ctr(_br), 0, pw, ph, Color( 0, 0, 0, 255 ), YRP:ctr(4) )
@@ -112,9 +108,7 @@ function createRoleBox(rol, parent, mainparent)
 		-- Role Button --
 		_rol.gr = YRPCreateD("YButton", _rol, _rol:GetWide(), _rol:GetTall(), 0, 0)
 		function _rol.gr:Paint(pw, ph)
-			if self:IsHovered() then
-				draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 60))
-			end
+			if self:IsHovered() then draw.RoundedBox(0, 0, 0, pw, ph, Color(80, 80, 80, 60)) end
 		end
 
 		_rol.gr:SetText("")
@@ -125,25 +119,20 @@ function createRoleBox(rol, parent, mainparent)
 				local bgpm = YRPCreateD("DPanel", ROLEMENU.pms, YRP:ctr(200), YRP:ctr(400), (i - 1) * YRP:ctr(200), 0)
 				bgpm.id = i
 				function bgpm:Paint(pw, ph)
-					if self.id == pmid then
-						draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 10))
-					end
+					if self.id == pmid then draw.RoundedBox(0, 0, 0, pw, ph, Color(255, 255, 255, 10)) end
 				end
 
 				local dmp = YRPCreateD("DModelPanel", bgpm, YRP:ctr(200), YRP:ctr(400), 0, 0)
-				timer.Simple(
-					i * 0.3,
-					function()
-						if IsValid(dmp) then
-							dmp:SetModel(pmtab.string_model)
-							local randsize = math.Rand(pmtab.float_size_min, pmtab.float_size_max)
-							if IsNotNilAndNotFalse(dmp.Entity) then
-								dmp.Entity:SetModelScale(randsize + 1, 0)
-								dmp.Entity:SetPos(Vector(0, 0, -40))
-							end
+				timer.Simple(i * 0.3, function()
+					if IsValid(dmp) then
+						dmp:SetModel(pmtab.string_model)
+						local randsize = math.Rand(pmtab.float_size_min, pmtab.float_size_max)
+						if IsNotNilAndNotFalse(dmp.Entity) then
+							dmp.Entity:SetModelScale(randsize + 1, 0)
+							dmp.Entity:SetPos(Vector(0, 0, -40))
 						end
 					end
-				)
+				end)
 
 				local bpm = YRPCreateD("DButton", dmp, YRP:ctr(200), YRP:ctr(400), 0, 0)
 				bpm.id = i
@@ -162,18 +151,12 @@ function createRoleBox(rol, parent, mainparent)
 			ROLEMENU.info.rolename = rol.string_name
 			ROLEMENU.info.rolecolor = rol.string_color
 			ROLEMENU.infodesc:SetText("")
-			if ROLEMENU.infodesc.SetUnderlineFont ~= nil then
-				ROLEMENU.infodesc:SetUnderlineFont("Y_20_500")
-			end
-
+			if ROLEMENU.infodesc.SetUnderlineFont ~= nil then ROLEMENU.infodesc:SetUnderlineFont("Y_20_500") end
 			ROLEMENU.infodesc:SetFontInternal("Y_20_500")
 			ROLEMENU.infodesc:InsertColorChange(255, 255, 255, 255)
 			ROLEMENU.infodesc:AppendText(rol.string_description)
 			ROLEMENU.infosweps:SetText("")
-			if ROLEMENU.infosweps.SetUnderlineFont ~= nil then
-				ROLEMENU.infosweps:SetUnderlineFont("Y_20_500")
-			end
-
+			if ROLEMENU.infosweps.SetUnderlineFont ~= nil then ROLEMENU.infosweps:SetUnderlineFont("Y_20_500") end
 			ROLEMENU.infosweps:SetFontInternal("Y_20_500")
 			ROLEMENU.infosweps:InsertColorChange(255, 255, 255, 255)
 			ROLEMENU.infosweps:AppendText(string.Implode(", ", string.Explode(",", rol.string_sweps)))
@@ -183,13 +166,8 @@ function createRoleBox(rol, parent, mainparent)
 			ROLEMENU.infobutton.uniqueID = rol.uniqueID
 		end
 
-		if tonumber(rol.uniqueID) == 1 then
-			_rol.gr:DoClick()
-		end
-
-		if parent.AddPanel ~= nil then
-			parent:AddPanel(_rol)
-		end
+		if tonumber(rol.uniqueID) == 1 then _rol.gr:DoClick() end
+		if parent.AddPanel ~= nil then parent:AddPanel(_rol) end
 	end
 end
 
@@ -201,9 +179,7 @@ function createBouncer(parent, mainparent)
 			surfaceText("➔", "Y_24_500", pw / 2, ph / 2, Color(255, 255, 255, 255), 1, 1)
 		end
 
-		if parent.AddPanel ~= nil then
-			parent:AddPanel(_bou)
-		end
+		if parent.AddPanel ~= nil then parent:AddPanel(_bou) end
 	end
 end
 
@@ -215,15 +191,10 @@ function addPreRole(rol, parent, mainparent)
 end
 
 function getPreRole(uid, parent, mainparent)
-	net.Receive(
-		"nws_yrp_get_rol_prerole",
-		function(len)
-			local _prerole = net.ReadTable()
-			if _prerole.int_prerole ~= nil then
-				addPreRole(_prerole, _pr[_prerole.int_prerole], mainparent)
-			end
-		end
-	)
+	net.Receive("nws_yrp_get_rol_prerole", function(len)
+		local _prerole = net.ReadTable()
+		if _prerole.int_prerole ~= nil then addPreRole(_prerole, _pr[_prerole.int_prerole], mainparent) end
+	end)
 
 	net.Start("nws_yrp_get_rol_prerole")
 	net.WriteString(uid)
@@ -252,17 +223,12 @@ function addRoleRow(rol, parent)
 end
 
 function getRoles(uid, parent)
-	net.Receive(
-		"nws_yrp_get_grp_roles",
-		function(len)
-			local _roles = net.ReadTable()
-			for i, rol in SortedPairsByMemberValue(_roles, "int_position") do
-				if rol ~= nil and tonumber(rol.int_prerole) <= 0 then
-					addRoleRow(rol, parent)
-				end
-			end
+	net.Receive("nws_yrp_get_grp_roles", function(len)
+		local _roles = net.ReadTable()
+		for i, rol in SortedPairsByMemberValue(_roles, "int_position") do
+			if rol ~= nil and tonumber(rol.int_prerole) <= 0 then addRoleRow(rol, parent) end
 		end
-	)
+	end)
 
 	--getGroups(uid, parent)
 	net.Start("nws_yrp_get_grp_roles")
@@ -286,35 +252,21 @@ function addGroup(grp, parent)
 		local BR = YRP:ctr(30)
 		function _grp:PaintHeader(pw, ph)
 			local _hl = 0
-			if self.header:IsHovered() then
-				_hl = 70
-			end
-
+			if self.header:IsHovered() then _hl = 70 end
 			draw.RoundedBoxEx(0, 0, 0, pw, ph, Color(self.color.r + _hl, self.color.g + _hl, self.color.b + _hl, headeralpha), true, true, not self:IsOpen(), not self:IsOpen())
 			local _x = ph / 2
-			if strUrl(grp.string_icon) then
-				_x = ph
-			end
-
+			if strUrl(grp.string_icon) then _x = ph end
 			local name = self.tbl.string_name
-			if tonumber(self.tbl.int_parentgroup) == 0 then
-				name = YRP:trans("LID_faction") .. ": " .. name
-			end
-
+			if tonumber(self.tbl.int_parentgroup) == 0 then name = YRP:trans("LID_faction") .. ": " .. name end
 			draw.SimpleText(name, "Y_24_500", _x, ph / 2, Color(255, 255, 255, 255), 0, 1)
 			local _box = YRP:ctr(50)
 			local _dif = 50
 			local _br = (ph - _box) / 2
 			local _tog = "▼"
-			if self:IsOpen() then
-				_tog = "▲"
-			end
-
+			if self:IsOpen() then _tog = "▲" end
 			draw.RoundedBox(0, pw - _box - _br, _br, _box, _box, Color(self.color.r - _dif, self.color.g - _dif, self.color.b - _dif, headeralpha))
 			draw.SimpleText(_tog, "Y_24_500", pw - _box / 2 - _br, _br + _box / 2, Color(255, 255, 255, 255), 1, 1)
-			if tobool(grp.bool_locked) then
-				YRP:DrawIcon(YRP:GetDesignIcon("lock"), ph - YRP:ctr(8), ph - YRP:ctr(8), pw - 2 * ph, YRP:ctr(4), Color(255, 0, 0, 200))
-			end
+			if tobool(grp.bool_locked) then YRP:DrawIcon(YRP:GetDesignIcon("lock"), ph - YRP:ctr(8), ph - YRP:ctr(8), pw - 2 * ph, YRP:ctr(4), Color(255, 0, 0, 200)) end
 		end
 
 		function _grp:PaintContent(pw, ph)
@@ -352,10 +304,7 @@ function addGroup(grp, parent)
 			YRP:msg("note", "parent not valid")
 		end
 
-		if parent.Rebuild then
-			parent:Rebuild()
-		end
-
+		if parent.Rebuild then parent:Rebuild() end
 		return _grp
 	else
 		return NULL
@@ -363,29 +312,17 @@ function addGroup(grp, parent)
 end
 
 function getGroups(uid, parent)
-	net.Receive(
-		"nws_yrp_rolesmenu_get_groups",
-		function(len)
-			local _groups = net.ReadTable()
-			local dg = nil -- Default Group
-			for i, grp in SortedPairsByMemberValue(_groups, "int_position") do
-				grp.uniqueID = tonumber(grp.uniqueID)
-				local g = addGroup(grp, parent)
-				if grp.uniqueID == 1 then
-					dg = g
-				end
-			end
-
-			timer.Simple(
-				0.2,
-				function()
-					if IsNotNilAndNotFalse(dg) and IsNotNilAndNotFalse(dg.header) then
-						dg.header:DoClick()
-					end
-				end
-			)
+	net.Receive("nws_yrp_rolesmenu_get_groups", function(len)
+		local _groups = net.ReadTable()
+		local dg = nil -- Default Group
+		for i, grp in SortedPairsByMemberValue(_groups, "int_position") do
+			grp.uniqueID = tonumber(grp.uniqueID)
+			local g = addGroup(grp, parent)
+			if grp.uniqueID == 1 then dg = g end
 		end
-	)
+
+		timer.Simple(0.2, function() if IsNotNilAndNotFalse(dg) and IsNotNilAndNotFalse(dg.header) then dg.header:DoClick() end end)
+	end)
 
 	net.Start("nws_yrp_rolesmenu_get_groups")
 	net.WriteString(uid)

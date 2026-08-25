@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local _type = type
 local file = file
 local util = util
@@ -71,9 +71,7 @@ function YRPKeybindsCheckFile()
 				data = file.Read(dbfile, "DATA")
 				if data then
 					testfile = util.JSONToTable(data)
-					if testfile == nil or table.Count(testfile) <= 0 then
-						YRP:msg("error", "[KEYBINDS] File is still empty.")
-					end
+					if testfile == nil or table.Count(testfile) <= 0 then YRP:msg("error", "[KEYBINDS] File is still empty.") end
 				else
 					YRP:msg("error", "[KEYBINDS] FAILED TO READ KEYBINDS FILE #2 fi: " .. tostring(data))
 				end
@@ -83,27 +81,19 @@ function YRPKeybindsCheckFile()
 		end
 	end
 
-	if not file.Exists("yrp_keybinds", "DATA") then
-		YRP:msg("note", "[KEYBINDS] FAILED TO CREATE KEYBIND FOLDER, NO SPACE ON DISK??")
-	end
-
-	if not file.Exists(dbfile, "DATA") then
-		YRP:msg("note", "[KEYBINDS] FAILED TO CREATE KEYBIND FILE, NO SPACE ON DISK??")
-	end
+	if not file.Exists("yrp_keybinds", "DATA") then YRP:msg("note", "[KEYBINDS] FAILED TO CREATE KEYBIND FOLDER, NO SPACE ON DISK??") end
+	if not file.Exists(dbfile, "DATA") then YRP:msg("note", "[KEYBINDS] FAILED TO CREATE KEYBIND FILE, NO SPACE ON DISK??") end
 end
 
 function YRPKeybindsSave()
 	YRPKeybindsCheckFile()
 	YRPKeybindsMSG("Save Keybinds")
-	if dbfile then
-		file.Write(dbfile, util.TableToJSON(yrp_keybinds, true))
-	end
+	if dbfile then file.Write(dbfile, util.TableToJSON(yrp_keybinds, true)) end
 end
 
 function YRPKeybindsLoad()
 	if not IsValid(LocalPlayer()) then
 		timer.Simple(0.1, YRPKeybindsLoad)
-
 		return false
 	end
 
@@ -125,9 +115,7 @@ function YRPKeybindsLoad()
 				end
 			end
 
-			if missing then
-				YRPKeybindsSave()
-			end
+			if missing then YRPKeybindsSave() end
 		else
 			local fi = file.Read(dbfile, "DATA")
 			YRP:msg("error", "FAILED TO LOAD KEYBINDS! fi: [" .. tostring(fi) .. "]")
@@ -175,21 +163,17 @@ function YRPGetKeybind(name)
 				if dbf then
 					YRP:msg("error", "[KEYBINDS] Failed to get Keybind: " .. tostring(name) .. " result: " .. tostring(yrp_keybinds[name]))
 					YRP:msg("error", "[KEYBINDS] Content: " .. tostring(table.ToString(dbf, "File")))
-
 					return -1
 				else
 					YRP:msg("error", "[KEYBINDS] Failed to Parse to Table")
-
 					return -1
 				end
 			else
 				YRP:msg("note", "[KEYBINDS] Failed to get FILE Data, NO SPACE ON DISK??")
-
 				return -1
 			end
 		else
 			YRP:msg("error", "[KEYBINDS] Failed to Parse to Table")
-
 			return -1
 		end
 	else
@@ -197,7 +181,6 @@ function YRPGetKeybind(name)
 	end
 
 	YRP:msg("error", "[KEYBINDS] Unknown error")
-
 	return -1
 end
 
@@ -212,7 +195,6 @@ function YRPSetKeybind(name, value, force)
 
 		yrp_keybinds[name] = value
 		YRPKeybindsSave()
-
 		return true
 	else
 		return false
@@ -222,23 +204,11 @@ end
 function YRPGetKeybindName(kbname, show)
 	local _kb = kbname or ""
 	if YRP_KeybindsLoaded then
-		if not string.StartWith(kbname, "in_") and YRPGetKeybind(kbname) then
-			_kb = YRPGetKeybind(kbname)
-		end
-
-		if isnumber(tonumber(_kb)) then
-			_kb = input.GetKeyName(_kb)
-		end
-
-		if string.StartWith(kbname, "in_") then
-			_kb = YRP:trans("LID_" .. kbname)
-		end
-
-		if IsNotNilAndNotFalse(_kb) then
-			_kb = string.upper(_kb)
-		end
+		if not string.StartWith(kbname, "in_") and YRPGetKeybind(kbname) then _kb = YRPGetKeybind(kbname) end
+		if isnumber(tonumber(_kb)) then _kb = input.GetKeyName(_kb) end
+		if string.StartWith(kbname, "in_") then _kb = YRP:trans("LID_" .. kbname) end
+		if IsNotNilAndNotFalse(_kb) then _kb = string.upper(_kb) end
 	end
-
 	return tostring(_kb)
 end
 
@@ -248,12 +218,9 @@ function YRPResetKeybinds()
 	end
 end
 
-net.Receive(
-	"nws_yrp_setServerKeybinds",
-	function(len)
-		local keytab = net.ReadTable()
-		for i, ktab in pairs(keytab) do
-			YRPSetKeybind(ktab.name, ktab.value)
-		end
+net.Receive("nws_yrp_setServerKeybinds", function(len)
+	local keytab = net.ReadTable()
+	for i, ktab in pairs(keytab) do
+		YRPSetKeybind(ktab.name, ktab.value)
 	end
-)
+end)

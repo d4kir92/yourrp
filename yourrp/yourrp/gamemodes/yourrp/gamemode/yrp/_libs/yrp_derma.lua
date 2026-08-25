@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local _type = type
 local MaterialBlur = Material("pp/blurscreen.png", "noclamp")
 function YRPDrawRectBlur(pnl, px, py, sw, sh, blur)
@@ -80,10 +80,7 @@ function YRPDrawText(tab)
 		tab.ax = tab.ax or 1
 		tab.ay = tab.ay or 1
 		tab.text = tab.text or "NoText"
-		if tab.lforce or tab.lforce == nil then
-			tab.text = YRP:trans(tab.text)
-		end
-
+		if tab.lforce or tab.lforce == nil then tab.text = YRP:trans(tab.text) end
 		tab.font = tab.font or "Y_14_700"
 		draw.SimpleText(tab.text, tab.font, tab.x, tab.y, YRPTextColor(tab.color), tab.ax, tab.ay)
 	end
@@ -115,7 +112,6 @@ function DHorizontalScroller(tab)
 	end
 
 	dhorizontalscroller:SetOverlap(-tab.br)
-
 	return dhorizontalscroller
 end
 
@@ -170,7 +166,6 @@ function DGroup(tab)
 		dgroup.header:SetTall(dgroup.content.height + YRP:ctr(50 + 20))
 		dgroup.content:SetTall(dgroup.content.height)
 	end
-
 	return dgroup.content
 end
 
@@ -199,10 +194,7 @@ function DName(tab)
 		YRPDrawText(text)
 	end
 
-	if tab.parent ~= nil then
-		tab.parent:AddItem(dname)
-	end
-
+	if tab.parent ~= nil then tab.parent:AddItem(dname) end
 	return dname
 end
 
@@ -240,10 +232,7 @@ function DIntComboBoxBox(tab, choices, name, netstr, selected)
 	if choices ~= nil then
 		for i, choice in pairs(choices) do
 			local _sel = false
-			if selected == choice.data then
-				_sel = true
-			end
-
+			if selected == choice.data then _sel = true end
 			dintcomboboxbox.dcombobox:AddChoice(choice.name, choice.data, _sel)
 		end
 	end
@@ -256,10 +245,7 @@ function DIntComboBoxBox(tab, choices, name, netstr, selected)
 		end
 	end
 
-	if tab.parent ~= nil then
-		tab.parent:AddItem(dintcomboboxbox.line)
-	end
-
+	if tab.parent ~= nil then tab.parent:AddItem(dintcomboboxbox.line) end
 	return dintcomboboxbox.dcombobox
 end
 
@@ -308,23 +294,17 @@ function DBoolLine(tab, value, str, netstr)
 			end
 		end
 
-		net.Receive(
-			netstr,
-			function(len)
-				local b = btn(net.ReadString())
-				if YRPPanelAlive(dboolline.dcheckbox, "dboolline.dcheckbox") then
-					dboolline.dcheckbox.serverside = true
-					dboolline.dcheckbox:SetValue(b)
-					dboolline.dcheckbox.serverside = false
-				end
+		net.Receive(netstr, function(len)
+			local b = btn(net.ReadString())
+			if YRPPanelAlive(dboolline.dcheckbox, "dboolline.dcheckbox") then
+				dboolline.dcheckbox.serverside = true
+				dboolline.dcheckbox:SetValue(b)
+				dboolline.dcheckbox.serverside = false
 			end
-		)
+		end)
 	end
 
-	if tab.parent ~= nil then
-		tab.parent:AddItem(dboolline.line)
-	end
-
+	if tab.parent ~= nil then tab.parent:AddItem(dboolline.line) end
 	return dboolline.dcheckbox
 end
 
@@ -391,22 +371,16 @@ function DFloatLine(tab, value, name, netstr, max, min, dmg)
 		end
 	end
 
-	net.Receive(
-		netstr,
-		function(len)
-			local f = net.ReadFloat()
-			if YRPPanelAlive(dfloatline.dnumberwang, "dfloatline.dnumberwang") then
-				dfloatline.dnumberwang.serverside = true
-				dfloatline.dnumberwang:SetValue(f)
-				dfloatline.dnumberwang.serverside = false
-			end
+	net.Receive(netstr, function(len)
+		local f = net.ReadFloat()
+		if YRPPanelAlive(dfloatline.dnumberwang, "dfloatline.dnumberwang") then
+			dfloatline.dnumberwang.serverside = true
+			dfloatline.dnumberwang:SetValue(f)
+			dfloatline.dnumberwang.serverside = false
 		end
-	)
+	end)
 
-	if tab.parent ~= nil then
-		tab.parent:AddItem(dfloatline.line)
-	end
-
+	if tab.parent ~= nil then tab.parent:AddItem(dfloatline.line) end
 	return dfloatline.dnumberwang
 end
 
@@ -461,22 +435,16 @@ function OLDDIntBox(tab, value, name, netstr, max, min)
 		end
 	end
 
-	net.Receive(
-		netstr,
-		function(len)
-			local f = net.ReadInt(32)
-			if YRPPanelAlive(dintline.dnumberwang, "dintline.dnumberwang") then
-				dintline.dnumberwang.serverside = true
-				dintline.dnumberwang:SetValue(f)
-				dintline.dnumberwang.serverside = false
-			end
+	net.Receive(netstr, function(len)
+		local f = net.ReadInt(32)
+		if YRPPanelAlive(dintline.dnumberwang, "dintline.dnumberwang") then
+			dintline.dnumberwang.serverside = true
+			dintline.dnumberwang:SetValue(f)
+			dintline.dnumberwang.serverside = false
 		end
-	)
+	end)
 
-	if tab.parent ~= nil then
-		tab.parent:AddItem(dintline.line)
-	end
-
+	if tab.parent ~= nil then tab.parent:AddItem(dintline.line) end
 	return dintline.dnumberwang
 end
 
@@ -518,22 +486,16 @@ function DStringBox(tab, str, name, netstr)
 		net.SendToServer()
 	end
 
-	net.Receive(
-		netstr,
-		function(len)
-			local t = net.ReadString()
-			if YRPPanelAlive(dstringline.dtextentry, "dstringline.dtextentry") then
-				dstringline.dtextentry.serverside = true
-				dstringline.dtextentry:SetText(t)
-				dstringline.dtextentry.serverside = false
-			end
+	net.Receive(netstr, function(len)
+		local t = net.ReadString()
+		if YRPPanelAlive(dstringline.dtextentry, "dstringline.dtextentry") then
+			dstringline.dtextentry.serverside = true
+			dstringline.dtextentry:SetText(t)
+			dstringline.dtextentry.serverside = false
 		end
-	)
+	end)
 
-	if tab.parent ~= nil then
-		tab.parent:AddItem(dstringline.line)
-	end
-
+	if tab.parent ~= nil then tab.parent:AddItem(dstringline.line) end
 	return dstringline.dtextentry
 end
 
@@ -556,10 +518,7 @@ function DHR(tab)
 		draw.RoundedBox(0, 0, ph / 3, pw, ph / 3, Color(0, 0, 0, 255))
 	end
 
-	if tab.parent ~= nil then
-		tab.parent:AddItem(hr)
-	end
-
+	if tab.parent ~= nil then tab.parent:AddItem(hr) end
 	return hr
 end
 
@@ -590,9 +549,6 @@ function DHeader(tab, header)
 		YRPDrawText(head)
 	end
 
-	if tab.parent ~= nil then
-		tab.parent:AddItem(hea)
-	end
-
+	if tab.parent ~= nil then tab.parent:AddItem(hea) end
 	return hea
 end

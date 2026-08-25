@@ -1,7 +1,6 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 function fp(tbl)
 	local func = tbl[1]
-
 	return function(...)
 		local fnArgs = {}
 		local arg = {...}
@@ -13,7 +12,6 @@ function fp(tbl)
 		for i = 1, table.maxn(arg) do
 			fnArgs[tblN + i - 1] = arg[i]
 		end
-
 		return func(unpack(fnArgs, 1, table.maxn(fnArgs)))
 	end
 end
@@ -32,10 +30,7 @@ module("fn")
 --Parameter manipulation
 Id = function(...) return ... end
 Flip = function(f)
-	if not f then
-		error("not a function")
-	end
-
+	if not f then error("not a function") end
 	return function(b, a, ...) return f(a, b, ...) end
 end
 
@@ -49,7 +44,6 @@ ReverseArgs = function(...)
 			return reverse_h(function() return v, acc() end, ...)
 		end
 	end
-
 	return reverse_h(function() return end, ...)
 end
 
@@ -60,7 +54,6 @@ do
 	local function comp_h(a, b, ...)
 		if b == nil then return a end
 		b = comp_h(b, ...)
-
 		return function(...) return a(b(...)) end
 	end
 
@@ -76,14 +69,8 @@ end
 _G.fc = Compose
 -- Definition from http://lua-users.org/wiki/CurriedLua
 Curry = function(func, num_args)
-	if not num_args then
-		error("Missing argument #2: num_args")
-	end
-
-	if not func then
-		error("Function does not exist!", 2)
-	end
-
+	if not num_args then error("Missing argument #2: num_args") end
+	if not func then error("Function does not exist!", 2) end
 	-- helper
 	local function curry_h(argtrace, n)
 		if n == 0 then
@@ -105,7 +92,6 @@ end
 -- Thanks Lexic!
 Partial = function(func, ...)
 	local args = {...}
-
 	return function(...) return func(unpack(table.Add(args, {...}))) end
 end
 
@@ -113,13 +99,11 @@ Apply = function(f, ...) return f(...) end
 Const = function(a, b) return a end
 Until = function(cmp, fn, val)
 	if cmp(val) then return val end
-
 	return Until(cmp, fn, fn(val))
 end
 
 Seq = function(f, x)
 	f(x)
-
 	return x
 end
 
@@ -161,7 +145,6 @@ FOr = function(fns)
 			val = {f(...)}
 			if val[1] then return unpack(val) end
 		end
-
 		return false, unpack(val, 2)
 	end
 end
@@ -182,7 +165,6 @@ Map = function(f, xs)
 	for k, v in pairs(xs) do
 		xs[k] = f(v)
 	end
-
 	return xs
 end
 
@@ -190,11 +172,8 @@ Append = function(xs, ys) return table.Add(xs, ys) end
 Filter = function(f, xs)
 	local res = {}
 	for k, v in pairs(xs) do
-		if f(v) then
-			res[k] = v
-		end
+		if f(v) then res[k] = v end
 	end
-
 	return res
 end
 
@@ -209,13 +188,11 @@ Head = function(xs) return table.GetFirstValue(xs) end
 Last = function(xs) return xs[#xs] or table.GetLastValue(xs) end
 Tail = function(xs)
 	table.remove(xs, 1)
-
 	return xs
 end
 
 Init = function(xs)
 	xs[#xs] = nil
-
 	return xs
 end
 
@@ -224,7 +201,6 @@ Null = function(xs)
 	for k, v in pairs(xs) do
 		return false
 	end
-
 	return true
 end
 
@@ -235,7 +211,6 @@ Reverse = function(xs)
 	for i = #xs, 1, -1 do
 		res[#xs - i + 1] = xs[i]
 	end
-
 	return res
 end
 
@@ -244,7 +219,6 @@ Foldr = function(func, val, xs)
 	for i = #xs, 1, -1 do
 		val = func(xs[i], val)
 	end
-
 	return val
 end
 
@@ -252,7 +226,6 @@ Foldl = function(func, val, xs)
 	for k, v in ipairs(xs) do
 		val = func(val, v)
 	end
-
 	return val
 end
 
@@ -260,7 +233,6 @@ And = function(xs)
 	for k, v in pairs(xs) do
 		if v ~= true then return false end
 	end
-
 	return true
 end
 
@@ -268,7 +240,6 @@ Or = function(xs)
 	for k, v in pairs(xs) do
 		if v == true then return true end
 	end
-
 	return false
 end
 
@@ -276,7 +247,6 @@ Any = function(func, xs)
 	for k, v in pairs(xs) do
 		if func(v) == true then return true end
 	end
-
 	return false
 end
 
@@ -284,7 +254,6 @@ All = function(func, xs)
 	for k, v in pairs(xs) do
 		if func(v) ~= true then return false end
 	end
-
 	return true
 end
 

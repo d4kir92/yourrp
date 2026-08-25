@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local PANEL = {}
 function PANEL:GetLanguageChanger()
 	return self._lc or true
@@ -43,14 +43,12 @@ function PANEL:OnMousePressed()
 	if self.m_bSizable and gui.MouseX() > (screenX + self:GetWide() - 20) and gui.MouseY() > (screenY + self:GetTall() - 20) then
 		self.Sizing = {gui.MouseX() - self:GetWide(), gui.MouseY() - self:GetTall()}
 		self:MouseCapture(true)
-
 		return
 	end
 
 	if self:GetDraggable() and gui.MouseY() < (screenY + self:GetHeaderHeight()) then
 		self.Dragging = {gui.MouseX() - self.x, gui.MouseY() - self.y}
 		self:MouseCapture(true)
-
 		return
 	end
 end
@@ -74,10 +72,7 @@ end
 
 local dbfile = "yrp_frames/yrp_frames.json"
 local yframes = {}
-if not file.Exists("yrp_frames", "DATA") then
-	file.CreateDir("yrp_frames")
-end
-
+if not file.Exists("yrp_frames", "DATA") then file.CreateDir("yrp_frames") end
 local function DiagnoseJSON(str)
 	if not str or str == "" then return "file is empty" end
 	local trimmed = str:match("^%s*(.-)%s*$")
@@ -89,7 +84,6 @@ local function DiagnoseJSON(str)
 	if opens ~= closes then return "unbalanced braces/brackets (" .. opens .. " opening vs. " .. closes .. " closing) - likely truncated" end
 	local quotes = select(2, str:gsub('"', ""))
 	if quotes % 2 ~= 0 then return "unbalanced quotes - likely truncated or contains unescaped '\"'" end
-
 	return "unknown reason (possibly malformed key/value syntax)"
 end
 
@@ -127,17 +121,13 @@ end
 function PANEL:SaveStatus()
 	if self.yrpname then
 		local json = util.TableToJSON(yframes, true)
-		if not file.Exists("yrp_frames", "DATA") then
-			file.CreateDir("yrp_frames")
-		end
-
+		if not file.Exists("yrp_frames", "DATA") then file.CreateDir("yrp_frames") end
 		file.Write(dbfile, json)
 	end
 end
 
 function PANEL:IsMaximised()
 	self:CheckSave()
-
 	return yframes[self.yrpname].maximised
 end
 
@@ -160,14 +150,8 @@ function PANEL:SetMaximised(b, von)
 			self:SetPos(0, 0)
 			self:SetSize(ScrW(), ScrH())
 		else
-			if self.maxsw and yframes[self.yrpname].sw > self.maxsw then
-				yframes[self.yrpname].sw = self.maxsw
-			end
-
-			if self.maxsh and yframes[self.yrpname].sh > self.maxsh then
-				yframes[self.yrpname].sh = self.maxsh
-			end
-
+			if self.maxsw and yframes[self.yrpname].sw > self.maxsw then yframes[self.yrpname].sw = self.maxsw end
+			if self.maxsh and yframes[self.yrpname].sh > self.maxsh then yframes[self.yrpname].sh = self.maxsh end
 			self:SetSize(yframes[self.yrpname].sw, yframes[self.yrpname].sh)
 			self:Center()
 		end
@@ -179,7 +163,6 @@ end
 
 function PANEL:IsExpanded()
 	self:CheckSave()
-
 	return yframes[self.yrpname].expanded
 end
 
@@ -243,19 +226,14 @@ function PANEL:InternalUpdateSize()
 		self.langu:SetPos(self:GetWide() - self.langu:GetWide() - self:GetHeaderHeight() * 1.0, self:GetHeaderHeight() * 0.2)
 	end
 
-	if self.UpdateCustomeSize then
-		self:UpdateCustomeSize()
-	end
-
+	if self.UpdateCustomeSize then self:UpdateCustomeSize() end
 	self:ChangedSize()
 end
 
 function PANEL:OnSizeChanged(pw, ph)
 	self:InternalUpdateSize()
 	self:UpdateSize()
-	if self.ready and not self:IsMaximised() then
-		self:SaveSize(pw, ph)
-	end
+	if self.ready and not self:IsMaximised() then self:SaveSize(pw, ph) end
 end
 
 function PANEL:GetContent()
@@ -271,14 +249,8 @@ function PANEL:Init()
 	self:CheckSave()
 	self.maxsw = self.maxsw or ScrW() - 100
 	self.maxsh = self.maxsh or ScrH() - 100
-	if self._lc == nil then
-		self._lc = true
-	end
-
-	if self._cb == nil then
-		self._cb = true
-	end
-
+	if self._lc == nil then self._lc = true end
+	if self._cb == nil then self._cb = true end
 	self:SetHeaderHeight(YRP:ctr(GetGlobalYRPInt("int_headerheight", 100)))
 	self._border = 20
 	self:ShowCloseButton(false)
@@ -329,14 +301,8 @@ function PANEL:Think()
 		self:UpdateSize()
 	end
 
-	if IsValid(self.langu) and self.langu ~= nil and self._lc ~= nil then
-		self.langu:SetVisible(self._lc)
-	end
-
-	if self.close ~= nil and self._cb ~= nil then
-		self.close:SetVisible(self._cb)
-	end
-
+	if IsValid(self.langu) and self.langu ~= nil and self._lc ~= nil then self.langu:SetVisible(self._lc) end
+	if self.close ~= nil and self._cb ~= nil then self.close:SetVisible(self._cb) end
 	if self.sw ~= self:GetWide() or self.sh ~= self:GetTall() then
 		self.sw = self:GetWide()
 		self.sh = self:GetTall()
@@ -387,38 +353,27 @@ function PANEL:Think()
 			y = ScrH() - py
 		end
 
-		if self.maxsw and x > self.maxsw then
-			x = self.maxsw
-		end
-
-		if self.maxsh and y > self.maxsh then
-			y = self.maxsh
-		end
-
+		if self.maxsw and x > self.maxsw then x = self.maxsw end
+		if self.maxsh and y > self.maxsh then y = self.maxsh end
 		self:SetSize(x, y)
 		self:SetCursor("sizenwse")
-
 		return
 	end
 
 	local screenX, screenY = self:LocalToScreen(0, 0)
 	if self.Hovered and self.m_bSizable and mousex > (screenX + self:GetWide() - 20) and mousey > (screenY + self:GetTall() - 20) then
 		self:SetCursor("sizenwse")
-
 		return
 	end
 
 	if self.Hovered and self:GetDraggable() and mousey < (screenY + self:GetHeaderHeight()) then
 		self:SetCursor("sizeall")
-
 		return
 	end
 
 	self:SetCursor("arrow")
 	-- Don't allow the frame to go higher than 0
-	if self.y < 0 then
-		self:SetPos(self.x, 0)
-	end
+	if self.y < 0 then self:SetPos(self.x, 0) end
 end
 
 vgui.Register("YFrame", PANEL, "DFrame")

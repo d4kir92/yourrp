@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local YRP_TUTORIALS = {}
 YRP_TUTORIALS["tut_all"] = 1
 YRP_TUTORIALS["tut_cs"] = 1
@@ -38,32 +38,22 @@ function YRPTutorialsLoad()
 	YRPTutorialsCheckFile()
 	YRPTutorialsMSG("Load Tutorials")
 	local data = util.JSONToTable(file.Read(dbfile, "DATA"))
-	if data then
-		yrp_tutorials = data
-	end
+	if data then yrp_tutorials = data end
 end
 
 function YRPTutorialsSave()
 	YRPTutorialsCheckFile()
 	YRPTutorialsMSG("Save Tutorials")
-	if yrp_tutorials then
-		file.Write(dbfile, util.TableToJSON(yrp_tutorials, true))
-	end
+	if yrp_tutorials then file.Write(dbfile, util.TableToJSON(yrp_tutorials, true)) end
 end
 
 function done_tutorial(str, time)
 	if tobool(get_tutorial(str)) then
-		if time == nil then
-			time = 0
-		end
-
-		timer.Simple(
-			time,
-			function()
-				yrp_tutorials[str] = 0
-				YRPTutorialsSave()
-			end
-		)
+		if time == nil then time = 0 end
+		timer.Simple(time, function()
+			yrp_tutorials[str] = 0
+			YRPTutorialsSave()
+		end)
 	end
 end
 
@@ -74,7 +64,6 @@ end
 
 function get_tutorial(str)
 	if yrp_tutorials then return tobool(yrp_tutorials[str]) end
-
 	return false
 end
 

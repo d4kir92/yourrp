@@ -1,10 +1,9 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 function YRPTextColor(bgcol)
 	if bgcol.r and bgcol.g and bgcol.b then
 		local sum = bgcol.r + bgcol.g + bgcol.b
 		if sum > 255 then return Color(0, 0, 0, 255) end
 	end
-
 	return Color(255, 255, 255, 255)
 end
 
@@ -19,20 +18,14 @@ function YRPAreYouSure(yes, no)
 	local _yes = createVGUI("DButton", win, 300, 50, 10, 110)
 	_yes:SetText(YRP:trans("LID_yes"))
 	function _yes:DoClick()
-		if yes ~= nil then
-			yes()
-		end
-
+		if yes ~= nil then yes() end
 		win:Close()
 	end
 
 	local _no = createVGUI("DButton", win, 300, 50, 10 + 300 + 10, 110)
 	_no:SetText(YRP:trans("LID_no"))
 	function _no:DoClick()
-		if no ~= nil then
-			no()
-		end
-
+		if no ~= nil then no() end
 		win:Close()
 	end
 
@@ -158,7 +151,6 @@ function GetBorderTab(tab)
 	tab[4].x = tab.x
 	tab[4].y = tab.y
 	tab[4].color = tab.color
-
 	return tab
 end
 
@@ -171,7 +163,6 @@ function stc(str)
 		str = string.Explode(",", str)
 		if table.Count(str) >= 3 then return Color(str[1] or 0, str[2] or 0, str[3] or 0, str[4] or 255) end
 	end
-
 	return Color(255, 255, 255, 255)
 end
 
@@ -199,10 +190,7 @@ function YRPDrawButton(button, tab)
 		tab.hovercolor.a = 200
 	end
 
-	if button:IsHovered() then
-		tab.color = tab.hovercolor or Color(255, 255, 255, 255)
-	end
-
+	if button:IsHovered() then tab.color = tab.hovercolor or Color(255, 255, 255, 255) end
 	YRPDrawBox(tab)
 	tab.text = tab.text or {}
 	tab.text.text = tab.text.text or "NOTEXT"
@@ -215,7 +203,6 @@ end
 function YRPGetTextLength(text, font)
 	surface.SetFont(font)
 	local l = select(1, surface.GetTextSize(text))
-
 	return l
 end
 
@@ -265,31 +252,26 @@ end
 
 function InterfaceBorder()
 	local lply = LocalPlayer()
-
 	return lply:GetYRPBool("interface_border", true)
 end
 
 function InterfaceRounded()
 	local lply = LocalPlayer()
-
 	return lply:GetYRPBool("interface_rounded", true)
 end
 
 function InterfaceTransparent()
 	local lply = LocalPlayer()
-
 	return lply:GetYRPBool("interface_transparent", true)
 end
 
 function InterfaceColor()
 	local lply = LocalPlayer()
-
 	return lply:GetYRPString("interface_color", "blue")
 end
 
 function InterfaceStyle()
 	local lply = LocalPlayer()
-
 	return lply:GetYRPString("interface_style", "dark")
 end
 
@@ -297,13 +279,9 @@ local yrp_colors = {}
 function YRPGetColor(nr)
 	if IsNotNilAndNotFalse(yrp_colors[interfaceDesign()]) and IsNotNilAndNotFalse(yrp_colors[interfaceDesign()][InterfaceColor()]) and IsNotNilAndNotFalse(yrp_colors[interfaceDesign()][InterfaceColor()][nr]) then
 		local color = yrp_colors[interfaceDesign()][InterfaceColor()][nr]
-		if InterfaceTransparent() then
-			color.a = 200
-		end
-
+		if InterfaceTransparent() then color.a = 200 end
 		return color
 	end
-
 	return Color(255, 0, 0, 255)
 end
 
@@ -436,30 +414,16 @@ function YRP:YLoadDesignIcon()
 		local mat, _ = Material(path, "noclamp")
 		_icons[name] = mat
 		m_adding = false
-		if _w_icons[m_counter + 1] ~= nil then
-			YRP:YLoadDesignIcon()
-		end
+		if _w_icons[m_counter + 1] ~= nil then YRP:YLoadDesignIcon() end
 	elseif m_counter ~= m_w_counter then
-		timer.Simple(
-			1,
-			function()
-				YRP:YLoadDesignIcon()
-			end
-		)
+		timer.Simple(1, function() YRP:YLoadDesignIcon() end)
 	end
 end
 
-timer.Simple(
-	1,
-	function()
-		YRP:YLoadDesignIcon()
-	end
-)
-
+timer.Simple(1, function() YRP:YLoadDesignIcon() end)
 YRP:AddDesignIcon("clear", "vgui/material/icon_clear.png")
 function YRP:GetDesignIcon(name)
 	if _icons[name] ~= nil and tostring(_icons[name]) ~= "Material [___error]" then return _icons[name] end
-
 	return _icons["clear"]
 end
 
@@ -476,16 +440,12 @@ local _delay = 1
 local _get_design = true
 function surfaceWindow(self, pw, ph, title)
 	local _title = title or ""
-	if yrp_if[interfaceDesign()] ~= nil and yrp_if[interfaceDesign()]["DFrame"] then
-		yrp_if[interfaceDesign()]["DFrame"](self, pw, ph, _title)
-	end
+	if yrp_if[interfaceDesign()] ~= nil and yrp_if[interfaceDesign()]["DFrame"] then yrp_if[interfaceDesign()]["DFrame"](self, pw, ph, _title) end
 end
 
 function surfacePanel(derm, pw, ph, text, color, px, py, ax, ay)
 	local _text = text or ""
-	if yrp_if and yrp_if[interfaceDesign()] ~= nil and yrp_if[interfaceDesign()] and yrp_if[interfaceDesign()]["DPanel"] then
-		yrp_if[interfaceDesign()]["DPanel"](derm, pw, ph, _text, color, px, py, ax, ay)
-	end
+	if yrp_if and yrp_if[interfaceDesign()] ~= nil and yrp_if[interfaceDesign()] and yrp_if[interfaceDesign()]["DPanel"] then yrp_if[interfaceDesign()]["DPanel"](derm, pw, ph, _text, color, px, py, ax, ay) end
 end
 
 function surfaceCheckBox(self, pw, ph, icon)
@@ -556,10 +516,7 @@ local color_pb1 = Color(255, 255, 255, 150)
 local color_pb2 = Color(255, 255, 100, 150)
 function paintButton(self, pw, ph, mytext)
 	local _color = color_pb1
-	if self:IsHovered() then
-		_color = color_pb2
-	end
-
+	if self:IsHovered() then _color = color_pb2 end
 	draw.RoundedBox(0, 0, 0, pw, ph, _color)
 	local _brC = Color(0, 0, 0, 255)
 	paintBr(pw, ph, _brC)
@@ -568,10 +525,7 @@ end
 
 function paintPanel(self, pw, ph, color)
 	local _c = color
-	if _c == nil then
-		_c = Color(0, 0, 0, 255)
-	end
-
+	if _c == nil then _c = Color(0, 0, 0, 255) end
 	draw.RoundedBox(0, 0, 0, pw, ph, _c)
 	local _brC = Color(255, 255, 255, 255)
 	paintBr(pw, ph, _brC)
@@ -583,9 +537,7 @@ function paintInv(self, pw, ph, text1, text2)
 	local _brC = Color(255, 255, 255, 255)
 	paintBr(pw, ph, _brC)
 	draw.SimpleTextOutlined(YRP:trans(text1), "DermaDefault", YRP:ctr(15), ph - YRP:ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, YRP:ctr(1), Color(0, 0, 0, 255))
-	if text2 ~= nil then
-		draw.SimpleTextOutlined(YRP:trans(text2), "DermaDefault", YRP:ctr(15), YRP:ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, YRP:ctr(1), Color(0, 0, 0, 255))
-	end
+	if text2 ~= nil then draw.SimpleTextOutlined(YRP:trans(text2), "DermaDefault", YRP:ctr(15), YRP:ctr(10), Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, YRP:ctr(1), Color(0, 0, 0, 255)) end
 end
 
 function YRPCreateD(cla, parent, w, h, x, y)
@@ -598,7 +550,6 @@ function YRPCreateD(cla, parent, w, h, x, y)
 	if IsValid(tmpD) then
 		tmpD:SetSize(_w, _h)
 		tmpD:SetPos(_x, _y)
-
 		return tmpD
 	else
 		return NULL
@@ -655,12 +606,9 @@ function colorH(colTab)
 			col[k] = v
 		else
 			col[k] = v + def
-			if col[k] > 255 then
-				col[k] = 255
-			end
+			if col[k] > 255 then col[k] = 255 end
 		end
 	end
-
 	return Color(col.r, col.g, col.b, col.a)
 end
 
@@ -673,12 +621,9 @@ function colorBG(colTab)
 			col[k] = v
 		else
 			col[k] = v - def
-			if col[k] < 0 then
-				col[k] = 0
-			end
+			if col[k] < 0 then col[k] = 0 end
 		end
 	end
-
 	return Color(col.r, col.g, col.b, col.a)
 end
 
@@ -691,17 +636,12 @@ function colorToMode(colTab)
 			col[k] = v
 		elseif getMDMode() == "light" then
 			col[k] = v + def
-			if col[k] > 255 then
-				col[k] = 255
-			end
+			if col[k] > 255 then col[k] = 255 end
 		elseif getMDMode() == "dark" then
 			col[k] = v - def
-			if col[k] < 0 then
-				col[k] = 0
-			end
+			if col[k] < 0 then col[k] = 0 end
 		end
 	end
-
 	return Color(col.r, col.g, col.b, col.a)
 end
 
@@ -721,13 +661,11 @@ end
 
 function getMDPColor()
 	local tmp = getMDPCol()
-
 	return colorToMode(tmp)
 end
 
 function getMDSColor()
 	local tmp = getMDSCol()
-
 	return colorToMode(tmp)
 end
 
@@ -763,7 +701,6 @@ function GetFontSizes()
 	_fs[13] = 60
 	_fs[14] = 72
 	_fs[15] = 96
-
 	return _fs
 end
 
@@ -792,10 +729,7 @@ end
 function surfaceText(mytext, font, x, y, color, ax, ay, br)
 	br = br or true
 	local col_br = Color(0, 0, 0, color.a)
-	if color == Color(0, 0, 0, 255) then
-		col_br = Color(255, 255, 255, color.a)
-	end
-
+	if color == Color(0, 0, 0, 255) then col_br = Color(255, 255, 255, color.a) end
 	if not br then
 		draw.SimpleText(mytext, font, x, y, color, ax, ay, 0, Color(255, 255, 255, 0))
 	else
@@ -805,14 +739,8 @@ end
 
 function createVGUI(art, parent, w, h, x, y)
 	local tmp = vgui.Create(art, parent, nil)
-	if w ~= nil and h ~= nil then
-		tmp:SetSize(YRP:ctr(w), YRP:ctr(h))
-	end
-
-	if x ~= nil and y ~= nil then
-		tmp:SetPos(YRP:ctr(x), YRP:ctr(y))
-	end
-
+	if w ~= nil and h ~= nil then tmp:SetSize(YRP:ctr(w), YRP:ctr(h)) end
+	if x ~= nil and y ~= nil then tmp:SetPos(YRP:ctr(x), YRP:ctr(y)) end
 	return tmp
 end
 
@@ -1029,7 +957,6 @@ function createMDMenu(parent, w, h, x, y)
 			self:SetPos(self.px, self.py)
 		end
 	end
-
 	return tmp
 end
 
@@ -1063,7 +990,6 @@ function createMDSwitch(parent, w, h, x, y, opt1, opt2, _hook)
 		addMDColor("dsecondary", getMDSColor())
 		addMDColor("dsecondaryH", colorH(getMDSColor()))
 	end
-
 	return tmp
 end
 
@@ -1073,16 +999,13 @@ function addPColorField(parent, col, x, y)
 	tmp:SetText("")
 	function tmp:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, self.color)
-		if self:IsHovered() then
-			draw.SimpleTextOutlined("X", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-		end
+		if self:IsHovered() then draw.SimpleTextOutlined("X", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255)) end
 	end
 
 	function tmp:DoClick()
 		addMDColor("dprimary", getMDPColor())
 		addMDColor("dprimaryBG", colorBG(getMDPColor()))
 	end
-
 	return tmp
 end
 
@@ -1092,16 +1015,13 @@ function addSColorField(parent, col, x, y)
 	tmp:SetText("")
 	function tmp:Paint(pw, ph)
 		draw.RoundedBox(0, 0, 0, pw, ph, self.color)
-		if self:IsHovered() then
-			draw.SimpleTextOutlined("X", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255))
-		end
+		if self:IsHovered() then draw.SimpleTextOutlined("X", "DermaDefault", pw / 2, ph / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0, 255)) end
 	end
 
 	function tmp:DoClick()
 		addMDColor("dsecondary", getMDSColor())
 		addMDColor("dsecondaryH", colorH(getMDSColor()))
 	end
-
 	return tmp
 end
 
@@ -1128,140 +1048,109 @@ end
 function YRPDrawCircle(x, y, radius, seg)
 	if x == nil then
 		YRP:msg("error", "x: " .. tostring(x))
-
 		return
 	end
 
 	if y == nil then
 		YRP:msg("error", "y: " .. tostring(y))
-
 		return
 	end
 
 	if radius == nil then
 		YRP:msg("error", "Radius: " .. tostring(radius))
-
 		return
 	end
 
 	if seg == nil then
 		YRP:msg("error", "Seg: " .. tostring(seg))
-
 		return
 	end
 
 	local cir = {}
-	table.insert(
-		cir,
-		{
-			x = x,
-			y = y,
-			u = 0.5,
-			v = 0.5
-		}
-	)
+	table.insert(cir, {
+		x = x,
+		y = y,
+		u = 0.5,
+		v = 0.5
+	})
 
 	for i = 0, seg do
 		local a = math.rad((i / seg) * -360)
-		table.insert(
-			cir,
-			{
-				x = x + math.sin(a) * radius,
-				y = y + math.cos(a) * radius,
-				u = math.sin(a) / 2 + 0.5,
-				v = math.cos(a) / 2 + 0.5
-			}
-		)
-	end
-
-	local a = math.rad(0) -- This is needed for non absolute segment counts
-	table.insert(
-		cir,
-		{
+		table.insert(cir, {
 			x = x + math.sin(a) * radius,
 			y = y + math.cos(a) * radius,
 			u = math.sin(a) / 2 + 0.5,
 			v = math.cos(a) / 2 + 0.5
-		}
-	)
+		})
+	end
+
+	local a = math.rad(0) -- This is needed for non absolute segment counts
+	table.insert(cir, {
+		x = x + math.sin(a) * radius,
+		y = y + math.cos(a) * radius,
+		u = math.sin(a) / 2 + 0.5,
+		v = math.cos(a) / 2 + 0.5
+	})
 
 	surface.DrawPoly(cir)
 end
 
 function YRPDrawCircleL(x, y, radius, seg)
 	local cir = {}
-	table.insert(
-		cir,
-		{
-			x = x,
-			y = y,
-			u = 0.5,
-			v = 0.5
-		}
-	)
+	table.insert(cir, {
+		x = x,
+		y = y,
+		u = 0.5,
+		v = 0.5
+	})
 
 	for i = 0, seg do
 		local a = math.rad((i / seg) * -180)
-		table.insert(
-			cir,
-			{
-				x = x + math.sin(a) * radius,
-				y = y + math.cos(a) * radius,
-				u = math.sin(a) / 2 + 0.5,
-				v = math.cos(a) / 2 + 0.5
-			}
-		)
-	end
-
-	local a = math.rad(0) -- This is needed for non absolute segment counts
-	table.insert(
-		cir,
-		{
+		table.insert(cir, {
 			x = x + math.sin(a) * radius,
 			y = y + math.cos(a) * radius,
 			u = math.sin(a) / 2 + 0.5,
 			v = math.cos(a) / 2 + 0.5
-		}
-	)
+		})
+	end
+
+	local a = math.rad(0) -- This is needed for non absolute segment counts
+	table.insert(cir, {
+		x = x + math.sin(a) * radius,
+		y = y + math.cos(a) * radius,
+		u = math.sin(a) / 2 + 0.5,
+		v = math.cos(a) / 2 + 0.5
+	})
 
 	surface.DrawPoly(cir)
 end
 
 function YRPDrawCircleR(x, y, radius, seg)
 	local cir = {}
-	table.insert(
-		cir,
-		{
-			x = x,
-			y = y,
-			u = 0.5,
-			v = 0.5
-		}
-	)
+	table.insert(cir, {
+		x = x,
+		y = y,
+		u = 0.5,
+		v = 0.5
+	})
 
 	for i = 0, seg do
 		local a = math.rad(((i / seg) * -180) + 180)
-		table.insert(
-			cir,
-			{
-				x = x + math.sin(a) * radius,
-				y = y + math.cos(a) * radius,
-				u = math.sin(a) / 2 + 0.5,
-				v = math.cos(a) / 2 + 0.5
-			}
-		)
-	end
-
-	local a = math.rad(0) -- This is needed for non absolute segment counts
-	table.insert(
-		cir,
-		{
+		table.insert(cir, {
 			x = x + math.sin(a) * radius,
 			y = y + math.cos(a) * radius,
 			u = math.sin(a) / 2 + 0.5,
 			v = math.cos(a) / 2 + 0.5
-		}
-	)
+		})
+	end
+
+	local a = math.rad(0) -- This is needed for non absolute segment counts
+	table.insert(cir, {
+		x = x + math.sin(a) * radius,
+		y = y + math.cos(a) * radius,
+		u = math.sin(a) / 2 + 0.5,
+		v = math.cos(a) / 2 + 0.5
+	})
 
 	surface.DrawPoly(cir)
 end
@@ -1271,9 +1160,7 @@ function drawRoundedBox(r, x, y, w, h, color)
 	surface.SetDrawColor(color)
 	draw.NoTexture()
 	YRPDrawCircleL(x + h / 2, y + h / 2, h / 2, 64)
-	if w >= h then
-		YRPDrawCircleR(x + w - h / 2, y + h / 2, h / 2, 64)
-	end
+	if w >= h then YRPDrawCircleR(x + w - h / 2, y + h / 2, h / 2, 64) end
 end
 
 function drawRoundedBoxStencil(r, x, y, w, h, color, max)
@@ -1321,10 +1208,7 @@ end
 
 function YRPTestHTML(pnl, url, rem)
 	if SERVER then return end
-	if rem == nil then
-		rem = true
-	end
-
+	if rem == nil then rem = true end
 	if strEmpty(url) then
 		if rem then
 			pnl:Remove()
@@ -1332,59 +1216,44 @@ function YRPTestHTML(pnl, url, rem)
 			pnl:SetVisible(false)
 		end
 	else
-		http.Fetch(
-			url,
-			function(body, len, headers, code)
-				if code ~= 200 then
-					if rem and YRPPanelAlive(pnl, "pnl:Remove") and pnl.Remove then
-						pnl:Remove()
-					elseif YRPPanelAlive(pnl, "pnl:SetV 1") and pnl.SetVisible then
-						pnl:SetVisible(false)
-					end
-				elseif YRPPanelAlive(pnl, "pnl:SetV 2") and pnl.SetVisible then
-					pnl:SetVisible(true)
+		http.Fetch(url, function(body, len, headers, code)
+			if code ~= 200 then
+				if rem and YRPPanelAlive(pnl, "pnl:Remove") and pnl.Remove then
+					pnl:Remove()
+				elseif YRPPanelAlive(pnl, "pnl:SetV 1") and pnl.SetVisible then
+					pnl:SetVisible(false)
 				end
-			end,
-			function(error)
-				if pnl and YRPPanelAlive(pnl, "error derma") then
-					if rem and pnl.Remove then
-						pnl:Remove()
-					elseif pnl.SetVisible then
-						pnl:SetVisible(false)
-					end
+			elseif YRPPanelAlive(pnl, "pnl:SetV 2") and pnl.SetVisible then
+				pnl:SetVisible(true)
+			end
+		end, function(error)
+			if pnl and YRPPanelAlive(pnl, "error derma") then
+				if rem and pnl.Remove then
+					pnl:Remove()
+				elseif pnl.SetVisible then
+					pnl:SetVisible(false)
 				end
 			end
-		)
+		end)
 	end
 end
 
-hook.Add(
-	"Think",
-	"yrp_motion",
-	function()
-		local lply = LocalPlayer()
-		lply.oldang = lply.oldang or Angle(0, 0, 0)
-		lply.newang = lply:EyeAngles()
-		lply.swayx = lply.swayx or 0
-		lply.swayy = lply.swayy or 0
-		local valx1 = Lerp(FrameTime() * 8, lply.swayx, lply.newang.y - lply.oldang.y)
-		local valy1 = Lerp(FrameTime() * 8, lply.swayy, lply.newang.p - lply.oldang.p)
-		if valx1 < 4 and valx1 > -4 then
-			lply.swayx = valx1
-		end
-
-		if valy1 < 4 and valy1 > -4 then
-			lply.swayy = valy1
-		end
-
-		lply.oldang = lply.newang
-	end
-)
+hook.Add("Think", "yrp_motion", function()
+	local lply = LocalPlayer()
+	lply.oldang = lply.oldang or Angle(0, 0, 0)
+	lply.newang = lply:EyeAngles()
+	lply.swayx = lply.swayx or 0
+	lply.swayy = lply.swayy or 0
+	local valx1 = Lerp(FrameTime() * 8, lply.swayx, lply.newang.y - lply.oldang.y)
+	local valy1 = Lerp(FrameTime() * 8, lply.swayy, lply.newang.p - lply.oldang.p)
+	if valx1 < 4 and valx1 > -4 then lply.swayx = valx1 end
+	if valy1 < 4 and valy1 > -4 then lply.swayy = valy1 end
+	lply.oldang = lply.newang
+end)
 
 function HUDMOTIONX(px)
 	if GetGlobalYRPBool("bool_yrp_hud_swaying", false) then
 		local lply = LocalPlayer()
-
 		return px + lply.swayx * 20
 	else
 		return px
@@ -1394,7 +1263,6 @@ end
 function HUDMOTIONY(py)
 	if GetGlobalYRPBool("bool_yrp_hud_swaying", false) then
 		local lply = LocalPlayer()
-
 		return py + -lply.swayy * 20
 	else
 		return py
@@ -1417,29 +1285,21 @@ if BSHADOWS == nil then
 	--The shadow layer
 	BSHADOWS.RenderTarget2 = GetRenderTarget("bshadows_shadow", ScrW(), ScrH())
 	--The matarial to draw the render targets on
-	BSHADOWS.ShadowMaterial = CreateMaterial(
-		"bshadows",
-		"UnlitGeneric",
-		{
-			["$translucent"] = 1,
-			["$vertexalpha"] = 1,
-			["alpha"] = 1
-		}
-	)
+	BSHADOWS.ShadowMaterial = CreateMaterial("bshadows", "UnlitGeneric", {
+		["$translucent"] = 1,
+		["$vertexalpha"] = 1,
+		["alpha"] = 1
+	})
 
 	--When we copy the rendertarget it retains color, using this allows up to force any drawing to be black
 	--Then we can blur it to create the shadow effect
-	BSHADOWS.ShadowMaterialGrayscale = CreateMaterial(
-		"bshadows_grayscale",
-		"UnlitGeneric",
-		{
-			["$translucent"] = 1,
-			["$vertexalpha"] = 1,
-			["$alpha"] = 1,
-			["$color"] = "0 0 0",
-			["$color2"] = "0 0 0"
-		}
-	)
+	BSHADOWS.ShadowMaterialGrayscale = CreateMaterial("bshadows_grayscale", "UnlitGeneric", {
+		["$translucent"] = 1,
+		["$vertexalpha"] = 1,
+		["$alpha"] = 1,
+		["$color"] = "0 0 0",
+		["$color2"] = "0 0 0"
+	})
 
 	--Call this to begin drawing a shadow
 	BSHADOWS.BeginShadow = function()

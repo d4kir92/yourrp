@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 include("shared.lua")
@@ -33,14 +33,7 @@ function ENT:OnTakeDamage(dmg)
 			_rd:SetAngles(self:GetAngles())
 			_rd:Spawn()
 			self:Remove()
-			timer.Simple(
-				9,
-				function()
-					if tostring(_rd) ~= "[NULL Entity]" then
-						_rd:Remove()
-					end
-				end
-			)
+			timer.Simple(9, function() if tostring(_rd) ~= "[NULL Entity]" then _rd:Remove() end end)
 		end
 	end
 end
@@ -59,12 +52,7 @@ function ENT:Open(activator, caller)
 	if not activator:GetYRPBool("open_menu", false) then
 		activator:SetYRPBool("open_menu", true)
 		self:OpenBuyMenu(activator)
-		timer.Simple(
-			1,
-			function()
-				activator:SetYRPBool("open_menu", false)
-			end
-		)
+		timer.Simple(1, function() activator:SetYRPBool("open_menu", false) end)
 	end
 end
 
@@ -78,7 +66,6 @@ end
 function ENT:AcceptInput(input, entActivator, entCaller, data)
 	if string.lower(input) == "use" then
 		self:Open(entActivator, entCaller)
-
 		return
 	end
 end

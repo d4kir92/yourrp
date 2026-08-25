@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 function FOColor()
 	return Color(249, 247, 196, 255)
 end
@@ -139,10 +139,7 @@ function FO76Element(tab)
 	elseif lply:HudElementVisible(tab.element) then
 		YRPHudBox(FO76["BG"][tab.element])
 		YRPHudBox(FO76["BGBar"][tab.element])
-		if tab.cur ~= nil and tab.max ~= nil then
-			FO76["Bar"][tab.element].w = FO76["Bar"][tab.element].fw * tab.cur / tab.max
-		end
-
+		if tab.cur ~= nil and tab.max ~= nil then FO76["Bar"][tab.element].w = FO76["Bar"][tab.element].fw * tab.cur / tab.max end
 		YRPHudBox(FO76["Bar"][tab.element])
 		if tab.text ~= nil and lply:HudValue(tab.element, "TEXT") then
 			FO76["TEXT"][tab.element].text = tab.text
@@ -175,10 +172,7 @@ function FO76Name(tab)
 		local ax = lply:HudValue(tab.element, "AX")
 		local ay = lply:HudValue(tab.element, "AY")
 		local fontsize = lply:HudValue(tab.element, "TS")
-		if fontsize <= 0 then
-			fontsize = 14
-		end
-
+		if fontsize <= 0 then fontsize = 14 end
 		if ax == 1 then
 			x = x + w / 2
 		elseif ax == 2 then
@@ -214,10 +208,7 @@ function FO76Numbers(tab)
 		local x = lply:HudValue(tab.element, "POSI_X")
 		local y = lply:HudValue(tab.element, "POSI_Y")
 		local fontsize = lply:HudValue(tab.element, "TS")
-		if fontsize <= 0 then
-			fontsize = 14
-		end
-
+		if fontsize <= 0 then fontsize = 14 end
 		FO76["NUM"][tab.element].w = w
 		FO76["NUM"][tab.element].h = h
 		FO76["NUM"][tab.element].x = x + w / 2
@@ -608,9 +599,4 @@ function HUD_FO76()
 	end
 end
 
-timer.Simple(
-	1,
-	function()
-		hook.Add("HUDPaint", "yrp_hud_design_Fallout76", HUD_FO76)
-	end
-)
+timer.Simple(1, function() hook.Add("HUDPaint", "yrp_hud_design_Fallout76", HUD_FO76) end)

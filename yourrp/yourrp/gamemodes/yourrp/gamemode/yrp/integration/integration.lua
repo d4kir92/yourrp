@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 DarkRP = DarkRP or {}
 DarkRP.disabledDefaults = DarkRP.disabledDefaults or {}
 DarkRP.disabledDefaults.modules = DarkRP.disabledDefaults.modules or {}
@@ -139,10 +139,7 @@ include("darkrp/player/shared.lua")
 include("darkrp/entity/shared.lua")
 include("darkrp/config/config.lua")
 --include( "darkrp/scoreboard/sh_scoreboard.lua" )
-if CLIENT then
-	include("darkrp/drawfunction.lua")
-end
-
+if CLIENT then include("darkrp/drawfunction.lua") end
 local Vector = FindMetaTable("Vector")
 function Vector:isInSight(filter, ply)
 	--Description: Decides whether the vector could be seen by the player if they
@@ -154,15 +151,11 @@ function Vector:isInSight(filter, ply)
 	trace.filter = filter
 	trace.mask = -1
 	local TheTrace = util.TraceLine(trace)
-
 	return not TheTrace.Hit, TheTrace.HitPos
 end
 
 -- Neurotec fix
-if SERVER then
-	include("neurotanks/sv_fix.lua")
-end
-
+if SERVER then include("neurotanks/sv_fix.lua") end
 -- NETWORKING
 local tab_darkrp = {}
 function SetDarkRPTab(tab)
@@ -191,14 +184,11 @@ function UpdateDarkRP(tab)
 	end
 end
 
-net.Receive(
-	"nws_yrp_update_yrp_darkrp",
-	function(len)
-		local tab = net.ReadTable()
-		SetDarkRPTab(tab)
-		UpdateDarkRP(DarkRP)
-	end
-)
+net.Receive("nws_yrp_update_yrp_darkrp", function(len)
+	local tab = net.ReadTable()
+	SetDarkRPTab(tab)
+	UpdateDarkRP(DarkRP)
+end)
 
 function AddExtraTeam(...)
 end
@@ -212,9 +202,7 @@ local function GetLuaFilesRecursively(folderPath, collectedFiles)
 	local files, folders = file.Find(folderPath .. "*", "GAME")
 	if files then
 		for _, fileName in ipairs(files) do
-			if string.EndsWith(fileName, ".lua") and file.Exists(folderPath .. fileName, "GAME") and file.Size(folderPath .. fileName, "GAME") > 0 and string.find(folderPath .. fileName, "lua/darkrp_modules") then
-				table.insert(collectedFiles, folderPath .. fileName)
-			end
+			if string.EndsWith(fileName, ".lua") and file.Exists(folderPath .. fileName, "GAME") and file.Size(folderPath .. fileName, "GAME") > 0 and string.find(folderPath .. fileName, "lua/darkrp_modules") then table.insert(collectedFiles, folderPath .. fileName) end
 		end
 	end
 
@@ -223,7 +211,6 @@ local function GetLuaFilesRecursively(folderPath, collectedFiles)
 			GetLuaFilesRecursively(folderPath .. subfolderName .. "/", collectedFiles)
 		end
 	end
-
 	return collectedFiles
 end
 
@@ -237,16 +224,11 @@ function AddDarkRPModules()
 			if file.Exists(shortPath, "GAME") and file.Size(shortPath, "GAME") > 0 then
 				if string.StartWith(fileName, "sh_") then
 					MsgC(Color(0, 255, 0), "LOADED DARKRP MODULE FILE for SHARED: " .. shortPath, "\n")
-					if SERVER then
-						AddCSLuaFile(shortPath)
-					end
-
+					if SERVER then AddCSLuaFile(shortPath) end
 					include(shortPath)
 				elseif string.StartWith(fileName, "sv_") then
 					MsgC(Color(0, 255, 0), "LOADED DARKRP MODULE FILE for SERVER: " .. shortPath, "\n")
-					if SERVER then
-						include(shortPath)
-					end
+					if SERVER then include(shortPath) end
 				elseif string.StartWith(fileName, "cl_") then
 					MsgC(Color(0, 255, 0), "LOADED DARKRP MODULE FILE for CLIENT: " .. shortPath, "\n")
 					if SERVER then
@@ -260,9 +242,4 @@ function AddDarkRPModules()
 	end
 end
 
-timer.Simple(
-	1,
-	function()
-		AddDarkRPModules()
-	end
-)
+timer.Simple(1, function() AddDarkRPModules() end)

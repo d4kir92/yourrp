@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local _emotes = {}
 local _emotes_lookup = {}
 function GetEmotes()
@@ -10,14 +10,11 @@ function AddEmote(name, cmd)
 	_new.name = name
 	_new.cmd = cmd
 	table.insert(_emotes, _new)
-	if cmd ~= nil then
-		_emotes_lookup[tostring(cmd)] = true
-	end
+	if cmd ~= nil then _emotes_lookup[tostring(cmd)] = true end
 end
 
 function YRPIsValidEmote(cmd)
 	if cmd == nil then return false end
-
 	return _emotes_lookup[tostring(cmd)] or false
 end
 

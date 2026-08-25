@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 function DarkRP.addJailPos(pos)
 end
 
@@ -15,7 +15,6 @@ function DarkRP.createMoneyBag(pos, amount)
 	_moneyEnt:SetPos(pos)
 	_moneyEnt:Spawn()
 	_moneyEnt:SetMoney(amount)
-
 	return _moneyEnt
 end
 
@@ -32,14 +31,12 @@ end
 function DarkRP.createVote(question, voteid, target, delay, callback, excludeVoters, fail, ...)
 	--Description: Create a vote.
 	YRPDarkrpNotFound("createVote(	question, voteid, target, delay, callback, excludeVoters, fail, ...)")
-
 	return {}
 end
 
 function DarkRP.customEntityLimitReached(tblEnt)
 	--Description: Set a shared variable.
 	YRPDarkrpNotFound("customEntityLimitReached(tblEnt)")
-
 	return false
 end
 
@@ -60,7 +57,6 @@ end
 function DarkRP.destroyLastVote()
 	--Description: Destroy the last created vote.
 	YRPDarkrpNotFound("destroyLastVote()")
-
 	return false
 end
 
@@ -82,14 +78,12 @@ end
 function DarkRP.doorIndexToEnt(index)
 	--Description: Get the entity of a door index (inverse of ent:doorIndexToEnt() ). Note: the door MUST have been created by the map!
 	YRPDarkrpNotFound("doorIndexToEnt( " .. tostring(index) .. " )")
-
 	return NULL
 end
 
 function DarkRP.doorToEntIndex(index)
 	--Description: Get an ENT index from a door index.
 	YRPDarkrpNotFound("doorToEntIndex( " .. tostring(index) .. " )")
-
 	return -1
 end
 
@@ -102,14 +96,12 @@ end
 function DarkRP.getChatSound(text)
 	--Description: Get a chat sound (play a noise when someone says something) associated with the given phrase.
 	YRPDarkrpNotFound("getChatSound( " .. text .. " )")
-
 	return {}
 end
 
 function DarkRP.getHits()
 	--Description: Get all the active hits
 	YRPDarkrpNotFound("getHits()")
-
 	return {}
 end
 
@@ -121,14 +113,12 @@ end
 function DarkRP.isEmpty(pos, ignore)
 	--Description: Destroy a question by ID.
 	YRPDarkrpNotFound("isEmpty( " .. tostring(pos) .. ", ignore)")
-
 	return false
 end
 
 function DarkRP.jailPosCount()
 	--Description: The amount of jail positions in the current map.
 	YRPDarkrpNotFound("jailPosCount()")
-
 	return 0
 end
 
@@ -210,7 +200,6 @@ end
 function DarkRP.retrieveJailPos(index)
 	--Description: Retrieve a jail position.
 	YRPDarkrpNotFound("retrieveJailPos( " .. tostring(index) .. " )")
-
 	return Vector(0, 0, 0)
 end
 
@@ -229,10 +218,7 @@ function DarkRP.retrieveRPNames(name, callback)
 		end
 	end
 
-	if callback then
-		callback(inuse)
-	end
-
+	if callback then callback(inuse) end
 	return inuse
 end
 
@@ -244,7 +230,6 @@ end
 function DarkRP.retrieveTeamSpawnPos(team)
 	--Description: Retrieve a random spawn position for a job.
 	YRPDarkrpNotFound("retrieveTeamSpawnPos(team)")
-
 	return Vector(0, 0, 0)
 end
 
@@ -318,14 +303,12 @@ end
 function DarkRP.toggleSleep(ply, command)
 	--Description: Old function to toggle sleep. I'm not proud of it.
 	YRPDarkrpNotFound("toggleSleep(ply, command)")
-
 	return ""
 end
 
 function DarkRP.unLockdown(ply)
 	--Description: Stop the lockdown.
 	YRPDarkrpNotFound("unLockdown(ply)")
-
 	return ""
 end
 

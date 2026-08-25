@@ -1,23 +1,13 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 function DrawSelector(btn, w, h, text, selected, hassubtabs)
 	local spacer = 0
-	if hassubtabs then
-		spacer = YRP:ctr(100)
-	end
-
+	if hassubtabs then spacer = YRP:ctr(100) end
 	draw.SimpleText(text, "Y_22_500", w / 2 - spacer / 2, h / 2, Color(255, 255, 255, 255), 1, 1)
-	if btn.ani_h == nil then
-		btn.ani_h = 0
-	end
-
+	if btn.ani_h == nil then btn.ani_h = 0 end
 	if btn:IsHovered() or selected then
-		if btn.ani_h < 10 then
-			btn.ani_h = btn.ani_h + 1
-		end
+		if btn.ani_h < 10 then btn.ani_h = btn.ani_h + 1 end
 	else
-		if btn.ani_h > 0 then
-			btn.ani_h = btn.ani_h - 1
-		end
+		if btn.ani_h > 0 then btn.ani_h = btn.ani_h - 1 end
 	end
 
 	local color = YRPGetColor("2")
@@ -88,15 +78,9 @@ function PANEL:SiteNotFound()
 end
 
 function PANEL:AddTab(name, netstr, starttab, hassubtabs)
-	if #self.tabs > 0 then
-		self:MakeSpacer()
-	end
-
+	if #self.tabs > 0 then self:MakeSpacer() end
 	local spacer = 0
-	if hassubtabs then
-		spacer = YRP:ctr(100)
-	end
-
+	if hassubtabs then spacer = YRP:ctr(100) end
 	local TAB = YRPCreateD("YButton", self, YRPGetTextLength(YRP:trans(name), "Y_22_500") + YRP:ctr(30 * 2) + spacer, YRP:ctr(100), YRP:ctr(400), 0)
 	TAB.menu = self
 	TAB.name = name
@@ -118,10 +102,7 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 			self.stabs:ShowCloseButton(false)
 			self.stabs:SetDraggable(false)
 			function self.stabs:Paint(pw, ph)
-				if not YRPPanelAlive(self:GetParent(), "ShowSubTabs") then
-					self:HideSubTabs()
-				end
-
+				if not YRPPanelAlive(self:GetParent(), "ShowSubTabs") then self:HideSubTabs() end
 				local mx, my = gui.MousePos()
 				local px, py = self:GetPos()
 				if mx > px + pw then
@@ -240,12 +221,8 @@ function PANEL:AddTab(name, netstr, starttab, hassubtabs)
 		table.insert(self.subtabs, entry)
 	end
 
-	if starttab then
-		TAB:DoClick()
-	end
-
+	if starttab then TAB:DoClick() end
 	self:AddPanel(TAB)
-
 	return TAB
 end
 
@@ -262,36 +239,28 @@ end
 function PANEL:GetMenuInfo(netstr)
 	net.Start(netstr)
 	net.SendToServer()
-	net.Receive(
-		netstr,
-		function(len)
-			if YRPPanelAlive(self, "GetMenuInfo") then
-				local tabs = net.ReadTable()
-				local subtabs = net.ReadTable()
-				for i, tab in pairs(tabs) do
-					local starttab = false
-					if tab.name == self.starttab then
-						starttab = true
-					end
+	net.Receive(netstr, function(len)
+		if YRPPanelAlive(self, "GetMenuInfo") then
+			local tabs = net.ReadTable()
+			local subtabs = net.ReadTable()
+			for i, tab in pairs(tabs) do
+				local starttab = false
+				if tab.name == self.starttab then starttab = true end
+				local hassubtabs = false
+				for _i, subtab in pairs(subtabs) do
+					if subtab.parent == tab.name then hassubtabs = true end
+				end
 
-					local hassubtabs = false
-					for _i, subtab in pairs(subtabs) do
-						if subtab.parent == tab.name then
-							hassubtabs = true
-						end
-					end
-
-					local pnl = self:AddTab(tab.name, tab.netstr, starttab, hassubtabs)
-					for _i, subtab in pairs(subtabs) do
-						if subtab.parent == tab.name then
-							pnl.hassubtabs = true
-							pnl:AddToTab(subtab.name, subtab.netstr, subtab.url, subtab.func)
-						end
+				local pnl = self:AddTab(tab.name, tab.netstr, starttab, hassubtabs)
+				for _i, subtab in pairs(subtabs) do
+					if subtab.parent == tab.name then
+						pnl.hassubtabs = true
+						pnl:AddToTab(subtab.name, subtab.netstr, subtab.url, subtab.func)
 					end
 				end
 			end
 		end
-	)
+	end)
 end
 
 function PANEL:Think()

@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 AddCSLuaFile("client.lua")
 if CLIENT then
 	include("client.lua")
@@ -9,7 +9,6 @@ end
 function DarkRP.error(message, stack, hints, path, line)
 	--Description: Throw a simplerr formatted error. Also halts the stack, which means that statements after calling this function will not execute.
 	YRPDarkrpNotFound("error( " .. message .. ", " .. tostring(stack) .. ", hints, " .. tostring(path) .. ", " .. tostring(line) .. " )")
-
 	return false, "this say nothing"
 end
 
@@ -17,7 +16,6 @@ function DarkRP.errorNoHalt(message, stack, hints, path, line)
 	--Description: Throw a simplerr formatted error. Unlike DarkRP.error, this does not halt the stack. This means that statements after
 	--						 calling this function will be executed like normal.
 	YRPDarkrpNotFound("errorNoHalt( " .. message .. ", " .. tostring(stack) .. ", hints, " .. tostring(path) .. ", " .. tostring(line) .. " )")
-
 	return false, "this say nothing"
 end
 
@@ -39,9 +37,7 @@ end
 function DarkRP.addPhrase(Languagename, key, translation)
 	--Description: Add a phrase to the existing translation.
 	--YRPDarkrpNotFound( "addPhrase( " .. Languagename .. ", " .. key .. ", " .. translation .. " )" )
-	if Languagename == "en" and not string.StartWith(YRP:trans("LID_" .. key), "LID_") then
-		YRP:set_lang_string("LID_" .. key, translation)
-	end
+	if Languagename == "en" and not string.StartWith(YRP:trans("LID_" .. key), "LID_") then YRP:set_lang_string("LID_" .. key, translation) end
 end
 
 function DarkRP.addPlayerGesture(anim, text)
@@ -77,9 +73,7 @@ function DarkRP.createCategory(tbl)
 		if group == nil then
 			MsgC(Color(0, 255, 0), "[YRPImportCategory]", " Add Group ( ", tbl.name, " )", "\n")
 			local res = YRP_SQL_INSERT_INTO("yrp_ply_groups", "string_name, string_color", YRP_SQL_STR_IN(tbl.name) .. ", " .. YRP_SQL_STR_IN(YRPColorToString(tbl.color)))
-			if res ~= nil then
-				MsgC(Color(0, 255, 0), "[YRPImportCategory]", " FAILED? ( ", res, " )", "\n")
-			end
+			if res ~= nil then MsgC(Color(0, 255, 0), "[YRPImportCategory]", " FAILED? ( ", res, " )", "\n") end
 		else
 			MsgC(Color(0, 255, 0), "[YRPImportCategory]", " Already Added? ( ", tbl.name, " )", "\n")
 		end
@@ -188,7 +182,6 @@ function DarkRP.createJob(name, tbl)
 			MsgC(Color(255, 255, 0), "[YRPImportJob]", " Already added? ( ", name, " )", "\n")
 		end
 	end
-
 	return c
 end
 
@@ -213,7 +206,6 @@ local checkChatCommand = function(tbl)
 	for k in pairs(validChatCommand) do
 		if not validChatCommand[k](tbl[k]) then return false, k end
 	end
-
 	return true
 end
 
@@ -221,10 +213,7 @@ function DarkRP.declareChatCommand(tbl)
 	--Description: Declare a chat command ( describe it)
 	DarkRP.chatCommands = DarkRP.chatCommands or {}
 	local valid, element = checkChatCommand(tbl)
-	if not valid then
-		DarkRP.error("Incorrect chat command! " .. element .. " is invalid!", 2)
-	end
-
+	if not valid then DarkRP.error("Incorrect chat command! " .. element .. " is invalid!", 2) end
 	tbl.command = string.lower(tbl.command)
 	DarkRP.chatCommands[tbl.command] = DarkRP.chatCommands[tbl.command] or tbl
 	for k, v in pairs(tbl) do
@@ -232,32 +221,27 @@ function DarkRP.declareChatCommand(tbl)
 	end
 end
 
-DarkRP.declareChatCommand(
-	{
-		command = "advert",
-		description = "Create a billboard holding an advertisement.",
-		delay = 1.5
-	}
-)
+DarkRP.declareChatCommand({
+	command = "advert",
+	description = "Create a billboard holding an advertisement.",
+	delay = 1.5
+})
 
 function DarkRP.explodeArg(arg)
 	--Description: String arguments exploded into a table. It accounts for substrings in quotes, which makes it more intelligent than string.Explode
 	YRPDarkrpNotFound("explodeArg( " .. arg .. " )")
-
 	return {}
 end
 
 function DarkRP.findPlayer(info)
 	--Description: Find a single player based on vague information.
 	YRPDarkrpNotFound("findPlayer( " .. info .. " )")
-
 	return NULL
 end
 
 function DarkRP.findPlayers(info)
 	--Description: Find a list of players based on vague information.
 	YRPDarkrpNotFound("findPlayers( " .. info .. " )")
-
 	return {}
 end
 
@@ -279,7 +263,6 @@ end
 function DarkRP.getAvailableVehicles()
 	--Description: Get the available vehicles that DarkRP supports.
 	YRPDarkrpNotFound("getAvailableVehicles()")
-
 	return {}
 end
 
@@ -297,7 +280,6 @@ end
 function DarkRP.getChatCommand(command)
 	DarkRP.chatCommands = DarkRP.chatCommands or {}
 	--Description: Get the information on a chat command.
-
 	return DarkRP.chatCommands[string.lower(command)]
 end
 
@@ -307,7 +289,6 @@ end
 
 function DarkRP.getChatCommands()
 	DarkRP.chatCommands = DarkRP.chatCommands or {}
-
 	return DarkRP.chatCommands
 end
 
@@ -322,14 +303,12 @@ end
 function DarkRP.getDoorVars()
 	--Description: Internal function, retrieves all the registered door variables.
 	YRPDarkrpNotFound("getDoorVars()")
-
 	return {}
 end
 
 function DarkRP.getDoorVarsByName()
 	--Description: Internal function, retrieves all the registered door variables, indeded by their names.
 	YRPDarkrpNotFound("getDoorVarsByName()")
-
 	return {}
 end
 
@@ -348,7 +327,6 @@ end
 function DarkRP.getIncompleteChatCommands()
 	--Description: chat commands that have been defined, but not declared. Information about these chat commands is missing.
 	YRPDarkrpNotFound("getIncompleteChatCommands()")
-
 	return {}
 end
 
@@ -370,7 +348,6 @@ end
 function DarkRP.getMissingPhrases(languageCode)
 	--Description: Get all the phrases a language is missing.
 	YRPDarkrpNotFound("getMissingPhrases( " .. languageCode .. " )")
-
 	return "Old getMissingPhrases"
 end
 
@@ -385,14 +362,12 @@ function DarkRP.getPhrase(key, parameters)
 	end
 
 	local _translation = YRP:trans("LID_" .. key)
-
 	return _translation
 end
 
 function DarkRP.getSortedChatCommands()
 	--Description: Get every chat command, sorted by their name.
 	YRPDarkrpNotFound("getSortedChatCommands()")
-
 	return {}
 end
 
@@ -481,7 +456,6 @@ function DarkRP.simplerrRun(f, args)
 	--Description: Run a function with the given parameters and send any runtime
 	--						 errors to admins.
 	YRPDarkrpNotFound("simplerrRun(f, args)")
-
 	return {}
 end
 
@@ -507,10 +481,7 @@ local moduleLoaded
 local function loadMySQLModule()
 	if moduleLoaded or not MySQLite_config or not MySQLite_config.EnableMySQL then return end
 	local moo, tmsql = file.Exists("bin/gmsv_mysqloo_*.dll", "LUA"), file.Exists("bin/gmsv_tmysql4_*.dll", "LUA")
-	if not moo and not tmsql then
-		error("Could not find a suitable MySQL module. Supported modules are MySQLOO and tmysql4.")
-	end
-
+	if not moo and not tmsql then error("Could not find a suitable MySQL module. Supported modules are MySQLOO and tmysql4.") end
 	moduleLoaded = true
 	require(moo and tmsql and MySQLite_config.Preferred_module or moo and "mysqloo" or "tmysql4")
 	multistatements = CLIENT_MULTI_STATEMENTS
@@ -540,21 +511,15 @@ end
 
 function initialize(config)
 	MySQLite_config = config or MySQLite_config
-	if not MySQLite_config then
-		ErrorNoHalt("Warning: No MySQL config!")
-	end
-
+	if not MySQLite_config then ErrorNoHalt("Warning: No MySQL config!") end
 	loadMySQLModule()
 	if MySQLite_config.EnableMySQL then
 		connectToMySQL(MySQLite_config.Host, MySQLite_config.Username, MySQLite_config.Password, MySQLite_config.Database_name, MySQLite_config.Database_port)
 	else
-		timer.Simple(
-			0,
-			function()
-				_G.GAMEMODE.DatabaseInitialized = _G.GAMEMODE.DatabaseInitialized or function() end
-				hook.Call("DatabaseInitialized", _G.GAMEMODE)
-			end
-		)
+		timer.Simple(0, function()
+			_G.GAMEMODE.DatabaseInitialized = _G.GAMEMODE.DatabaseInitialized or function() end
+			hook.Call("DatabaseInitialized", _G.GAMEMODE)
+		end)
 	end
 end
 
@@ -583,23 +548,14 @@ end
 function commit(onFinished)
 	if not CONNECTED_TO_MYSQL then
 		sql.Commit()
-		if onFinished then
-			onFinished()
-		end
-
+		if onFinished then onFinished() end
 		return
 	end
 
-	if not queuedQueries then
-		error("No queued queries! Call begin() first!")
-	end
-
+	if not queuedQueries then error("No queued queries! Call begin() first!") end
 	if #queuedQueries == 0 then
 		queuedQueries = nil
-		if onFinished then
-			onFinished()
-		end
-
+		if onFinished then onFinished() end
 		return
 	end
 
@@ -612,17 +568,11 @@ function commit(onFinished)
 	-- Recursion invariant: queuePos > 0 and queue[queuePos] <= #queue
 	call = function(...)
 		queuePos = queuePos + 1
-		if queue[queuePos].callback then
-			queue[queuePos].callback(...)
-		end
-
+		if queue[queuePos].callback then queue[queuePos].callback(...) end
 		-- Base case, end of the queue
 		if queuePos + 1 > #queue then
 			-- All queries have finished
-			if onFinished then
-				onFinished()
-			end
-
+			if onFinished then onFinished() end
 			return
 		end
 
@@ -636,15 +586,11 @@ end
 
 function queueQuery(sqlText, callback, errorCallback)
 	if CONNECTED_TO_MYSQL then
-		table.insert(
-			queuedQueries,
-			{
-				query = sqlText,
-				callback = callback,
-				onError = errorCallback
-			}
-		)
-
+		table.insert(queuedQueries, {
+			query = sqlText,
+			callback = callback,
+			onError = errorCallback
+		})
 		return
 	end
 
@@ -665,21 +611,16 @@ local function msOOQuery(sqlText, callback, errorCallback, queryValue)
 			table.insert(cachedQueries, {sqlText, callback, queryValue})
 			-- Immediately try reconnecting
 			msOOConnect(MySQLite_config.Host, MySQLite_config.Username, MySQLite_config.Password, MySQLite_config.Database_name, MySQLite_config.Database_port)
-
 			return
 		end
 
 		local supp = errorCallback and errorCallback(E, sqlText)
-		if not supp then
-			error(E .. " (" .. sqlText .. ")")
-		end
+		if not supp then error(E .. " (" .. sqlText .. ")") end
 	end
 
 	queryObject.onSuccess = function()
 		local res = queryValue and data and data[1] and arbitraryTableValue(data[1]) or not queryValue and data or nil
-		if callback then
-			callback(res, queryObject:lastInsert())
-		end
+		if callback then callback(res, queryObject:lastInsert()) end
 	end
 
 	queryObject:start()
@@ -690,22 +631,14 @@ local function tmsqlQuery(sqlText, callback, errorCallback, queryValue)
 		res = res[1] -- For now only support one result set
 		if not res.status then
 			local supp = errorCallback and errorCallback(res.error, sqlText)
-			if not supp then
-				error(res.error .. " (" .. sqlText .. ")")
-			end
-
+			if not supp then error(res.error .. " (" .. sqlText .. ")") end
 			return
 		end
 
 		-- compatibility with other backends
-		if not res.data or #res.data == 0 then
-			res.data = nil
-		end
-
+		if not res.data or #res.data == 0 then res.data = nil end
 		if queryValue and callback then return callback(res.data and res.data[1] and arbitraryTableValue(res.data[1]) or nil) end
-		if callback then
-			callback(res.data, res.lastid)
-		end
+		if callback then callback(res.data, res.lastid) end
 	end
 
 	databaseObject:Query(sqlText, call)
@@ -718,29 +651,21 @@ local function SQLiteQuery(sqlText, callback, errorCallback, queryValue)
 	if sql.LastError() and sql.LastError() ~= lastError then
 		local err = sql.LastError()
 		local supp = errorCallback and errorCallback(err, sqlText)
-		if supp == false then
-			error(err .. " (" .. sqlText .. ")", 2)
-		end
-
+		if supp == false then error(err .. " (" .. sqlText .. ")", 2) end
 		return
 	end
 
-	if callback then
-		callback(Result)
-	end
-
+	if callback then callback(Result) end
 	return Result
 end
 
 function query(sqlText, callback, errorCallback)
 	local qFunc = (CONNECTED_TO_MYSQL and ((mysqlOO and msOOQuery) or (TMySQL and tmsqlQuery))) or SQLiteQuery
-
 	return qFunc(sqlText, callback, errorCallback, false)
 end
 
 function queryValue(sqlText, callback, errorCallback)
 	local qFunc = (CONNECTED_TO_MYSQL and ((mysqlOO and msOOQuery) or (TMySQL and tmsqlQuery))) or SQLiteQuery
-
 	return qFunc(sqlText, callback, errorCallback, true)
 end
 
@@ -763,18 +688,9 @@ end
 
 msOOConnect = function(host, username, password, database_name, database_port)
 	databaseObject = mysqlOO.connect(host, username, password, database_name, database_port)
-	if timer.Exists("darkrp_check_mysql_status") then
-		timer.Remove("darkrp_check_mysql_status")
-	end
-
+	if timer.Exists("darkrp_check_mysql_status") then timer.Remove("darkrp_check_mysql_status") end
 	databaseObject.onConnectionFailed = function(_, msg)
-		timer.Simple(
-			5,
-			function()
-				msOOConnect(MySQLite_config.Host, MySQLite_config.Username, MySQLite_config.Password, MySQLite_config.Database_name, MySQLite_config.Database_port)
-			end
-		)
-
+		timer.Simple(5, function() msOOConnect(MySQLite_config.Host, MySQLite_config.Username, MySQLite_config.Password, MySQLite_config.Database_name, MySQLite_config.Database_port) end)
 		error("Connection failed! " .. tostring(msg) .. "\nTrying again in 5 seconds.")
 	end
 
@@ -784,21 +700,10 @@ end
 
 local function tmsqlConnect(host, username, password, database_name, database_port)
 	local db, err = TMySQL.Connect(host, username, password, database_name, database_port, nil, MySQLite_config.MultiStatements and multistatements or nil)
-	if err then
-		error("Connection failed! " .. err .. "\n")
-	end
-
+	if err then error("Connection failed! " .. err .. "\n") end
 	databaseObject = db
 	onConnected()
-	if TMySQL.Version and TMySQL.Version >= 4.1 then
-		hook.Add(
-			"Think",
-			"MySQLite:tmysqlPoll",
-			function()
-				db:Poll()
-			end
-		)
-	end
+	if TMySQL.Version and TMySQL.Version >= 4.1 then hook.Add("Think", "MySQLite:tmysqlPoll", function() db:Poll() end) end
 end
 
 function connectToMySQL(host, username, password, database_name, database_port)
@@ -809,7 +714,6 @@ end
 
 function SQLStr(sqlStr)
 	local escape = not CONNECTED_TO_MYSQL and sql.SQLStr or mysqlOO and function(str) return "\"" .. databaseObject:escape(tostring(str)) .. "\"" end or TMySQL and function(str) return "\"" .. databaseObject:Escape(tostring(str)) .. "\"" end
-
 	return escape(sqlStr)
 end
 
@@ -817,14 +721,8 @@ function tableExists(tbl, callback, errorCallback)
 	if not CONNECTED_TO_MYSQL then
 		local exists = sql.TableExists(tbl)
 		callback(exists)
-
 		return exists
 	end
 
-	queryValue(
-		string.format("SHOW TABLES LIKE %s", SQLStr(tbl)),
-		function(v)
-			callback(v ~= nil)
-		end, errorCallback
-	)
+	queryValue(string.format("SHOW TABLES LIKE %s", SQLStr(tbl)), function(v) callback(v ~= nil) end, errorCallback)
 end

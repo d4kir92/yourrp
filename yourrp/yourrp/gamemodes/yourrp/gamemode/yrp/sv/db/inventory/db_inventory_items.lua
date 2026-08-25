@@ -1,29 +1,23 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local DATABASE_NAME = "yrp_inventory_items"
-hook.Add(
-	"YRP_SQLDBREADY_GENERAL_DB",
-	"yrp_inventory_items",
-	function()
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_slotID", "INT DEFAULT 0")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_type", "TEXT DEFAULT 'item'")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_fixed", "INT DEFAULT 0") -- Fixed = not moveable
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_storageID", "INT DEFAULT 0") -- storageID
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_printname", "TEXT DEFAULT 'Unnamed'")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_classname", "TEXT DEFAULT 'yrp_money_printer'")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_worldmodel", "TEXT DEFAULT 'models/props_junk/garbage_takeoutcarton001a.mdl'")
-	end
-)
+hook.Add("YRP_SQLDBREADY_GENERAL_DB", "yrp_inventory_items", function()
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_slotID", "INT DEFAULT 0")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_type", "TEXT DEFAULT 'item'")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_fixed", "INT DEFAULT 0") -- Fixed = not moveable
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME, "int_storageID", "INT DEFAULT 0") -- storageID
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_printname", "TEXT DEFAULT 'Unnamed'")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_classname", "TEXT DEFAULT 'yrp_money_printer'")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME, "text_worldmodel", "TEXT DEFAULT 'models/props_junk/garbage_takeoutcarton001a.mdl'")
+end)
 
 function InventoryBlacklisted(cname)
 	local blacklist = GetGlobalYRPTable("yrp_blacklist_inventory", {})
 	for i, black in pairs(blacklist) do
 		if string.find(cname, black.value, 1, true) then
 			YRP:msg("note", "Blacklisted for inventory: " .. cname)
-
 			return true
 		end
 	end
-
 	return false
 end
 
@@ -42,14 +36,12 @@ function CreateItem(slotID, tab)
 		tab.int_fixed = tab.int_fixed or "0"
 		if InventoryBlacklisted(tab.text_classname) or InventoryBlacklisted(tab.text_worldmodel) then
 			YRP:msg("note", "[CreateItem] blacklisted item!")
-
 			return false
 		end
 
 		YRP_SQL_INSERT_INTO(DATABASE_NAME, "int_slotID, text_classname, text_printname, text_worldmodel, int_storageID, text_type, int_fixed", "'" .. slotID .. "', '" .. tab.text_classname .. "', '" .. tab.text_printname .. "', '" .. tab.text_worldmodel .. "', '" .. tab.int_storageID .. "', '" .. tab.text_type .. "', '" .. tab.int_fixed .. "'")
 	else
 		YRP:msg("db", "[CreateItem] tab is wrong!")
-
 		return false
 	end
 
@@ -59,23 +51,19 @@ function CreateItem(slotID, tab)
 		StoreItem(slotID, last)
 	else
 		YRP:msg("note", "[CreateItem] not worked")
-
 		return false
 	end
-
 	return true
 end
 
 function CreateItemByEntity(slotID, entity)
 	if entity == NULL then
 		YRP:msg("db", "[CreateItemByEntity] ENTITY is NULL (not exists anymore)")
-
 		return false
 	end
 
 	if entity:IsPlayer() or entity:IsWorld() or entity:CreatedByMap() or entity:GetOwner():IsPlayer() or strEmpty(entity:GetModel()) or entity:IsVehicle() then
 		YRP:msg("db", "[CreateItemByEntity] INVALID")
-
 		return false
 	end
 
@@ -90,11 +78,9 @@ function CreateItemByEntity(slotID, entity)
 			local storage = CreateStorage(entity.bag_size)
 			if IsNotNilAndNotFalse(storage) then
 				tab.int_storageID = storage.uniqueID
-
 				return CreateItem(slotID, tab)
 			else
 				YRP:msg("db", "Failed to create backpack")
-
 				return false
 			end
 		else
@@ -113,15 +99,12 @@ function GetItem(slotID)
 			local storage = YRP_SQL_SELECT("yrp_inventory_storages", "*", "uniqueID = '" .. item.int_storageID .. "'")
 			if not IsNotNilAndNotFalse(storage) then
 				YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. item.uniqueID .. "'")
-
 				return false
 			end
 		end
-
 		return item
 	end
 	--YRP:msg( "db", "[GetItem] No item in " .. tostring(slotID) )
-
 	return false
 end
 
@@ -151,9 +134,7 @@ function StoreItem(slotID, itemTable, ply)
 		local invslots = YRP_SQL_SELECT("yrp_inventory_slots", "*", "int_storageID = '" .. invstor.uniqueID .. "'")
 		for i, v in pairs(invslots) do
 			v.uniqueID = tonumber(v.uniqueID)
-			if itemTable.int_slotID == v.uniqueID then
-				itemTable.isinv = true
-			end
+			if itemTable.int_slotID == v.uniqueID then itemTable.isinv = true end
 		end
 	end
 
@@ -189,10 +170,7 @@ function DropItem(ply, slotID)
 	local e = ents.Create(item.text_classname)
 	if IsValid(e) then
 		e:SetModel(item.text_worldmodel)
-		if item.text_type == "bag" then
-			e:SetStorage(item.int_storageID)
-		end
-
+		if item.text_type == "bag" then e:SetStorage(item.int_storageID) end
 		e:SetPos(ply:GetPos() + ply:GetForward() * 64)
 		e:Spawn()
 	else
@@ -221,25 +199,21 @@ function MoveItem(ply, itemID, slotID)
 		item.int_storageID = tonumber(item.int_storageID)
 		if IsValid(ply) and YRPItemBelongsToOtherPlayer(ply, item) then
 			YRP:msg("db", "[MoveItem] " .. ply:Nick() .. " tried to steal item from another player")
-
 			return
 		end
 
 		if item.int_fixed == 1 then
 			YRP:msg("db", "[MoveItem] Item is fixed")
-
 			return
 		end
 
 		if slot.text_type == "bag" and item.text_type ~= "bag" then
 			YRP:msg("db", "[MoveItem] Only Bags are allowed here")
-
 			return
 		end
 
 		if slot.int_storageID == item.int_storageID then
 			YRP:msg("db", "You cant put bag into bag (self)")
-
 			return
 		end
 
@@ -248,7 +222,6 @@ function MoveItem(ply, itemID, slotID)
 				local ite = YRP_SQL_SELECT(DATABASE_NAME, "*", "int_slotID = '" .. slot2.uniqueID .. "'")
 				if IsNotNilAndNotFalse(ite) then
 					YRP:msg("db", "Bag is not empty")
-
 					return
 				end
 			end
@@ -258,16 +231,10 @@ function MoveItem(ply, itemID, slotID)
 		local newslot = slot.uniqueID
 		-- when no item in target
 		if not GetItem(slotID) then
-			if item.text_type == "bag" then
-				CloseBag(item.int_storageID)
-			end
-
-			YRP_SQL_UPDATE(
-				DATABASE_NAME,
-				{
-					["int_slotID"] = newslot
-				}, "uniqueID = '" .. item.uniqueID .. "'"
-			)
+			if item.text_type == "bag" then CloseBag(item.int_storageID) end
+			YRP_SQL_UPDATE(DATABASE_NAME, {
+				["int_slotID"] = newslot
+			}, "uniqueID = '" .. item.uniqueID .. "'")
 
 			UnstoreItem(oldslot)
 			StoreItem(newslot, item)
@@ -278,7 +245,6 @@ function MoveItem(ply, itemID, slotID)
 		local e = net.ReadEntity()
 		if not IsValid(e) or ply:GetPos():DistToSqr(e:GetPos()) > (250 * 250) then
 			YRP:msg("db", "[MoveItem] Entity not in range")
-
 			return
 		end
 
@@ -293,60 +259,49 @@ end
 
 -- Networking
 YRP:AddNetworkString("nws_yrp_item_clicked")
-net.Receive(
-	"nws_yrp_item_clicked",
-	function(len, ply)
-		local itemID = net.ReadString()
-		itemID = tonumber(itemID)
-		local item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. itemID .. "'")
-		if IsNotNilAndNotFalse(item) then
-			item = item[1]
-			if YRPItemBelongsToOtherPlayer(ply, item) then
-				YRP:msg("db", "[yrp_item_clicked] " .. ply:Nick() .. " tried to open a storage of another player")
-
-				return
-			end
-
-			item.int_storageID = tonumber(item.int_storageID)
-			if item.int_storageID ~= 0 then
-				OpenStorage(ply, item.int_storageID)
-			else
-				YRP:msg("db", "[yrp_item_clicked] item is not a storage")
-			end
-		else
-			YRP:msg("db", "[yrp_item_clicked] item not exists")
+net.Receive("nws_yrp_item_clicked", function(len, ply)
+	local itemID = net.ReadString()
+	itemID = tonumber(itemID)
+	local item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. itemID .. "'")
+	if IsNotNilAndNotFalse(item) then
+		item = item[1]
+		if YRPItemBelongsToOtherPlayer(ply, item) then
+			YRP:msg("db", "[yrp_item_clicked] " .. ply:Nick() .. " tried to open a storage of another player")
+			return
 		end
+
+		item.int_storageID = tonumber(item.int_storageID)
+		if item.int_storageID ~= 0 then
+			OpenStorage(ply, item.int_storageID)
+		else
+			YRP:msg("db", "[yrp_item_clicked] item is not a storage")
+		end
+	else
+		YRP:msg("db", "[yrp_item_clicked] item not exists")
 	end
-)
+end)
 
 YRP:AddNetworkString("nws_yrp_item_move")
-net.Receive(
-	"nws_yrp_item_move",
-	function(len, ply)
-		local itemID = net.ReadString()
-		local slotID = net.ReadString()
-		itemID = tonumber(itemID)
-		slotID = tonumber(slotID)
-		MoveItem(ply, itemID, slotID)
-	end
-)
+net.Receive("nws_yrp_item_move", function(len, ply)
+	local itemID = net.ReadString()
+	local slotID = net.ReadString()
+	itemID = tonumber(itemID)
+	slotID = tonumber(slotID)
+	MoveItem(ply, itemID, slotID)
+end)
 
 YRP:AddNetworkString("nws_yrp_item_drop")
-net.Receive(
-	"nws_yrp_item_drop",
-	function(len, ply)
-		local itemID = net.ReadString()
-		itemID = tonumber(itemID)
-		local item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. itemID .. "'")
-		if IsNotNilAndNotFalse(item) then
-			item = item[1]
-			if YRPItemBelongsToOtherPlayer(ply, item) then
-				YRP:msg("db", "[yrp_item_drop] " .. ply:Nick() .. " tried to drop an item of another player")
-
-				return
-			end
-
-			DropItem(ply, item.int_slotID)
+net.Receive("nws_yrp_item_drop", function(len, ply)
+	local itemID = net.ReadString()
+	itemID = tonumber(itemID)
+	local item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. itemID .. "'")
+	if IsNotNilAndNotFalse(item) then
+		item = item[1]
+		if YRPItemBelongsToOtherPlayer(ply, item) then
+			YRP:msg("db", "[yrp_item_drop] " .. ply:Nick() .. " tried to drop an item of another player")
+			return
 		end
+
+		DropItem(ply, item.int_slotID)
 	end
-)
+end)

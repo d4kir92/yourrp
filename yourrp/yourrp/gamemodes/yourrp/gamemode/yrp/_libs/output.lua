@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local _text = {}
 _text.pre = "#YRP# "
 _text.gmname = "YourRP"
@@ -12,7 +12,6 @@ function strEmpty(str)
 			return false
 		end
 	end
-
 	return true
 end
 
@@ -38,7 +37,6 @@ end
 
 function strUrl(str)
 	if not strEmpty(str) and #string.Explode(".", str) > 1 then return true end
-
 	return false
 end
 
@@ -135,7 +133,6 @@ function MSGChannelEnabled(chan)
 		elseif GetGlobalYRPBool("bool_msg_channel_" .. chan) == true then
 			return true
 		end
-
 		return false
 	else
 		return true
@@ -156,20 +153,12 @@ function YRP:msg(chan, str_msg, tochat, force)
 	if force or strEmpty(str_msg) or not table.HasValue(yrpmsgantispam, str_msg) then
 		if not table.HasValue(yrpmsgantispam, str_msg) then
 			table.insert(yrpmsgantispam, str_msg)
-			timer.Simple(
-				3,
-				function()
-					table.RemoveByValue(yrpmsgantispam, str_msg)
-				end
-			)
+			timer.Simple(3, function() table.RemoveByValue(yrpmsgantispam, str_msg) end)
 		end
 
 		local cn = GetChannelName(chan)
 		if force or MSGChannelEnabled(cn) then
-			if str_msg == nil or str_msg == false then
-				str_msg = tostring(str_msg)
-			end
-
+			if str_msg == nil or str_msg == false then str_msg = tostring(str_msg) end
 			local cc = GetChannelColor(cn)
 			local _yrp = GetGamemodeShortname()
 			local _yrpc = Color(0, 100, 225)
@@ -194,29 +183,17 @@ function YRP:msg(chan, str_msg, tochat, force)
 
 				MsgC("\n")
 				local str = "[" .. _yrp .. "|" .. cn .. "] " .. msg
-				if force then
-					str = str .. " [FORCED]"
-				end
-
+				if force then str = str .. " [FORCED]" end
 				if tochat and SERVER then
 					PrintMessage(3, "\n")
 					PrintMessage(3, msg)
 				end
 
-				if SERVER and AddToFakeServerConsole ~= nil then
-					AddToFakeServerConsole(str)
-				end
-
+				if SERVER and AddToFakeServerConsole ~= nil then AddToFakeServerConsole(str) end
 				local REALM = "CLIENT"
-				if SERVER then
-					REALM = "SERVER"
-				end
-
+				if SERVER then REALM = "SERVER" end
 				if cn == "ERROR" or cn == "MISSING" or cn == "ACCESS" then
-					if YRPNewError and YRPNewError(str) then
-						YRPAddError(str, str, REALM)
-					end
-
+					if YRPNewError and YRPNewError(str) then YRPAddError(str, str, REALM) end
 					if CLIENT and cn == "ERROR" and YRPCreateD ~= nil then
 						local err = YRPCreateD("DFrame", nil, YRP:ctr(600), YRP:ctr(60), YRP:ctr(60), YRP:ctr(400))
 						err:ShowCloseButton(false)
@@ -226,17 +203,10 @@ function YRP:msg(chan, str_msg, tochat, force)
 							draw.WordBox(YRP:ctr(12), 0, 0, "[YourRP] [" .. YRP:trans("LID_error") .. "] " .. "Look into the console!", "Y_14_500", Color(0, 255, 0), Color(0, 0, 0, 255))
 						end
 
-						timer.Simple(
-							8,
-							function()
-								err:Remove()
-							end
-						)
+						timer.Simple(8, function() err:Remove() end)
 					end
 				elseif cn == "DARKRP" then
-					if YRPNewError and YRPNewError(str) then
-						YRPAddError(str, str, REALM)
-					end
+					if YRPNewError and YRPNewError(str) then YRPAddError(str, str, REALM) end
 				end
 			end
 		end
@@ -253,17 +223,13 @@ end
 
 function YRPColorToString(col)
 	col.a = col.a or 255
-
 	return col.r .. "," .. col.g .. "," .. col.b .. "," .. col.a
 end
 
 function printTab(ta, name)
 	local _header = "PrintTable: "
 	name = name or ""
-	if not strEmpty(name) then
-		name = name .. " "
-	end
-
+	if not strEmpty(name) then name = name .. " " end
 	_header = _header .. name .. "( " .. tostring(ta) .. " )"
 	YRP:msg("note", _header)
 	if istable(table) then
@@ -532,7 +498,6 @@ countries["ZW"] = "Zimbabwe"
 function YRPGetCountryName(id, from)
 	if id == nil then
 		YRP:msg("error", "[YRPGetCountryName] NO INPUT: " .. tostring(id) .. " from: " .. tostring(from))
-
 		return ""
 	end
 
@@ -542,11 +507,9 @@ function YRPGetCountryName(id, from)
 		return countryname
 	elseif string.len(id) == 2 then
 		YRP:msg("error", "[YRPGetCountryName] Missing Country: " .. tostring(id))
-
 		return id
 	else
 		YRP:msg("error", "[YRPGetCountryName] Input Wrong: " .. tostring(id) .. " from: " .. tostring(from))
-
 		return id
 	end
 end

@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 include("shared.lua")
@@ -8,28 +8,12 @@ function ENT:Initialize()
 	self:SetMoveType(MOVETYPE_NONE)
 	self:SetSolid(SOLID_VPHYSICS)
 	local phys = self:GetPhysicsObject()
-	if phys:IsValid() then
-		phys:Wake()
-	end
-
+	if phys:IsValid() then phys:Wake() end
 	self:SetYRPString("status", "startup")
-	timer.Simple(
-		4,
-		function()
-			if self:IsValid() then
-				self:SetYRPString("status", "logo")
-			end
-
-			timer.Simple(
-				3,
-				function()
-					if self:IsValid() then
-						self:SetYRPString("status", "home")
-					end
-				end
-			)
-		end
-	)
+	timer.Simple(4, function()
+		if self:IsValid() then self:SetYRPString("status", "logo") end
+		timer.Simple(3, function() if self:IsValid() then self:SetYRPString("status", "home") end end)
+	end)
 
 	self.pressed = false
 	self.menu = {}
@@ -41,9 +25,7 @@ function ENT:Initialize()
 end
 
 function ENT:OnRemove()
-	if self.withdraw ~= nil then
-		self.withdraw:Remove()
-	end
+	if self.withdraw ~= nil then self.withdraw:Remove() end
 end
 
 function ENT:Use(activator, caller)
@@ -59,19 +41,14 @@ function ENT:ChangeMenu()
 	self.menu.other = false
 	self.menu.fail = false
 	for k, v in pairs(self.buttons) do
-		if v ~= nil and v ~= NULL then
-			v:Remove()
-		end
+		if v ~= nil and v ~= NULL then v:Remove() end
 	end
 end
 
 function ENT:ATMPressPrev(ply)
 	local _tmpPlayers = YRP_SQL_SELECT("yrp_characters", "*", nil)
 	self.namePos = self.namePos - 4
-	if self.namePos < 1 then
-		self.namePos = 1
-	end
-
+	if self.namePos < 1 then self.namePos = 1 end
 	local names = {}
 	local SteamIDs = {}
 	local i = 1
@@ -159,23 +136,13 @@ function ENT:createButtonNumber(parent, up, forward, right, add)
 		self:EmitSound(filename, 75, 100, 1, CHAN_AUTO)
 		local cur = parent:GetYRPString("othermoney", "")
 		if add ~= "<" then
-			if string.len(cur) < OTHERMONEY_MAX_DIGITS then
-				parent:SetYRPString("othermoney", cur .. add)
-			end
+			if string.len(cur) < OTHERMONEY_MAX_DIGITS then parent:SetYRPString("othermoney", cur .. add) end
 		else
 			parent:SetYRPString("othermoney", string.sub(cur, 1, string.len(cur) - 1))
 		end
 
-		timer.Simple(
-			0.2,
-			function()
-				if IsValid(parent) then
-					parent.pressed = false
-				end
-			end
-		)
+		timer.Simple(0.2, function() if IsValid(parent) then parent.pressed = false end end)
 	end
-
 	return tmp
 end
 
@@ -184,7 +151,6 @@ function ATMTransfer(atm, activator, amount)
 	local targetID = tonumber(atm:GetYRPString("SteamID"))
 	if targetID == nil then
 		YRP:msg("note", "[ATM] no valid transfer target")
-
 		return
 	end
 
@@ -195,19 +161,13 @@ function ATMTransfer(atm, activator, amount)
 	if dbSelectTarget[1].SteamID == activator:YRPSteamID() then return end
 	local fromBank = (tonumber(dbSelectActivator[1].moneybank) or 0) - amount
 	local toBank = (tonumber(dbSelectTarget[1].moneybank) or 0) + amount
-	YRP_SQL_UPDATE(
-		"yrp_characters",
-		{
-			["moneybank"] = fromBank
-		}, "uniqueID = " .. activator:CharID()
-	)
+	YRP_SQL_UPDATE("yrp_characters", {
+		["moneybank"] = fromBank
+	}, "uniqueID = " .. activator:CharID())
 
-	YRP_SQL_UPDATE(
-		"yrp_characters",
-		{
-			["moneybank"] = toBank
-		}, "uniqueID = " .. targetID
-	)
+	YRP_SQL_UPDATE("yrp_characters", {
+		["moneybank"] = toBank
+	}, "uniqueID = " .. targetID)
 
 	activator:SetYRPString("moneybank", fromBank)
 	for k, v in pairs(player.GetAll()) do
@@ -234,15 +194,7 @@ function ENT:createButton(parent, up, forward, right, status, _money, func)
 		if not IsValid(parent) or parent.pressed then return end
 		if not IsValid(activator) or not activator:IsPlayer() then return end
 		parent.pressed = true
-		timer.Simple(
-			0.2,
-			function()
-				if IsValid(parent) then
-					parent.pressed = false
-				end
-			end
-		)
-
+		timer.Simple(0.2, function() if IsValid(parent) then parent.pressed = false end end)
 		local filename = "buttons/button14.wav"
 		util.PrecacheSound(filename)
 		self:EmitSound(filename, 75, 100, 1, CHAN_AUTO)
@@ -278,10 +230,7 @@ function ENT:createButton(parent, up, forward, right, status, _money, func)
 			end
 		end
 
-		if status ~= nil then
-			parent:SetYRPString("status", status)
-		end
-
+		if status ~= nil then parent:SetYRPString("status", status) end
 		if money ~= nil then
 			if money > 0 then
 				if activator:canAfford(money) then
@@ -296,7 +245,6 @@ function ENT:createButton(parent, up, forward, right, status, _money, func)
 
 		parent:ChangeMenu()
 	end
-
 	return tmp
 end
 
@@ -336,23 +284,11 @@ function ENT:Think()
 		if not self.menu.transfer then
 			self.menu.transfer = true
 			self:SetYRPString("prevstatus", "transfer")
-			if self:GetYRPString("name1") ~= "nil" then
-				self.buttons.transferName1 = self:createButton(self, 49.74, 7.14, 8.8, "other", nil, "ATMPressPlayer1")
-			end
-
-			if self:GetYRPString("name2") ~= "nil" then
-				self.buttons.transferName2 = self:createButton(self, 48.0, 8.84, 8.8, "other", nil, "ATMPressPlayer2")
-			end
-
+			if self:GetYRPString("name1") ~= "nil" then self.buttons.transferName1 = self:createButton(self, 49.74, 7.14, 8.8, "other", nil, "ATMPressPlayer1") end
+			if self:GetYRPString("name2") ~= "nil" then self.buttons.transferName2 = self:createButton(self, 48.0, 8.84, 8.8, "other", nil, "ATMPressPlayer2") end
 			self.buttons.transferPrev = self:createButton(self, 46.36, 10.54, 8.8, nil, nil, "ATMPressPrev")
-			if self:GetYRPString("name3") ~= "nil" then
-				self.buttons.transferName3 = self:createButton(self, 49.74, 7.14, -0.8, "other", nil, "ATMPressPlayer3")
-			end
-
-			if self:GetYRPString("name4") ~= "nil" then
-				self.buttons.transferName4 = self:createButton(self, 48.0, 8.84, -0.8, "other", nil, "ATMPressPlayer4")
-			end
-
+			if self:GetYRPString("name3") ~= "nil" then self.buttons.transferName3 = self:createButton(self, 49.74, 7.14, -0.8, "other", nil, "ATMPressPlayer3") end
+			if self:GetYRPString("name4") ~= "nil" then self.buttons.transferName4 = self:createButton(self, 48.0, 8.84, -0.8, "other", nil, "ATMPressPlayer4") end
 			self.buttons.transferNext = self:createButton(self, 46.36, 10.54, -0.8, nil, nil, "ATMPressNext")
 			self.buttons.transferBack = self:createButton(self, 43.48, 13.32, 8.8, "home", nil, nil)
 		end

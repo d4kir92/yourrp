@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local PANEL = {}
 function PANEL:ColorChanged(col)
 end
@@ -28,10 +28,7 @@ function PANEL:SetColor(col)
 end
 
 function PANEL:Paint(pw, ph)
-	if self._colormenu ~= nil and self._colormenu:IsValid() and self._colormenu:GetColor() ~= self._col then
-		self._col = self._colormenu:GetColor()
-	end
-
+	if self._colormenu ~= nil and self._colormenu:IsValid() and self._colormenu:GetColor() ~= self._col then self._col = self._colormenu:GetColor() end
 	draw.RoundedBox(ph / 2, 0, 0, pw, ph, self._col)
 end
 

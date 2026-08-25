@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 local _fut = {}
 _fut.author = "D4KiR"
 _fut.name = "Futuristic"
@@ -134,10 +134,7 @@ function _fut.DrawWindow(window, pw, ph, title)
 
 	draw.RoundedBox(0, 0, 0, pw, YRP:ctr(50), _color_bar)
 	draw.RoundedBox(0, 0, YRP:ctr(50), pw, ph - YRP:ctr(50), _color_bg)
-	if InterfaceBorder() then
-		LaserBorder(pw, ph)
-	end
-
+	if InterfaceBorder() then LaserBorder(pw, ph) end
 	--[[ Title ]]
 	--
 	surfaceText(_title, "Y_22_500", YRP:ctr(10), YRP:ctr(25), Color(255, 255, 255, 255), 0, 1)
@@ -158,16 +155,10 @@ function _fut.YRPDrawButton(btn, pw, ph, text, color)
 	end
 
 	local _hovered = 0
-	if btn:IsHovered() then
-		_hovered = 60
-	end
-
+	if btn:IsHovered() then _hovered = 60 end
 	local _color = color or _color_bar
 	draw.RoundedBox(0, 0, 0, pw, ph, Color(_color.r + _hovered, _color.g + _hovered, _color.b + _hovered, _color.a))
-	if InterfaceBorder() then
-		LaserBorder(pw, ph)
-	end
-
+	if InterfaceBorder() then LaserBorder(pw, ph) end
 	--[[ text ]]
 	--
 	surfaceText(_text, _fut.textFont, pw / 2, ph / 2, Color(255, 255, 255, 255), 1, 1)
@@ -188,10 +179,7 @@ function _fut.DrawPanel(pnl, pw, ph, text, color, px, py, ax, ah)
 	end
 
 	draw.RoundedBox(0, 0, 0, pw, ph, _color_bar)
-	if InterfaceBorder() then
-		LaserBorder(pw, ph)
-	end
-
+	if InterfaceBorder() then LaserBorder(pw, ph) end
 	--[[ text ]]
 	--
 	surfaceText(_text, _fut.textFont, px or pw / 2, py or ph / 2, color or Color(255, 255, 255, 255), ax or 1, ay or 1, 1)

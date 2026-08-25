@@ -1,35 +1,19 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 -- DO NOT TOUCH THE DATABASE FILES! If you have errors, report them here:
 -- https://discord.gg/sEgNZxg
 local DATABASE_NAME = "yrp_dealers"
-hook.Add(
-	"YRP_SQLDBREADY_GAMEPLAY_DB",
-	"yrp_dealers",
-	function()
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT 'Unnamed dealer'")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "tabs", "TEXT DEFAULT ''")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "WorldModel", "TEXT DEFAULT 'models/player/skeleton.mdl'")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "map", "TEXT DEFAULT 'gm_construct'")
-		YRP_SQL_ADD_COLUMN(DATABASE_NAME, "storagepoints", "TEXT DEFAULT ''")
-		if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then
-			local _global_shop = YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, uniqueID", "'LID_buymenu', 1")
-		end
+hook.Add("YRP_SQLDBREADY_GAMEPLAY_DB", "yrp_dealers", function()
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT 'Unnamed dealer'")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME, "tabs", "TEXT DEFAULT ''")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME, "WorldModel", "TEXT DEFAULT 'models/player/skeleton.mdl'")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME, "map", "TEXT DEFAULT 'gm_construct'")
+	YRP_SQL_ADD_COLUMN(DATABASE_NAME, "storagepoints", "TEXT DEFAULT ''")
+	if YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = 1") == nil then local _global_shop = YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, uniqueID", "'LID_buymenu', 1") end
+	local _minus = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '-1'")
+	if _minus ~= nil then YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '-1'") end
+end)
 
-		local _minus = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '-1'")
-		if _minus ~= nil then
-			YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '-1'")
-		end
-	end
-)
-
-hook.Add(
-	"YRP_SQLDBREADY_GAMEPLAY",
-	"yrp_dealers",
-	function()
-		CleanUpDealers()
-	end
-)
-
+hook.Add("YRP_SQLDBREADY_GAMEPLAY", "yrp_dealers", function() CleanUpDealers() end)
 YRP:AddNetworkString("nws_yrp_dealer_add")
 function dealer_rem(uid)
 	uid = tonumber(uid)
@@ -43,9 +27,7 @@ function CleanUpDealers()
 		for i, dealer in pairs(_dealers) do
 			local found = false
 			for j, map_dealer in pairs(_map_dealers) do
-				if dealer.uniqueID == map_dealer.linkID then
-					found = true
-				end
+				if dealer.uniqueID == map_dealer.linkID then found = true end
 			end
 
 			if not found and tonumber(dealer.uniqueID) ~= 1 then
@@ -62,12 +44,9 @@ function dealer_add(ply)
 	local _db_sel = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID", "name = '" .. _uid .. "'")
 	if _db_sel ~= nil then
 		_db_sel = _db_sel[1]
-		local _db_upd = YRP_SQL_UPDATE(
-			DATABASE_NAME,
-			{
-				["name"] = "Unnamed Dealer"
-			}, "uniqueID = " .. _db_sel.uniqueID
-		)
+		local _db_upd = YRP_SQL_UPDATE(DATABASE_NAME, {
+			["name"] = "Unnamed Dealer"
+		}, "uniqueID = " .. _db_sel.uniqueID)
 
 		local _pos = ply:GetPos()
 		local _ang = ply:EyeAngles()
@@ -76,127 +55,89 @@ function dealer_add(ply)
 	end
 end
 
-net.Receive(
-	"nws_yrp_dealer_add",
-	function(len, ply)
-		if not ply:HasAccess("nws_yrp_dealer_add", true) then return end
-		dealer_add(ply)
-	end
-)
+net.Receive("nws_yrp_dealer_add", function(len, ply)
+	if not ply:HasAccess("nws_yrp_dealer_add", true) then return end
+	dealer_add(ply)
+end)
 
 YRP:AddNetworkString("nws_yrp_dealer_add_tab")
-net.Receive(
-	"nws_yrp_dealer_add_tab",
-	function(len, ply)
-		if not ply:HasAccess("nws_yrp_dealer_add_tab", true) then return end
-		local _dealer_uid = tonumber(net.ReadString())
-		local _tab_uid = net.ReadString()
-		if not _dealer_uid then return end
-		local _dealer = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. _dealer_uid)
-		if _dealer ~= nil then
-			_dealer = _dealer[1]
-			local _tabs = string.Explode(",", _dealer.tabs)
-			if _tabs[1] == "" then
-				_tabs = {}
-			end
-
-			table.insert(_tabs, _tab_uid)
-			local tabs = string.Implode(",", _tabs)
-			local _up = YRP_SQL_UPDATE(
-				DATABASE_NAME,
-				{
-					["tabs"] = tabs
-				}, "uniqueID = " .. _dealer_uid
-			)
-		end
+net.Receive("nws_yrp_dealer_add_tab", function(len, ply)
+	if not ply:HasAccess("nws_yrp_dealer_add_tab", true) then return end
+	local _dealer_uid = tonumber(net.ReadString())
+	local _tab_uid = net.ReadString()
+	if not _dealer_uid then return end
+	local _dealer = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. _dealer_uid)
+	if _dealer ~= nil then
+		_dealer = _dealer[1]
+		local _tabs = string.Explode(",", _dealer.tabs)
+		if _tabs[1] == "" then _tabs = {} end
+		table.insert(_tabs, _tab_uid)
+		local tabs = string.Implode(",", _tabs)
+		local _up = YRP_SQL_UPDATE(DATABASE_NAME, {
+			["tabs"] = tabs
+		}, "uniqueID = " .. _dealer_uid)
 	end
-)
+end)
 
 YRP:AddNetworkString("nws_yrp_dealer_rem_tab")
-net.Receive(
-	"nws_yrp_dealer_rem_tab",
-	function(len, ply)
-		if not ply:HasAccess("nws_yrp_dealer_rem_tab", true) then return end
-		local _dealer_uid = tonumber(net.ReadString())
-		local _tab_uid = net.ReadString()
-		if not _dealer_uid then return end
-		local _dealer = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. _dealer_uid)
-		if _dealer ~= nil then
-			_dealer = _dealer[1]
-			_dealer.tabs = string.Explode(",", _dealer.tabs)
-			table.RemoveByValue(_dealer.tabs, _tab_uid)
-			_dealer.tabs = string.Implode(",", _dealer.tabs)
-			YRP_SQL_UPDATE(
-				DATABASE_NAME,
-				{
-					["tabs"] = _dealer.tabs
-				}, "uniqueID = " .. _dealer_uid
-			)
-		end
+net.Receive("nws_yrp_dealer_rem_tab", function(len, ply)
+	if not ply:HasAccess("nws_yrp_dealer_rem_tab", true) then return end
+	local _dealer_uid = tonumber(net.ReadString())
+	local _tab_uid = net.ReadString()
+	if not _dealer_uid then return end
+	local _dealer = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = " .. _dealer_uid)
+	if _dealer ~= nil then
+		_dealer = _dealer[1]
+		_dealer.tabs = string.Explode(",", _dealer.tabs)
+		table.RemoveByValue(_dealer.tabs, _tab_uid)
+		_dealer.tabs = string.Implode(",", _dealer.tabs)
+		YRP_SQL_UPDATE(DATABASE_NAME, {
+			["tabs"] = _dealer.tabs
+		}, "uniqueID = " .. _dealer_uid)
 	end
-)
+end)
 
 YRP:AddNetworkString("nws_yrp_dealer_edit_name")
-net.Receive(
-	"nws_yrp_dealer_edit_name",
-	function(len, ply)
-		if not ply:HasAccess("nws_yrp_dealer_edit_name", true) then return end
-		local _dealer_uid = tonumber(net.ReadString())
-		local _dealer_new_name = net.ReadString()
-		if not _dealer_uid then return end
-		local _dealer = YRP_SQL_UPDATE(
-			DATABASE_NAME,
-			{
-				["name"] = _dealer_new_name
-			}, "uniqueID = " .. _dealer_uid
-		)
+net.Receive("nws_yrp_dealer_edit_name", function(len, ply)
+	if not ply:HasAccess("nws_yrp_dealer_edit_name", true) then return end
+	local _dealer_uid = tonumber(net.ReadString())
+	local _dealer_new_name = net.ReadString()
+	if not _dealer_uid then return end
+	local _dealer = YRP_SQL_UPDATE(DATABASE_NAME, {
+		["name"] = _dealer_new_name
+	}, "uniqueID = " .. _dealer_uid)
 
-		for i, npc in pairs(ents.GetAll()) do
-			if npc:GetYRPString("dealerID", "FAILED") == tostring(_dealer_uid) then
-				npc:SetYRPString("name", _dealer_new_name)
-			end
-		end
+	for i, npc in pairs(ents.GetAll()) do
+		if npc:GetYRPString("dealerID", "FAILED") == tostring(_dealer_uid) then npc:SetYRPString("name", _dealer_new_name) end
 	end
-)
+end)
 
 YRP:AddNetworkString("nws_yrp_dealer_edit_worldmodel")
-net.Receive(
-	"nws_yrp_dealer_edit_worldmodel",
-	function(len, ply)
-		if not ply:HasAccess("nws_yrp_dealer_edit_worldmodel", true) then return end
-		local _dealer_uid = tonumber(net.ReadString())
-		local _dealer_new_wm = net.ReadString()
-		if not _dealer_uid then return end
-		local _dealer = YRP_SQL_UPDATE(
-			DATABASE_NAME,
-			{
-				["WorldModel"] = _dealer_new_wm
-			}, "uniqueID = " .. _dealer_uid
-		)
+net.Receive("nws_yrp_dealer_edit_worldmodel", function(len, ply)
+	if not ply:HasAccess("nws_yrp_dealer_edit_worldmodel", true) then return end
+	local _dealer_uid = tonumber(net.ReadString())
+	local _dealer_new_wm = net.ReadString()
+	if not _dealer_uid then return end
+	local _dealer = YRP_SQL_UPDATE(DATABASE_NAME, {
+		["WorldModel"] = _dealer_new_wm
+	}, "uniqueID = " .. _dealer_uid)
 
-		for i, npc in pairs(ents.GetAll()) do
-			if npc:GetYRPString("dealerID", "FAILED") == tostring(_dealer_uid) then
-				npc:SetModel(_dealer_new_wm)
-				npc:LookupSequence("idle_all_01")
-				npc:ResetSequence("idle_all_01")
-			end
+	for i, npc in pairs(ents.GetAll()) do
+		if npc:GetYRPString("dealerID", "FAILED") == tostring(_dealer_uid) then
+			npc:SetModel(_dealer_new_wm)
+			npc:LookupSequence("idle_all_01")
+			npc:ResetSequence("idle_all_01")
 		end
 	end
-)
+end)
 
 YRP:AddNetworkString("nws_yrp_dealer_edit_storagepoints")
-net.Receive(
-	"nws_yrp_dealer_edit_storagepoints",
-	function(len, ply)
-		if not ply:HasAccess("nws_yrp_dealer_edit_storagepoints", true) then return end
-		local _dealer_uid = tonumber(net.ReadString())
-		local _dealer_storagepoints = net.ReadString()
-		if not _dealer_uid then return end
-		local _dealer = YRP_SQL_UPDATE(
-			DATABASE_NAME,
-			{
-				["storagepoints"] = _dealer_storagepoints
-			}, "uniqueID = " .. _dealer_uid
-		)
-	end
-)
+net.Receive("nws_yrp_dealer_edit_storagepoints", function(len, ply)
+	if not ply:HasAccess("nws_yrp_dealer_edit_storagepoints", true) then return end
+	local _dealer_uid = tonumber(net.ReadString())
+	local _dealer_storagepoints = net.ReadString()
+	if not _dealer_uid then return end
+	local _dealer = YRP_SQL_UPDATE(DATABASE_NAME, {
+		["storagepoints"] = _dealer_storagepoints
+	}, "uniqueID = " .. _dealer_uid)
+end)

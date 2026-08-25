@@ -1,4 +1,4 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 include("shared.lua")
@@ -9,9 +9,7 @@ function ENT:Initialize()
 	self:SetSolid(SOLID_VPHYSICS)
 	self:SetPos(self:GetPos())
 	local phys = self:GetPhysicsObject()
-	if phys:IsValid() then
-		phys:Wake()
-	end
+	if phys:IsValid() then phys:Wake() end
 end
 
 local delay = 5
@@ -22,14 +20,10 @@ function ENT:Think()
 		lastTS = os.time() + delay
 		local msg = "[CLOTHING] Model has no Physic Object, cant be used for Clothing"
 		YRP:msg("note", msg)
-		if SERVER then
-			PrintMessage(HUD_PRINTCENTER, msg)
-		end
+		if SERVER then PrintMessage(HUD_PRINTCENTER, msg) end
 	end
 
-	if string.lower(GetGlobalYRPString("text_appearance_model", "models/props_wasteland/controlroom_storagecloset001a.mdl")) ~= self:GetModel() then
-		self:SetModel(string.lower(GetGlobalYRPString("text_appearance_model", "models/props_wasteland/controlroom_storagecloset001a.mdl")))
-	end
+	if string.lower(GetGlobalYRPString("text_appearance_model", "models/props_wasteland/controlroom_storagecloset001a.mdl")) ~= self:GetModel() then self:SetModel(string.lower(GetGlobalYRPString("text_appearance_model", "models/props_wasteland/controlroom_storagecloset001a.mdl"))) end
 end
 
 YRP:AddNetworkString("nws_yrp_openAM")
@@ -38,11 +32,6 @@ function ENT:Use(activator, caller)
 		activator:SetYRPBool("clicked", true)
 		net.Start("nws_yrp_openAM")
 		net.Send(activator)
-		timer.Simple(
-			0.4,
-			function()
-				activator:SetYRPBool("clicked", false)
-			end
-		)
+		timer.Simple(0.4, function() activator:SetYRPBool("clicked", false) end)
 	end
 end

@@ -1,11 +1,9 @@
---Copyright (C) 2017-2025 D4KiR (https://www.gnu.org/licenses/gpl.txt)
+--Copyright (C) 2017-2026 D4KiR (https://www.gnu.org/licenses/gpl.txt)
 function YRPIsValidEntityForTeleport(ent)
 	if not IsValid(ent) then
 		YRP:msg("note", "[YRPIsValidEntityForTeleport] Entity is not valid to teleport >>> ent: " .. tostring(ent))
-
 		return false
 	end
-
 	return true
 end
 
@@ -65,7 +63,6 @@ function tp_to(ply, pos)
 			else
 				ply:SetAngles(_tmpAngle)
 			end
-
 			return true
 		else
 			for i = 1, 3 do
@@ -80,7 +77,6 @@ function tp_to(ply, pos)
 						else
 							ply:SetAngles(_tmpAngle)
 						end
-
 						return true
 					end
 				end
@@ -93,6 +89,5 @@ function tp_to(ply, pos)
 	else
 		YRP:msg("note", "[tp_to] >>> FAILED! TELEPORTED TO EARLY?")
 	end
-
 	return false
 end
