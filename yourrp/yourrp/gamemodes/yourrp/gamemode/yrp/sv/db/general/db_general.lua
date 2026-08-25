@@ -368,6 +368,14 @@ net.Receive(
 	"nws_yrp_do_act",
 	function(len, ply)
 		local act = net.ReadString()
+		if (ply.yrp_next_act or 0) > CurTime() then return end
+		ply.yrp_next_act = CurTime() + 1
+		if not YRPIsValidEmote(act) then
+			YRP:msg("note", "[do_act] " .. ply:YRPName() .. " sent an invalid emote")
+
+			return
+		end
+
 		net.Start("nws_yrp_do_act")
 		net.WriteEntity(ply)
 		net.WriteString(act)
