@@ -188,6 +188,11 @@ end
 function MoveItem(ply, itemID, slotID)
 	itemID = tonumber(itemID)
 	slotID = tonumber(slotID)
+	if itemID == nil or slotID == nil then
+		YRP:msg("db", "[MoveItem] invalid item or slot id")
+		return
+	end
+
 	local item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. itemID .. "'")
 	local slot = YRP_SQL_SELECT("yrp_inventory_slots", "*", "uniqueID = '" .. slotID .. "'")
 	-- if both exists
@@ -262,6 +267,11 @@ YRP:AddNetworkString("nws_yrp_item_clicked")
 net.Receive("nws_yrp_item_clicked", function(len, ply)
 	local itemID = net.ReadString()
 	itemID = tonumber(itemID)
+	if itemID == nil then
+		YRP:msg("db", "[yrp_item_clicked] invalid item id")
+		return
+	end
+
 	local item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. itemID .. "'")
 	if IsNotNilAndNotFalse(item) then
 		item = item[1]
@@ -294,6 +304,11 @@ YRP:AddNetworkString("nws_yrp_item_drop")
 net.Receive("nws_yrp_item_drop", function(len, ply)
 	local itemID = net.ReadString()
 	itemID = tonumber(itemID)
+	if itemID == nil then
+		YRP:msg("db", "[yrp_item_drop] invalid item id")
+		return
+	end
+
 	local item = YRP_SQL_SELECT(DATABASE_NAME, "*", "uniqueID = '" .. itemID .. "'")
 	if IsNotNilAndNotFalse(item) then
 		item = item[1]

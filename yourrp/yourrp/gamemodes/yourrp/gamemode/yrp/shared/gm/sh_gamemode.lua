@@ -71,29 +71,20 @@ if SERVER then
 		end
 	end
 
-	local delay = 0
-	local count = 0
-	local dir = 1
 	hook.Remove("Think", "yrp_double_installed")
-	hook.Add("Think", "yrp_double_installed", function()
-		if CurTime() < delay then return end
-		delay = CurTime() + 1
-		count = count + dir
-		if count > 3 then
-			dir = -1
-			count = 20
-		elseif count == 0 then
-			dir = 1
-		end
-
-		if YRPIsDoubleInstalled() and dir == 1 then
+	timer.Remove("yrp_double_installed")
+	if doubleinstalledpath ~= "" then
+		local function YRPWarnDoubleInstalled()
 			YRPHR(Color(0, 255, 0))
 			MsgC(Color(0, 255, 0), "[YourRP] YourRP is DOUBLE installed!" .. "\n")
 			MsgC(Color(0, 255, 0), "[YourRP] Please REMOVE the folder: Server/garrysmod/gamemodes/" .. tostring(doubleinstalledpath) .. " <-" .. "\n")
 			MsgC(Color(0, 255, 0), "[YourRP] You will not lose your Data (Data is saved in: Server/garrysmod/sv.db)" .. "\n")
 			YRPHR(Color(0, 255, 0))
 		end
-	end)
+
+		YRPWarnDoubleInstalled()
+		timer.Create("yrp_double_installed", 60, 0, YRPWarnDoubleInstalled)
+	end
 end
 
 local initOnce = true

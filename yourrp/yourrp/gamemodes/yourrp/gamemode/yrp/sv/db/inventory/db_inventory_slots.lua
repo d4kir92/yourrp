@@ -52,6 +52,11 @@ end
 
 function ConnectToSlot(ply, slotID)
 	slotID = tonumber(slotID)
+	if slotID == nil then
+		YRP:msg("db", "[ConnectToSlot] invalid slot id")
+		return
+	end
+
 	YRP_SLOTS_PLYS[slotID] = YRP_SLOTS_PLYS[slotID] or {}
 	if not IsConnectedToSlot(ply, slotID) then
 		table.insert(YRP_SLOTS_PLYS[slotID], ply)
@@ -62,6 +67,11 @@ end
 
 function DisconnectFromSlot(ply, slotID)
 	slotID = tonumber(slotID)
+	if slotID == nil then
+		YRP:msg("db", "[DisconnectFromSlot] invalid slot id")
+		return
+	end
+
 	YRP_SLOTS_PLYS[slotID] = YRP_SLOTS_PLYS[slotID] or {}
 	if IsConnectedToSlot(ply, slotID) then table.RemoveByValue(YRP_SLOTS_PLYS[slotID], ply) end
 end
