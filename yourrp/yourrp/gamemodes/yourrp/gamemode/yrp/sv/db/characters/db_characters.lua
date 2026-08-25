@@ -345,8 +345,8 @@ function Player:UpdateBackpack()
 	return _bp
 end
 
-function Player:SetRPName(str, from)
-	if (GetGlobalYRPBool("bool_characters_changeable_name", false) or self:GetYRPBool("bool_players", false)) and isstring(str) then
+function Player:SetRPName(str, from, force)
+	if (force or GetGlobalYRPBool("bool_characters_changeable_name", false) or self:GetYRPBool("bool_players", false)) and isstring(str) then
 		str = YRPCleanUpName(str)
 		if strEmpty(str) then
 			YRP:msg("note", self:Nick() .. " tried to set an empty name")
@@ -1066,7 +1066,7 @@ net.Receive("nws_yrp_set_rpname", function(len, ply)
 	if IsValid(p) then
 		local rpname = net.ReadString()
 		rpname = YRPCleanUpName(rpname)
-		p:SetRPName(rpname, "set_rpname")
+		p:SetRPName(rpname, "set_rpname", true)
 	end
 end)
 

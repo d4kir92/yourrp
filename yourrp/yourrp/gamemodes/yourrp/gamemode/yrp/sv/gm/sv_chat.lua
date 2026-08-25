@@ -254,7 +254,7 @@ function YRPChatRenamePlayer(sender, text)
 				name = YRPCleanUpName(name)
 				if ply ~= NULL then
 					name = string.Replace(name, tab[1] .. " ", "")
-					ply:SetRPName(name, "chat command 2.1")
+					ply:SetRPName(name, "chat command 2.1", true)
 				else
 					if not strEmpty(name) then
 						sender:SetRPName(name, "chat command 2.2")
@@ -271,7 +271,7 @@ function YRPChatRenamePlayer(sender, text)
 			name, newname = tab[1], tab[2]
 			if name and newname then
 				local ply = YRPGetPlayerByName(name)
-				if ply ~= NULL then ply:SetRPName(newname, "chat command 2.3") end
+				if ply ~= NULL then ply:SetRPName(newname, "chat command 2.3", true) end
 			elseif name then
 				sender:SetRPName(name, "chat command 2.4")
 			else

@@ -111,7 +111,7 @@ concommand.Add("darkrp", function(ply, cmd, args)
 		local newrpname = args[3]
 		local pl = YRPGetPlayerByName(playername)
 		if YRPEntityAlive(pl) then
-			pl:SetRPName(newrpname, "darkrp forcerpname")
+			pl:SetRPName(newrpname, "darkrp forcerpname", true)
 		else
 			YRP:msg("note", "[forcerpname] Player not found")
 		end
