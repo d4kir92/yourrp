@@ -257,10 +257,11 @@ YRP_PM.y = 0
 YRP_PM.version = -1
 YRP_PM.model = ""
 local function YRPBodyGroupChanged()
-	if YRP_PM and YRP_PM.Entity then
-		for i, v in pairs(LocalPlayer():GetBodyGroups()) do
-			if YRP_PM.Entity:GetBodygroup(v.id) ~= LocalPlayer():GetBodygroup(v.id) then return true end
-		end
+	if not YRPEntityAlive(YRP_PM.Entity) then return false end
+	local lply = LocalPlayer()
+	if not IsValid(lply) then return false end
+	for i, v in pairs(lply:GetBodyGroups()) do
+		if YRP_PM.Entity:GetBodygroup(v.id) ~= lply:GetBodygroup(v.id) then return true end
 	end
 	return false
 end
