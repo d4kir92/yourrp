@@ -7,9 +7,9 @@ hook.Add("YRP_SQLDBREADY_GENERAL_DB", "yrp_blacklist", function()
 	YRP_SQL_ADD_COLUMN(DATABASE_NAME, "name", "TEXT DEFAULT ''")
 	YRP_SQL_ADD_COLUMN(DATABASE_NAME, "value", "TEXT DEFAULT ''")
 	if YRP_SQL_SELECT(DATABASE_NAME, "*", "value = 'yrp_teleporter'") == nil then YRP_SQL_INSERT_INTO(DATABASE_NAME, "name, value", "'inventory', 'yrp_teleporter'") end
+	LoadBlacklist()
 end)
 
-hook.Add("YRP_SQLDBREADY_GENERAL_DB", "yrp_blacklist", function() LoadBlacklist() end)
 function LoadBlacklist()
 	local tabChat = YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. "chat" .. "'")
 	local tabInventory = YRP_SQL_SELECT(DATABASE_NAME, "*", "name = '" .. "inventory" .. "'")

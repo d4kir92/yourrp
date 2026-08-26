@@ -119,7 +119,7 @@ function YRPConST(ply, _time)
 
 		if ply.yrpjumping == -2 then
 			ply.yrpjumping = -1
-			timer.Simple(1, function() ply.yrpjumping = 0 end)
+			timer.Simple(1, function() if IsValid(ply) then ply.yrpjumping = 0 end end)
 		elseif ply.yrpjumping == 0 then
 			ply.yrpjumping = 1
 		end

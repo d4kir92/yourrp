@@ -1156,6 +1156,11 @@ end)
 net.Receive("nws_yrp_character_delete", function(len, ply)
 	if not ply:GetYRPBool("bool_players", false) then return end
 	local id = tonumber(net.ReadString())
+	if id == nil then
+		YRP:msg("db", "[character_delete] invalid character id")
+		return
+	end
+
 	for i, v in pairs(player.GetAll()) do
 		if v:CharID() == id then
 			YRP:msg("note", "Can't Delete Character, CURRENTLY IN USE")
@@ -1163,7 +1168,7 @@ net.Receive("nws_yrp_character_delete", function(len, ply)
 		end
 	end
 
-	local char = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID = '" .. id .. "'")
+	local char = YRP_SQL_SELECT(DATABASE_NAME, "uniqueID", "uniqueID = '" .. id .. "'")
 	if char and char[1] then
 		YRP_SQL_DELETE_FROM(DATABASE_NAME, "uniqueID = '" .. id .. "'")
 		net.Start("nws_yrp_character_delete")

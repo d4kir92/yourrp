@@ -16,6 +16,11 @@ function ENT:SetClassName(classname)
 	self:SetYRPString("classname", classname)
 	if not YRPEntityAlive(self.viewmodel) then
 		self.viewmodel = ents.Create("prop_dynamic")
+		if not YRPEntityAlive(self.viewmodel) then
+			YRP:msg("note", "[yrp_shipment] could not create viewmodel")
+			return
+		end
+
 		self.viewmodel:SetPos(self:GetPos())
 		self.viewmodel:SetModel("models/items/item_item_crate.mdl")
 		self.viewmodel:Spawn()
@@ -24,9 +29,16 @@ function ENT:SetClassName(classname)
 
 	local mdl = ents.Create(classname)
 	if YRPEntityAlive(mdl) then
-		self.viewmodel:SetModel(mdl:GetModel())
+		local mdlname = mdl:GetModel()
+		if strEmpty(mdlname) then mdlname = mdl.WorldModel end
+		if strEmpty(mdlname) then
+			YRP:msg("note", "[yrp_shipment] no model for class: " .. tostring(classname))
+		else
+			self.viewmodel:SetModel(mdlname)
+			self:SetYRPEntity("viewmodel", self.viewmodel)
+		end
+
 		mdl:Remove()
-		self:SetYRPEntity("viewmodel", self.viewmodel)
 	end
 end
 

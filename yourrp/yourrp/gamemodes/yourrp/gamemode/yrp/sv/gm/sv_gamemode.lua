@@ -565,6 +565,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 end
 
 function YRPIsAllowedToDrop(ply, wep)
+	if not IsValid(ply) or not IsValid(wep) then return false end
 	if wep:GetModel() ~= "" and IsNoDefaultWeapon(wep:GetClass()) and IsNoRoleSwep(ply, wep:GetClass()) and IsNoGroupSwep(ply, wep:GetClass()) and IsNoUserGroupWeapon(ply, wep:GetClass()) then return true end
 	return false
 end
@@ -608,7 +609,7 @@ hook.Add("DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function(ply, attack
 		if _money > _max then _money = _max end
 		if _money > 0 then
 			local money = ents.Create("yrp_money")
-			if IsNotNilAndNotFalse(money) then
+			if YRPEntityAlive(money) then
 				money:SetPos(ply:GetPos())
 				money:Spawn()
 				money:SetMoney(_money)
