@@ -590,13 +590,12 @@ hook.Add("DoPlayerDeath", "yrp_player_spawn_DoPlayerDeath", function(ply, attack
 	if roleondeathuid > 0 then YRPSetRole("yrp_player_spawn_DoPlayerDeath", ply, roleondeathuid, false) end
 	if IsDropItemsOnDeathEnabled() then
 		local _weapons = ply:GetWeapons()
-		local _cooldown_item = 60
 		for i, wep in pairs(_weapons) do
 			if YRPIsAllowedToDrop(ply, wep) then
 				local wepClass = wep:GetClass()
 				timer.Simple(0.04 * i, function()
-					ply:DropSWEP(wepClass)
-					timer.Simple(_cooldown_item, function() if wep:IsValid() and wep:GetOwner() == "" then wep:Remove() end end)
+					if not IsValid(ply) then return end
+					ply:DropSWEP(wepClass, true)
 				end)
 			end
 			--ply:DropSWEPSilence(wep:GetClass() )
