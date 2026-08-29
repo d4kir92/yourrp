@@ -239,15 +239,11 @@ function YRP_SQL_TABLE_EXISTS(db_table, from)
 	if _NotReadyMessage("YRP_SQL_TABLE_EXISTS", db_table, from) then return false end
 	-- YRP:msg( "db", "YRP_SQL_TABLE_EXISTS( " .. tostring( db_table) .. " )" )
 	if GetSQLMode() == 0 then
-		local _r = YRP_SQL_SELECT(db_table, "*", nil)
-		if _r == nil or istable(_r) then
-			return true
-		else
-			return false
-		end
+		local _r = sql.Query("SELECT name FROM sqlite_master WHERE type = 'table' AND name = " .. sql.SQLStr(tostring(db_table)) .. ";")
+		return istable(_r)
 		--YRP:msg( "note", "Table [" .. tostring( db_table) .. "] not exists." )
 	elseif GetSQLMode() == 1 then
-		local _r = YRP_SQL_SELECT(db_table, "*", nil)
+		local _r = YRP_SQL_SELECT(db_table, "*", nil, "LIMIT 1")
 		if _r == nil or istable(_r) then
 			return true
 		else
