@@ -55,8 +55,20 @@ net.Receive("nws_yrp_drop_tables", function(len, ply)
 	if not ply:GetYRPBool("bool_ac_database", false) then return end
 	local _drop_tables = net.ReadTable()
 	if yrp_db_loaded() then YRPCreateBackup() end
+	local _droppable = {}
+	local _existing = sql.Query("SELECT name FROM sqlite_master WHERE type='table';")
+	if IsNotNilAndNotFalse(_existing) then
+		for i, tab in pairs(_existing) do
+			if tab.name ~= "yrp_sql" and tab.name ~= "sqlite_sequence" then _droppable[tab.name] = true end
+		end
+	end
+
 	for i, tab in pairs(_drop_tables) do
-		if tab.name ~= "yrp_sql" and tab.name ~= "sqlite_sequence" then YRP_SQL_DROP_TABLE(tab) end
+		if isstring(tab) and _droppable[tab] then
+			YRP_SQL_DROP_TABLE(tab)
+		else
+			YRP:msg("note", "[nws_yrp_drop_tables] " .. ply:Nick() .. " requested invalid table: " .. tostring(tab))
+		end
 	end
 
 	game.ConsoleCommand("changelevel " .. GetMapNameDB() .. "\n")

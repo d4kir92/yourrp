@@ -5,7 +5,7 @@ local _show_db_if_not_empty = false
 YRPSQL = YRPSQL or {}
 YRPSQL.mysql_worked = YRPSQL.mysql_worked or false
 YRPSQL.int_mode = YRPSQL.int_mode or 0
-local db_version = 3
+local db_version = 4
 local function YRP_MYSQL_CHECK_OUTDATED()
 	if system.IsLinux() and (not file.Exists("bin/gmsv_mysqloo_linux.dll", "LUA") or not file.Exists("bin/gmsv_mysqloo_linux64.dll", "LUA")) then
 		if not file.Exists("bin/gmsv_mysqloo_linux.dll", "LUA") then MsgC(Color(255, 0, 0), "MISSING FILE FOR MYSQL: lua/bin/gmsv_mysqloo_linux.dll", "\n") end
@@ -41,6 +41,15 @@ local function _IsReady()
 	if tab then
 		tab = tab[1]
 		if tab.db_version then version = tonumber(tab.db_version) end
+	end
+
+	if YRPSQL.created_tables then
+		YRPSQL.created_tables = false
+		YRP_SQL_UPDATE("yrp_sql", {
+			["db_version"] = 0
+		}, "uniqueID = '1'", true)
+
+		version = 0
 	end
 
 	for i, tableName in pairs(GetDBNames()) do
@@ -589,6 +598,7 @@ function YRP_SQL_INIT_DATABASE(db_name, sqlite)
 	if GetSQLMode() == 0 or sqlite then
 		if not YRP_SQL_TABLE_EXISTS(db_name, "YRP_SQL_INIT_DATABASE") then
 			local _result = YRP_SQL_CREATE_TABLE(db_name)
+			YRPSQL.created_tables = true
 			if not YRP_SQL_TABLE_EXISTS(db_name, "YRP_SQL_INIT_DATABASE") and _YRP_SQL_Last_Error() ~= "" then
 				YRP:msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_INIT_DATABASE " .. tostring(db_name) .. " FAILED INIT TABLE" .. YRP_SQL_Show_Last_Error())
 				_YRPTryRepairDatabase(db_name)
@@ -598,6 +608,7 @@ function YRP_SQL_INIT_DATABASE(db_name, sqlite)
 	elseif GetSQLMode() == 1 then
 		if not YRP_SQL_TABLE_EXISTS(db_name, "YRP_SQL_INIT_DATABASE") then
 			local _result, que = YRP_SQL_CREATE_TABLE(db_name)
+			YRPSQL.created_tables = true
 			if not YRP_SQL_TABLE_EXISTS(db_name) and _YRP_SQL_Last_Error() ~= "" then YRP:msg("error", GetSQLModeName() .. ": " .. "YRP_SQL_INIT_DATABASE " .. tostring(db_name) .. " FAILED INIT TABLE" .. YRP_SQL_Show_Last_Error(que, "INIT_DATABASE")) end
 			return _result, que
 		end
